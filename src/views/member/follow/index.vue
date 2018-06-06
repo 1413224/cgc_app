@@ -3,20 +3,20 @@
 		<x-header class="b-w" :left-options="{backText: '',preventGoBack: true}" @on-click-more="edit" @on-click-back="changeBack">
 			<div class="tar-box">
 				<tab v-model="index" :line-width="2" active-color="#397df8" custom-bar-width="1.1rem">
-					<tab-item selected @on-item-click="active">联盟企业</tab-item>
-					<tab-item @on-item-click="active">联营企业</tab-item>
-					<tab-item @on-item-click="active">商品</tab-item>
+					<tab-item :selected="index==0" @on-item-click="active">联盟企业</tab-item>
+					<tab-item :selected="index==1" @on-item-click="active">联营企业</tab-item>
+					<tab-item :selected="index==2" @on-item-click="active">商品</tab-item>
 				</tab>
 			</div>
 			<div class="edit-btn" @click="edit" slot="right">{{isBj?'完成':'编辑'}}</div>
 		</x-header>
-		<swiper v-model="index" height="100vh" :show-dots="false" :threshold='150'>
-			<swiper-item>
+		<div>
+			<div v-show="index == 0">
 				<div class="store-list">
 					<div class="wrapper3" ref="wrapper3">
 						<div class="content">
-							<div class="list-item" v-for="(item,index) in lyList" v-if="lyList.length>0" @click="toDetail(item.enterpriseId)">
-								<div @click="changeStore2()">
+							<div class="list-item" v-for="(item,index) in lmList" v-if="lmList.length>0" @click="toDetail(item.enterpriseId)">
+								<div @click="changelmStore()">
 									<check-icon v-if="storeShow2" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
 								<div class="img-box"><img v-if="item.logo" :src="item.logo.original" /></div>
@@ -34,17 +34,17 @@
 								</div>
 							</div>
 							<Loading v-if="show3"> </Loading>
-							<noData v-if="lyList.length==0" :status="storeState" :stateText="noly"></noData>
+							<noData v-if="lmList.length==0" :status="storeState" :stateText="nolm"></noData>
 						</div>
 					</div>
 				</div>
-			</swiper-item>
-			<swiper-item>
+			</div>
+			<div v-show="index == 1">
 				<div class="store-list">
 					<div class="wrapper2" ref="wrapper2">
 						<div class="content">
-							<div class="list-item" v-for="(item,index) in lmList" v-if="lmList.length>0" @click="toDetail(item.enterpriseId)">
-								<div @click="changeStore()">
+							<div class="list-item" v-for="(item,index) in lyList" v-if="lyList.length>0" @click="toDetail(item.enterpriseId)">
+								<div @click="changelyStore()">
 									<check-icon v-if="storeShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
 								<div class="img-box"><img v-if="item.logo" :src="item.logo.original" /></div>
@@ -62,12 +62,12 @@
 								</div>
 							</div>
 							<Loading v-if="show2"> </Loading>
-							<noData v-if="lmList.length==0" :status="storeState" :stateText="nolm"></noData>
+							<noData v-if="lyList.length==0" :status="storeState" :stateText="noly"></noData>
 						</div>
 					</div>
 				</div>
-			</swiper-item>
-			<swiper-item>
+			</div>
+			<div v-show="index == 2">
 				<div class="pro-list">
 					<div class="wrapper" ref="wrapper">
 						<div class="content">
@@ -90,8 +90,8 @@
 						</div>
 					</div>
 				</div>
-			</swiper-item>
-		</swiper>
+			</div>
+		</div>
 		<div v-transfer-dom>
 			<popup v-model="show10" position="top">
 				<div class="position-vertical-demo">
@@ -105,8 +105,8 @@
 				<div class="bjBtn-box">
 					<div style="flex: 1;" @click="isallcheck">
 						<check-icon v-if="isBj && index==2" class="check-btn" :value.sync="allprCheck">全部商品 <span v-if="!allprCheck">已选 <i>{{proidList.length}}</i> 个商品</span></check-icon>
-						<check-icon v-if="isBj && index==1" class="check-btn" :value.sync="allstCheck">全部店铺<span v-if="!allstCheck">已选 <i>{{storeidList.length}}</i> 间店铺</span></check-icon>
-						<check-icon v-if="isBj && index==0" class="check-btn" :value.sync="allstCheck2">全部店铺<span v-if="!allstCheck2">已选 <i>{{storeidList2.length}}</i> 间店铺</span></check-icon>
+						<check-icon v-if="isBj && index==1" class="check-btn" :value.sync="allstCheck">全部店铺<span v-if="!allstCheck">已选 <i>{{lyidList.length}}</i> 间店铺</span></check-icon>
+						<check-icon v-if="isBj && index==0" class="check-btn" :value.sync="allstCheck2">全部店铺<span v-if="!allstCheck2">已选 <i>{{lmidList.length}}</i> 间店铺</span></check-icon>
 					</div>
 					<div class="qx-box">
 						<div class="add-btn" @click="deleteConcern">取消关注</div>
@@ -143,8 +143,8 @@
 				lyList: [],
 				lmList: [],
 				proidList: [],
-				storeidList: [],
-				storeidList2: [],
+				lmidList: [],
+				lyidList: [],
 				show: false,
 				show2: false,
 				show3: false,
@@ -160,8 +160,19 @@
 			}
 		},
 		created() {
-			
+
 			this.$route.query.index ? this.index = Number(this.$route.query.index) : this.index = 0
+
+			if(this.index == 0) {
+				this.type = 2 //联盟企业
+			} else if(this.index == 1) {
+				this.type = 3 //联营企业
+			} else {
+				this.type = 1 //商品
+			}
+			
+			console.log(this.index)
+
 			this.getFollow()
 		},
 		mounted() {
@@ -185,14 +196,13 @@
 					if(res.data.status == "00000000") {
 						//联盟企业
 						if(_this.type == 2) {
-							_this.lyList = res.data.data.list
-							_this.lyList.forEach((value) => {
-								value.ischeck = false
-							})
-							console.log(_this.lyList)
-						} else if(_this.type == 3) {
 							_this.lmList = res.data.data.list
 							_this.lmList.forEach((value) => {
+								value.ischeck = false
+							})
+						} else if(_this.type == 3) {
+							_this.lyList = res.data.data.list
+							_this.lyList.forEach((value) => {
 								value.ischeck = false
 							})
 
@@ -203,9 +213,9 @@
 			deleteConcern() {
 				var _this = this
 				if(_this.type == 2) {
-					var concernIds = _this.storeidList2.join(',')
+					var concernIds = _this.lmidList.join(',')
 				} else if(_this.type == 3) {
-					var concernIds = _this.storeidList.join(',')
+					var concernIds = _this.lyidList.join(',')
 				}
 				_this.$http.post(_this.url.user.deleteConcern, {
 					userId: localStorage.getItem('userId'),
@@ -320,30 +330,30 @@
 					console.log(this.proidList, 'pro')
 				} else if(this.index == 0) {
 					if(this.allstCheck2 == true) {
-						for(var i = 0; i < this.lyList.length; i++) {
-							this.lyList[i].ischeck = true
-							this.storeidList2.push(this.lyList[i].objectId)
-						}
-					} else {
-						for(var i = 0; i < this.lyList.length; i++) {
-							this.lyList[i].ischeck = false
-							this.storeidList2 = []
-						}
-					}
-					console.log(this.storeidList2, 'store2')
-				} else if(this.index == 1) {
-					if(this.allstCheck == true) {
 						for(var i = 0; i < this.lmList.length; i++) {
 							this.lmList[i].ischeck = true
-							this.storeidList.push(this.lmList[i].objectId)
+							this.lmidList.push(this.lmList[i].objectId)
 						}
 					} else {
 						for(var i = 0; i < this.lmList.length; i++) {
 							this.lmList[i].ischeck = false
-							this.storeidList = []
+							this.lmidList = []
 						}
 					}
-					console.log(this.storeidList, 'store')
+					console.log(this.lmidList, 'lm')
+				} else if(this.index == 1) {
+					if(this.allstCheck == true) {
+						for(var i = 0; i < this.lyList.length; i++) {
+							this.lyList[i].ischeck = true
+							this.lyidList.push(this.lyList[i].objectId)
+						}
+					} else {
+						for(var i = 0; i < this.lyList.length; i++) {
+							this.lyList[i].ischeck = false
+							this.lyidList = []
+						}
+					}
+					console.log(this.lyidList, 'ly')
 				}
 			},
 			//商品  店铺切换
@@ -367,12 +377,18 @@
 					_this.type = 1
 				}
 				_this.index = index
+
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'index': _this.index
+					})
+				})
 			},
 			//点击编辑
 			edit() {
 				this.proidList = [] //重置商品id列表
-				this.storeidList = [] //重置店铺id列表
-				this.storeidList2 = [] //重置店铺id列表
+				this.lyidList = [] //重置店铺id列表
+				this.lmidList = [] //重置店铺id列表
 				this.allprCheck = false //重置全选
 				this.allstCheck = false
 				this.allstCheck2 = false
@@ -391,10 +407,10 @@
 				if(this.index == 2 && this.proList.length > 0) {
 					this.isBj = !this.isBj
 					this.proShow = !this.proShow
-				} else if(this.index == 1 && this.lmList.length > 0) {
+				} else if(this.index == 1 && this.lyList.length > 0) {
 					this.isBj = !this.isBj
 					this.storeShow = !this.storeShow
-				} else if(this.index == 0 && this.lyList.length > 0) {
+				} else if(this.index == 0 && this.lmList.length > 0) {
 					this.isBj = !this.isBj
 					this.storeShow2 = !this.storeShow2
 				}
@@ -411,24 +427,24 @@
 				console.log(this.proidList, 'pro')
 			},
 			//店铺选择
-			changeStore() {
-				var idList = []
-				for(var i = 0; i < this.lmList.length; i++) {
-					if(this.lmList[i].ischeck == true) {
-						idList.push(this.lmList[i].objectId)
-					}
-				}
-				this.storeidList = idList
-			},
-			//店铺选择
-			changeStore2() {
+			changelyStore() {
 				var idList = []
 				for(var i = 0; i < this.lyList.length; i++) {
 					if(this.lyList[i].ischeck == true) {
 						idList.push(this.lyList[i].objectId)
 					}
 				}
-				this.storeidList2 = idList
+				this.lyidList = idList
+			},
+			//店铺选择
+			changelmStore() {
+				var idList = []
+				for(var i = 0; i < this.lmList.length; i++) {
+					if(this.lmList[i].ischeck == true) {
+						idList.push(this.lmList[i].objectId)
+					}
+				}
+				this.lmidList = idList
 			},
 			sousShow() {
 				this.show10 = true
@@ -464,15 +480,15 @@
 					this.allprCheck = false
 				}
 			},
-			storeidList() {
-				if(this.storeidList.length == this.lmList.length) {
+			lyidList() {
+				if(this.lyidList.length == this.lyList.length) {
 					this.allstCheck = true
 				} else {
 					this.allstCheck = false
 				}
 			},
-			storeidList2() {
-				if(this.storeidList2.length == this.lyList.length) {
+			lmidList() {
+				if(this.lmidList.length == this.lmList.length) {
 					this.allstCheck2 = true
 				} else {
 					this.allstCheck2 = false
@@ -487,8 +503,8 @@
 				this.allstCheck = false
 				this.allstCheck2 = false
 				this.proidList = []
-				this.storeidList = []
-				this.storeidList2 = []
+				this.lyidList = []
+				this.lmidList = []
 
 				if(this.index == 0) {
 					this.type = 2 //联盟企业
@@ -497,12 +513,6 @@
 				} else {
 					this.type = 1 //商品
 				}
-
-				this.$router.replace({
-					query: this.merge(this.$route.query, {
-						'index': this.index
-					})
-				})
 
 				this.getFollow()
 			}
@@ -625,9 +635,10 @@
 		.store-list {
 			background-color: white;
 			.wrapper,
-			.wrapper2 {
+			.wrapper2,
+			.wrapper3 {
 				position: absolute;
-				top: 0px;
+				top: 50px;
 				bottom: 47px;
 				overflow: hidden;
 				width: 100%;
