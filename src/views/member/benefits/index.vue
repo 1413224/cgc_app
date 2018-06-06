@@ -47,7 +47,7 @@
 					<p class="text mt">信用积分<span>{{ tj.num}}</span>分/消费额<span>{{ tj.number}}</span>CGC通用积分</p>
 				</div>
 			</div>
-			<div class="btn">
+			<div class="btn" @click="$router.push({path:'/member/benefits/detail'})">
 				<span>权益说明</span>  
 				<img src="../../../assets/images/member/go.png">
 			</div>

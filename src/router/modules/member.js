@@ -468,6 +468,14 @@ const memberModule = [{
 		meta: {
 			title: '赚钱攻略'
 		}
+	},
+	{
+		path: '/member/benefits/detail',
+		name: 'benefits_detail',
+		component: resolve => require(['@/views/member/benefits/detail'], resolve),
+		meta: {
+			title: '详细权益介绍'
+		}
 	}
 ]
 
