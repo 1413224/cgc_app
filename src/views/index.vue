@@ -104,11 +104,16 @@
 					<router-link to="/share">
 						<img class="auto-img mt20" v-lazy="'./static/images/wfg2.png'" alt="" />
 					</router-link>
-					<img class="auto-img mt20" v-lazy="'./static/images/mxqy2.png'" alt="" />
+					<!-- <img class="auto-img mt20" v-lazy="'./static/images/mxqy2.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/gmdq.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/hxmkl2.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/hdjt.png'" alt="" />
-					<img class="auto-img mt20" v-lazy="'./static/images/mz2.png'" alt="" />
+					<img class="auto-img mt20" v-lazy="'./static/images/mz2.png'" alt="" /> -->
+					<img class="auto-img mt20" src="../../static/images/mxqy2.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/gmdq.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/hxmkl2.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/hdjt.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/mz2.png" alt="" />
 				</div>
 				
 				<!--<div class="pro-allbox" v-for="item in proList">
