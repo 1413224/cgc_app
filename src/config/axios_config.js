@@ -14,7 +14,13 @@ axios.defaults.baseURL = 'http://47.104.187.243:18666' // 请求默认地址
 
 axios.interceptors.request.use(config => {
 	// isLoading方法
-	Vue.$isload.show()
+	if(config.params) {
+		if(!config.params.islist) {
+			Vue.$isload.show()
+		}
+	}else{
+		Vue.$isload.show()
+	}
 
 	let token = localStorage.getItem('token')
 	let timestamp = Math.round(new Date().getTime() / 1000)

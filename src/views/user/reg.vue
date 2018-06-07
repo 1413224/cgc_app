@@ -153,7 +153,8 @@
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
-					password: _this.MD5(_this.password)
+					password: _this.MD5(_this.password),
+					terminal:_this.url.client
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 

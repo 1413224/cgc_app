@@ -124,7 +124,7 @@
 				</popup>
 			</div>
 		</div>
-		<div id="container"></div>
+
 		<!-- 价格/距离框 -->
 		<!-- <div v-transfer-dom class="aa">
 	      <popup v-model="priceShang" position="top">
@@ -280,7 +280,11 @@
 				provinceId: '',
 				cityId: '',
 				areaId: '',
-				distance: '',
+				distance: 5,
+				lat: '22.979898',
+				lng: '113.370196',
+				curPage: 1,
+				pageSize: 20
 			}
 		},
 		components: {
@@ -301,28 +305,22 @@
 		},
 		methods: {
 			getLg() {
-				var map = new AMap.Map('container')
-				map.plugin('AMap.Geolocation', function() {
-					geolocation = new AMap.Geolocation({
-						enableHighAccuracy: true, //是否使用高精度定位，默认:true
-						timeout: 10000, //超过10秒后停止定位，默认：无穷大
-						buttonPosition: 'RB'
-					});
-					map.addControl(geolocation);
-					geolocation.getCurrentPosition();
-					AMap.event.addListener(geolocation, 'complete', function() {
-						console.log(data)
-						console.log('经度：' + data.position.getLng())
-						console.log('纬度：' + data.position.getLat())
-					}); 
-				})
+
 			},
 			getEnterpriseListInfo() {
 				var _this = this
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: {
-						listType: 1,
-						type: 1
+						listType: _this.listType,
+						countryId: _this.countryId,
+						provinceId: _this.provinceId,
+						cityId: _this.cityId,
+						areaId: _this.areaId,
+						distance: _this.distance,
+						lat: _this.lat,
+						lng: _this.lng,
+						curPage: _this.curPage,
+						pageSize: _this.pageSize
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -420,6 +418,8 @@
 				var _this = this
 
 				_this.listType = value
+				
+				_this.getEnterpriseListInfo()
 
 				setTimeout(function() {
 					_this.priceType = label
@@ -483,6 +483,7 @@
 			// 完成
 			complete() {
 				this.show1 = false
+				this.getEnterpriseListInfo()
 			},
 			selectCss: function(e) {
 				if(e.target.className.indexOf("li-selected") == -1) {
@@ -534,13 +535,14 @@
 					this.region = this.addressDetail + ' ' + name
 					_this.areaId = id //区级ID
 
-					console.log(_this.provinceId, _this.cityId, _this.areaId)
-
+					_this.getEnterpriseListInfo()
 					return
 				} else if(this.addressKey == 1) {
 					_this.provinceId = id //省级ID
+					_this.getEnterpriseListInfo()
 				} else if(this.addressKey == 2) {
 					_this.cityId = id //市级ID
+					_this.getEnterpriseListInfo()
 				}
 
 				let param = {

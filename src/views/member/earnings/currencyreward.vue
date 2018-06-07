@@ -65,7 +65,7 @@
 				showNo: false,
 				show8: false,
 				twoIndex: 0,
-				typeTitle:'',
+				typeTitle: '',
 				tyClass: [{
 					title: '全部列表',
 					type: 1
@@ -114,9 +114,9 @@
 			} else if(this.$route.query.type == 7) {
 				this.twoIndex = 6
 				this.typeTitle = '任务奖励'
-			}else if(this.$route.query.type == 1){
+			} else if(this.$route.query.type == 1) {
 				this.typeTitle = '全部列表'
-			}else if(this.$route.query.type == 2){
+			} else if(this.$route.query.type == 2) {
 				this.typeTitle = '消费'
 			}
 			this.getMyBalanceList()
@@ -132,11 +132,11 @@
 						userId: localStorage.getItem('userId'),
 						type: _this.type,
 						curPage: _this.curPage,
-						pageSize: _this.pageSize
+						pageSize: _this.pageSize,
+						islist:true
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						_this.balanceInfo = res.data.data
 						if(res.data.data.pageBean.list.length > 0) {
 							_this.list = _this.list.concat(res.data.data.pageBean.list)
@@ -148,6 +148,12 @@
 							if(_this.isload) {
 								_this.show = false
 								_this.showNo = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
 							}
 						}
 					}
@@ -166,6 +172,7 @@
 				_this.twoIndex = index
 				_this.type = item.type
 				_this.typeTitle = item.title
+				_this.isload = false
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'type': item.type
@@ -176,7 +183,7 @@
 				_this.curPage = 1
 				_this.getMyBalanceList()
 			},
-			lookAll(){
+			lookAll() {
 				this.type = 1
 				this.twoIndex = 0
 				this.typeTitle = '全部列表'
@@ -214,7 +221,7 @@
 			LoadData() {
 				var _this = this
 				_this.curPage++
-				_this.getMyBalanceList()
+					_this.getMyBalanceList()
 				_this.isload = true
 			}
 		},

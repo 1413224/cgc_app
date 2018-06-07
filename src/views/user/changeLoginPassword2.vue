@@ -49,7 +49,6 @@
 					})
 					return false
 				}
-				alert(_this.$route.query.code)
 				_this.$http.post(_this.url.user.forgetPassword, {
 					mobile: _this.$route.query.mobile,
 					smsVerificationCode: _this.$route.query.code,

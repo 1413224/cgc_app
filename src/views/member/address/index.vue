@@ -24,7 +24,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="height: 100vh;background-color: white;">
+		<div v-else style="background-color: white;height: 100%;">
 			<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
 		</div>
 		<div class="add-btn-box">
@@ -57,11 +57,11 @@
 			this.getShippingAddress()
 		},
 		methods: {
-			toEdit(id){
+			toEdit(id) {
 				this.$router.push({
-					name:'address_edit',
-					query:{
-						'addressId':id
+					name: 'address_edit',
+					query: {
+						'addressId': id
 					}
 				})
 			},
@@ -117,11 +117,11 @@
 					params: param
 				}).then(resp => {
 					_this.list = resp.data.data.list
-					_this.list.forEach(function(value){
-					 	value.isDefault = !!value.isDefault
+					_this.list.forEach(function(value) {
+						value.isDefault = !!value.isDefault
 					})
 				})
-				
+
 			}
 		},
 		components: {
@@ -139,6 +139,8 @@
 		background: #F5F6FA;
 		padding-bottom: 1rem;
 		position: relative;
+		height: 100%;
+		box-sizing: border-box;
 		.settingHeader {
 			position: relative;
 		}
