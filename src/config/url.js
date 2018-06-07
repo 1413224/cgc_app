@@ -2,7 +2,8 @@ var uri1 = '/user',
 	uri2 = '/datacenter'
 
 var url = {
-	platformId: 2018050800000002,
+	platformId: 2018050800000002,//平台ID
+	client:'user.travel.android',//区分那个端登录
 
 	user: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //获取第三方应用授权链接接口
