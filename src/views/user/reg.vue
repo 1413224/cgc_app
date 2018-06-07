@@ -82,7 +82,7 @@
 					_this.isCheckLogin()
 				} else {
 					_this.$vux.toast.show({
-						width: '50%',
+						width: '60%',
 						type: 'text',
 						position: 'middle',
 						text: '手机号码或密码格式不正确'
@@ -153,15 +153,15 @@
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
-					password: _this.password
+					password: _this.MD5(_this.password)
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 
 						localStorage.setItem('userId', res.data.data.id)
-						localStorage.setItem('userNp', res.data.data.id + res.data.data.randomAccessCode)
-						//						localStorage.setItem('userId', 'appUser2018051900000001')
+						localStorage.setItem('userNp', res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
+						//localStorage.setItem('userId', 'appUser2018051900000001')
 						localStorage.setItem('token', res.data.data.token)
-						
+
 						_this.$store.state.page.isLogin = true
 						_this.$vux.toast.show({
 							width: '50%',
@@ -169,7 +169,7 @@
 							position: 'middle',
 							text: '登陆成功'
 						})
-						if(window.sessionStorage.length>2) {
+						if(window.sessionStorage.length > 2) {
 							if(_this.frompath) {
 								_this.$router.replace({
 									path: _this.frompath
@@ -271,7 +271,7 @@
 						type: 1
 					}
 				}).then((res) => {
-					_this.$http.get(res.data.data).then((res)=>{
+					_this.$http.get(res.data.data).then((res) => {
 						console.log(res)
 					})
 				})
