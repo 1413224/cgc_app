@@ -1,8 +1,8 @@
 <template>
-	<section style="background: #E32921;height: 100%;">
+	<section style="height: 100%;">
+		<settingHeader :title="title"></settingHeader>
         <div class="wrapper" ref="wrapper">
 			<div class="content">
-				<settingHeader :title="title"></settingHeader>
 		        <div class="recordList">
 					<div v-if="recordList.length==0">
 		        		<div class="noRecord">
@@ -223,6 +223,10 @@
 	.wrapper {
 		height: 100%;
 		overflow: hidden;
+		.content{
+			background: #E32921;
+			padding-top: 0.2rem;
+		}
 	}
 	.noRecord{
 		background: #fff;
@@ -427,7 +431,7 @@
 			min-height: 2.49rem;
 			background-color: #FF273A;
 			text-align: center;
-			margin-top: 1.09rem;
+			/*margin-top: 1.09rem;*/
 			border-radius: 0.16rem;
 			.dia_title{
 				color: #fff;
@@ -454,7 +458,7 @@
 					padding: 0 0.5rem;
 					box-sizing: border-box;
 					font-size: 0.24rem;
-					margin-bottom: 0.5rem;
+					margin-bottom: 0.4rem;
 					span{
 						color: #E32921;
 					}
@@ -583,7 +587,7 @@
 			max-width: 78.67%;
 			z-index: 111111111111111111111111;
 			border-radius: 0.16rem; 
-			top: 46%;
+			top: 50%;
 		}
 	}
 

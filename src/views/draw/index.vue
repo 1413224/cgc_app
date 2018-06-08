@@ -1,78 +1,80 @@
 <template>
-	<section style="height: 100%;" class="draw_index">
-		<div class="wrapper" ref="wrapper">
-			<div class="content">
-				<settingHeader :title="title"></settingHeader>
-
-				<div class="head">
-					<swiper :options="swiperOption" class="swiper" style="padding-bottom: 0.2rem;">
-				        <swiper-slide v-for="item in demoList">
+	<section style="height: 100%;">
+		<div class="draw_index">
+			<settingHeader :title="title"></settingHeader>
+			<div class="wrapper" ref="wrapper">
+				<div class="content">
+					<swiper :options="swiperOption" class="swiper">
+				        <swiper-slide v-for="(item,index) in demoList" :key="index">
 				        	<img v-lazy="item">
 				        </swiper-slide>
 				        <div class="swiper-pagination" slot="pagination"></div>
 			        </swiper>
-					<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
-					<div class="list">
-						<ul class="ul-list">
-							<li>
-								<p class="status">中奖次数</p>
-								<p class="money">5</p>
-							</li>
-							<li>
-								<p class="status">待领奖金</p>
-								<p class="money">5000</p>
-							</li>
-							<li>
-								<p class="status">中奖总额</p>
-								<p class="money">25000</p>
-							</li>
-						</ul>
-
-						<div class="navList">
-							<ul>
-								<li class="li-nav" @click="$router.push({path: '/draw/luckyrank'})">	
-									<span>幸运排行</span>
+					<div class="head">
+						<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
+						<div class="list">
+							<ul class="ul-list">
+								<li>
+									<p class="status">中奖次数</p>
+									<p class="money">5</p>
 								</li>
-								<li class="li-nav" @click="$router.push({path: '/draw/record'})">
-									<span>中奖记录</span>
+								<li>
+									<p class="status">待领奖金</p>
+									<p class="money">5000</p>
+								</li>
+								<li>
+									<p class="status">中奖总额</p>
+									<p class="money">25000</p>
 								</li>
 							</ul>
-							<div class="btn" @click="$router.push({path: '/draw/review'})">
-								<span>往期回顾</span>
+
+							<div class="navList">
+								<ul>
+									<li class="li-nav" @click="$router.push({path: '/draw/luckyrank'})">	
+										<span>幸运排行</span>
+									</li>
+									<li class="li-nav" @click="$router.push({path: '/draw/record'})">
+										<span>中奖记录</span>
+									</li>
+								</ul>
+								<div class="btn" @click="$router.push({path: '/draw/review'})">
+									<span>往期回顾</span>
+								</div>
+								<div class="round1"></div>
+								<div class="round2"></div>
 							</div>
-							<div class="round1"></div>
-							<div class="round2"></div>
 						</div>
-					</div>
-		        </div>
-				
-                <div class="drawList">
-                	<p class="wonderful">精彩推荐</p>
-                    <ul class="commodity">
-                    	<group  v-for="(item,index) in reviewData.lists" :key="index">
-                    		<cell>
-		                    	<li @click="$router.push({path: '/draw/pastevents'})">
-		                    		<div class="img">
-		                    			<img :src="item.thumb" alt="">
-		                    			<div class="arrow">
-		                    				<img src="../../assets/images/draw/lottery_index8.png" alt="" >
-		                    			</div>
-		                    		</div>
-		                    		<div class="container flex">
-		                    			<p class="lucky">{{ item.title}}</p>
-		                    			<p class="num">参加人数:{{ item.user}}</p>
-		                    			<p class="bonusPool">奖金池:<span>￥{{ item.bonusPool}}</span></p>
-		                    		</div>
-		                    	</li>
-                    		</cell>
-                    	</group>
-                    </ul>
-                    <loading v-if="show"></loading>
-                    <noMore v-if="showNomore"></noMore>
-                </div>
-                <div class="clear"></div>
+			        </div>
+					
+	                <div class="drawList">
+	                	<p class="wonderful">精彩推荐</p>
+	                    <ul class="commodity">
+	                    	<group  v-for="(item,index) in reviewData.lists" :key="index">
+	                    		<cell>
+			                    	<li @click="$router.push({path: '/draw/pastevents'})">
+			                    		<div class="img">
+			                    			<img :src="item.thumb" alt="">
+			                    			<div class="arrow">
+			                    				<img src="../../assets/images/draw/lottery_index8.png" alt="" >
+			                    			</div>
+			                    		</div>
+			                    		<div class="container flex">
+			                    			<p class="lucky">{{ item.title}}</p>
+			                    			<p class="num">参加人数:{{ item.user}}</p>
+			                    			<p class="bonusPool">奖金池:<span>￥{{ item.bonusPool}}</span></p>
+			                    		</div>
+			                    	</li>
+	                    		</cell>
+	                    	</group>
+	                    </ul>
+	                    <loading v-if="show"></loading>
+	                    <noMore v-if="showNomore"></noMore>
+	                </div>
+	                <div class="clear"></div>
+				</div>
 			</div>
 		</div>
+		
 	</section>
 </template>
 
@@ -183,15 +185,18 @@
 </script>
 
 <style lang="less" scoped>
+.draw_index{
+	height: 100%;
+	background: #E32921;
+}
 .wrapper {
 	height: 100%;
 	overflow: hidden;
-	.content{
-		background: #E32921;
-	}
+	background: #E32921;
 }
 .head {
   	width: 100%;
+  	padding-top: 0.2rem;
   	img{
   		width: 100%;
   		display: block;
@@ -317,7 +322,7 @@
 	  .img{
 	  	position: relative;
 	    width: 2.42rem;
-	    height: 1.5rem;
+	    height: auto;
 	    img{
 	    	width: 100%;
 	    	height: 100%;
@@ -329,8 +334,8 @@
 	  .arrow {
 	    width: 0.33rem;
 	    position: absolute;
-	    bottom:0.1rem;
-	    right: 0.1rem;
+	    bottom:0;
+	    right: 0.15rem;
 	    img{
 	    	width: 100%;
 	    	height: 100%;
@@ -383,7 +388,7 @@
 </style>
 
 <style lang="less">
-.draw_index  .content .swiper-pagination-bullet-active{
+.draw_index .swiper-pagination-bullet-active{
 	background: #fff;
 }
 .commodity{

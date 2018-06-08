@@ -95,13 +95,6 @@
     			</div>
     		</div>
         </div>
-        
-	    <!-- #FF273A -->
-       
-        
-
-        
-
 	</section>
 </template>
 
