@@ -21,18 +21,17 @@
 		        	<div v-else style="padding-bottom: 0rem;">
 			            <ul class="ul-record" v-for="(item,index) in recordList" :key="index" @click="$router.push({path:'/draw/details'})">
 							<div class="re-content">
-								<div class="left">{{ item.drawTitle}}</div>
+								<div class="left" style="padding-top: 0.05rem;">{{ item.drawTitle}}</div>
 		                    	<div class="period left">{{ item.period}}期</div>
 		                    	<div class="win">{{ item.stateValue}}</div>
 							</div>
 	                    	
 							<div class="clear pd">
 								<div class="left">
-									<p class="time">开奖时间: {{ item.awardDate}}</p>
-									<p class="bonusPool">
-										奖金池：￥{{ item.money}}
-									</p>
-									<p>参与人数：<span class="num">{{ item.num}}人</span></p>
+									<p>开奖时间: {{ item.awardDate}}</p>
+									<p>参与人数：{{ item.num}}人</p>
+									<p>奖金池：￥{{ item.money}}</p>
+									<p v-if="item.status == 2">中奖金额:<span class="num" style="color: #E32921">￥{{ item.awardMoney}}</span></p>
 								</div>
 								<div v-if="item.status == 2">
 									<div class="right btn" v-if="item.awardStatus == '未领取'" @click.stop="goWinningSpeech">
@@ -52,7 +51,7 @@
 			        <div v-transfer-dom class="dialog">
 			        	<x-dialog v-model="showDialog" :hide-on-blur="true">
 			        		<!-- 未实名认证\等待审核\审核未通过 -->
-			        		<div class="dia" v-if="0 != false">
+			        		<div class="dia" v-if="0 == false">
 			        			<img class="img" :src="imgSrc">
 			        			<div class="dia_top">
 			        				<div class="dia_content">
@@ -71,31 +70,35 @@
 			        					<p>第12期</p>
 			        					<p>番禺国美店周末幸运大抽奖</p>
 			        				</div>
-			        				<div class="dia_content2">
-			        					<p class="title">{{headMessage}}</p>
-			        					<p class="note">买单报手机号赢<span>5000元</span>大奖</p>
-			        					<div class="yhq">
-			        						<img src="../../assets/images/draw/tag.png" width="100%">
-			        						<div class="yhqMoney">
-			        							￥<span>5000</span>现金
-			        						</div>
-			        					</div>
-			        					<!-- <div class="btn-link" @click="$router.push({path: '/draw/details'})">点击查看详情 <img src="../../assets/images/draw/crown.png"></div> -->
-			        					<div  class="time-line">
-			        						<timeline>
-			        							<timeline-item v-for="(item, index) in count" :key="index">
-			        								<h4 :class="[index === 0 ? 'recent' : '']" >
-			        									<span class="tl-content">{{item.content}}</span>
-			        									<!-- <span class="winMoney right">{{item.date}}元</span> -->
-			        								</h4>
-			        								<div :class="[index === 0 ? 'recent' : '']" class='bottom flex'>
-			        									<div class="rankDate">{{item.date}}</div>
-			        								</div>
-			        								<div class="clear"></div>
-			        							</timeline-item>
-			        						</timeline>
-			        					</div>
-			        				</div>
+	        				        <div class="wrapper2" ref="wrapper2">
+	        							<div class="content">
+	        								<div class="dia_content2">
+	        									<p class="title">{{headMessage}}</p>
+	        									<p class="note">买单报手机号赢<span>5000元</span>大奖</p>
+	        									<div class="yhq">
+	        										<img src="../../assets/images/draw/tag.png" width="100%">
+	        										<div class="yhqMoney">
+	        											￥<span>5000</span>现金
+	        										</div>
+	        									</div>
+	        									<div class="time-line">
+	        										<timeline>
+	        											<timeline-item v-for="(item, index) in count" :key="index">
+	        												<h4 :class="[index === 0 ? 'recent' : '']" >
+	        													<span class="tl-content">{{item.content}}</span>
+	        													<!-- <span class="winMoney right">{{item.date}}元</span> -->
+	        												</h4>
+	        												<div :class="[index === 0 ? 'recent' : '']" class='bottom flex'>
+	        													<div class="rankDate">{{item.date}}</div>
+	        												</div>
+	        												<div class="clear"></div>
+	        											</timeline-item>
+	        										</timeline>
+	        									</div>
+	        								</div>
+	        							</div>
+	        						</div>
+			        				
 			        			</div>
 			        			<div class="close" @click="showDialog=false"><img src="../../assets/images/draw/open.png"></div>
 			        		</div>
@@ -132,14 +135,14 @@
 				showNomore: false,
 				showDialog: false,
 				recordList:[
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:2, stateValue: '已中奖',awardStatus: '未领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:2, stateValue: '已中奖',awardStatus: '已领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:2, stateValue: '已中奖',awardStatus: '未领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:1, stateValue: '未中奖',awardStatus: '未领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取'},
-					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '800.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取'}
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:2, stateValue: '已中奖',awardStatus: '未领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:2, stateValue: '已中奖',awardStatus: '已领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:2, stateValue: '已中奖',awardStatus: '未领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:1, stateValue: '未中奖',awardStatus: '未领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取',awardMoney: '5000.00'},
+					{ drawTitle: '国美番禺店大抽奖', period: '1234', awardDate: '2018-03-20 20:00:00', money: '8000.00', num:'600.00',status:0, stateValue: '等待开奖',awardStatus: '未领取',awardMoney: '5000.00'}
 				],
 				headMessage: '您还未进行实名认证',
 				message: '进行实名认证之后才可以领取奖励',
@@ -173,11 +176,36 @@
 								this.scroll.refresh();
 							});
 						})
+						
 					} else {
 						this.scroll.refresh()
+						this.scroll2.refresh()
 					}
 				})
 
+			},
+			diaInitScroll(){
+				this.$nextTick(() => {
+					if(!this.scroll2) {
+						this.scroll2 = new BScroll(this.$refs.wrapper2, {
+							click: true,
+							scrollY: true,
+							pullUpLoad: {
+								threshold: -30, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+							}
+						})
+						this.scroll2.on('pullingUp', (pos) => {
+							this.show = true;
+							this.LoadData()
+							this.$nextTick(function() {
+								this.scroll.finishPullUp();
+								this.scroll.refresh();
+							});
+						})
+					}else{
+						this.scroll2.refresh()
+					}
+				})
 			},
 			LoadData() {
 				var _this = this
@@ -198,6 +226,7 @@
 			goWinningSpeech(){
 				var that = this;
 				this.showDialog = true;
+				this.diaInitScroll()
 				// setTimeout(function(){
 				// 	that.showDialog = false
 				// },5000)
@@ -276,7 +305,7 @@
 	.time-line{
 		background: #FFF5F6;
 		width: 100%;
-		border-radius: 0.06rem;
+		border-radius:0 0 0.16rem 0.16rem;
 		height: 75%;
 		color: #666666;
 		font-size: 0.26rem;
@@ -302,34 +331,49 @@
 			margin-top: 0.2rem;
 			border-radius: 0.08rem;
 			background-color: #fff;
-			padding: 0.35rem 0.1rem;
+			padding: 0 0.1rem 0.35rem 0.1rem;
 		}
 	  	.re-content{
+	  		position: relative;
 	      	color: #333333;
 	      	font-size: 0.36rem;
 	      	padding-left: 0.4rem;
 		  	border-bottom: 1px solid #F3F3F3;
-		  	padding-top: 0.05rem;
-		  	padding-bottom: 0.29rem;
+		  	height: 1.14rem;
+		  	line-height: 1.14rem;
 		  	overflow: hidden;
 		    .period{
+		    	position: absolute;
 		      	color: #fff;
 		      	font-size: 0.26rem;
 		      	background:linear-gradient(-121.4deg,#AF51FF,#9013FE);
 		      	border-radius: 0.04rem;
 		      	text-align: center;
-		      	padding:0.05rem 0.07rem; 
-		      	margin-left: 0.12rem;
+		      	padding:0.03rem 0.07rem 0 0.07rem; 
+		      	height: 0.35rem;
+		      	height: auto;
+		      	margin: auto;
+		      	line-height: 0.36rem;
+		      	left: 50%;
+		      	top: 35%;
+
 		    }
 		    .win{
+		    	position: absolute;
 		      	float: right;
+		      	height: 0.52rem;
 		      	background-color: #E5EAEF;
-		      	padding: 0.15rem 0.38rem;
+		      	padding: 0 0.38rem;
 		      	color: #666666;
 		      	font-size: 0.28rem;
 		      	text-align: center;
 		      	border-radius: 0.37rem;
+		      	margin: auto;
 		      	margin-right: 0.2rem;
+		      	line-height: 0.56rem;
+		      	right: 0;
+		      	top: 28%;
+		      	padding-top: 0.04rem;
 		    }
 	  	}
 	  	.pd{
@@ -339,7 +383,7 @@
 	  			color: #666;
 	  		}
 	  		.num{
-	  			color: #333333;
+	  			color: #E32921;
 	  		}
 	  	}
 
@@ -371,7 +415,7 @@
 		width: 100%;
 		color: #1A2642;
 		position: relative;
-		height: auto;
+		height: 80%;
 		.img {
 			width: 25%;
 			position: absolute;
@@ -418,7 +462,8 @@
 				border-radius: 0.5rem;
 				text-align: center;
 				box-shadow:0.04rem 0px 0.08rem rgba(136,46,219,0.3);
-				padding: 0.32rem 0; 
+				height: 1rem;
+				line-height: 1rem;
 				margin-top: 0.8rem;
 			}
 			
@@ -427,7 +472,7 @@
 		.dia_top2{
 			width: 100%;
 			margin: 0 auto;
-			height: auto;
+			height: 100%;
 			min-height: 2.49rem;
 			background-color: #FF273A;
 			text-align: center;
@@ -441,6 +486,11 @@
 				p:nth-child(1){
 					font-size: 0.72rem;
 				}
+			}
+			.wrapper2{
+				height: 81%;
+				overflow: hidden;
+				border-radius:0 0 0.16rem 0.16rem;
 			}
 			.dia_content2{
 				background: #fff;
@@ -588,6 +638,7 @@
 			z-index: 111111111111111111111111;
 			border-radius: 0.16rem; 
 			top: 50%;
+			height: 80%;
 		}
 	}
 

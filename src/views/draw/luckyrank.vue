@@ -6,58 +6,58 @@
 		      	<tab-item selected @on-item-click="showNumber">中奖次数</tab-item>
 		      	<tab-item @on-item-click="showMoney">中奖累计金额</tab-item>
 		    </tab>
-		     <!-- 排行前3名 -->
-		    <div class="former-three">
-		    	<div class="rank-top">
-			    	<li>
-		    		    <div class="rank-pic" v-if="rankList.lists.length>1">
-		    		        <img src="../../assets/images/draw/2.png" alt="">
-		    		        <div class="pic-move">
-		    		            <img :src="rankList.lists[1].thumb" alt="">
-		    		        </div>
-		    		        <div class="ranking">
-		    		        	<img src="../../assets/images/draw/two.png">
-		    		        </div>
-		    		    </div>
-			    	</li>
-
-			    	<li>
-		    		    <div class="rank-pic"  v-if="rankList.lists.length>0">
-		    		        <img src="../../assets/images/draw/1.png" alt="">
-		    		        <div class="pic-move">
-		    		            <img :src="rankList.lists[0].thumb" alt="">
-		    		        </div>
-		    		        <div class="ranking">
-		    		        	<img src="../../assets/images/draw/one.png">
-		    		        </div>
-		    		    </div>
-			    	</li>
-
-			    	<li>
-		    		    <div class="rank-pic"  v-if="rankList.lists.length>2">
-		    		        <img src="../../assets/images/draw/3.png" alt="">
-		    		        <div class="pic-move">
-		    		            <img :src="rankList.lists[2].thumb" alt="">
-		    		        </div>
-		    		        <div class="ranking">
-		    		        	<img src="../../assets/images/draw/three.png">
-		    		        </div>
-		    		    </div>
-			    	</li>
-		    	</div>
-		    	
-    		    <div class="rank-content">
-    		    	<div class="content-float" v-for="(item,index) in rankList.lists" :key="index" v-if="index<3">
-    		    		<div class="rank-phone">{{ item.mobile}}</div>
-    		    		<div class="rank-money" v-if="tab2 == true">{{ item.money}}</div>
-    		    		<div class="rank-money" v-else>{{ item.number}}</div>
-    		    	</div>
-    		        
-	    		</div>
-		    </div>
-		    
-            <div class="wrapper" ref="wrapper">
+		    <div class="wrapper" ref="wrapper">
     			<div class="content">
+				    <!-- 排行前3名 -->
+				    <div class="former-three">
+				    	<div class="rank-top">
+					    	<li>
+				    		    <div class="rank-pic" v-if="rankList.lists.length>1">
+				    		        <img src="../../assets/images/draw/2.png" alt="">
+				    		        <div class="pic-move">
+				    		            <img :src="rankList.lists[1].thumb" alt="">
+				    		        </div>
+				    		        <div class="ranking">
+				    		        	<img src="../../assets/images/draw/two.png">
+				    		        </div>
+				    		    </div>
+					    	</li>
+
+					    	<li>
+				    		    <div class="rank-pic"  v-if="rankList.lists.length>0">
+				    		        <img src="../../assets/images/draw/1.png" alt="">
+				    		        <div class="pic-move">
+				    		            <img :src="rankList.lists[0].thumb" alt="">
+				    		        </div>
+				    		        <div class="ranking">
+				    		        	<img src="../../assets/images/draw/one.png">
+				    		        </div>
+				    		    </div>
+					    	</li>
+
+					    	<li>
+				    		    <div class="rank-pic"  v-if="rankList.lists.length>2">
+				    		        <img src="../../assets/images/draw/3.png" alt="">
+				    		        <div class="pic-move">
+				    		            <img :src="rankList.lists[2].thumb" alt="">
+				    		        </div>
+				    		        <div class="ranking">
+				    		        	<img src="../../assets/images/draw/three.png">
+				    		        </div>
+				    		    </div>
+					    	</li>
+				    	</div>
+				    	
+		    		    <div class="rank-content">
+		    		    	<div class="content-float" v-for="(item,index) in rankList.lists" :key="index" v-if="index<3">
+		    		    		<div class="rank-phone">{{ item.mobile}}</div>
+		    		    		<div class="rank-money" v-if="tab2 == true">{{ item.money}}</div>
+		    		    		<div class="rank-money" v-else>{{ item.number}}</div>
+		    		    	</div>
+		    		        
+			    		</div>
+				    </div>
+		    
     				<div class="rankData">
     				<!--数据列表 -->
     			        <ul  v-if="tab2 == true">
@@ -245,7 +245,7 @@
 
 <style lang="less" scoped>
 	.wrapper{
-		height: 56.5%;
+		height: 92.4%;
 		overflow: hidden;
 	}
 	.luckyrank{
@@ -429,6 +429,9 @@
 		.weui-cells:before{
 			border-top: none;
 		}
+		.weui-cell:before{
+			border-top:none !important;
+		}
 	}
 	.rankData{
 		.weui-cells{
@@ -452,6 +455,5 @@
 		.weui-cells:after{
 			border-bottom: none;
 		}
-		
 	}	
 </style>
