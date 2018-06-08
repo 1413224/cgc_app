@@ -1,11 +1,17 @@
 <template>
-	<section style="height: 100%;background: #E32921;">
+	<section style="height: 100%;" class="draw_index">
 		<div class="wrapper" ref="wrapper">
 			<div class="content">
 				<settingHeader :title="title"></settingHeader>
 
 				<div class="head">
-					<img src="../../assets/images/draw/lottery_index1.png">
+					<swiper :options="swiperOption" class="swiper" style="padding-bottom: 0.2rem;">
+				        <swiper-slide v-for="item in demoList">
+				        	<img v-lazy="item">
+				        </swiper-slide>
+				        <div class="swiper-pagination" slot="pagination"></div>
+			        </swiper>
+					<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
 					<div class="list">
 						<ul class="ul-list">
 							<li>
@@ -76,9 +82,11 @@
 	import noMore from '../../components/noMore'
 	import settingHeader from '../../components/setting_header'
 	import url from '../../config/url'
+	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	export default {
 		components: {
-			Loading,noMore,settingHeader
+			Loading,noMore,settingHeader,swiper,
+			swiperSlide
 		},
 		data(){
 			return {
@@ -86,7 +94,20 @@
 				showNomore: false,
 				reviewData: {},
 				title: '幸运大抽奖',
-				page: 1
+				page: 1,
+				demoList:[
+					'./static/draw/lottery_index1.png',
+					'./static/draw/banner2.png',
+					'./static/draw/banner3.png'
+				],
+				swiperOption :{
+					pagination:{
+						el:'.swiper-pagination'
+					},
+					autoplay: {
+						disableOnInteraction: false,
+					}
+				}
 			}
 		},
 		mounted() {
@@ -165,6 +186,9 @@
 .wrapper {
 	height: 100%;
 	overflow: hidden;
+	.content{
+		background: #E32921;
+	}
 }
 .head {
   	width: 100%;
@@ -218,13 +242,15 @@
 				.li-nav {
 				    text-align: center;
 				    flex: 1;
-				    border-radius: 0.62rem ; 
+				    border-radius: 0.48rem ; 
 				    border: 1px solid #FF2D4F;
 				    margin-right: 0.64rem;
 				    color: #FF3B5A;
 				    font-size: 0.32rem;
-				    padding: 0.25rem 0; 
+				    /*padding: 0.25rem 0; */
 				    width: 44.5%;
+				    height: 0.96rem;
+				    line-height: 0.96rem;
 				}
 				li:nth-child(2) {
 			      	margin-right: 0;
@@ -238,9 +264,11 @@
 				color: #fff;
 				text-align: center;
 				font-size: 0.32rem;
-				padding: 0.25rem 0;
+				/*padding: 0.25rem 0;*/
 				margin: 0 auto;
 				margin-top: 0.32rem;
+				height: 0.96rem;
+				line-height: 0.96rem;
 			}
 			.round1{
 				position: absolute;
@@ -341,7 +369,23 @@
 }
 </style>
 
+<style lang='less' scoped>
+	@img:3.56rem;
+	.draw_index {
+		.swiper{
+			height: @img;
+		}
+		img{
+			width: 7.5rem;
+			height: @img;
+		}
+	}
+</style>
+
 <style lang="less">
+.draw_index  .content .swiper-pagination-bullet-active{
+	background: #fff;
+}
 .commodity{
 	padding: 0 0.2rem 0 0.3rem;
 	.weui-cells{

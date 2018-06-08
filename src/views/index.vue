@@ -224,13 +224,13 @@
 					},
 				],
 				demoList: [
-					'./static/index/share.png',
-					'./static/index/wfg.png',
 					'./static/index/lt.png',
-					'./static/index/gmdq.png',
-					'./static/index/hxmkl.png',
-					'./static/index/hdjt.png',
-					'./static/index/mz.png'
+					'./static/index/lt.png',
+					'./static/index/lt.png',
+					// './static/index/gmdq.png',
+					// './static/index/hxmkl.png',
+					// './static/index/hdjt.png',
+					// './static/index/mz.png'
 				],
 				plateList: [{
 						title: '扫一扫',

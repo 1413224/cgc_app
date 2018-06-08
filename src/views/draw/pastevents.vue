@@ -1,5 +1,5 @@
 <template>
-	<section style="background: #E32921;color: #1A2642;height: 100%;" class="pastwrap">
+	<section style="height: 100%;" class="pastwrap">
 		<div class="wrapper" ref="wrapper">
     		<div class="content">
 				<settingHeader :title="title"></settingHeader>
@@ -267,6 +267,8 @@
 		overflow: hidden;
 		.content{
 			padding-bottom: 0.2rem;
+			background: #E32921;
+			color: #1A2642;
 		}
 	}
 	.left{
@@ -316,11 +318,11 @@
 			}
 			.ul-set{
 				margin-top: 0.3rem;
-				padding-left: 0.19rem;
+				margin-left: 0.19rem;
 				li{
 					list-style: none;
 			    	background:linear-gradient(-121.4deg,#FF5C34,#FF2A4B);
-			    	padding: 0.1rem 0.09rem;
+			    	padding: 0.1rem 0.05rem;
 			    	margin-right: 0.2rem;
 			    	margin-bottom: 0.1rem;
 			    	float: left;
@@ -348,9 +350,12 @@
 			    	.num{
 			    		padding-left: 0.15rem;
 			    		margin: auto ;
-			    		margin-left: 0.2rem;
+			    		margin-left: 0.15rem;
 			    		border-left: 1px solid #fff;
 			    	}
+				}
+				li:nth-of-type(even){
+					margin-right: 0;
 				}
 			}
 		}
