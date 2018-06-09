@@ -512,8 +512,8 @@
 			}
 			.notMore{
 			    img{
-			    	width: 0.3rem;
-			    	height: 0.3rem;
+			    	width: 0.25rem;
+			    	height: 0.25rem;
 			    	border: none;
 			    	border-left: 1px solid #D8DFF0;
 			    	display: inline-block;

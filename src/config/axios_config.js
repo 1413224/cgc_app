@@ -18,7 +18,7 @@ axios.interceptors.request.use(config => {
 		if(!config.params.islist) {
 			Vue.$isload.show()
 		}
-	}else{
+	} else {
 		Vue.$isload.show()
 	}
 

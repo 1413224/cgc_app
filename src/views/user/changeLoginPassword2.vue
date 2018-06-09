@@ -22,10 +22,13 @@
 				title: '设置登录密码', //头部标题
 				password: '',
 				password1: '',
-				showLoading: false
+				showLoading: false,
+				mobile: ''
 			}
 		},
-		created() {},
+		created() {
+			this.mobile = _this.$route.query.mobile
+		},
 		methods: {
 			submit() {
 				var _this = this
@@ -50,7 +53,7 @@
 					return false
 				}
 				_this.$http.post(_this.url.user.forgetPassword, {
-					mobile: _this.$route.query.mobile,
+					mobile: _this.mobile,
 					smsVerificationCode: _this.$route.query.code,
 					newPassword: _this.MD5(_this.password),
 					platformId: _this.url.platformId
@@ -63,8 +66,10 @@
 							text: '密码保存成功'
 						})
 						_this.$router.replace({
-							path: '/user/reg'
+							path: '/user/reg',
+							query: _this.mobile
 						})
+						console.log(_this.mobile)
 					}
 				})
 			}

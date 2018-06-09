@@ -15,46 +15,44 @@
 
 			<div class="list-box">
 				<div class="scroll-box">
-					<div class="wrapper" ref="wrapper" v-if="list.length>0">
+					<div class="wrapper" ref="wrapper">
 						<div class="content">
-							<div class="box2">
-								<div>
-									<div class="list" v-for="(item,index) in list" :key="index">
-										<div class="he">
-											<div class="user-img">
-												<img :src="item.avatar.original" />
-											</div>
-											<div class="user-text">
-												<p>{{item.nickname}}</p>
-												<p>手机号码：{{item.mobile}}</p>
-												<p>加入时间：{{item.registerTime}}</p>
-											</div>
+							<div v-if="list.length>0">
+								<div class="list" v-for="(item,index) in list" :key="index">
+									<div class="he">
+										<div class="user-img">
+											<img :src="item.avatar.original" />
 										</div>
-										<div class="footer">
-											<grid class="footer-item">
-												<grid-item>
-													<p>订单数</p>
-													<p>{{item.orderSum}}</p>
-												</grid-item>
-												<grid-item>
-													<p>消费额</p>
-													<p>{{item.orderPrice}}</p>
-												</grid-item>
-											</grid>
+										<div class="user-text">
+											<p>{{item.nickname}}</p>
+											<p>手机号码：{{item.mobile}}</p>
+											<p>加入时间：{{item.registerTime}}</p>
 										</div>
 									</div>
-									<Loading v-if="showloading"></Loading>
-									<Nomore v-if="showNo"></Nomore>
+									<div class="footer">
+										<grid class="footer-item">
+											<grid-item>
+												<p>订单数</p>
+												<p>{{item.orderSum}}</p>
+											</grid-item>
+											<grid-item>
+												<p>消费额</p>
+												<p>{{item.orderPrice}}</p>
+											</grid-item>
+										</grid>
+									</div>
 								</div>
+								<Loading v-if="show"></Loading>
+								<Nomore v-if="showNo"></Nomore>
+							</div>
+							<div class="null-box" v-else>
+								<img src="../../../assets/images/index/null-data.png" alt="" />
+								<p>暂无伙伴</p>
+								<router-link to="/member/purse/qrcode">
+									<div class="add-btn">我要邀请</div>
+								</router-link>
 							</div>
 						</div>
-					</div>
-					<div class="null-box" v-else>
-						<img src="../../../assets/images/index/null-data.png" alt="" />
-						<p>暂无伙伴</p>
-						<router-link to="/member/purse/qrcode">
-							<div class="add-btn">我要邀请</div>
-						</router-link>
 					</div>
 				</div>
 			</div>
@@ -72,11 +70,11 @@
 		data() {
 			return {
 				title: '我的团队',
-				showloading: false,
-				showNo: false,
+				show: false, //是否显示loading
+				showNo: false, //是否显示没有更多
+				isload: false, //是否上拉加载
 				totalNums: 0,
 				list: [],
-				showloading: false,
 				pageSize: 20,
 				curPage: 1,
 				userInfo: {}
@@ -87,10 +85,10 @@
 			this.userInfo = this.$store.state.page.userInfo
 		},
 		mounted() {
-
+			this.InitScroll()
 		},
 		methods: {
-
+			//获取我的团队
 			getMyTeam() {
 				var _this = this
 				_this.$http.get(_this.url.user.getMyTeam, {
@@ -100,25 +98,20 @@
 						pageSize: _this.pageSize
 					}
 				}).then((res) => {
-					console.log(res.data.data)
 					if(res.data.status == '00000000') {
-						var data = res.data.data
-						this.list = data.list
-						this.totalNums = data.totalNums
-						if(data.list.length > 0) {
-							this.InitScroll()
-						}
+						_this.totalNums = res.data.data.totalNums
+						_this.list = res.data.data.list
 					}
 				})
 			},
-
+			//跳转我的赚钱码页面
 			toQrcode() {
 				var _this = this
 				_this.$router.push({
 					path: '/member/purse/qrcode'
 				})
 			},
-
+			//上拉加载
 			InitScroll() {
 				this.$nextTick(() => {
 					if(!this.scroll) {
@@ -126,16 +119,16 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -50, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								threshold: -50
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
 							this.showloading = true;
 							this.LoadData()
 							this.$nextTick(function() {
-								this.scroll.finishPullUp();
-								this.scroll.refresh();
-							});
+								this.scroll.finishPullUp()
+								this.scroll.refresh()
+							})
 						})
 					} else {
 						this.scroll.refresh()
@@ -143,29 +136,35 @@
 				})
 
 			},
+			//加载更多
 			LoadData() {
 				var _this = this
 				_this.curPage++
-					var _this = this
-				_this.$http.get(_this.url.user.getMyTeam, {
-					params: {
-						userId: localStorage.getItem('userId'),
-						curPage: _this.curPage,
-						pageSize: _this.pageSize
-					}
-				}).then((res) => {
-					console.log(res.data.data)
-					if(res.data.status == '00000000') {
-						var data = res.data.data
-						if(data.list.length > 0) {
-							_this.showLoading = false
-							_this.showNo = false
-							_this.list = _this.list.concat(data.list)
-						} else {
-							_this.showNo = true
+					_this.$http.get(_this.url.user.getMyTeam, {
+						params: {
+							userId: localStorage.getItem('userId'),
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
 						}
-					}
-				})
+					}).then((res) => {
+						if(res.data.status == '00000000') {
+							if(res.data.data.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.list)
+								_this.show = true
+								_this.showNo = false
+							} else {
+								_this.show = false
+								_this.showNo = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
+						}
+					})
 			}
 		},
 		components: {
@@ -188,8 +187,8 @@
 			.list-box {
 				position: absolute;
 				top: 1.98rem;
+				bottom: 0;
 				width: 100%;
-				height: 10.08rem;
 				z-index: 11;
 				.scroll-box {
 					position: relative;

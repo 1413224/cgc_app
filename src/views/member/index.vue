@@ -9,8 +9,8 @@
 						<router-link to="/member/info/index">
 							<img :src="images?images:'./static/images/mrtx.png'" alt="" />
 						</router-link>
-						<p class="nickname">{{userInfo.nickname}}</p>
-						<p class="status">{{userInfo.levelName}}</p>
+						<p class="nickname">{{userInfo.nickname?userInfo.nickname:'未设置'}}</p>
+						<p class="status">{{userInfo.levelName?userInfo.levelName:'暂无等级'}}</p>
 					</div>
 
 					<div class="account">
@@ -18,7 +18,7 @@
 							<div class="universal">
 								<p>
 									<div class="num">
-										<span class="money">{{userInfo.balance}}</span>
+										<span class="money">{{userInfo.balance?userInfo.balance:0}}</span>
 										<!--<badge></badge>-->
 									</div>
 								</p>
@@ -28,7 +28,7 @@
 						<router-link to="/member/earnings/credit">
 							<div class="universal">
 								<div class="num">
-									<span class="money">{{userInfo.availablePoints}}</span>
+									<span class="money">{{userInfo.availablePoints?userInfo.availablePoints:0}}</span>
 
 								</div>
 								<p class="universalAccount">信用积分</p>
@@ -82,7 +82,7 @@
 			<section>
 				<router-link to="/draw">
 					<div class="banner">
-						<img src="../../assets/images/member/member_banner.png" alt="">
+						<img v-lazy="'./static/images/member_banner.png'" alt="">
 						<!-- <img src="static/images/alliance1.png"/> -->
 					</div>
 				</router-link>

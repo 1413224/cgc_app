@@ -92,11 +92,11 @@
 				curPage: 1,
 				pageSize: 20,
 				balanceInfo: {},
-				type: '',
-				isload: false
+				type: ''
 			}
 		},
 		created() {
+			this.list = []
 			this.type = this.$route.query.type
 			//设置对应筛选INDEX
 			if(this.$route.query.type == 3) {
@@ -133,29 +133,12 @@
 						type: _this.type,
 						curPage: _this.curPage,
 						pageSize: _this.pageSize,
-						islist:true
+						islist: _this.islist
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.balanceInfo = res.data.data
-						if(res.data.data.pageBean.list.length > 0) {
-							_this.list = _this.list.concat(res.data.data.pageBean.list)
-							if(_this.isload) {
-								_this.show = true
-								_this.showNo = false
-							}
-						} else {
-							if(_this.isload) {
-								_this.show = false
-								_this.showNo = true
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '已经到底了'
-								})
-							}
-						}
+						_this.list = res.data.data.pageBean.list
 					}
 				})
 			},
@@ -172,7 +155,8 @@
 				_this.twoIndex = index
 				_this.type = item.type
 				_this.typeTitle = item.title
-				_this.isload = false
+				_this.show = false
+				_this.showNo = false
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'type': item.type
@@ -186,6 +170,7 @@
 			lookAll() {
 				this.type = 1
 				this.twoIndex = 0
+				this.curPage = 1
 				this.typeTitle = '全部列表'
 				this.$router.replace({
 					query: this.merge(this.$route.query, {
@@ -202,11 +187,12 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -50, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								threshold: -50
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
 							this.LoadData()
+
 							this.$nextTick(function() {
 								this.scroll.finishPullUp();
 								this.scroll.refresh();
@@ -221,8 +207,33 @@
 			LoadData() {
 				var _this = this
 				_this.curPage++
-					_this.getMyBalanceList()
-				_this.isload = true
+					_this.$http.get(_this.url.user.getMyBalanceList, {
+						params: {
+							userId: localStorage.getItem('userId'),
+							type: _this.type,
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.balanceInfo = res.data.data
+							if(res.data.data.pageBean.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.pageBean.list)
+								_this.show = true
+								_this.showNo = false
+							} else {
+								_this.show = false
+								_this.showNo = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
+						}
+					})
 			}
 		},
 		components: {
@@ -278,7 +289,7 @@
 			.wrapper {
 				position: absolute;
 				top: 2.87rem;
-				bottom: 0;
+				bottom: 1rem;
 				width: 100%;
 				overflow: hidden;
 			}

@@ -1,5 +1,5 @@
 <template>
-	<div class="reward-box">
+	<div class="reward-box1">
 		<settingHeader :title="title"></settingHeader>
 		<div class="h">
 			<div class="top">
@@ -89,11 +89,11 @@
 				pageSize: 20,
 				balanceInfo: {},
 				type: '',
-				isload: false,
 				typeTitle: ''
 			}
 		},
 		created() {
+			this.list = []
 			this.type = this.$route.query.type
 			if(this.$route.query.type == 3) {
 				this.twoIndex = 2
@@ -128,23 +128,13 @@
 						userId: localStorage.getItem('userId'),
 						type: _this.type,
 						curPage: _this.curPage,
-						pageSize: _this.pageSize
+						pageSize: _this.pageSize,
+						islist: _this.islist
 					}
 				}).then((res) => {
 					if(res.data.status == '00000000') {
 						_this.balanceInfo = res.data.data
-						if(res.data.data.pageBean.list.length > 0) {
-							_this.list = _this.list.concat(res.data.data.pageBean.list)
-							if(_this.isload) {
-								_this.show = true;
-								_this.showNo = false;
-							}
-						} else {
-							if(_this.isload) {
-								_this.show = false;
-								_this.showNo = true;
-							}
-						}
+						_this.list = res.data.data.pageBean.list
 					}
 				})
 			},
@@ -166,14 +156,16 @@
 						'type': item.type
 					})
 				})
-				_this.show8 = false;
-				_this.list = [];
-
+				_this.show8 = false
+				_this.show = false
+				_this.showNo = false
+				_this.list = []
 				_this.getMyPointsList()
 			},
 			lookAll() {
 				this.type = 1
 				this.twoIndex = 0
+				this.curPage = 1
 				this.typeTitle = '全部列表'
 				this.$router.replace({
 					query: this.merge(this.$route.query, {
@@ -209,7 +201,34 @@
 			LoadData() {
 				var _this = this
 				_this.curPage++
-					_this.isload = true
+				_this.$http.get(_this.url.user.getMyPointsList, {
+					params: {
+						userId: localStorage.getItem('userId'),
+						type: _this.type,
+						curPage: _this.curPage,
+						pageSize: _this.pageSize,
+						islist: true
+					}
+				}).then((res) => {
+					if(res.data.status == '00000000') {
+						_this.balanceInfo = res.data.data
+						if(res.data.data.pageBean.list.length > 0) {
+							_this.list = _this.list.concat(res.data.data.pageBean.list)
+							_this.show = true
+							_this.showNo = false
+
+						} else {
+							_this.show = false
+							_this.showNo = true
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已经到底了'
+							})
+						}
+					}
+				})
 			}
 		},
 		components: {
@@ -255,7 +274,7 @@
 		}
 	}
 	
-	.reward-box {
+	.reward-box1 {
 		height: 100%;
 		font-family: PingFangSC-Medium;
 		background-color: white;
@@ -265,7 +284,7 @@
 			.wrapper {
 				position: absolute;
 				top: 2.87rem;
-				bottom: 0;
+				bottom: 1rem;
 				width: 100%;
 				overflow: hidden;
 			}

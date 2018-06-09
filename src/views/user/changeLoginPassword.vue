@@ -32,11 +32,22 @@
 			}
 		},
 		created() {
-			if(this.$route.query.isLogin) {
-				this.phone = JSON.parse(localStorage['userInfo']).mobile
-			}
+			this.getUserInfo()
 		},
 		methods: {
+			getUserInfo() {
+				var _this = this
+				//获取用户信息
+				_this.$http.get(_this.url.user.getBasicInfo, {
+					params: {
+						userId: localStorage['userId']
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.phone = res.data.data.mobile
+					}
+				})
+			},
 			submit() {
 				var _this = this
 				if(_this.mainApp.isphone(_this.phone) && _this.code.length == 4) {

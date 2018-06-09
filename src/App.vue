@@ -31,7 +31,8 @@
 		computed: {
 			...mapState({
 				direction: state => state.page.direction,
-				includeList: state => state.page.includeList
+				includeList: state => state.page.includeList,
+				isWx: state => state.page.isWx
 			}),
 			viewTransition() {
 				if(!this.direction) return ''
@@ -40,7 +41,7 @@
 		},
 		data() {
 			return {
-				show: '',
+				isWx: '',
 				orientation: false
 			}
 		},
@@ -56,16 +57,6 @@
 			}
 			if(this.$router.app._route.meta.title) {
 				document.title = this.$router.app._route.meta.title
-			}
-
-			var ua = navigator.userAgent.toLowerCase();
-			var isWeixin = ua.indexOf('micromessenger') != -1;
-			if(isWeixin) {
-				this.show = false;
-				return true;
-			} else {
-				this.show = true;
-				return false;
 			}
 		},
 		components: {
@@ -112,7 +103,7 @@
 		z-index: 10000;
 	}
 	
-	.add-btn{
+	.add-btn {
 		border-radius: 2px!important;
 	}
 	
