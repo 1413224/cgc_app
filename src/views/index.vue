@@ -56,7 +56,7 @@
 					</div>
 				</div>
 				<router-link to="">
-					<img class="auto-img" v-lazy="'../../static/images/IMG_3224 Copy@2x.png'" alt="" />
+					<img class="auto-img" v-lazy="'./static/images/IMG_3224 Copy@2x.png'" alt="" />
 				</router-link>-->
 				<!-- <div class="plate">
 					<div class="item" v-for="(item,index) in plateList" :key="index">
@@ -99,10 +99,10 @@
 
 				<div>
 					<router-link to="/share">
-						<img class="auto-img mt20" v-lazy="'./static/images/share1.png'" alt="" />
+						<img class="auto-img mt20" v-lazy="'./static/index/share.png'" alt="" />
 					</router-link>
 					<router-link to="/share">
-						<img class="auto-img mt20" v-lazy="'./static/images/wfg2.png'" alt="" />
+						<img class="auto-img mt20" v-lazy="'./static/index/wfg.png'" alt="" />
 					</router-link>
 					<!-- <img class="auto-img mt20" v-lazy="'./static/images/mxqy2.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/gmdq.png'" alt="" />
@@ -110,10 +110,10 @@
 					<img class="auto-img mt20" v-lazy="'./static/images/hdjt.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/mz2.png'" alt="" /> -->
 					<img class="auto-img mt20" src="../../static/images/mxqy2.png" alt="" />
-					<img class="auto-img mt20" src="../../static/images/gmdq.png" alt="" />
-					<img class="auto-img mt20" src="../../static/images/hxmkl2.png" alt="" />
-					<img class="auto-img mt20" src="../../static/images/hdjt.png" alt="" />
-					<img class="auto-img mt20" src="../../static/images/mz2.png" alt="" />
+					<img class="auto-img mt20" src="../../static/index/gmdq.png" alt="" />
+					<img class="auto-img mt20" src="../../static/index/hxmkl.png" alt="" />
+					<img class="auto-img mt20" src="../../static/index/hdjt.png" alt="" />
+					<img class="auto-img mt20" src="../../static/index/mz.png" alt="" />
 				</div>
 				
 				<!--<div class="pro-allbox" v-for="item in proList">
@@ -224,14 +224,13 @@
 					},
 				],
 				demoList: [
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
-					'https://img1.360buyimg.com/da/s750x366_jfs/t17776/179/1756407821/231537/470e3442/5ad9b0a3N5573c82c.jpg!cr_1125x549_0_72.dpg',
+					'./static/index/lt.png',
+					'./static/index/lt.png',
+					'./static/index/lt.png',
+					// './static/index/gmdq.png',
+					// './static/index/hxmkl.png',
+					// './static/index/hdjt.png',
+					// './static/index/mz.png'
 				],
 				plateList: [{
 						title: '扫一扫',
@@ -903,10 +902,10 @@
 	#appIndex {
 		/*banner轮播*/
 		.swiper {
-			height: 3.36rem;
+			height: 3rem;
 			img {
 				width: 100%;
-				height: 3.36rem;
+				height: 3rem;
 			}
 			.swiper-pagination-bullet {
 				background: #fff!important;

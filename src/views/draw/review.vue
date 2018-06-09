@@ -1,18 +1,18 @@
 <template>
-	<section style="height: 100%;background-color: #E32921;">
+	<section class="review" style="height: 100%;">
 		<div class="wrapper" ref="wrapper">
 			<div class="content">
 				<settingHeader :title="title"></settingHeader>
 				<!-- 轮播 -->
-				<!-- <swiper :options="swiperOption" class="swiper">
-			        <swiper-slide v-for="item in imgList">
+				<swiper :options="swiperOption" class="swiper">
+			        <swiper-slide v-for="(item,index) in imgList" :key="index">
 			        	<img :src="item">
 			        </swiper-slide>
 			        <div class="swiper-pagination" slot="pagination"></div>
-		        </swiper> -->
-		        <div class="head">
+		        </swiper>
+		       <!--  <div class="head">
 					<img src="../../assets/images/draw/lottery_index1.png">
-				</div>
+				</div> -->
 		        
                 <div class="drawList">
                 	<p class="wonderful">往期回顾</p>
@@ -62,10 +62,9 @@
 				showNomore: false,
 				reviewData: {},
 				imgList:[
-					'./static/draw/lottery_review1.png',
-					'./static/draw/lottery_review1.png',
-					'./static/draw/lottery_review1.png',
-					'./static/draw/lottery_review1.png'
+					'./static/draw/lottery_index1.png',
+					'./static/draw/banner2.png',
+					'./static/draw/banner3.png'
 				],
 				swiperOption :{
 					pagination:{
@@ -152,20 +151,26 @@
 </script>
 
 <style lang='less' scoped>
-	@img:3.97rem;
-	.swiper{
-		height: @img;
+	@img:3.56rem;
+	.review{
+		.swiper{
+			height: @img;
+		}
+		img{
+			width: 7.5rem;
+			height: @img;
+		}
 	}
-	img{
-		width: 7.5rem;
-		height: @img;
-	}
+		
 </style>
 
 <style lang="less" scoped>
 .wrapper {
 	height: 100%;
 	overflow: hidden;
+	.content{
+		background: #E32921;
+	}
 }
 .head {
   	width: 100%;
@@ -198,7 +203,7 @@
 	  .img{
 	  	position: relative;
 	    width: 2.42rem;
-	    height: 1.5rem;
+	    height: auto;
 	    img{
 	    	width: 100%;
 	    	height: 100%;
@@ -213,8 +218,8 @@
 	  .arrow {
 	    width: 0.33rem;
 	    position: absolute;
-	    bottom:0.1rem;
-	    right: 0.1rem;
+	    bottom:0;
+	    right: 0.15rem;
 	    img{
 	    	width: 100%;
 	    	height: 100%;
@@ -254,7 +259,7 @@
 </style>
 
 <style lang="less">
-.content .swiper-pagination-bullet-active{
+.review .content .swiper-pagination-bullet-active{
 	background: #fff;
 }
 .commodity2{

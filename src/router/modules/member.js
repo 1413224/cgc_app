@@ -476,6 +476,14 @@ const memberModule = [{
 		meta: {
 			title: '详细权益介绍'
 		}
+	},
+	{
+		path: '/member/join/index',
+		name: 'join',
+		component: resolve => require(['@/views/member/join/index'], resolve),
+		meta: {
+			title: '企业加盟'
+		}
 	}
 ]
 
