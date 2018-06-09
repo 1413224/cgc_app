@@ -5,7 +5,7 @@
 				<settingHeader :title="title"></settingHeader>
 				<!-- 轮播 -->
 				<swiper :options="swiperOption" class="swiper">
-			        <swiper-slide v-for="item in imgList">
+			        <swiper-slide v-for="(item,index) in imgList" :key="index">
 			        	<img :src="item">
 			        </swiper-slide>
 			        <div class="swiper-pagination" slot="pagination"></div>
@@ -203,7 +203,7 @@
 	  .img{
 	  	position: relative;
 	    width: 2.42rem;
-	    height: 1.5rem;
+	    height: auto;
 	    img{
 	    	width: 100%;
 	    	height: 100%;
@@ -218,8 +218,8 @@
 	  .arrow {
 	    width: 0.33rem;
 	    position: absolute;
-	    bottom:0.1rem;
-	    right: 0.1rem;
+	    bottom:0;
+	    right: 0.15rem;
 	    img{
 	    	width: 100%;
 	    	height: 100%;

@@ -1,6 +1,6 @@
 <template>
-	<section style="background-color: #F4F4F4;height: 100%;">
-		<!-- <drawHeader :title="title"></drawHeader> -->
+	<section class="awards">
+
 		<div class="wrapper" ref="wrapper">
 			<div class="content">
 				<settingHeader :title="title"></settingHeader>
@@ -38,15 +38,16 @@
 							<h4 class="left">中奖感言</h4>
 						</div>
 						<group style="margin-top: 0.3rem;">
-					      	<x-textarea :max="200" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
+					      	<x-textarea :max="200" :min="20" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
 					    </group>
 					</div>
 				</div>
 				<div class="radio">
-			    	<input type="radio" name="">
-			    	<span class="read">
-			    		阅读<span class="preposition">《易消费中奖协议》</span>
-			    	</span>
+			    	<check-icon :value.sync="demo1" >
+			    		<span class="read">阅读<span class="preposition">《易消费中奖协议》</span>
+			    		</span>
+			    	</check-icon>
+			    	
 			    </div>
 			</div>
 			<div class="foot" @click="showToast">立即提交</div>
@@ -71,12 +72,12 @@
 </template>
 
 <script>
-	import { XInput, XDialog} from 'vux'
+	import { XInput, XDialog,CheckIcon} from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import BScroll from 'better-scroll'
 	export default {
 	  components: {
-	    XInput,settingHeader,XDialog
+	    XInput,settingHeader,XDialog,CheckIcon
 	  },
 	  data(){
 	  	return {
@@ -86,7 +87,8 @@
 	  		showDialog: false,
 	  		pindex:0,
 	  		headMessage: '请您耐心等待审核',
-	  		imgSrc: './static/draw/wait.png'
+	  		imgSrc: './static/draw/wait.png',
+	  		demo1: false
 	  	}
 	  },
 	  mounted:function(){
@@ -153,6 +155,9 @@
 </script>
 
 <style lang="less" scoped>
+.awards{
+	height: 100%;
+}
 	.wrapper{
 		height: 100%;
 		overflow: hidden;
@@ -426,4 +431,20 @@
 			top: 46%;
 		}
 	}
+	.radio{
+		.weui-icon-circle{
+			font-size: 0.4rem;
+		}
+		.vux-check-icon > span{
+			font-size: 0.32rem;
+			line-height: 0.4rem;
+		}
+		.weui-icon-success{
+			font-size: 0.4rem;
+		}
+		.weui-icon-success-circle{
+			font-size: 0.4rem;
+		}
+	}
+	 
 </style>
