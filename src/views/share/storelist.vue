@@ -1,5 +1,5 @@
 <template>
-	<div class="storelist-box1" style="height: 100%;">
+	<div class="storelist-box1" style="height: 100%;background-color: white;">
 		<settingHeader :title="title"></settingHeader>
 
 		<div class="searchBox">
@@ -38,35 +38,33 @@
 			</popup>
 		</div>
 
-		<div style="height: 100%;position: relative;background-color: white;">
-			<div class="wrapper" ref="wrapper">
-				<div class="content">
-					<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
-					<div class="list" v-if="list.length>0">
-						<ul>
-							<li class="clearfix" @click="goStoreDetail(item.enterpriseId)" v-for="(item,index) in list" :key="item.enterpriseId">
-								<div class="left">
-									<img v-if="item.logo" :src="item.logo.original" alt="">
-								</div>
-								<div class="right">
-									<p class="title">{{item.name}}</p>
-									<!--<p class="content1 ellipise">
+		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
+			<div class="content">
+				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
+				<div class="list" v-if="list.length>0">
+					<ul>
+						<li class="clearfix" @click="goStoreDetail(item.enterpriseId)" v-for="(item,index) in list" :key="item.enterpriseId">
+							<div class="left">
+								<img v-if="item.logo" :src="item.logo.original" alt="">
+							</div>
+							<div class="right">
+								<p class="title">{{item.name}}</p>
+								<!--<p class="content1 ellipise">
 									<span class="free" v-if="item.isAlliance == 1">商品</span>
 									<span class="free" v-if="item.isChains == 1">服务</span>
 									<span class="return">返积分</span>
 								</p>-->
-									<p class="nr"><span class="ms_price">电话:{{item.tel}}</span></p>
-									<p class="nr">
-										<span class="num"><span v-if="item.area">{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>{{item.distance}}km</span>
-									</p>
-								</div>
-							</li>
-						</ul>
-						<Loading v-if="showLoading"></Loading>
-						<noMore v-if="showNoMore"></noMore>
-					</div>
-					<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
+								<p class="nr"><span class="ms_price">电话:{{item.tel}}</span></p>
+								<p class="nr">
+									<span class="num"><span v-if="item.area">{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>{{item.distance}}km</span>
+								</p>
+							</div>
+						</li>
+					</ul>
+					<Loading v-if="showLoading"></Loading>
+					<noMore v-if="showNoMore"></noMore>
 				</div>
+				<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
 			</div>
 		</div>
 
@@ -690,11 +688,15 @@
 		top: 3rem!important;
 	}
 	
+	.h {
+		top: 2.75rem!important;
+	}
+	
 	.wrapper {
 		position: absolute;
 		width: 100%;
-		bottom: 1rem;
-		top: 0;
+		bottom: 0.5rem;
+		top: 1.75rem;
 		overflow: hidden;
 	}
 	

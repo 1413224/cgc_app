@@ -284,7 +284,7 @@
 			.wrapper {
 				position: absolute;
 				top: 2.87rem;
-				bottom: 1rem;
+				bottom: 0rem;
 				width: 100%;
 				overflow: hidden;
 			}
