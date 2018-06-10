@@ -7,6 +7,7 @@ const page = {
 		isLogin: false,
 		includeList:[],
 		ispreview:false,
+		isWx:true,
 		userInfo:{}
 	},
 	mutations: {

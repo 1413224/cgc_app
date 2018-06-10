@@ -33,7 +33,8 @@
 									</div>
 								</div>
 							</div>
-							<Loading v-if="show3"> </Loading>
+							<Loading v-if="show1"> </Loading>
+							<Nomore v-if="showNo1"></Nomore>
 							<noData v-if="lmList.length==0" :status="storeState" :stateText="nolm"></noData>
 						</div>
 					</div>
@@ -62,6 +63,7 @@
 								</div>
 							</div>
 							<Loading v-if="show2"> </Loading>
+							<Nomore v-if="showNo2"></Nomore>
 							<noData v-if="lyList.length==0" :status="storeState" :stateText="noly"></noData>
 						</div>
 					</div>
@@ -124,6 +126,7 @@
 	import settingHeader from '../../../components/setting_header'
 	import Loading from '../../../components/loading'
 	import noData from '../../../components/noData'
+	import Nomore from '../../../components/noMore'
 	export default {
 		data() {
 			return {
@@ -145,7 +148,7 @@
 				proidList: [],
 				lmidList: [],
 				lyidList: [],
-				show: false,
+				show1: false,
 				show2: false,
 				show3: false,
 				proState: 0,
@@ -156,7 +159,10 @@
 				pageSize: 20,
 				curPage: 1,
 				type: 2,
-				back: Function
+				back: Function,
+				showNo1: false,
+				showNo2: false,
+				showNo3: false
 			}
 		},
 		created() {
@@ -170,7 +176,7 @@
 			} else {
 				this.type = 1 //商品
 			}
-			
+
 			console.log(this.index)
 
 			this.getFollow()
@@ -268,7 +274,7 @@
 							});
 						})
 
-						this.scroll3 = new BScroll(this.$refs.wrapper2, {
+						this.scroll3 = new BScroll(this.$refs.wrapper3, {
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
@@ -292,22 +298,75 @@
 
 			},
 			LoadData() {
-				let _this = this;
-				setTimeout(function() {
-					_this.show = false;
-				}, 3500)
+
 			},
 			LoadData2() {
-				let _this = this;
-				setTimeout(function() {
-					_this.show2 = false;
-				}, 3500)
+				var _this = this
+
+				_this.$http.get(_this.url.user.getConcernLists, {
+					params: {
+						userId: localStorage.getItem('userId'),
+						type: _this.type,
+						pageSize: _this.pageSize,
+						curPage: _this.curPage,
+						islist: true
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.lyList = _this.lyList.concat(res.data.data.list)
+							_this.show2 = true
+							_this.showNo2 = false
+							_this.lyList.forEach((value) => {
+								value.ischeck = false
+							})
+						} else {
+							_this.show2 = false
+							_this.showNo2 = true
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已经到底了'
+							})
+						}
+
+					}
+				})
 			},
 			LoadData3() {
-				let _this = this;
-				setTimeout(function() {
-					_this.show3 = false;
-				}, 3500)
+				var _this = this
+
+				_this.$http.get(_this.url.user.getConcernLists, {
+					params: {
+						userId: localStorage.getItem('userId'),
+						type: _this.type,
+						pageSize: _this.pageSize,
+						curPage: _this.curPage,
+						islist: true
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.lmList = _this.lmList.concat(res.data.data.list)
+							_this.show1 = true
+							_this.showNo1 = false
+							_this.lmList.forEach((value) => {
+								value.ischeck = false
+							})
+						} else {
+							_this.show1 = false
+							_this.showNo1 = true
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已经到底了'
+							})
+						}
+
+					}
+				})
 			},
 			//点击全选
 			isallcheck() {
@@ -528,7 +587,8 @@
 			XButton,
 			XHeader,
 			Loading,
-			noData
+			noData,
+			Nomore
 		}
 	}
 </script>

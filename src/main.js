@@ -102,6 +102,15 @@ Vue.prototype.$echarts = echarts
 import { BusPlugin } from 'vux'
 Vue.use(BusPlugin)
 
+//判断是否微信端
+var ua = navigator.userAgent.toLowerCase()
+var isWeixin = ua.indexOf('micromessenger') != -1
+if(isWeixin) {
+	store.state.page.isWx = true
+} else {
+	store.state.page.isWx = false
+}
+
 //动画ios修复
 const shouldUseTransition = !/transition=none/.test(location.href)
 store.registerModule('vux', {
@@ -270,6 +279,81 @@ router.beforeEach(function(to, from, next) {
 						direction: ''
 					})
 				}
+			}
+		}
+	} else {
+		//touchEnd事件
+		document.addEventListener('touchend', function(event) {
+			startX = 0
+		}, false)
+
+		window.onpopstate = function(e) {
+			if((Date.now() - endTime) < 377) {
+				store.state.page.back = false
+			} else if((Date.now() - endTime) > 377 && startX > 160) {
+				store.state.page.back = false
+			} else {
+				store.state.page.back = true
+			}
+		}
+
+		const toIndex = history.getItem(to.path)
+		const fromIndex = history.getItem(from.path)
+
+		if(toIndex) {
+			if(!fromIndex || parseInt(toIndex, 10) > parseInt(fromIndex, 10) || (toIndex === '0' && fromIndex === '0')) {
+				// 判断是否是ios左滑返回
+				if(!isPush && (Date.now() - endTime) < 377 || !isPush && (Date.now() - endTime) > 377) {
+					if(store.state.page.back) {
+						store.commit('UPDATE_DIRECTION', {
+							direction: 'reverse'
+						})
+					} else {
+						store.commit('UPDATE_DIRECTION', {
+							direction: ''
+						})
+					}
+				} else {
+					store.commit('UPDATE_DIRECTION', {
+						direction: 'forward'
+					})
+				}
+			} else {
+				// 判断是否是ios左滑返回
+				if(!isPush && (Date.now() - endTime) < 377 || !isPush && (Date.now() - endTime) > 377) {
+					if(store.state.page.back) {
+						store.commit('UPDATE_DIRECTION', {
+							direction: 'reverse'
+						})
+					} else {
+						store.commit('UPDATE_DIRECTION', {
+							direction: ''
+						})
+					}
+				} else {
+					store.commit('UPDATE_DIRECTION', {
+						direction: 'reverse'
+					})
+				}
+			}
+		} else {
+			++historyCount
+			history.setItem('count', historyCount)
+			to.path !== '/' && history.setItem(to.path, historyCount)
+			if(!isPush && (Date.now() - endTime) < 377 || !isPush && (Date.now() - endTime) > 377) {
+				if(store.state.page.back) {
+					store.commit('UPDATE_DIRECTION', {
+						direction: 'reverse'
+					})
+				} else {
+					store.commit('UPDATE_DIRECTION', {
+						direction: ''
+					})
+				}
+			} else {
+				store.commit('UPDATE_DIRECTION', {
+					direction: 'forward'
+				})
 			}
 		}
 	}

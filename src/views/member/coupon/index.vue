@@ -53,7 +53,7 @@
         </div>
 
 		<div class="couponList">
-			<div class="wrapper" :class="{'top46':hShow}" ref="wrapper">
+			<div class="wrapper" :class="{'top46':$store.state.page.isWx}" ref="wrapper">
 				<div class="content">
 					<div v-if="couponList.length>0">
 						<div v-for="(item,index) in couponList" :style="[!item.show?mb:'']" class="roll">
@@ -241,10 +241,8 @@
 			},
 			changeType(value,label){
 				var _this=this;
-				console.log(value,label);
 				setTimeout(function(){
-					_this.par.type = parseInt(value) * 10;
-					console.log('---type',_this.par)
+					_this.par.type = parseInt(value) * 10
 					_this.changeRouter(_this.par)
 					_this.getCouponList(_this.par)
 					_this.typeShang=false;
@@ -260,12 +258,10 @@
 			},
 			changeStatus(value,label){
 				var _this=this;
-				console.log(value,label);
 				setTimeout(function(){
 					_this.par.status = parseInt(value);
 					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
-					console.log('---status',_this.par)
 					_this.statusShang=false;
 				},50);
 			},
@@ -279,12 +275,10 @@
 			},
 			changeDate(value,label){
 				var _this=this;
-				console.log(value,label);
 				setTimeout(function(){
 					_this.par.timeType = parseInt(value);
 					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
-					console.log('---date',_this.par)
 					_this.dateShang=false;
 				},50);
 			},
@@ -324,7 +318,6 @@
 						pageSize: 20
 					}
 				}).then((res) => {
-					console.log(res.data.data)
 					if(res.data.status == '00000000') {
 						var data = res.data.data
 						if(data.list.length > 0) {
@@ -358,8 +351,6 @@
 					if(res.data.status == "00000000") {
 						_this.couponList = res.data.data.list
 						_this.addShow()
-						console.log('---get', _this.couponList)
-						// _this.setData(obj,res.data.data)
 					}
 				})
 			},
@@ -368,14 +359,12 @@
 				for(let i = 0; i < this.couponList.length; i++) {
 					this.couponList[i].show = false;
 				}
-				console.log('--couponList', this.couponList)
 			},
 			// 查看详情
 			view(i) {
 				let obj = this.couponList[i];
 				obj.show = !this.couponList[i].show;
 				this.$set(this.couponList, i, obj);
-				// this.couponList[i].show = !this.couponList[i].show;
 			},
 			//修改路由
 			changeRouter(par){
@@ -385,7 +374,6 @@
 						'type': _this.par.type,
 						'status': _this.par.status,
 						'timeType': _this.par.timeType
-						// 'curPage': 1,
 					})
 				})
 			}
@@ -481,6 +469,9 @@
 				width: 100%;
 				padding: 0rem 0.21rem;
 				box-sizing: border-box;
+			}
+			.top46{
+				top:46px!important;
 			}
 			.bgImgThree {
 				/*background: url(../../../assets/images/user/rollBg4.png) no-repeat;*/
@@ -616,6 +607,7 @@
 	}
 	.no_data{
 		width: 100%;
+		height: 100%;
 		background: #fff;
 		padding: 1.5rem 0;
 		.none-data {

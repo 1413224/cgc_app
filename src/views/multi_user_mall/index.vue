@@ -35,12 +35,12 @@
 						</div>
 					</tab-item>
 					<tab-item :selected="tabIndex==1" @on-item-click="index">
-						<div class="tab-item" v-if="info.isChains == 1">
+						<div class="tab-item" v-if="info.isAlliance == 1">
 							<img src="../../assets/images/multi_user_mall/shop1.png" v-if="tabIndex==1">
 							<img src="../../assets/images/multi_user_mall/shop.png" v-else>
 							<div>商品</div>
 						</div>
-						<div class="tab-item" v-if="info.isAlliance == 1">
+						<div class="tab-item" v-if="info.isChains == 1">
 							<img src="../../assets/images/multi_user_mall/service1.png" v-if="tabIndex==1">
 							<img src="../../assets/images/multi_user_mall/service.png" v-else>
 							<div>服务</div>
@@ -67,8 +67,8 @@
 					<mallTheme :themeTitle="themeTitle"></mallTheme>
 					<mallTheme :themeTitle="themeTitle1"></mallTheme>
 				</div>
-				<service v-if="tabIndex==1 && info.isAlliance == 1"></service>
-				<shop v-if="tabIndex==1 && info.isChains == 1"></shop>
+				<service v-if="tabIndex==1 && info.isChains == 1"></service>
+				<shop v-if="tabIndex==1 && info.isAlliance == 1"></shop>
 				<store v-if="tabIndex==2"></store>
 				<loading v-if="tabIndex==1 && show"></loading>
 				<noMore v-if="tabIndex==1 && showNomore"></noMore>
@@ -328,6 +328,7 @@
 			.one {
 				display: flex;
 				align-items: center;
+				flex: 1;
 				img {
 					width: 16.5%;
 					margin-right: 0.16rem;

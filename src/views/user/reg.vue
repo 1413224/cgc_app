@@ -68,6 +68,10 @@
 		},
 		created() {
 			this.parentId = this.mainApp.getCs('parentId')
+			if(this.$route.query.mobile) {
+				this.mobile = this.$route.query.mobile
+			}
+			console.log(this.mobile)
 		},
 		beforeRouteEnter(to, from, next) {
 			next(vm => {
@@ -154,7 +158,7 @@
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
 					password: _this.MD5(_this.password),
-					terminal:_this.url.client
+					terminal: _this.url.client
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 
@@ -172,21 +176,24 @@
 						})
 						if(window.sessionStorage.length > 2) {
 							if(_this.frompath) {
-								_this.$router.replace({
-									path: _this.frompath
-								})
-								console.log(1)
+								if(_this.frompath != '/user/changeLoginPassword2') {
+									_this.$router.replace({
+										path: _this.frompath
+									})
+								} else {
+									_this.$router.replace({
+										path: '/index'
+									})
+								}
 							} else {
 								_this.$router.replace({
 									path: '/index'
 								})
-								console.log(2)
 							}
 						} else {
 							_this.$router.replace({
 								path: '/index'
 							})
-							console.log(3)
 						}
 					} else {
 						localStorage.removeItem('userNp')

@@ -37,9 +37,9 @@
 				show: false,
 				showNo: false,
 				isWx: true,
-				type:0,
-				curPage:1,
-				pageSize:20,
+				type: 0,
+				curPage: 1,
+				pageSize: 20,
 				list: []
 			}
 		},
@@ -70,18 +70,7 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						if(res.data.data.list.length > 0) {
-							_this.list = _this.list.concat(res.data.data.list)
-							if(_this.isload) {
-								_this.show = true
-								_this.showNo = false
-							}
-						} else {
-							if(_this.isload) {
-								_this.show = false
-								_this.showNo = true
-							}
-						}
+						_this.list = res.data.data.list
 					}
 				})
 			},
@@ -110,9 +99,33 @@
 			},
 			LoadData() {
 				var _this = this
-				_this.curPage ++
-				_this.getDayBalanceList()
-				_this.isload = true
+				_this.curPage++
+					_this.$http.get(_this.url.user.getDayBalanceList, {
+						params: {
+							userId: localStorage.getItem('userId'),
+							type: _this.type,
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.list = res.data.data.list
+								_this.show = true
+								_this.showNo = false
+							} else {
+								_this.show = false
+								_this.showNo = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
+						}
+					})
 			}
 		},
 		components: {

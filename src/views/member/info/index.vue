@@ -17,7 +17,7 @@
 			</group>
 			<group>
 				<cell class="list-item" title="实名认证" :value="auth" is-link link='/member/setting/real'></cell>
-				<cell class="list-item" title="个人档案" is-link link='/member/info/data' primary="content">完整度{{userInfo.percentage}}%</cell>
+				<cell class="list-item" title="个人档案" is-link link='/member/info/data' primary="content">完整度{{userInfo.percentage?userInfo.percentage:0}}%</cell>
 			</group>
 		</div>
 	</div>
@@ -35,7 +35,7 @@
 				varmax: 1, //图片最大张数
 				images: '', //图片数组
 				userInfo: {},
-				auth:''
+				auth: ''
 			}
 		},
 		created() {
