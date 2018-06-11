@@ -61,6 +61,11 @@ var url = {
 	zone: {
 		area: '/area/v1/area/level', //区域地址
 		address: '/area/v1/area/getInfo' //三级联动地址
+	},
+	// 快讯
+	article: {
+		getArticleCategory: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=getArticleCategory',//快讯tab接口
+		getArticleLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=getArticleLists'//快讯列表接口
 	}
 
 }
