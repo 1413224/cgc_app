@@ -248,7 +248,6 @@
 							font-size: 0.46rem;
 							color: #FFFFFF;
 							letter-spacing: 0;
-							margin-right: 0.2rem;
 						}
 					}
 					.universalAccount {
