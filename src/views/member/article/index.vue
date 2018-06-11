@@ -63,6 +63,7 @@
 	import Loading from '../../../components/loading'
 	import noMore from '../../../components/noMore'
 	import url from '../../../config/url'
+	import Qs from 'qs'
 	export default {
 		data(){
 			return {
@@ -114,20 +115,23 @@
 				})
 			},
 			LoadData() {
-				this.page ++;
 				var _this = this
 				_this.show = true
 				if(_this.showNomore){
-					_this.show = false; 
+					_this.show = false;
 				}else{
 					setTimeout(function(){
 						_this.show = false;
+						_this.page ++;
 						let len = _this.articleList.length;
-						let par = new URLSearchParams()
-						par.append('page',_this.page)
+						let parJson = {
+							pagesize:6,
+							page: _this.page
+						}
+						let par = Qs.stringify(parJson)
 						_this.$http.post(url.article.getArticleLists,par).then(function (response) {
 							if( response.status == 200 && response.data != null&&response.data.result.page == _this.page){
-								_this.articleList = _this.reviewData.lists.concat(response.data.result.lists)
+								_this.articleList = _this.articleList.concat(response.data.result.lists)
 							}
 							console.log(_this.articleList);
 							if(len == _this.articleList.length){
@@ -141,7 +145,12 @@
 			},
 			getData(){
 				let _this = this;
-				_this.$http.post(url.article.getArticleLists,{}).then(function (response) {
+				let parJson = {
+					pagesize:6,
+					page: 1
+				}
+				let par = Qs.stringify(parJson)
+				_this.$http.post(url.article.getArticleLists,par).then(function (response) {
 					if( response.status == 200 && response.data != null){
 						_this.articleList = response.data.result.lists
 					}
