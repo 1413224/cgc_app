@@ -170,9 +170,7 @@
 				],
 				show1: false,
 				logoTitle: '门店',
-				logolist: [{
-						name: '全部'
-					},
+				logolist: [
 					{
 						name: '5'
 					},

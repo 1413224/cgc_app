@@ -19,7 +19,7 @@
 				<group gutter="0">
 					<cell class="info-item" title="来源平台" :value="pointDetail.platformName"></cell>
 					<cell class="info-item" title="说明" :value="pointDetail.remark"></cell>
-					<cell class="info-item" title="创建时间" :value="pointDetail.createTime"></cell>
+					<cell class="info-item" title="创建时间" :value="pointDetail.createTime | getDate"></cell>
 					<cell class="info-item" title="订单编号" :value="pointDetail.orderSn" v-if="pointDetail.type == 1 || pointDetail.type == 4"></cell>
 					<cell class="info-item" :title="pointDetail.nickname" v-if="pointDetail.type == 5">
 						<div class="up-box">
@@ -30,7 +30,7 @@
 				</group>
 			</section>
 			<div class="lw-box">
-				<div class="all-h">
+				<div class="all-h" @click="$router.push({path:'/shop'})">
 					<img src="../../../../static/member/lw1.png" />
 					<div>
 						<p>更多惊喜礼品兑换</p>
@@ -53,7 +53,6 @@
 			}
 		},
 		created() {
-			console.log(this.$route.query)
 			this.getMyPointDetail(this.$route.query.id)
 		},
 		mounted() {
@@ -69,7 +68,6 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						_this.pointDetail = res.data.data
 					}
 				})

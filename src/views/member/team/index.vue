@@ -24,9 +24,9 @@
 											<img :src="item.avatar.original" />
 										</div>
 										<div class="user-text">
-											<p>{{item.nickname}}</p>
 											<p>手机号码：{{item.mobile}}</p>
-											<p>加入时间：{{item.registerTime}}</p>
+											<p>名称：{{item.nickname}}</p>
+											<p>加入时间：{{item.registerTime | getDate}}</p>
 										</div>
 									</div>
 									<div class="footer">

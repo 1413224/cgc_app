@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="item">
 			<div>
-				<span>当前平台</span><span>健康平台</span>
+				<span>当前平台</span><span>{{info.name}}</span>
 			</div>
 			<div>
 				<span>当前积分</span><span>89.24</span>
@@ -11,14 +11,17 @@
 		</div>
 		<div class="change-box">
 			<div class="change-tip">
-				<span>通用积分充值</span><span>充值记录</span>
+				<span>通用积分充值</span><span @click="record">充值记录</span>
 			</div>
 			<div class="change-row">
-				<div v-for="(item,index) in moneyList" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.null)">
+				<div v-for="(item,index) in moneyList" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.rechargeId)" v-if="moneyList.length>0">
 					<div class="box" :class="{'nohas':item.null}">
-						<p>{{item.now}}元</p>
-						<p>{{item.old}}</p>
+						<p>{{item.money}}元</p>
+						<p>充{{item.integral}}赠送{{item.integral}}积分</p>
 					</div>
+				</div>
+				<div v-if="moneyList.length == 0">
+					<p class="gy">暂无充值套餐</p>
 				</div>
 			</div>
 		</div>
@@ -65,30 +68,9 @@
 					value: '微信支付'
 				}],
 				show1: false,
-				moneyList: [{
-						now: '1000',
-						old: '赠送1000信用积分'
-					},
-					{
-						now: '2000',
-						old: '赠送2000信用积分',
-						null: true
-					},
-					{
-						now: '5000',
-						old: '赠送5000信用积分'
-					},
-					{
-						now: '8000',
-						old: '赠送8000信用积分'
-					}, {
-						now: '10000',
-						old: '赠送10000信用积分'
-					}, {
-						now: '20000',
-						old: '赠送20000信用积分'
-					},
-				]
+				moneyList: [],
+
+				info: {}
 			}
 		},
 		created() {
@@ -106,21 +88,21 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res)
+						_this.info = res.data.data
+						_this.moneyList = res.data.data.list
+						console.log(_this.info)
 					}
 				})
 			},
-			changeMoney(index, isnull) {
-				if(isnull) {
-					this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'top',
-						text: '暂无此商品'
-					})
-				} else {
-					this.moneyIndex = index
-				}
+			changeMoney(index, id) {
+				this.moneyIndex = index
+
+				this.$vux.toast.show({
+					width: '50%',
+					type: 'text',
+					position: 'top',
+					text: id
+				})
 			},
 			changePt(index) {
 				this.ptIndex = index
@@ -155,6 +137,15 @@
 					},
 					ishide() {
 						console.log('关闭了支付窗口')
+					}
+				})
+			},
+			record() {
+				this.$router.push({
+					name: 'currencyreward',
+					query: {
+						title: '通用积分',
+						type: 3
 					}
 				})
 			}

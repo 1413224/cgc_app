@@ -52,13 +52,26 @@
 			}
 		},
 		created() {
-			this.phone = JSON.parse(localStorage['userInfo']).mobile
 			this.getUserPayPassword()
+			this.getUserInfo()
 		},
 		mounted() {
 
 		},
 		methods: {
+			getUserInfo() {
+				var _this = this
+				//获取用户信息
+				_this.$http.get(_this.url.user.getBasicInfo, {
+					params: {
+						userId: localStorage['userId']
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.phone = res.data.data.mobile
+					}
+				})
+			},
 			//检测是否设置支付密码
 			getUserPayPassword() {
 				var _this = this
@@ -70,8 +83,6 @@
 					if(res.data.status == "00000000") {
 						if(res.data.data == 2) {
 							_this.isRemember = 0
-						} else {
-
 						}
 					}
 				})

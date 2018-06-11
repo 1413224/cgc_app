@@ -2,9 +2,9 @@ var uri1 = '/user',
 	uri2 = '/datacenter'
 
 var url = {
-	platformId: 2018050800000002,//平台ID
-	client:'user',//区分那个端登录
-	mapKey:'XMHBZ-DHFWD-M3P4H-HHVZP-UOKV3-5WBB5',
+	platformId: 2018050800000002, //平台ID
+	client: 'user', //区分那个端登录
+	mapKey: 'XMHBZ-DHFWD-M3P4H-HHVZP-UOKV3-5WBB5',
 
 	user: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //获取第三方应用授权链接接口
@@ -45,6 +45,7 @@ var url = {
 		getMyBalanceDetail: uri1 + '/v1/user/getMyBalanceDetail', //获取通用积分详情
 		getMyPointDetail: uri1 + '/v1/user/getMyPointDetail', //获取信用积分详情
 		getUserCouponList: uri1 + '/v1/user/getUserCouponList', //获取优惠券列表
+		getRechargeList: uri1 + '/v1/user/getRechargeList', //获取平台充值套餐列表信息接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息

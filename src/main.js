@@ -18,8 +18,17 @@ import VueLazyLoad from 'vue-lazyload'
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
 
+//时间控件  全局时间过滤器
 import mainApp from './global/global'
 Vue.prototype.mainApp = mainApp
+Vue.filter('getDate', function(value) {
+	if(value != 0){
+		return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
+	}else{
+		return value
+	}
+	
+})
 
 import MD5 from 'js-md5'
 Vue.prototype.MD5 = MD5

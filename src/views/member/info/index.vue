@@ -56,7 +56,6 @@
 						userId: localStorage.getItem('userId')
 					}
 				}).then((res) => {
-					console.log(res)
 					if(res.data.status == "00000000") {
 						_this.userInfo = res.data.data
 						if(res.data.data.avatar.original) {

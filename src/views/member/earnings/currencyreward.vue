@@ -22,7 +22,7 @@
 								<li v-for="item in list" @click="toDetail(item.balanceId)">
 									<div>
 										<p>{{item.remark}}</p>
-										<p>{{item.createTime}}</p>
+										<p>{{item.createTime | getDate}}</p>
 									</div>
 									<p class="red">{{item.directType == 1?'+':'-'}} {{item.balance}}</p>
 								</li>
@@ -57,6 +57,7 @@
 	import Loading from '../../../components/loading'
 	import Nomore from '../../../components/noMore'
 	import noData from '../../../components/noData'
+	import mainApp from '@/global/global'
 	export default {
 		data() {
 			return {
