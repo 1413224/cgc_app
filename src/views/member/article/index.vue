@@ -22,7 +22,7 @@
 			                <!--<a href="{php echo mobileUrl('stores')}">去逛逛</a>-->
 			                <!--</div>-->
 			                <div class="new" v-for="item in articleList"  :class="item.imgNumber==1?'oneImage':''">
-			                	<router-link :to="item.url">
+			                	<a :href="item.url">
 				                    <p class="newTitle">{{item.name}}!</p>
 				                    <div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
 				                    <div class="imgList" v-show="item.imgNumber>1">
@@ -30,7 +30,7 @@
                             		</div>
 				                    <p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
 				                    <div class="clear"></div>
-			                	</router-link>
+			                	</a>
 			                </div>
 			                
 			                <!-- <div class="new" :class="item.imgNumber==1?'oneImage':''" v-for="item in items">
