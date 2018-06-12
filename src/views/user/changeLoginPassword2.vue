@@ -4,7 +4,7 @@
 		<div class="content">
 			<group gutter="0" class="input-div">
 				<x-input class="input-item" ref="password" v-model="password" placeholder="输入六位新密码" type="password" :max="20"></x-input>
-				<x-input class="input-item" ref="password1" v-model="password1" placeholder="确认新密码" type="password"></x-input>
+				<x-input class="input-item" ref="password1" v-model="password1" placeholder="确认新密码" type="password" :max="20"></x-input>
 			</group>
 			<div class="tip">
 				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading">提交</x-button>
@@ -27,18 +27,28 @@
 			}
 		},
 		created() {
-			this.mobile = _this.$route.query.mobile
+			this.mobile = this.$route.query.mobile
 		},
 		methods: {
 			submit() {
 				var _this = this
 
-				if(_this.password == '' || _this.password1 == '') {
+				if(_this.password.length < 6 || _this.password1.length < 6) {
 					_this.$vux.toast.show({
 						width: '50%',
 						type: 'text',
 						position: 'middle',
 						text: '密码不能少于六位'
+					})
+					return false
+				}
+
+				if(_this.password.length > 20 || _this.password1.length > 20) {
+					_this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'middle',
+						text: '密码不能超过20位'
 					})
 					return false
 				}
@@ -59,17 +69,18 @@
 					platformId: _this.url.platformId
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+						_this.$router.replace({
+							path: '/user/reg',
+							query: {
+								mobile: _this.mobile
+							}
+						})
 						_this.$vux.toast.show({
 							width: '50%',
 							type: 'text',
 							position: 'middle',
 							text: '密码保存成功'
 						})
-						_this.$router.replace({
-							path: '/user/reg',
-							query: _this.mobile
-						})
-						console.log(_this.mobile)
 					}
 				})
 			}

@@ -72,7 +72,7 @@
 					headMessage: '提示',
 					message: '确定删除该地址吗?',
 					canel() {
-						console.log('取消')
+
 					},
 					confirm() {
 						let param = {

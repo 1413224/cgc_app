@@ -21,7 +21,7 @@
 								<div class="list" v-for="(item,index) in list" :key="index">
 									<div class="he">
 										<div class="user-img">
-											<img :src="item.avatar.original" />
+											<img :src="item.avatar.original?item.avatar.original:'./static/images/mrtx.png'" />
 										</div>
 										<div class="user-text">
 											<p>手机号码：{{item.mobile}}</p>

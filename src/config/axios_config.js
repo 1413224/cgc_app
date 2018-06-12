@@ -79,9 +79,9 @@ axios.interceptors.response.use(res => {
 				position: 'middle',
 				width: '50%'
 			})
-		} else if(res.data.status == 'utils007') {
+		} else if(res.data.status == 'utils007' || res.data.status == 'utils010') {
 			store.state.page.isLogin = false
-			router.push({
+			router.replace({
 				path: '/user/reg'
 			})
 			Vue.$vux.toast.show({

@@ -99,7 +99,7 @@
 				var _this = this
 				if(_this.code) {
 					_this.$http.post(_this.url.user.authVerification, {
-						type: 5,
+						type: 102,
 						mobile: _this.phone,
 						code: _this.code
 					}).then((res) => {
@@ -185,9 +185,9 @@
 				_this.code = ''
 				if(_this.mainApp.isphone(_this.phone)) {
 					_this.$refs.code.focus()
-					_this.$http.post(this.url.user.getVerificationCode, {
-						mobile: _this.phone,
-						type: 5
+					_this.$http.post(this.url.user.getVerificationCode1, {
+						userId:localStorage['userId'],
+						type: 102
 					}).then(function(res) {
 						if(res.data.status == "00000000") {
 							_this.$vux.toast.show({
