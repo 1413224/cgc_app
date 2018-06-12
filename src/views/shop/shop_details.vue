@@ -19,7 +19,7 @@
     			<swiper :options="swiperOption" class="imgBox">
 			       	<swiper-slide v-for="(item,index) in shopImg" :key="index">
 			       		<div class="imgBox-item">
-                        	<img class="previewer-demo-img" v-lazy="item.src" @click="show(index)">
+                        	<img class="previewer-demo-img" :src="item.src" @click="show(index)">
 			       		</div>
 			       	</swiper-slide>
 			    </swiper> 
