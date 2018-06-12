@@ -326,11 +326,15 @@ export default {
 		width: 100%;
 		height: 3.66rem;
 		line-height: 3.66rem;
-		img{
-			width: 100%;
-			display: inline-block; 
-			vertical-align: middle;
+		.imgBox-item{
+			img{
+				width: 100%;
+				height: 100%;
+				display: inline-block; 
+				vertical-align: middle;
+			}
 		}
+		
 	}
 
 	.shop_content{
