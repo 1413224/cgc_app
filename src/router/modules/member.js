@@ -51,6 +51,7 @@ import preview from '@/views/member/setting/preview'
 import article from '@/views/member/article/index'
 import vip from '@/views/member/vip/index'
 import generalize from '@/views/member/generalize/index'
+import wxpay from '@/views/member/pay/wxgzhpay'
 
 const memberModule = [{
 		path: '/index',
@@ -483,6 +484,14 @@ const memberModule = [{
 		component: resolve => require(['@/views/member/join/index'], resolve),
 		meta: {
 			title: '企业加盟'
+		}
+	},
+	{
+		path:'/member/pay/wxgzhpay',
+		name:'wxpay',
+		component: resolve => require(['@/views/member/pay/wxgzhpay'], resolve),
+		meta: {
+			title: '微信支付'
 		}
 	}
 ]
