@@ -44,6 +44,7 @@
 	import { XInput, Group, XButton, Cell, Loading, AlertModule, Confirm, CheckIcon } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import agreement from '@/views/member/setting/agreement'
+	import {base64_encode,base64_decode} from '../../global/course.js'
 	export default {
 		name: 'reg',
 		data() {
@@ -67,6 +68,7 @@
 			}
 		},
 		created() {
+
 			this.parentId = this.mainApp.getCs('parentId')
 			if(this.$route.query.mobile) {
 				this.mobile = this.$route.query.mobile
@@ -168,6 +170,25 @@
 					terminal: _this.url.client
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
+
+
+
+						/*let info={
+							'userId': res.data.data.id
+						}*/
+						/*let userId = base64_encode(res.data.data.id)
+						let userNp = base64_encode(res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
+						let token = base64_encode(res.data.data.token)
+
+						let hasc={} */
+						console.log(res.data.data)
+
+
+
+						let hash = base64_encode(res.data.data)
+						console.log(hash)
+
+						localStorage.setItem('_HASH_', hash)
 
 						localStorage.setItem('userId', res.data.data.id)
 						localStorage.setItem('userNp', res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
