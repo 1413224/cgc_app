@@ -136,13 +136,13 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						_this.info = res.data.data
 						localStorage.setItem('storeInfo',JSON.stringify(res.data.data))
 						if(_this.info.logo) {
 							_this.logo = _this.info.logo.original
 						}
-
+						
+							
 						if(_this.info.isAlliance == 1) {
 							_this.getAllianceConcern(_this.info.allianceId)
 						} else if(_this.info.isChains == 1) {
@@ -162,7 +162,7 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
+						
 					}
 				})
 			},

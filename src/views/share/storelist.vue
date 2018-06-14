@@ -41,7 +41,7 @@
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
 			<div class="content">
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
-				<div class="list" v-if="list.length>0">
+				<div class="list" v-if="list.length > 0">
 					<ul>
 						<li class="clearfix" @click="goStoreDetail(item.enterpriseId)" v-for="(item,index) in list" :key="item.enterpriseId">
 							<div class="left">
@@ -64,7 +64,9 @@
 					<Loading v-if="showLoading"></Loading>
 					<noMore v-if="showNoMore"></noMore>
 				</div>
-				<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
+				<div style="margin-top: 1px;">
+					<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
+				</div>
 			</div>
 		</div>
 
@@ -170,8 +172,7 @@
 				],
 				show1: false,
 				logoTitle: '门店',
-				logolist: [
-					{
+				logolist: [{
 						name: '5'
 					},
 					{
@@ -261,7 +262,6 @@
 			noData
 		},
 		created() {
-			this.list = []
 			this.InitScroll()
 			this.itemsInit()
 			this.getLg()
@@ -332,7 +332,7 @@
 					if(res.data.status == "00000000") {
 						console.log(res.data.data)
 						if(res.data.data) {
-							_this.list = res.data.data
+							_this.list = res.data.data.list
 						}
 					}
 				})
@@ -498,6 +498,7 @@
 			},
 			// 重置
 			reset() {
+				this.addressKey = 1
 				this.listType = '1'
 				this.countryId = 1
 				this.provinceId = ''

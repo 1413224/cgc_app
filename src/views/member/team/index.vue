@@ -25,7 +25,7 @@
 										</div>
 										<div class="user-text">
 											<p>手机号码：{{item.mobile}}</p>
-											<p>名称：{{item.nickname}}</p>
+											<p>名称：{{item.nickname?item.nickname:'未设置'}}</p>
 											<p>加入时间：{{item.registerTime | getDate}}</p>
 										</div>
 									</div>
@@ -285,7 +285,7 @@
 				justify-content: flex-start;
 				img {
 					width: 0.9rem;
-					height: 0.9rem;
+					height: auto;
 					border-radius: 50%;
 				}
 			}

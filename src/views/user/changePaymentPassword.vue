@@ -263,7 +263,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			padding: 0 0.35rem;
+			padding: 0 0.90rem;
 			margin-top: 0.30rem;
 			box-sizing: border-box;
 			div {
@@ -273,6 +273,7 @@
 				margin-top: 0.6rem;
 				font-size: 0.28rem;
 				text-align: center;
+				border-radius: 2px;
 				font-family: MicrosoftYaHei;
 			}
 			div:nth-child(1) {

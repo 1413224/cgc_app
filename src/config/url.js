@@ -20,7 +20,7 @@ var url = {
 		forgetPassword: uri1 + '/public/v1/user/forgetPassword', //重置登录密码
 		checkUserExistsByMobile: uri1 + '/public/v1/user/checkUserExistsByMobile', //用户是否注册
 		getVerificationCode: uri1 + '/public/v1/sms/getVerificationCode', //获取验证码
-		getVerificationCode1: uri1 + '/v1/accountSms/getVerificationCode', //登录后获取验证码
+		getVerificationCode1: uri1 + '/v1/sms/getVerificationCode', //登录后获取验证码
 		authVerification: uri1 + '/public/v1/sms/authVerificationCode', //检测验证码是否正确
 		setPayPassword: uri1 + '/v1/user/setPayPassword', //设置支付密码
 		changeNickname: uri1 + '/v1/user/changeNickname', //修改用户名

@@ -219,6 +219,13 @@ const memberModule = [{
 		meta: {
 			title: '详细资料'
 		}
+	}, {
+		path: '/member/info/img',
+		name: 'infoimg',
+		component: resolve => require(['@/views/member/info/img'], resolve),
+		meta: {
+			title: '上传图片'
+		}
 	},
 	{
 		path: '/member/setting/changeCode',
@@ -255,14 +262,14 @@ const memberModule = [{
 		name: 'pursewallet',
 		component: resolve => require(['@/views/member/purse/wallet'], resolve),
 		meta: {
-			title: '我的钱包'
+			title: '我的资产'
 		}
 	}, {
 		path: '/member/purse/index',
 		name: 'purseindex',
 		component: resolve => require(['@/views/member/purse/index'], resolve),
 		meta: {
-			title: '我的钱包'
+			title: '我的资产'
 		}
 	},
 	{

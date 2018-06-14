@@ -5,8 +5,10 @@
 			<group gutter="0">
 				<cell class="list-item user-img" title="头像编辑" is-link>
 					<div class="up-box">
-						<img class="tx" :src="images?images:'./static/images/mrtx.png'" />
-						<input class="upinput" type="file" name="" id="" value="" @change="up" ref="input" />
+						<div class="tx">
+							<img :src="images?images:'./static/images/mrtx.png'" />
+						</div>
+						<input class="upinput" type="file" name="" id="" value="" @change="up2" ref="input" />
 					</div>
 				</cell>
 				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>
@@ -103,6 +105,17 @@
 						})
 					}
 				})
+			},
+			up2(e) {
+				var _this = this
+				console.log(_this.$scImg)
+				_this.$scImg.show({
+					panel: true,
+					e: e,
+					hide(){
+						_this.getUserInfo()
+					}
+				})
 			}
 		},
 		components: {
@@ -127,8 +140,16 @@
 				.tx {
 					width: 1rem;
 					height: 1rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					border-radius: 50%;
-					vertical-align: middle;
+					overflow: hidden;
+					img {
+						vertical-align: middle;
+						width: 100%;
+						height: 100%;
+					}
 				}
 				.code {
 					width: 0.36rem;

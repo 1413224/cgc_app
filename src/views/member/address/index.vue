@@ -200,7 +200,7 @@
 					align-items: center;
 					.label {
 						display: inline-block;
-						// width: 0.8rem;
+						background:rgba(215,227,255,1);
 						border: 1px solid #1c70f1;
 						border-radius: 2px;
 						margin-left: 0.18rem;

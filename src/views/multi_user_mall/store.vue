@@ -1,7 +1,7 @@
 <template>
 	<section class='store'>
 		<div class="shop">
-			<img :src="logo" alt="">
+			<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="">
 			<div>
 				<p class='shop-name'>{{pinfo.name}}</p>
 				<p class='shop-size' v-if="pinfo.isAlliance == 1">{{pinfo.allianceConcern}}关注</p>

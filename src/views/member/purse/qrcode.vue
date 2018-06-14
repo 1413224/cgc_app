@@ -9,7 +9,7 @@
 					<!--<img class="code" src="../../../assets/images/lock/qcode.png" />-->
 					<qrcode :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
 					<div class="bottom">
-						<img :src="images" alt="" />
+						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
 						<div>
 							<p>{{userInfo.nickname}}</p>
 							<p>{{userInfo.mobile}}</p>

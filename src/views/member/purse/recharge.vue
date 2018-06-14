@@ -6,7 +6,7 @@
 				<span>当前平台</span><span>{{info.name}}</span>
 			</div>
 			<div>
-				<span>当前积分</span><span>89.24</span>
+				<span>当前积分</span><span>{{userInfo.availablePoints}}</span>
 			</div>
 		</div>
 		<div class="change-box">
@@ -17,7 +17,7 @@
 				<div v-for="(item,index) in moneyList" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.rechargeId)" v-if="moneyList.length>0">
 					<div class="box" :class="{'nohas':item.null}">
 						<p>{{item.money}}元</p>
-						<p>充{{item.integral}}赠送{{item.integral}}积分</p>
+						<p>赠送{{item.integral}}积分</p>
 					</div>
 				</div>
 				<div v-if="moneyList.length == 0">
@@ -70,10 +70,12 @@
 				show1: false,
 				moneyList: [],
 
-				info: {}
+				info: {},
+				userInfo:{}
 			}
 		},
 		created() {
+			this.userInfo = JSON.parse(localStorage['userInfo'])
 			this.getRechargeList()
 		},
 		mounted() {},
@@ -230,11 +232,12 @@
 						border-radius: 3px;
 						color: #C6CCDA;
 						p:nth-child(1) {
-							font-size: 0.28rem;
+							font-size: 0.30rem;
 						}
 						p:nth-child(2) {
 							font-size: 0.20rem;
 							text-align: center;
+							margin-top: 0.1rem;
 						}
 						img {
 							width: 0.4rem;

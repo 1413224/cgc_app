@@ -211,9 +211,12 @@ li{
 				  display:inline-block;
 				  margin-left: 0.06rem;
 				  float: left;
+				  display: flex;
+				  align-items: center;
+				  overflow: hidden;
 				  img{
 				  	width: 100%;
-				  	height: 100%;
+				  	height: auto;
 				  }
 				}
 				.box1-item:first-child {

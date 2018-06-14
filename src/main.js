@@ -41,6 +41,7 @@ Vue.prototype.$http = axios //定义axios组件用法  this.$http(opt).then(fn)
 
 import url from './config/url'
 Vue.prototype.url = url //全局url路径
+Vue.prototype.url2 = url //全局url路径
 
 Vue.config.silent = true
 
@@ -93,8 +94,10 @@ Vue.config.productionTip = false
 //组件插件
 import dialog from '@/components/dialog'
 import code from '@/components/code'
+import scimg from '@/components/scimg'
 Vue.use(dialog)
 Vue.use(code)
+Vue.use(scimg)
 
 //引用动画库
 import animate from 'animate.css'
