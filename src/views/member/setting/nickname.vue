@@ -2,7 +2,7 @@
 	<div class="content">
 		<settingHeader :title="title"></settingHeader>
 		<group class="input-div" gutter="0">
-			<x-input class="input-item" v-model="name" placeholder="请输入修改的用户名" type="text" :max="20" :required="true"></x-input>
+			<x-input class="input-item" v-model="name" placeholder="请输入修改的用户昵称" type="text" :max="20" :required="true"></x-input>
 		</group>
 		<div class="tip">
 			<div class="add-btn" @click="submit">保存</div>

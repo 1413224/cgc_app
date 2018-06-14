@@ -3,6 +3,7 @@ import axios from 'axios'
 import store from '@/store'
 import isload from '@/components/isload'
 import router from '@/router'
+import {base64_decode} from '../global/course.js'
 
 import MD5 from 'js-md5'
 
@@ -23,6 +24,15 @@ axios.interceptors.request.use(config => {
 	}
 
 	let token = localStorage.getItem('token')
+
+
+	/*let _HASH_ = localStorage.getItem('_HASH_')
+	let info = base64_decode(_HASH_)
+	console.log(info)*/
+
+
+	
+
 	let timestamp = Math.round(new Date().getTime() / 1000)
 	let sign = ''
 	if(token && config.url.split('/')[2] != 'public') {

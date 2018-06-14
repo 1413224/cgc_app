@@ -27,11 +27,11 @@
 							<marquee-item v-for="i in 5" :key="i" :duration='3000' class="align-middle">魅族手机成功加盟CGC全球智慧产业联盟</marquee-item>
 						</marquee>
 					</div>
-					<router-link to="/member/article/index">
+					<!--<router-link to="/member/article/index">
 						<div class="notMore">
 							<img src="../assets/images/shop/turn_right.png">
 						</div>
-					</router-link>
+					</router-link>-->
 				</div>
 				<!--<div class="lottery">
 					<img class="auto-img" src="../assets/images/index/group.png" alt="">
@@ -111,13 +111,18 @@
 					<img class="auto-img mt20" v-lazy="'./static/images/hxmkl2.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/hdjt.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/mz2.png'" alt="" /> -->
-					<img class="auto-img mt20" src="../../static/images/mxqy2.png" alt="" />
+					<!--<img class="auto-img mt20" src="../../static/images/mxqy2.png" alt="" />
 					<img class="auto-img mt20" src="../../static/index/gmdq.png" alt="" />
 					<img class="auto-img mt20" src="../../static/index/hxmkl.png" alt="" />
 					<img class="auto-img mt20" src="../../static/index/hdjt.png" alt="" />
-					<img class="auto-img mt20" src="../../static/index/mz.png" alt="" />
+					<img class="auto-img mt20" src="../../static/index/mz.png" alt="" />-->
+					<img class="auto-img mt20" src="../../static/images/index1.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/index2.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/index3.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/index4.png" alt="" />
+					<img class="auto-img mt20" src="../../static/images/index5.png" alt="" />
 				</div>
-				
+
 				<!--<div class="pro-allbox" v-for="item in proList">
 					<div class="titlebox">{{item.title}}</div>
 					<img class="auto-img" v-lazy="item.img" />
@@ -225,16 +230,18 @@
 						tip: '100积分+199.67元'
 					},
 				],
-				demoList: [
-				{
-					img: './static/index/lt.png',url: ''
-				},
-				{
-					img: './static/index/syjm.png',url: '/member/join/index'
-				},
-				{
-					img: './static/index/lt.png',url: ''
-				}
+				demoList: [{
+						img: './static/index/lt.png',
+						url: ''
+					},
+					{
+						img: './static/index/syjm.png',
+						url: '/member/join/index'
+					},
+					{
+						img: './static/index/lt.png',
+						url: ''
+					}
 					// './static/index/gmdq.png',
 					// './static/index/hxmkl.png',
 					// './static/index/hdjt.png',
@@ -253,14 +260,17 @@
 						url: '/member/purse/qrcode'
 					}
 				],
+
 				navList:[
 					{title:'抽奖中心',img:'./static/images/cj.png',url:'/draw'},
 					{title:'邀请有奖',img:'./static/images/yq.png',url:'/member/purse/qrcode'},
 					{title:'推广助手',img:'./static/images/tg.png',url:'/member/generalize/index'},
-					{title:'赚钱攻略',img:'./static/images/gl.png',url:'/member/strategy/index'},
+					// {title:'赚钱攻略',img:'./static/images/gl.png',url:'/member/strategy/index'},
+					{title:'会员权益',img:'./static/images/gl.png',url:'/member/benefits/index'},
 					{title:'充值有奖',img:'./static/images/cz.png',url:'/member/purse/recharge'},
 					{title:'我的优惠券',img:'./static/images/yh.png',url:'/member/coupon/index'},
-					{title:'会员权益',img:'./static/images/hy.png',url:'/member/benefits/index'},
+					// {title:'会员权益',img:'./static/images/hy.png',url:'/member/benefits/index'},
+					{title:'我的会员',img:'./static/images/hy.png',url:'/member/vip/index'},
 					{title:'我的资产',img:'./static/images/zc.png',url:'/member/purse/wallet'},
 				],
 				allianceList: [{
@@ -435,8 +445,8 @@
 			height: auto;
 			display: block
 		}
-		.mt20{
-			margin-top: 0.2rem;
+		.mt20 {
+			margin-top: 0.22rem;
 		}
 		/*banner顶部*/
 		.swiperTop {
@@ -517,17 +527,17 @@
 				border-right: 1px solid #E1E1E1;
 				padding-right: 0.2rem;
 			}
-			.notMore{
-			    img{
-			    	width: 0.25rem;
-			    	height: 0.25rem;
-			    	border: none;
-			    	border-left: 1px solid #D8DFF0;
-			    	display: inline-block;
-			    	padding: 0.15rem 0;
-			    	padding-left: 0.3rem;
-			    	margin-left: 0.85rem;
-			    }
+			.notMore {
+				img {
+					width: 0.25rem;
+					height: 0.25rem;
+					border: none;
+					border-left: 1px solid #D8DFF0;
+					display: inline-block;
+					padding: 0.15rem 0;
+					padding-left: 0.3rem;
+					margin-left: 0.85rem;
+				}
 			}
 		}
 		/*抽奖模块*/
@@ -910,10 +920,10 @@
 	#appIndex {
 		/*banner轮播*/
 		.swiper {
-			height: 3rem;
+			/*height: 3rem;*/
 			img {
 				width: 100%;
-				height: 3rem;
+				/*height: 3rem;*/
 			}
 			.swiper-pagination-bullet {
 				background: #fff!important;

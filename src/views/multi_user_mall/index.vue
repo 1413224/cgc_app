@@ -205,6 +205,7 @@
 			index(index) {
 				var _this = this
 				_this.tabIndex = index
+				console.log(index)
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'tabIndex': index
@@ -317,7 +318,8 @@
 		width: 100%;
 		height: 2.36rem;
 		background-color: #90A2C7;
-		/*background: url('../../assets/images/multi_user_mall/Mask.png') no-repeat;*/
+		background: url(../../../static/shop/storebg.png) no-repeat;
+		background-size: cover;
 		.store {
 			height: 100%;
 			padding: 15px 15px;

@@ -27,6 +27,6 @@ router.afterEach(function(to,from){
 export default new Router({
   // base:'/new/',
   routes: all,
-  /*mode:'history',
-  fallback:true*/
+  // mode:'history',
+ /* fallback:true*/
 })

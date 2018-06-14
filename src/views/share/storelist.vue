@@ -5,7 +5,7 @@
 		<div class="searchBox">
 			<div class="search">
 				<img src="../../assets/images/shop/search.png">
-				<input type="search" placeholder="搜索心仪的门店" @click="goSearch">
+				<input type="text" placeholder="搜索心仪的门店" @click="goSearch">
 			</div>
 		</div>
 
@@ -80,14 +80,14 @@
 						<div class="content">
 							<div class="screening">
 								<div class="logo">
-									<group>
+									<group class="input-div">
 										<!-- <cell islink :title="logoTitle" :border-intent="false" :arrow-direction="showContent ? 'up' : 'down'" @click.native="down()"> -->
 										<cell :title="logoTitle" :border-intent="false">
 										</cell>
 										<div>
 											<div class="logolist">
-												<li class="item" :class="{'li-selected':distanceIndex == index}" v-for="(item, index) in logolist" @click="changeCss(index,item.name)">{{ item.name}}公里</li>
-												<input type="number" v-model="distance" placeholder="请输入距离" class="distance" />
+												<li class="item" :class="{'li-selected':distanceIndex == index}" v-for="(item, index) in logolist" @click="changeCss(index,item)">{{item}}公里</li>
+												<x-input class="distance" style="text-align: center;" placeholder="请输入距离" v-model="distance" type="number" @on-change="distanceChange"></x-input>
 											</div>
 										</div>
 									</group>
@@ -120,6 +120,8 @@
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
 	import noData from '../../components/noData'
+
+	import { Group, XInput } from 'vux'
 	export default {
 		data() {
 			return {
@@ -172,22 +174,7 @@
 				],
 				show1: false,
 				logoTitle: '门店',
-				logolist: [{
-						name: '5'
-					},
-					{
-						name: '10'
-					},
-					{
-						name: '20'
-					},
-					{
-						name: '50'
-					},
-					{
-						name: '100'
-					}
-				],
+				logolist: [5, 10, 20, 50, 100],
 				screeningContent: [{
 						title: '美食',
 						options: [{
@@ -259,7 +246,9 @@
 			scroll,
 			Loading,
 			noMore,
-			noData
+			noData,
+			Group,
+			XInput
 		},
 		created() {
 			this.InitScroll()
@@ -318,7 +307,7 @@
 					islist: _this.islist
 				}
 				if(_this.provinceId != '') {
-					data.provinceI = _this.provinceId
+					data.provinceId = _this.provinceId
 				}
 				if(_this.cityId != '') {
 					data.cityId = _this.cityId
@@ -518,9 +507,27 @@
 			},
 			// 完成
 			complete() {
+				var _this = this
 				this.show1 = false
 				this.list = []
 				this.getEnterpriseListInfo()
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'distance': _this.distance
+					})
+				})
+			},
+			distanceChange(val) {
+				var _this = this
+				console.log(val)
+				for(var i = 0; i < _this.logolist.length; i++) {
+					if(_this.logolist[i] == val) {
+						_this.distanceIndex = i
+						return false
+					} else {
+						_this.distanceIndex = 50
+					}
+				}
 			},
 			selectCss: function(e) {
 				if(e.target.className.indexOf("li-selected") == -1) {
@@ -988,10 +995,11 @@
 			input {
 				width: 100%;
 				background: #F5F6FA;
-				border-radius: 0.29rem;
+				border-radius: 2px;
 				color: #1A2642;
 				font-size: 0.24rem;
 				padding: 0.14rem 0.1rem 0.12rem 0.78rem;
+				box-sizing: border-box;
 			}
 			input::-webkit-input-placeholder {
 				color: #90A2C7 !important; // WebKit browsers 

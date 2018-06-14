@@ -1,5 +1,5 @@
 import imgComponent from './scimg.vue'
-
+//https://github.com/fengyuanchen/cropperjs/blob/master/README.md 官方文档
 let $scImg
 
 export default {
@@ -15,7 +15,8 @@ export default {
 			show(obj){
 				$scImg.panel = true
 				$scImg.e = obj.e
-				$scImg.hide = obj.hide
+				$scImg.Confirm = obj.Confirm
+				$scImg.Cancel = obj.Cancel
 			},
 		}
 		
