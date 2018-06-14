@@ -52,13 +52,26 @@
 			}
 		},
 		created() {
-			this.phone = JSON.parse(localStorage['userInfo']).mobile
 			this.getUserPayPassword()
+			this.getUserInfo()
 		},
 		mounted() {
 
 		},
 		methods: {
+			getUserInfo() {
+				var _this = this
+				//获取用户信息
+				_this.$http.get(_this.url.user.getBasicInfo, {
+					params: {
+						userId: localStorage['userId']
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.phone = res.data.data.mobile
+					}
+				})
+			},
 			//检测是否设置支付密码
 			getUserPayPassword() {
 				var _this = this
@@ -70,8 +83,6 @@
 					if(res.data.status == "00000000") {
 						if(res.data.data == 2) {
 							_this.isRemember = 0
-						} else {
-
 						}
 					}
 				})
@@ -88,7 +99,7 @@
 				var _this = this
 				if(_this.code) {
 					_this.$http.post(_this.url.user.authVerification, {
-						type: 5,
+						type: 102,
 						mobile: _this.phone,
 						code: _this.code
 					}).then((res) => {
@@ -174,9 +185,9 @@
 				_this.code = ''
 				if(_this.mainApp.isphone(_this.phone)) {
 					_this.$refs.code.focus()
-					_this.$http.post(this.url.user.getVerificationCode, {
-						mobile: _this.phone,
-						type: 5
+					_this.$http.post(this.url.user.getVerificationCode1, {
+						userId:localStorage['userId'],
+						type: 102
 					}).then(function(res) {
 						if(res.data.status == "00000000") {
 							_this.$vux.toast.show({

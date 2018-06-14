@@ -33,7 +33,7 @@
 				<group gutter="0">
 					<cell class="info-item" title="来源平台" :value="balanceDetail.platformName"></cell>
 					<cell class="info-item" title="说明" :value="balanceDetail.remark"></cell>
-					<cell class="info-item" title="创建时间" :value="balanceDetail.createTime"></cell>
+					<cell class="info-item" title="创建时间" :value="balanceDetail.createTime | getDate"></cell>
 					<cell class="info-item" title="订单编号" :value="balanceDetail.orderSn" v-if="balanceDetail.type == 1 || balanceDetail.type == 4"></cell>
 					<cell class="info-item" :title="balanceDetail.nickname" v-if="balanceDetail.type == 5">
 						<div class="up-box">

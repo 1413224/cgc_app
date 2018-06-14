@@ -2,12 +2,12 @@
 	<div class="addressEdit-box">
 		<settingHeader :title="title"></settingHeader>
 		<group :gutter="0" class="input-div">
-			<x-input class="address-item" placeholder="姓名" v-model="info.name" required></x-input>
-			<x-input class="address-item" placeholder="联系方式" type="text" v-model="info.mobile" required></x-input>
+			<x-input class="address-item" placeholder="姓名" v-model="info.name"></x-input>
+			<x-input class="address-item" placeholder="联系方式" type="text" v-model="info.mobile"></x-input>
 			<cell title="中国" value-align="left" class="addr-cell">
 				<x-address :list="list" class="address-item address-check" v-model="addArr" title='' placeholder="请选择地址" value-text-align="left" @on-show="onAddArr"></x-address>
 			</cell>
-			<x-input class="address-item" placeholder="详细地址" v-model="info.address" type="text" required></x-input>
+			<x-input class="address-item" placeholder="详细地址" v-model="info.address" type="text"></x-input>
 			<x-input class="address-item" placeholder="邮箱" v-model="info.email" type="text"></x-input>
 			<x-textarea class="address-tt" :height="40" title="标签 :" v-model="info.remark" @on-change="labelChange" type="text"></x-textarea>
 			<div class="label-box">

@@ -18,8 +18,17 @@ import VueLazyLoad from 'vue-lazyload'
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
 
+//时间控件  全局时间过滤器
 import mainApp from './global/global'
 Vue.prototype.mainApp = mainApp
+Vue.filter('getDate', function(value) {
+	if(value != 0){
+		return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
+	}else{
+		return value
+	}
+	
+})
 
 import MD5 from 'js-md5'
 Vue.prototype.MD5 = MD5
@@ -156,7 +165,7 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	//缓存路由页面
+	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
 	if(to.path == '/user/reg') {

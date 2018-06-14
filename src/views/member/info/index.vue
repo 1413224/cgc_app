@@ -9,14 +9,14 @@
 						<input class="upinput" type="file" name="" id="" value="" @change="up" ref="input" />
 					</div>
 				</cell>
-				<cell class="list-item" title="用户昵称" :value="userInfo.nickname" is-link link="/member/setting/nickname"></cell>
+				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>
 			</group>
 			<group>
 				<cell class="list-item" title="我的二维码" is-link link="/member/purse/qrcode"><img class="code" src="../../../assets/images/member/code@2x.png" /></cell>
 				<cell class="list-item user-address" title="地址管理" is-link link="/member/address/index"></cell>
 			</group>
 			<group>
-				<cell class="list-item" title="实名认证" :value="auth" is-link link='/member/setting/real'></cell>
+				<cell class="list-item" title="实名认证" :value="auth?auth:'未认证'" is-link link='/member/setting/real'></cell>
 				<cell class="list-item" title="个人档案" is-link link='/member/info/data' primary="content">完整度{{userInfo.percentage?userInfo.percentage:0}}%</cell>
 			</group>
 		</div>
@@ -56,7 +56,6 @@
 						userId: localStorage.getItem('userId')
 					}
 				}).then((res) => {
-					console.log(res)
 					if(res.data.status == "00000000") {
 						_this.userInfo = res.data.data
 						if(res.data.data.avatar.original) {

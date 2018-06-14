@@ -67,7 +67,7 @@
 									<div class="middle">
 										<div>
 											<span>满{{item.condition}}元减{{item.denomination}}元</span><br>
-											<span>{{item.startTime}} - {{item.endTime}}</span>
+											<span>{{item.startTime | getDate}} - {{item.endTime | getDate}}</span>
 										</div>
 										<div class="bottom" @click="view(index)">查看详情 <img :class="{'noshow':!item.show}" :src="iconImg"></div>
 									</div>

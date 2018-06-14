@@ -5,13 +5,13 @@
 			<div>
 				<p class='shop-name'>{{pinfo.name}}</p>
 				<p class='shop-size' v-if="pinfo.isAlliance == 1">{{pinfo.allianceConcern}}关注</p>
-				<p class='shop-size' v-if="pinfo.isChains == 1">{{pinfo.chainsConcern}}关注</p>
+				<p class='shop-size' v-if="pinfo.isChains == 1">{{pinfo.chainsConcern}}人关注</p>
 			</div>
 		</div>
 		<div class="select">
 			<group>
 				<cell title="店铺号" :value="pinfo.number" :border-intent="false"></cell>
-				<cell title="开店时间" :value="pinfo.joinTime" :border-intent="false"></cell>
+				<cell title="开店时间" :value="pinfo.joinTime | getDate" :border-intent="false"></cell>
 				<cell title="图册" :border-intent="false" is-link @click.native="isLook"></cell>
 			</group>
 			<group class="center">

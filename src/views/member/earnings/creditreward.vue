@@ -22,7 +22,7 @@
 								<li v-for="item in list" @click="toDetail(item.pointId)">
 									<div>
 										<p>{{item.remark}}</p>
-										<p>{{item.createTime}}</p>
+										<p>{{item.createTime | getDate}}</p>
 									</div>
 									<p class="red">{{item.directType == 1?'+':'-'}} {{item.point}}</p>
 								</li>

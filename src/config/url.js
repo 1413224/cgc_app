@@ -2,9 +2,9 @@ var uri1 = '/user',
 	uri2 = '/datacenter'
 
 var url = {
-	platformId: 2018050800000002,//平台ID
-	client:'user',//区分那个端登录
-	mapKey:'XMHBZ-DHFWD-M3P4H-HHVZP-UOKV3-5WBB5',
+	platformId: 2018050800000002, //平台ID
+	client: 'user', //区分那个端登录
+	mapKey: 'XMHBZ-DHFWD-M3P4H-HHVZP-UOKV3-5WBB5',
 
 	user: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //获取第三方应用授权链接接口
@@ -20,6 +20,7 @@ var url = {
 		forgetPassword: uri1 + '/public/v1/user/forgetPassword', //重置登录密码
 		checkUserExistsByMobile: uri1 + '/public/v1/user/checkUserExistsByMobile', //用户是否注册
 		getVerificationCode: uri1 + '/public/v1/sms/getVerificationCode', //获取验证码
+		getVerificationCode1: uri1 + '/v1/accountSms/getVerificationCode', //登录后获取验证码
 		authVerification: uri1 + '/public/v1/sms/authVerificationCode', //检测验证码是否正确
 		setPayPassword: uri1 + '/v1/user/setPayPassword', //设置支付密码
 		changeNickname: uri1 + '/v1/user/changeNickname', //修改用户名
@@ -45,7 +46,7 @@ var url = {
 		getMyBalanceDetail: uri1 + '/v1/user/getMyBalanceDetail', //获取通用积分详情
 		getMyPointDetail: uri1 + '/v1/user/getMyPointDetail', //获取信用积分详情
 		getUserCouponList: uri1 + '/v1/user/getUserCouponList', //获取优惠券列表
-		getRechargeList:uri1 + '/v1/user/getRechargeList',//获取平台充值套餐列表信息接口
+		getRechargeList: uri1 + '/v1/user/getRechargeList', //获取平台充值套餐列表信息接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
@@ -61,6 +62,11 @@ var url = {
 	zone: {
 		area: '/area/v1/area/level', //区域地址
 		address: '/area/v1/area/getInfo' //三级联动地址
+	},
+	// 快讯
+	article: {
+		getArticleCategory: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=getArticleCategory', //快讯tab接口
+		getArticleLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=getArticleLists' //快讯列表接口
 	}
 
 }

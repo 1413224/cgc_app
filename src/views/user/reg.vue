@@ -71,7 +71,6 @@
 			if(this.$route.query.mobile) {
 				this.mobile = this.$route.query.mobile
 			}
-			console.log(this.mobile)
 		},
 		beforeRouteEnter(to, from, next) {
 			next(vm => {
@@ -97,26 +96,34 @@
 			}, //注册
 			reg() {
 				var _this = this
-				console.log(typeof(_this.code), _this.code)
-				_this.$http.post(this.url.user.userRegister, {
-					mobile: _this.mobile,
-					password: _this.password,
-					smsVerificationCode: _this.code,
-					platformId: _this.url.platformId,
-					parentUserId: _this.parentId
-				}).then(function(res) {
-					if(res.data.status == "00000000") {
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '注册成功',
-							onHide() {
-								_this.login()
-							}
-						})
-					}
-				})
+				if(_this.mainApp.isphone(_this.mobile) && _this.password.length > 0) {
+					_this.$http.post(this.url.user.userRegister, {
+						mobile: _this.mobile,
+						password: _this.password,
+						smsVerificationCode: _this.code,
+						platformId: _this.url.platformId,
+						parentUserId: _this.parentId
+					}).then(function(res) {
+						if(res.data.status == "00000000") {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '注册成功',
+								onHide() {
+									_this.login()
+								}
+							})
+						}
+					})
+				} else {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '手机号码或密码格式不正确'
+					})
+				}
 			},
 			////检测用户是否注册
 			isCheckLogin() {
@@ -164,7 +171,6 @@
 
 						localStorage.setItem('userId', res.data.data.id)
 						localStorage.setItem('userNp', res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
-						//localStorage.setItem('userId', 'appUser2018051900000001')
 						localStorage.setItem('token', res.data.data.token)
 
 						_this.$store.state.page.isLogin = true

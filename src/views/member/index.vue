@@ -18,7 +18,7 @@
 							<div class="universal">
 								<p>
 									<div class="num">
-										<span class="money">{{userInfo.balance?userInfo.balance:0}}</span>
+										<p class="money">{{userInfo.balance?userInfo.balance:0}}</p>
 										<!--<badge></badge>-->
 									</div>
 								</p>
@@ -28,7 +28,7 @@
 						<router-link to="/member/earnings/credit">
 							<div class="universal">
 								<div class="num">
-									<span class="money">{{userInfo.availablePoints?userInfo.availablePoints:0}}</span>
+									<p class="money">{{userInfo.availablePoints?userInfo.availablePoints:0}}</p>
 
 								</div>
 								<p class="universalAccount">信用积分</p>
@@ -232,8 +232,8 @@
 			display: flex;
 			width: 100%;
 			a {
-				flex: 1;
 				text-align: center;
+				width: 50%;
 				.universal {
 					.num {
 						font-size: 0.391rem;
@@ -243,12 +243,18 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
+						padding: 0 0.1rem;
+						box-sizing: border-box;
 						.money {
 							font-family: PingFangSC-Medium;
 							font-size: 0.46rem;
 							color: #FFFFFF;
 							letter-spacing: 0;
-							margin-right: 0.2rem;
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 1;
+							overflow: hidden;
+							text-overflow: ellipsis;
 						}
 					}
 					.universalAccount {

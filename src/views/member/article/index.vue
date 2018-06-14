@@ -21,61 +21,18 @@
 			                <!--<p>您还没有任何关注哦</p>-->
 			                <!--<a href="{php echo mobileUrl('stores')}">去逛逛</a>-->
 			                <!--</div>-->
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
+			                <div class="new" v-for="item in articleList"  :class="item.imgNumber==1?'oneImage':''">
+			                	<a :href="item.url">
+				                    <p class="newTitle">{{item.name}}!</p>
+				                    <div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
+				                    <div class="imgList" v-show="item.imgNumber>1">
+                            			<img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2'>
+                            		</div>
+				                    <p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
+				                    <div class="clear"></div>
+			                	</a>
 			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
+			                
 			                <!-- <div class="new" :class="item.imgNumber==1?'oneImage':''" v-for="item in items">
 			                    <a :href="item.url">
 			                        <p class="newTitle">{{item.name}}!</p>
@@ -105,6 +62,8 @@
 	import BScroll from 'better-scroll'
 	import Loading from '../../../components/loading'
 	import noMore from '../../../components/noMore'
+	import url from '../../../config/url'
+	import Qs from 'qs'
 	export default {
 		data(){
 			return {
@@ -117,6 +76,8 @@
 				actTab:0,
 				show:false,
 				showNomore: false,
+				articleList: [],
+				page: 1
 			}
 		},
 		components:{
@@ -128,6 +89,7 @@
 		},
 		mounted() {
 			this.InitScroll()
+			this.getData()
 		},
 		methods:{
 			InitScroll() {
@@ -141,7 +103,6 @@
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							this.show = true;
 							this.LoadData()
 							this.$nextTick(function() {
 								this.scroll.finishPullUp();
@@ -154,16 +115,50 @@
 				})
 			},
 			LoadData() {
-				// var _this = this
-				// setTimeout(function(){
-				// 	_this.show = false;
-				// 	let obj = [{ shopname: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5', money: '3598', score: '266'},
-				// 	{ shopname: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5', money: '3598', score: '266'}];
-				// 	_this.shopList = _this.shopList.concat(obj);
-				// 	console.log(_this.shopList);
-				// 	// _this.showNomore = true;
-				// },3000)
+				var _this = this
+				_this.show = true
+				if(_this.showNomore){
+					_this.show = false;
+				}else{
+					setTimeout(function(){
+						_this.show = false;
+						_this.page ++;
+						let len = _this.articleList.length;
+						let parJson = {
+							pagesize:6,
+							page: _this.page
+						}
+						let par = Qs.stringify(parJson)
+						_this.$http.post(url.article.getArticleLists,par).then(function (response) {
+							if( response.status == 200 && response.data != null&&response.data.result.page == _this.page){
+								_this.articleList = _this.articleList.concat(response.data.result.lists)
+							}
+							console.log(_this.articleList);
+							if(len == _this.articleList.length){
+								_this.showNomore = true;
+							}
+						}).catch(function (error) {
+							console.log(error);
+						});
+					},3000)
+				}
 			},
+			getData(){
+				let _this = this;
+				let parJson = {
+					pagesize:6,
+					page: 1
+				}
+				let par = Qs.stringify(parJson)
+				_this.$http.post(url.article.getArticleLists,par).then(function (response) {
+					if( response.status == 200 && response.data != null){
+						_this.articleList = response.data.result.lists
+					}
+					console.log(_this.articleList);
+				}).catch(function (error) {
+					console.log(error);
+				});
+			}
 		}
 	}
 </script>

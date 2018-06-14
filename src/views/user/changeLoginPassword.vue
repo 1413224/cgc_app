@@ -32,7 +32,9 @@
 			}
 		},
 		created() {
-			this.getUserInfo()
+			if(this.$route.query.isLogin) {
+				this.getUserInfo()
+			}
 		},
 		methods: {
 			getUserInfo() {

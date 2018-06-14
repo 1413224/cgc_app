@@ -137,7 +137,6 @@
 				storeShow: false, //点击店铺编辑
 				storeShow2: false, //点击店铺编辑
 				onFetching: false,
-				show10: false,
 				allprCheck: false, //全选商品
 				allstCheck: false, //全选店铺
 				allstCheck2: false, //全选店铺
@@ -418,15 +417,16 @@
 			//商品  店铺切换
 			active(index) {
 				var _this = this
-				_this.isBj = false //重置编辑
-				_this.storeShow = false //重置商品选择框
-				_this.proShow = false //重置店铺选择框
-				_this.allprCheck = false
-				_this.allstCheck = false
-				_this.proidList = []
-				_this.storeidList = []
-				_this.show = false
-				_this.show2 = false
+				this.isBj = false //重置编辑
+				this.storeShow = false //重置商品选择框
+				this.storeShow2 = false //重置商品选择框
+				this.proShow = false //重置店铺选择框
+				this.allprCheck = false
+				this.allstCheck = false
+				this.allstCheck2 = false
+				this.proidList = []
+				this.lyidList = []
+				this.lmidList = []
 
 				if(index == 1) {
 					_this.type = 3
@@ -505,21 +505,6 @@
 				}
 				this.lmidList = idList
 			},
-			sousShow() {
-				this.show10 = true
-				this.$nextTick(() => {
-					this.$refs.search.setFocus()
-				})
-			},
-			onSubmit() {
-				this.$refs.search.setBlur()
-			},
-			onFocus() {
-				console.log('on focus')
-			},
-			onCancel() {
-				console.log('on cancel')
-			},
 			toDetail(id) {
 				if(!this.isBj) {
 					this.$router.push({
@@ -554,17 +539,6 @@
 				}
 			},
 			index() {
-				this.isBj = false //重置编辑
-				this.storeShow = false //重置商品选择框
-				this.storeShow2 = false //重置商品选择框
-				this.proShow = false //重置店铺选择框
-				this.allprCheck = false
-				this.allstCheck = false
-				this.allstCheck2 = false
-				this.proidList = []
-				this.lyidList = []
-				this.lmidList = []
-
 				if(this.index == 0) {
 					this.type = 2 //联盟企业
 				} else if(this.index == 1) {

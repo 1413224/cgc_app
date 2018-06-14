@@ -4,7 +4,9 @@
 			<div class="content" style="padding-bottom: 0.2rem">
 				<swiper :options="swiperOption" class="swiper">
 					<swiper-slide v-for="(item, index) in demoList" :key="index">
-						<img :src="item">
+						<router-link :to="item.url">
+							<img :src="item.img">
+						</router-link>
 					</swiper-slide>
 					<div class="swiper-pagination" slot="pagination"></div>
 				</swiper>
@@ -224,9 +226,15 @@
 					},
 				],
 				demoList: [
-					'./static/index/lt.png',
-					'./static/index/lt.png',
-					'./static/index/lt.png',
+				{
+					img: './static/index/lt.png',url: ''
+				},
+				{
+					img: './static/index/syjm.png',url: '/member/join/index'
+				},
+				{
+					img: './static/index/lt.png',url: ''
+				}
 					// './static/index/gmdq.png',
 					// './static/index/hxmkl.png',
 					// './static/index/hdjt.png',
