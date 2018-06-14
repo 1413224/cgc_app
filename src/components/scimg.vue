@@ -135,6 +135,14 @@
 								})
 								_this.Confirm()
 							})
+						} else {
+							_this.vm.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '上传失败'
+							})
+							this.Cancel()
 						}
 					})
 				});

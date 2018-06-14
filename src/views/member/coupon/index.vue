@@ -674,7 +674,7 @@
 			padding: 0.15rem 0.3rem 0 0.45rem;
 		}
 		.vux-radio-label{
-			font-size: 0.24rem;
+			font-size: 0.28rem;
 		}
 		.weui-check__label:active{
 			background: #fff;

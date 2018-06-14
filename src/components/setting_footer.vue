@@ -89,6 +89,7 @@
 					img {
 						width: 0.5rem;
 						height: 0.5rem;
+						margin-bottom: 0.08rem;
 					}
 					p {
 						font-size: 0.2rem;

@@ -12,7 +12,7 @@
 						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
 						<div>
 							<p>{{userInfo.nickname}}</p>
-							<p>{{userInfo.mobile}}</p>
+							<!--<p>{{userInfo.mobile}}</p>-->
 						</div>
 					</div>
 				</div>
@@ -299,14 +299,14 @@
 			.title {
 				font-size: 0.36rem;
 				color: rgba(26, 38, 66, 1);
-				margin: 1rem 0;
+				margin: 0.6rem 0;
 			}
 			.b-w {
 				width: 5.78rem;
 				border-radius: 5px;
 				background-color: white;
 				margin: 0 auto;
-				padding: 0.29rem;
+				padding:0.5rem 0.29rem;
 				.code {
 					width: 100%;
 					height: auto;
@@ -314,9 +314,9 @@
 				.bottom {
 					display: flex;
 					align-items: center;
-					margin-top: 0.29rem;
+					margin-top: 0.5rem;
 					position: relative;
-					padding: 0.32rem 0;
+					padding-top: 0.32rem;
 					img {
 						width: 1rem;
 						height: 1rem;

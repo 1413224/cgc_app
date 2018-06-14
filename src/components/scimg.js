@@ -1,5 +1,5 @@
 import imgComponent from './scimg.vue'
-
+//https://github.com/fengyuanchen/cropperjs/blob/master/README.md 官方文档
 let $scImg
 
 export default {
