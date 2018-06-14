@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div class="tip">
-			<p v-if="status == 0">（文字清晰,四角齐全）</p>
+			<p v-if="status == 0">（图片文字清晰,四角齐全）</p>
 			<x-button v-if="status == 0" class="add-btn" @click.native="submit" :show-loading="isload">{{isload?'正在上传':'保存'}}</x-button>
 			<div v-if="status == 1" class="two-btn bounceInRight animated">
 				<div @click="$router.go(-1)">返回</div>
@@ -279,6 +279,11 @@
 					z-index: 11;
 					position: relative;
 					overflow: hidden;
+					font-size: 0.26rem;
+					p{
+						padding: 0 0.05rem;
+						box-sizing: border-box;
+					}
 					.img-bg {
 						z-index: 13;
 						width: 100%;

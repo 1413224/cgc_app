@@ -1,9 +1,9 @@
 <template>
 	<div id="demo">
 		<!-- 遮罩层 -->
-		<div class="container" v-show="panel">
-			<div class="cropper-box">
-				<img style="width: 100%;height: auto;" id="image" :src="url" alt="Picture">
+		<div class="container" id="container1" v-if="panel">
+			<div class="cropper-box" id="cropper-box">
+				<img id="image" :src="url" alt="" />
 			</div>
 			<button type="button" id="button" @click="commit">确定</button>
 			<button type="button" id="cancel" @click="cancel">取消</button>
@@ -17,7 +17,8 @@
 		props: {
 			panel: Boolean,
 			e: '',
-			hide:Function
+			Cancel: Function,
+			Confirm: Function
 		},
 		data() {
 			return {
@@ -35,6 +36,7 @@
 			//取消上传
 			cancel() {
 				this.panel = false;
+				this.Cancel()
 			},
 			//创建url路径
 			getObjectURL(file) {
@@ -53,21 +55,45 @@
 			},
 			//input框change事件，获取到上传的文件
 			change(e) {
+				var _this = this
+
 				let files = e.target.files || e.dataTransfer.files;
 				if(!files.length) return;
+
 				let type = files[0].type; //文件的类型，判断是否是图片
 				let size = files[0].size; //文件的大小，判断图片的大小
 				if(this.imgCropperData.accept.indexOf(type) == -1) {
+					this.panel = false;
+					this.Cancel()
 					alert("请选择我们支持的图片格式！");
 					return false;
 				}
 				if(size > 5242880) {
+					this.panel = false;
+					this.Cancel()
 					alert("请选择5M以内的图片！");
 					return false;
 				}
+
 				this.picValue = files[0];
 				this.url = this.getObjectURL(this.picValue);
 
+				//初始化这个裁剪框
+				_this.$nextTick(function() {
+					var image = document.getElementById('image')
+					_this.cropper = new Cropper(image, {
+						aspectRatio: 1, //裁剪容器的比例
+						viewMode: 1,
+						background: true, //是否在容器上显示网格背景
+						modal: true, //是否在剪裁框上显示黑色的模态窗口
+						guides: true, //是否在剪裁框上显示虚线
+						zoomable: true, //是否允许放大缩小图片
+						rotatable: true, //是否允许旋转图片
+						ready: function() {
+							_this.croppable = true;
+						}
+					});
+				})
 				//每次替换图片要重新得到新的url
 				if(this.cropper) {
 					this.cropper.replace(this.url);
@@ -107,8 +133,16 @@
 									position: 'middle',
 									text: '上传成功'
 								})
-								_this.hide()
+								_this.Confirm()
 							})
+						} else {
+							_this.vm.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '上传失败'
+							})
+							this.Cancel()
 						}
 					})
 				});
@@ -139,23 +173,12 @@
 		},
 		watch: {
 			panel() {
-				var self = this
-				//初始化这个裁剪框
-				var image = document.getElementById("image");
-				this.cropper = new Cropper(image, {
-					aspectRatio: 1, //裁剪容器的比例
-					viewMode: 1,
-					background: true, //是否在容器上显示网格背景
-					modal: true, //是否在剪裁框上显示黑色的模态窗口
-					guides: true, //是否在剪裁框上显示虚线
-					zoomable: true, //是否允许放大缩小图片
-					rotatable: true, //是否允许旋转图片
-					ready: function() {
-						self.croppable = true;
-					}
-				});
 
-				self.change(self.e)
+				var self = this
+
+				if(self.panel) {
+					self.change(self.e)
+				}
 			}
 		}
 	};
@@ -164,7 +187,7 @@
 <style>
 	.cropper-box {
 		position: fixed;
-		top: 20%;
+		top: 0%;
 		width: 100%;
 	}
 	

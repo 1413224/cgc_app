@@ -341,6 +341,8 @@
 			font-size: 0.28rem;
 			color: #464646;
 			letter-spacing: 0;
+			height: 1.2rem;
+			box-sizing: border-box;
 			img {
 				width: 0.48rem;
 				height: 0.48rem;

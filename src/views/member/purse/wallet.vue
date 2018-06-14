@@ -90,14 +90,14 @@
 					<p>{{fundInfo.isshowFund?fundInfo.taskPoints:'****'}}</p>
 				</div>
 				<div class="one-item">
-					
+
 				</div>
 			</div>
 		</div>
 		<router-link to='/draw'>
 			<img style="display: block;width: 100%;height: auto;" :src="'./static/images/integral-bg.png'" alt="" />
 		</router-link>
-		
+
 	</div>
 </template>
 
@@ -179,7 +179,7 @@
 
 <style lang="less">
 	.wallet-box {
-		font-family: MicrosoftYaHei;
+		font-family: PingFangSC-Medium;
 		.tip-box {
 			margin-top: 0.2rem;
 			background-color: white;
@@ -285,7 +285,7 @@
 		}
 		.top-item {
 			height: 1.6rem;
-			font-size: 0.32rem;
+			font-size: 0.34rem;
 			color: rgba(26, 38, 66, 1);
 			img {
 				width: 0.76rem;

@@ -8,7 +8,7 @@
 					<tab-item :selected="index==2" @on-item-click="active">商品</tab-item>
 				</tab>
 			</div>
-			<div class="edit-btn" @click="edit" slot="right">{{isBj?'完成':'编辑'}}</div>
+			<div class="edit-btn" @click="edit" slot="right" v-if="hasLe">{{isBj?'完成':'编辑'}}</div>
 		</x-header>
 		<div>
 			<div v-show="index == 0">
@@ -161,7 +161,8 @@
 				back: Function,
 				showNo1: false,
 				showNo2: false,
-				showNo3: false
+				showNo3: false,
+				hasLe: true
 			}
 		},
 		created() {
@@ -188,6 +189,10 @@
 			},
 			getFollow() {
 				var _this = this
+				_this.isBj = false
+				_this.storeShow = false
+				_this.storeShow2 = false
+				_this.proShow = false
 				_this.$http.get(_this.url.user.getConcernLists, {
 					params: {
 						userId: localStorage.getItem('userId'),
@@ -209,6 +214,14 @@
 								value.ischeck = false
 							})
 
+						} else if(_this.type == 1) {
+
+						}
+
+						if(res.data.data.list.length > 0) {
+							_this.hasLe = true
+						} else {
+							_this.hasLe = false
 						}
 					}
 				})
