@@ -180,6 +180,18 @@
 							position: 'middle',
 							text: '登陆成功'
 						})
+
+						//获取用户信息
+						_this.$http.get(_this.url.user.getBasicInfo, {
+							params: {
+								userId: res.data.data.id
+							}
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								localStorage.setItem('userInfo',JSON.stringify(res.data.data))
+							}
+						})
+
 						if(window.sessionStorage.length > 2) {
 							if(_this.frompath) {
 								if(_this.frompath != '/user/changeLoginPassword2') {

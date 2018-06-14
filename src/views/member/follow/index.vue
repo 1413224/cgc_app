@@ -35,7 +35,7 @@
 							</div>
 							<Loading v-if="show1"> </Loading>
 							<Nomore v-if="showNo1"></Nomore>
-							<noData v-if="lmList.length==0" :status="storeState" :stateText="nolm"></noData>
+							<noData v-if="lmList.length==0" :status="2" :stateText="nolm"></noData>
 						</div>
 					</div>
 				</div>
@@ -64,7 +64,7 @@
 							</div>
 							<Loading v-if="show2"> </Loading>
 							<Nomore v-if="showNo2"></Nomore>
-							<noData v-if="lyList.length==0" :status="storeState" :stateText="noly"></noData>
+							<noData v-if="lyList.length==0" :status="2" :stateText="noly"></noData>
 						</div>
 					</div>
 				</div>
@@ -152,9 +152,9 @@
 				show3: false,
 				proState: 0,
 				storeState: 0,
-				noPro: '暂无商品',
-				noly: '暂无联营企业',
-				nolm: '暂无联盟企业',
+				noPro: '暂无关注商品',
+				noly: '暂无关注联营企业',
+				nolm: '暂无关注联盟企业',
 				pageSize: 20,
 				curPage: 1,
 				type: 2,
@@ -175,8 +175,6 @@
 			} else {
 				this.type = 1 //商品
 			}
-
-			console.log(this.index)
 
 			this.getFollow()
 		},

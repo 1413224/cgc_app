@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<group :gutter='0'>
 			<cell class="top-item" :title="fundInfo.nickname" value="使用积分" is-link link='/shop'>
-				<img slot="icon" :src="userImg">
+				<img slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
 			</cell>
 		</group>
 		<group :gutter='0' class="top-tip-box">
@@ -107,7 +107,7 @@
 	export default {
 		data() {
 			return {
-				title: '我的钱包',
+				title: '我的资产',
 				isopen: true,
 				isopen2: false,
 				fundInfo: {},
