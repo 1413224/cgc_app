@@ -8,7 +8,7 @@
 						<div class="tx">
 							<img :src="images?images:'./static/images/mrtx.png'" />
 						</div>
-						<input class="upinput" type="file" name="" id="" value="" @change="up2" ref="input" />
+						<input v-if="isC" class="upinput" id="upinput" type="file" @change="up2" ref="input" />
 					</div>
 				</cell>
 				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>
@@ -37,7 +37,8 @@
 				varmax: 1, //图片最大张数
 				images: '', //图片数组
 				userInfo: {},
-				auth: ''
+				auth: '',
+				isC:true
 			}
 		},
 		created() {
@@ -108,12 +109,16 @@
 			},
 			up2(e) {
 				var _this = this
-				console.log(_this.$scImg)
+				_this.isC = false
 				_this.$scImg.show({
 					panel: true,
 					e: e,
-					hide(){
+					Confirm(){
+						_this.isC = true
 						_this.getUserInfo()
+					},
+					Cancel(){
+						_this.isC = true
 					}
 				})
 			}

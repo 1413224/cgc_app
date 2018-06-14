@@ -15,7 +15,8 @@ export default {
 			show(obj){
 				$scImg.panel = true
 				$scImg.e = obj.e
-				$scImg.hide = obj.hide
+				$scImg.Confirm = obj.Confirm
+				$scImg.Cancel = obj.Cancel
 			},
 		}
 		
