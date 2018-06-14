@@ -40,7 +40,7 @@
 			</div>
 			<button class="nav-btn">立即体验</button>
 		</div>
-		<button class="qr-btn" @click="btnQrcode">生成二维码</button>
+		<!-- <button class="qr-btn" @click="btnQrcode">生成二维码</button> -->
 		<img src="../../assets/images/share/partner-bg.png" class="image"/>
 		<div class="partner">
 			<div class="partner-item">

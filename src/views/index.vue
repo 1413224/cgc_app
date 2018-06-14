@@ -260,46 +260,18 @@
 						url: '/member/purse/qrcode'
 					}
 				],
-				navList: [{
-						title: '抽奖中心',
-						img: './static/images/cj.png',
-						url: '/draw'
-					},
-					{
-						title: '邀请有奖',
-						img: './static/images/yq.png',
-						url: '/member/purse/qrcode'
-					},
-					{
-						title: '推广助手',
-						img: './static/images/tg.png',
-						url: '/member/generalize/index'
-					},
-					{
-						title: '赚钱攻略',
-						img: './static/images/gl.png',
-						url: '/member/strategy/index'
-					},
-					{
-						title: '充值有奖',
-						img: './static/images/cz.png',
-						url: '/member/purse/recharge'
-					},
-					{
-						title: '我的优惠券',
-						img: './static/images/yh.png',
-						url: '/member/coupon/index'
-					},
-					{
-						title: '会员权益',
-						img: './static/images/hy.png',
-						url: '/member/benefits/index'
-					},
-					{
-						title: '我的资产',
-						img: './static/images/zc.png',
-						url: '/member/purse/wallet'
-					},
+
+				navList:[
+					{title:'抽奖中心',img:'./static/images/cj.png',url:'/draw'},
+					{title:'邀请有奖',img:'./static/images/yq.png',url:'/member/purse/qrcode'},
+					{title:'推广助手',img:'./static/images/tg.png',url:'/member/generalize/index'},
+					// {title:'赚钱攻略',img:'./static/images/gl.png',url:'/member/strategy/index'},
+					{title:'会员权益',img:'./static/images/gl.png',url:'/member/benefits/index'},
+					{title:'充值有奖',img:'./static/images/cz.png',url:'/member/purse/recharge'},
+					{title:'我的优惠券',img:'./static/images/yh.png',url:'/member/coupon/index'},
+					// {title:'会员权益',img:'./static/images/hy.png',url:'/member/benefits/index'},
+					{title:'我的会员',img:'./static/images/hy.png',url:'/member/vip/index'},
+					{title:'我的资产',img:'./static/images/zc.png',url:'/member/purse/wallet'},
 				],
 				allianceList: [{
 						title: '本地服务',

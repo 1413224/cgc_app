@@ -168,7 +168,7 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	//缓存路由页面
+	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
 	if(to.path == '/user/reg') {
