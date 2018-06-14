@@ -218,13 +218,6 @@ const memberModule = [{
 		meta: {
 			title: '详细资料'
 		}
-	}, {
-		path: '/member/info/img',
-		name: 'infoimg',
-		component: resolve => require(['@/views/member/info/img'], resolve),
-		meta: {
-			title: '上传图片'
-		}
 	},
 	{
 		path: '/member/setting/changeCode',

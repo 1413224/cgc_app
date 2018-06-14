@@ -29,7 +29,7 @@
 	    <div v-transfer-dom class="popupTop">
 	      	<popup v-model="typeShang" position="top">
 	        	<group>
-			    	<radio title="title" :options="opType" value="0" @on-change="changeType" :selected-label-style="{color: '#336FFF'}"></radio>
+			    	<radio title="title" v-model="par.type" :options="opType" value="0" @on-change="changeType" :selected-label-style="{color: '#336FFF'}"></radio>
 			  	</group>
 	      	</popup>
 	    </div>
@@ -38,7 +38,7 @@
         <div v-transfer-dom class="popupTop">
           	<popup v-model="statusShang" position="top">
             	<group>
-    		    	<radio title="title" :options="opStatus" @on-change="changeStatus" :selected-label-style="{color: '#336FFF'}"></radio>
+    		    	<radio title="title" v-model="par.status" :options="opStatus" @on-change="changeStatus" :selected-label-style="{color: '#336FFF'}"></radio>
     		  	</group>
           	</popup>
         </div>
@@ -47,7 +47,7 @@
         <div v-transfer-dom class="popupTop">
           	<popup v-model="dateShang" position="top">
             	<group>
-    		    	<radio title="title" :options="opDate" value="0" @on-change="changeDate" :selected-label-style="{color: '#336FFF'}"></radio>
+    		    	<radio title="title" v-model="par.timeType" :options="opDate" value="0" @on-change="changeDate" :selected-label-style="{color: '#336FFF'}"></radio>
     		  	</group>
           	</popup>
         </div>

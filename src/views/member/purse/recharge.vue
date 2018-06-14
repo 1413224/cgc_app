@@ -91,7 +91,7 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.info = res.data.data
-						_this.moneyList = res.data.data.list
+						_this.moneyList = res.data.data.pageBean.list
 						console.log(_this.info)
 					}
 				})
