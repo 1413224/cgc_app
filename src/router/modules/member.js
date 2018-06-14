@@ -77,7 +77,7 @@ const memberModule = [{
 		name: 'setting',
 		component: resolve => require(['@/views/member/setting/index'], resolve),
 		meta: {
-			title: '账户设置'
+			title: '设置'
 		}
 	},
 	{
@@ -490,6 +490,14 @@ const memberModule = [{
 		component: resolve => require(['@/views/member/join/index'], resolve),
 		meta: {
 			title: '企业加盟'
+		}
+	},
+	{
+		path: '/member/setting/opinion',
+		name: 'opinion',
+		component: resolve => require(['@/views/member/setting/opinion'], resolve),
+		meta: {
+			title: '意见反馈'
 		}
 	}
 ]
