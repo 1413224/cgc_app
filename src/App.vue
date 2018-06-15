@@ -80,10 +80,11 @@
 				} else {
 					document.title = '大健康App'
 				}
-
+				
 				//自定义组件关闭
 				this.$code.hide()
 				this.$dialog.hide()
+				this.$scImg.hide()
 			}
 		}
 	}

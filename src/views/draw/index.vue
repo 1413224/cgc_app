@@ -14,7 +14,7 @@
 						<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
 						<div class="list">
 							<ul class="ul-list">
-								<li>
+								<li @click="toLuckyrank(0)">
 									<p class="status">中奖次数</p>
 									<p class="money">5</p>
 								</li>
@@ -22,7 +22,7 @@
 									<p class="status">待领奖金</p>
 									<p class="money">5000</p>
 								</li>
-								<li>
+								<li @click="toLuckyrank(1)">
 									<p class="status">中奖总额</p>
 									<p class="money">25000</p>
 								</li>
@@ -34,7 +34,7 @@
 										<span>幸运排行</span>
 									</li>
 									<li class="li-nav" @click="$router.push({path: '/draw/record'})">
-										<span>中奖记录</span>
+										<span>参与记录</span>
 									</li>
 								</ul>
 								<div class="btn" @click="$router.push({path: '/draw/review'})">
@@ -179,6 +179,15 @@
 				}).catch(function (error) {
 					console.log(error);
 				});
+			},
+			toLuckyrank(index){
+				var _this = this
+				_this.$router.push({
+					path:'/draw/luckyrank',
+					query:{
+						index:index
+					}
+				})
 			}
 		}
 	}

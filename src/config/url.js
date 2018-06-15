@@ -15,7 +15,7 @@ var url = {
 		fileuploadImage: uri2 + '/v1/fileupload/image', //上传图片
 		login: uri2 + '/public/v1/login', //云中心登录
 		userLogin: uri1 + '/public/v1/user/login', //用户登录
-		logout: uri1 + '/v1/user/logout', //用户登出
+		logout: uri1 + '/logout/v1', //用户登出
 		userRegister: uri1 + '/public/v1/user/register', //用户注册
 		forgetPassword: uri1 + '/public/v1/user/forgetPassword', //重置登录密码
 		checkUserExistsByMobile: uri1 + '/public/v1/user/checkUserExistsByMobile', //用户是否注册

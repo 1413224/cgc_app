@@ -206,6 +206,8 @@ router.beforeEach(function(to, from, next) {
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
+	
+	store.state.page.isLogin = localStorage['isLogin']
 
 	if(to.path == '/user/reg') {
 		to.meta.keepAlive = true
@@ -410,18 +412,6 @@ router.beforeEach(function(to, from, next) {
 		let url = to.path.split('http')[1]
 		window.location.href = `http${url}`
 	} else {
-		//       路由切换 没有登录  重定向至登录页
-		//		if(store.state.page.isLogin == false) {
-		//			if(to.path != '/user/reg') {
-		//				next({
-		//					path: '/user/reg'
-		//				})
-		//			} else {
-		//				next()
-		//			}
-		//		} else {
-		//			next()
-		//		}
 		next()
 	}
 })
@@ -432,7 +422,6 @@ router.afterEach(function(to) {
 	store.commit('UPDATE_DACK', {
 		back: false
 	})
-	store.state.page.isLogin = true
 })
 
 Vue.prototype.vm = new Vue({

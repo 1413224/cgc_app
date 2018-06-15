@@ -53,7 +53,7 @@ const drawModule = [
 		name: 'record',
 		component: resolve => require(['@/views/draw/record'], resolve),
 		meta: {
-			title:'中奖记录'
+			title:'参与记录'
 		}
 	},
 	{

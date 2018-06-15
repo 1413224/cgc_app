@@ -1,10 +1,11 @@
+var isLogin = localStorage['isLogin']
 const page = {
 	state: {
 		direction: 'forward',
 		addressData: '',
 		isLoading: false,
 		back: false,
-		isLogin: false,
+		isLogin: isLogin,
 		includeList:[],
 		ispreview:false,
 		isWx:true,

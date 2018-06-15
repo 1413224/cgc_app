@@ -1,6 +1,6 @@
 import {base64_encode,base64_decode} from '../../global/course.js'
 let info=base64_decode(localStorage['_HASH_'])
-// console.log(info)
+
 if(info){
   var userid = info.id
 }else{

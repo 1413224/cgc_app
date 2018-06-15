@@ -9,7 +9,7 @@
 				<cell class="list-item" title="意见反馈" is-link link="/member/setting/opinion"></cell>
 				<cell class="list-item" title="关于我们" is-link link="/member/setting/about"></cell>
 			</group>
-			<div class="logout-btn" @click="logout">退出登录</div>
+			<div v-if="$store.state.page.isLogin" class="logout-btn" @click="logout">退出登录</div>
 		</div>
 	</div>
 </template>
@@ -31,6 +31,7 @@
 			logout() {
 				var _this = this;
 				_this.$http.post(_this.url.user.logout, {
+					audience: _this.url.client,
 					userId: _this.$store.state.user.userId,
 					platformId: _this.url.platformId
 				}).then((res) => {
@@ -41,10 +42,14 @@
 							position: 'middle',
 							text: '退出成功'
 						})
+						_this.$router.push({
+							path: '/user/reg'
+						})
+						localStorage.removeItem('userInfo')
+						localStorage.setItem('isLogin',false)
+						_this.$store.state.page.isLogin = false
+						localStorage.removeItem('_HASH_')
 					}
-					_this.$router.push({
-						path: '/user/reg'
-					})
 				})
 			}
 		},
