@@ -135,7 +135,7 @@
 						mobile: _this.mobile
 					}).then(res => {
 						if(res.data.status == "00000000") {
-							if(res.data.data == 'false') {
+							if(res.data.data == 0) {
 								//未注册
 								_this.$dialog.show({
 									type: 'warning',

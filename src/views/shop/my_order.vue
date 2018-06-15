@@ -349,7 +349,7 @@
 		padding-bottom: 0.5rem;
 	}
 	.box2{
-		background-color: #F5F6FA;
+		background-color: white;
 		.box-head{
 			margin-top: 0.25rem;
 			height: 0.8rem;
@@ -382,6 +382,8 @@
 			.shop-detail{
 				height: 1.7rem;
 				padding-right: 0.2rem;
+				background: #F5F6FA;
+				margin-bottom: 0.03rem;
 				img{
 					margin:0.05rem 0.2rem 0.05rem 6px;
 					width: 1.6rem;
