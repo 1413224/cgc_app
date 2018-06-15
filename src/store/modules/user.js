@@ -1,6 +1,6 @@
 import {base64_encode,base64_decode} from '../../global/course.js'
 let info=base64_decode(localStorage['_HASH_'])
-console.log(info)
+// console.log(info)
 if(info){
   var userid = info.id
 }else{
@@ -10,7 +10,8 @@ const user = {
     state: {
         username: null,
         userstate: false,
-        userId:userid
+        userId:userid,
+        openid:""
     },
   
     mutations: {
