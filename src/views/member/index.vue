@@ -7,7 +7,8 @@
 					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
 					<div class="avatar">
 						<router-link to="/member/info/index">
-							<img :src="userInfo.avatar.original?userInfo.avatar.original:'./static/images/mrtx.png'" alt="" />
+							<img v-if="userInfo.avatar" :src="userInfo.avatar.original?userInfo.avatar.original:'./static/images/mrtx.png'" alt="" />
+							<img v-else :src="'./static/images/mrtx.png'" alt="">
 						</router-link>
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:'未设置'}}</p>
 						<p class="status">{{userInfo.levelName?userInfo.levelName:'暂无等级'}}</p>
@@ -151,8 +152,13 @@
 			}
 		},
 		created() {
-			this.userInfo = JSON.parse(localStorage['userInfo'])
-			this.getUserInfo()
+			if(localStorage['userInfo']){
+				this.userInfo = JSON.parse(localStorage['userInfo'])
+				this.getUserInfo()
+			}
+			
+			// this.userInfo = this.$store.state.user.userId.
+			
 		},
 		methods: {
 			getUserInfo() {
