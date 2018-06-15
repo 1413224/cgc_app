@@ -28,13 +28,13 @@
 			<div class="login-re" v-else>
 				<span @click="isReg = !isReg">返回登录</span>
 			</div>
-			<div class="Thirdparty" v-if="isReg">
-				<p class="title"><span>第三方登录</span></p>
-				<div>
-					<img src="../../assets/images/user/weibo.png" alt="" />
-					<img @click="wxLogin" src="../../assets/images/user/weixin.png" alt="" />
-					<img src="../../assets/images/user/qq.png" alt="" />
-				</div>
+		</div>
+		<div class="Thirdparty" v-if="isReg">
+			<p class="title"><span>第三方登录</span></p>
+			<div>
+				<img src="../../assets/images/user/weibo.png" alt="" />
+				<img @click="wxLogin" src="../../assets/images/user/weixin.png" alt="" />
+				<img src="../../assets/images/user/qq.png" alt="" />
 			</div>
 		</div>
 	</div>
@@ -44,7 +44,7 @@
 	import { XInput, Group, XButton, Cell, Loading, AlertModule, Confirm, CheckIcon } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import agreement from '@/views/member/setting/agreement'
-	import {base64_encode,base64_decode} from '../../global/course.js'
+	import { base64_encode, base64_decode } from '../../global/course.js'
 	export default {
 		name: 'reg',
 		data() {
@@ -172,12 +172,13 @@
 					if(res.data.status == "00000000") {
 
 						let hash = base64_encode(res.data.data)
-						
+
 						_this.$store.state.user.userId = res.data.data.id
 
 						localStorage.setItem('_HASH_', hash)
 
-						_this.$store.state.page.isLogin = true
+						localStorage.setItem('isLogin', true)
+						
 						_this.$vux.toast.show({
 							width: '50%',
 							type: 'text',
@@ -192,16 +193,22 @@
 							}
 						}).then((res) => {
 							if(res.data.status == "00000000") {
-								localStorage.setItem('userInfo',JSON.stringify(res.data.data))
+								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
 							}
 						})
 
-						if(window.sessionStorage.length > 2) {
-							if(_this.frompath) {
-								if(_this.frompath != '/user/changeLoginPassword2') {
-									_this.$router.replace({
-										path: _this.frompath
-									})
+						setTimeout(function() {
+							if(window.sessionStorage.length > 2) {
+								if(_this.frompath) {
+									if(_this.frompath != '/user/changeLoginPassword2') {
+										_this.$router.replace({
+											path: _this.frompath
+										})
+									} else {
+										_this.$router.replace({
+											path: '/index'
+										})
+									}
 								} else {
 									_this.$router.replace({
 										path: '/index'
@@ -212,11 +219,7 @@
 									path: '/index'
 								})
 							}
-						} else {
-							_this.$router.replace({
-								path: '/index'
-							})
-						}
+						}, 500)
 					}
 				})
 			},
@@ -228,14 +231,14 @@
 			},
 			//密码输入改变时
 			passwordChange() {
-				
+
 			},
 			//用户名输入改变时
 			nameChange(val) {
 				var _this = this
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
-					_this.$refs.password.focus()
+					//					_this.$refs.password.focus()
 				}
 			},
 			//发送验证码
@@ -320,6 +323,7 @@
 		padding: 0 0.5rem;
 		box-sizing: border-box;
 		user-select: none;
+		position: relative;
 		.login-box {
 			width: 100%;
 			height: 3.5rem;
@@ -403,9 +407,12 @@
 			}
 		}
 		.Thirdparty {
-			margin-top: 0.6rem;
 			padding: 0 0.5rem;
 			box-sizing: border-box;
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 100%;
 			div {
 				padding: 0.58rem 0;
 				box-sizing: border-box;

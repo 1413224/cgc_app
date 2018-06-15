@@ -4,7 +4,7 @@ import store from '@/store'
 import isload from '@/components/isload'
 import router from '@/router'
 import url from '../config/url.js'
-import {base64_decode} from '../global/course.js'
+import { base64_decode } from '../global/course.js'
 
 import MD5 from 'js-md5'
 
@@ -13,6 +13,8 @@ Vue.use(isload)
 axios.defaults.retry = 4 //请求次数
 axios.defaults.retryDelay = 1000 //请求间隙
 axios.defaults.baseURL = 'http://47.104.187.243:18666' // 请求默认地址
+
+var URL = ""
 
 axios.interceptors.request.use(config => {
 	// isLoading方法
@@ -30,41 +32,30 @@ axios.interceptors.request.use(config => {
 		userNp,
 		id,
 		randomAccessCode,
-	 	_HASH_ = localStorage.getItem('_HASH_'),
-	 	info = base64_decode(_HASH_);
+		_HASH_ = localStorage.getItem('_HASH_'),
+		info = base64_decode(_HASH_);
 
-	if(info){
-		console.log(info)
+	if(info) {
 
 		token = info.token ? info.token : ""
 		id = info.id ? info.id : ""
 		randomAccessCode = info.randomAccessCode ? info.randomAccessCode : ""
 
 		userNp = id + url.client + randomAccessCode
-	}else{
+	} else {
 		token = ""
 	}
 
-	
 	// console.log(token)
-
-
 
 	let timestamp = Math.round(new Date().getTime() / 1000)
 	let sign = ''
 	if(token && config.url.split('/')[2] != 'public') {
 
 		sign = MD5(config.url + timestamp + userNp)
-		console.log(1)
 	} else {
 		sign = MD5(config.url + timestamp)
-		console.log(2)
 	}
-
-
-
-
-
 
 	let type = 'application/json;charset=utf-8'
 	let entry = config.url.slice(0, 4)
@@ -91,6 +82,8 @@ axios.interceptors.request.use(config => {
 		}
 	}
 
+	URL = config.url
+
 	return config
 }, error => {
 	return Promise.reject(error)
@@ -104,8 +97,8 @@ axios.interceptors.response.use(res => {
 		}
 	})
 	if(res.data.status != '00000000' && res.data.status != 1) {
+		localStorage.setItem('isLogin',false)
 		if(res.data.status == '401') {
-			store.state.page.isLogin = false
 			router.push({
 				path: '/user/reg'
 			})
@@ -115,8 +108,7 @@ axios.interceptors.response.use(res => {
 				position: 'middle',
 				width: '50%'
 			})
-		} else if(res.data.status == 'utils007' || res.data.status == 'utils010') {
-			store.state.page.isLogin = false
+		} else if(res.data.status == 'utils007' || res.data.status == 'utils010' && URL != '/user/v1/user/getBasicInfo') {
 			router.replace({
 				path: '/user/reg'
 			})
@@ -126,7 +118,7 @@ axios.interceptors.response.use(res => {
 				position: 'middle',
 				width: '60%'
 			})
-		} else {
+		} else if(URL != '/user/v1/user/getBasicInfo') {
 			Vue.$vux.toast.show({
 				text: res.data.message,
 				type: 'text',

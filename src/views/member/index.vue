@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="content">
 			<section>
-				<div class="info-bg">
+				<div class="info-bg" v-if="isLogin">
 					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
 					<div class="avatar">
 						<router-link to="/member/info/index">
@@ -34,6 +34,17 @@
 								</div>
 								<p class="universalAccount">信用积分</p>
 							</div>
+						</router-link>
+					</div>
+				</div>
+				<div class="info-bg" v-else>
+					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
+					<div class="avatar noLogin">
+						<router-link to="/member/info/index">
+							<img :src="'./static/images/mrtx.png'" alt="">
+						</router-link>
+						<router-link to="/user/reg">
+							<p>登录 / 注册</p>
 						</router-link>
 					</div>
 				</div>
@@ -148,17 +159,22 @@
 						url: '/lock/card'
 					},*/
 				],
-				yhqTip: '5张快过期'
+				yhqTip: '5张快过期',
+				isLogin: false
 			}
 		},
 		created() {
-			if(localStorage['userInfo']){
+			if(this.$store.state.page.isLogin == 'true') {
+				this.isLogin = true
+			} else {
+				this.isLogin = false
+				localStorage.removeItem('userInfo')
+				this.$store.state.user.userId = ''
+			}
+			if(localStorage['userInfo'] && this.isLogin) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
 				this.getUserInfo()
 			}
-			
-			// this.userInfo = this.$store.state.user.userId.
-			
 		},
 		methods: {
 			getUserInfo() {
@@ -169,7 +185,7 @@
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
 						// userId: localStorage['userId']
-						userId:_this.$store.state.user.userId
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -199,6 +215,7 @@
 	.info-box {
 		background-color: #F5F6FA;
 		padding-bottom: 1rem;
+		position: relative;
 		.info-bg {
 			height: 4.47rem;
 			background: url(../../assets/images/member/index-bg.png) no-repeat;
@@ -228,6 +245,20 @@
 				letter-spacing: 0;
 			}
 			.status {
+				font-family: PingFangSC-Regular;
+				font-size: 0.24rem;
+				color: #FFFFFF;
+				letter-spacing: 0;
+				margin-top: 0.1rem;
+			}
+		}
+		.noLogin {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			padding-top: 0;
+			p {
 				font-family: PingFangSC-Regular;
 				font-size: 0.24rem;
 				color: #FFFFFF;

@@ -18,6 +18,9 @@ export default {
 				$scImg.Confirm = obj.Confirm
 				$scImg.Cancel = obj.Cancel
 			},
+			hide(){
+				$scImg.panel = false
+			}
 		}
 		
 		

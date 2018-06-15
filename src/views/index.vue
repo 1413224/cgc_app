@@ -27,6 +27,7 @@
 							<marquee-item v-for="i in 5" :key="i" :duration='3000' class="align-middle">魅族手机成功加盟CGC全球智慧产业联盟</marquee-item>
 						</marquee>
 					</div>
+					<i style="margin-left: 0.8rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
 					<!--<router-link to="/member/article/index">
 						<div class="notMore">
 							<img src="../assets/images/shop/turn_right.png">

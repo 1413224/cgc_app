@@ -47,7 +47,6 @@
 		},
 		created() {
 			var _this = this
-			console.log(_this.$store.state.user.userId)
 
 			window.onorientationchange = function() {
 				if(window.orientation == 90 || window.orientation == -90) {
@@ -81,10 +80,11 @@
 				} else {
 					document.title = '大健康App'
 				}
-
+				
 				//自定义组件关闭
 				this.$code.hide()
 				this.$dialog.hide()
+				this.$scImg.hide()
 			}
 		}
 	}

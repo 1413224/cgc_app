@@ -128,7 +128,7 @@
 		},
 		data() {
 			return {
-				title: '中奖记录',
+				title: '参与记录',
 				count: [{
 						content: '恭喜您中了一等奖',
 						date: '2018-02-09 17：56：30'
