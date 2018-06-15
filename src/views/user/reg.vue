@@ -170,27 +170,10 @@
 					terminal: _this.url.client
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
-						// alert(9)
-						/*let info={
-							'userId': res.data.data.id
-						}*/
-						/*let userId = base64_encode(res.data.data.id)
-						let userNp = base64_encode(res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
-						let token = base64_encode(res.data.data.token)
-
-						let hasc={} */
-						// console.log(res.data.data)
-
-
 
 						let hash = base64_encode(res.data.data)
-						// console.log(hash)
 
 						localStorage.setItem('_HASH_', hash)
-
-						/*localStorage.setItem('userId', res.data.data.id)
-						localStorage.setItem('userNp', res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
-						localStorage.setItem('token', res.data.data.token)*/
 
 						_this.$store.state.page.isLogin = true
 						_this.$vux.toast.show({
@@ -232,9 +215,6 @@
 								path: '/index'
 							})
 						}
-					} else {
-						localStorage.removeItem('userNp')
-						localStorage.removeItem('token')
 					}
 				})
 			},
@@ -246,14 +226,11 @@
 			},
 			//密码输入改变时
 			passwordChange() {
-				localStorage.removeItem('userNp')
-				localStorage.removeItem('token')
+				
 			},
 			//用户名输入改变时
 			nameChange(val) {
 				var _this = this
-				localStorage.removeItem('userNp')
-				localStorage.removeItem('token')
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
 					_this.$refs.password.focus()
