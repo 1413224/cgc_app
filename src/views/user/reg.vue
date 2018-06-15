@@ -172,6 +172,8 @@
 					if(res.data.status == "00000000") {
 
 						let hash = base64_encode(res.data.data)
+						
+						_this.$store.state.user.userId = res.data.data.id
 
 						localStorage.setItem('_HASH_', hash)
 
