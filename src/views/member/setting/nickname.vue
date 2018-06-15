@@ -29,7 +29,7 @@
 				let _this = this
 				if(_this.name.length > 0) {
 					let param = {
-						userId: localStorage['userId'],
+						userId: _this.$store.state.user.userId,
 						nickname: _this.name
 					}
 					_this.$http.post(_this.url.user.changeNickname, param).then(resp => {

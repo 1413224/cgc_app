@@ -107,7 +107,7 @@
 
 				this.$http.get(_this.url.user.getUserInfo, {
 					params: {
-						userId: localStorage.getItem('userId')
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == '00000000') {
@@ -279,7 +279,7 @@
 					egmobile: _this.contactnum,
 					emergency: _this.contact,
 					imageIds: _this.fileIdList.join() + ",",
-					userId: localStorage.getItem('userId')
+					userId: _this.$store.state.user.userId
 				}
 				_this.$http.post(_this.url.user.changeUserInfo, data).then((res) => {
 					if(res.data.status == '00000000') {

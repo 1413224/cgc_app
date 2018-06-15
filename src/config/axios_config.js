@@ -3,6 +3,7 @@ import axios from 'axios'
 import store from '@/store'
 import isload from '@/components/isload'
 import router from '@/router'
+import url from '../config/url.js'
 import {base64_decode} from '../global/course.js'
 
 import MD5 from 'js-md5'
@@ -23,23 +24,48 @@ axios.interceptors.request.use(config => {
 		Vue.$isload.show()
 	}
 
-	let token = localStorage.getItem('token')
+	// let token = localStorage.getItem('token')
 
+	var token,
+		userNp,
+		id,
+		randomAccessCode,
+	 	_HASH_ = localStorage.getItem('_HASH_'),
+	 	info = base64_decode(_HASH_);
 
-	/*let _HASH_ = localStorage.getItem('_HASH_')
-	let info = base64_decode(_HASH_)
-	console.log(info)*/
+	if(info){
+		console.log(info)
 
+		token = info.token ? info.token : ""
+		id = info.id ? info.id : ""
+		randomAccessCode = info.randomAccessCode ? info.randomAccessCode : ""
+
+		userNp = id + url.client + randomAccessCode
+	}else{
+		token = ""
+	}
 
 	
+	// console.log(token)
+
+
 
 	let timestamp = Math.round(new Date().getTime() / 1000)
 	let sign = ''
 	if(token && config.url.split('/')[2] != 'public') {
-		sign = MD5(config.url + timestamp + localStorage.getItem('userNp'))
+
+		sign = MD5(config.url + timestamp + userNp)
+		console.log(1)
 	} else {
 		sign = MD5(config.url + timestamp)
+		console.log(2)
 	}
+
+
+
+
+
+
 	let type = 'application/json;charset=utf-8'
 	let entry = config.url.slice(0, 4)
 	if(entry === 'http') {

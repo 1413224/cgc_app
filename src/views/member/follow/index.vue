@@ -195,7 +195,7 @@
 				_this.proShow = false
 				_this.$http.get(_this.url.user.getConcernLists, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: _this.type,
 						pageSize: _this.pageSize,
 						curPage: _this.curPage
@@ -234,7 +234,7 @@
 					var concernIds = _this.lyidList.join(',')
 				}
 				_this.$http.post(_this.url.user.deleteConcern, {
-					userId: localStorage.getItem('userId'),
+					userId: _this.$store.state.user.userId,
 					type: _this.type,
 					concernIds: concernIds
 				}).then((res) => {
@@ -315,7 +315,7 @@
 
 				_this.$http.get(_this.url.user.getConcernLists, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: _this.type,
 						pageSize: _this.pageSize,
 						curPage: _this.curPage,
@@ -349,7 +349,7 @@
 
 				_this.$http.get(_this.url.user.getConcernLists, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: _this.type,
 						pageSize: _this.pageSize,
 						curPage: _this.curPage,

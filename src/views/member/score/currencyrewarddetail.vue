@@ -70,7 +70,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getMyBalanceDetail, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						balanceId: id
 					}
 				}).then((res) => {

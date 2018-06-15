@@ -162,7 +162,7 @@
 				_this.info.provinceId = _this.addArr[0]
 				_this.info.cityId = _this.addArr[1]
 				_this.info.areaId = _this.addArr[2]
-				_this.info.userId = localStorage['userId']
+				_this.info.userId = _this.$store.state.user.userId
 				let tempUrl = _this.info.addressId ? _this.url.user.editShippingAddress : _this.url.user.addShippingAddress
 				_this.$http.post(tempUrl, _this.info).then(resp => {
 					_this.$vux.toast.show({
@@ -175,7 +175,7 @@
 			getShippingAddressById(addressId) { // 获取地址选项
 				let _this = this
 				let param = {
-					userId: localStorage['userId'],
+					userId: _this.$store.state.user.userId,
 					addressId: addressId
 				}
 				_this.$http.get(_this.url.user.getShippingAddressById, {

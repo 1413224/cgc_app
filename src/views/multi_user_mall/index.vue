@@ -171,7 +171,7 @@
 				var _this = this
 				_this.$http.get(_this.url.qy.getAllianceConcern, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						allianceId: id
 					}
 				}).then((res) => {
@@ -189,7 +189,7 @@
 				var _this = this
 				_this.$http.get(_this.url.qy.getChainsConcern, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						chainsId: id
 					}
 				}).then((res) => {
@@ -217,7 +217,7 @@
 				//取消关注联盟企业
 				if(_this.isAlliance) {
 					_this.$http.post(_this.url.user.deleteConcern, {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: 2,
 						concernIds: id
 					}).then((res) => {
@@ -234,7 +234,7 @@
 				} else {
 					//关注联盟企业
 					_this.$http.post(_this.url.user.addConcern, {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: 2,
 						platformId: _this.url.platformId,
 						objectId: id
@@ -256,7 +256,7 @@
 				//取消关注联盟企业
 				if(_this.isChains) {
 					_this.$http.post(_this.url.user.deleteConcern, {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: 3,
 						concernIds: id
 					}).then((res) => {
@@ -273,7 +273,7 @@
 				} else {
 					//关注联盟企业
 					_this.$http.post(_this.url.user.addConcern, {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: 3,
 						platformId: _this.url.platformId,
 						objectId: id

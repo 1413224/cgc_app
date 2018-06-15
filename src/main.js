@@ -15,6 +15,11 @@ import FastClick from 'fastclick'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import VueLazyLoad from 'vue-lazyload'
+import {base64_encode,base64_decode} from './global/course.js'
+
+Vue.prototype.base64_encode = base64_encode
+Vue.prototype.base64_decode = base64_decode
+
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
 
