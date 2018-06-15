@@ -77,7 +77,7 @@
         			role: _this.role,
         			storesnum: _this.storesnum,
         			remark: _this.remark,
-        			userId: localStorage.getItem('userId')
+        			userId: _this.$store.state.user.userId
         		}
         		console.log('--添加企业数据:',data)
         		// _this.$http.post(_this.url.user.changeUserInfo, data).then((res) => {

@@ -20,8 +20,8 @@
 			Qrcode
 		},
 		created() {
-			this.qrcodeVal = 'http://192.168.3.145:8080/#/user/reg?parentId=' + localStorage.getItem('userId')
-			alert(this.qrcodeVal)
+			this.qrcodeVal = 'http://192.168.3.145:8080/#/user/reg?parentId=' + this.$store.state.user.userId
+			
 		}
 	}
 </script>

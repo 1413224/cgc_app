@@ -126,7 +126,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getFundInfo, {
 					params: {
-						userId: localStorage.getItem('userId')
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -140,7 +140,7 @@
 			changeFundShow() {
 				var _this = this
 				_this.$http.post(_this.url.user.changeFundShow, {
-					userId: localStorage.getItem('userId'),
+					userId: _this.$store.state.user.userId,
 					isshowFund: _this.isshowFund == 0 ? 1 : 0
 				}).then((res) => {
 					if(res.data.status == "00000000") {

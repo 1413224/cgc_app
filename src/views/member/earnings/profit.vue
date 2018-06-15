@@ -63,7 +63,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getDayBalanceList, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: _this.type,
 						curPage: _this.curPage,
 						pageSize: _this.pageSize
@@ -102,7 +102,7 @@
 				_this.curPage++
 					_this.$http.get(_this.url.user.getDayBalanceList, {
 						params: {
-							userId: localStorage.getItem('userId'),
+							userId: _this.$store.state.user.userId,
 							type: _this.type,
 							curPage: _this.curPage,
 							pageSize: _this.pageSize,

@@ -92,7 +92,7 @@
 		},
 		created() {
 			this.getUserInfo()
-			this.qrcodeVal = 'http://192.168.3.145:8080/#/user/reg?parentId=' + localStorage.getItem('userId')
+			this.qrcodeVal = 'http://192.168.3.145:8080/#/user/reg?parentId=' + this.$store.state.user.userId
 			this.width = Number(document.body.clientWidth * 0.6773333333333333)
 		},
 		mounted() {},
@@ -102,7 +102,7 @@
 				//获取用户信息
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
-						userId: localStorage['userId']
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {

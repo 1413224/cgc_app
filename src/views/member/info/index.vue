@@ -56,7 +56,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
-						userId: localStorage.getItem('userId')
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -71,7 +71,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getUserAuthInfo, {
 					params: {
-						userId: localStorage.getItem('userId')
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -99,7 +99,7 @@
 				_this.$http.post(_this.url.user.fileuploadImage, data).then((res) => {
 					if(res.data.status == '00000000') {
 						_this.$http.post(_this.url.user.changeAvatar, {
-							userId: localStorage.getItem('userId'),
+							userId: _this.$store.state.user.userId,
 							avatarId: res.data.data.fileId
 						}).then((res) => {
 							_this.images = res.data.data.original

@@ -1,7 +1,9 @@
+import {base64_encode,base64_decode} from '../../global/course.js'
 const user = {
     state: {
         username: null,
-        userstate: false
+        userstate: false,
+        userId:base64_decode(localStorage['_HASH_']).id
     },
   
     mutations: {

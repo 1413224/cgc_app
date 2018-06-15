@@ -83,7 +83,7 @@
 		str = base.decode(str);
 		
 		// 拼接加密前缀
-		strLength = str.length;
+		var strLength = str.length;
 		//profixLength = Math.floor(strLength / 4) * 3;
 		var proStr = '';
 		for(var i=0; i<strLength; ++i){

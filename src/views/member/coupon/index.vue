@@ -310,7 +310,7 @@
 				_this.curPage++
 				_this.$http.get(_this.url.user.getUserCouponList, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: _this.par.type,
 						status: _this.par.status,
 						timeType: _this.par.timeType,
@@ -340,7 +340,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getUserCouponList, {
 					params: {
-						userId: localStorage.getItem('userId'),
+						userId: _this.$store.state.user.userId,
 						type: obj.type,
 						status: obj.status,
 						timeType: obj.timeType,

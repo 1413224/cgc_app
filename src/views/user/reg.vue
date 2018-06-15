@@ -135,7 +135,7 @@
 						mobile: _this.mobile
 					}).then(res => {
 						if(res.data.status == "00000000") {
-							if(res.data.data == 'false') {
+							if(res.data.data == '0') {
 								//未注册
 								_this.$dialog.show({
 									type: 'warning',
@@ -170,9 +170,7 @@
 					terminal: _this.url.client
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
-
-
-
+						// alert(9)
 						/*let info={
 							'userId': res.data.data.id
 						}*/
@@ -181,18 +179,18 @@
 						let token = base64_encode(res.data.data.token)
 
 						let hasc={} */
-						console.log(res.data.data)
+						// console.log(res.data.data)
 
 
 
 						let hash = base64_encode(res.data.data)
-						console.log(hash)
+						// console.log(hash)
 
 						localStorage.setItem('_HASH_', hash)
 
-						localStorage.setItem('userId', res.data.data.id)
+						/*localStorage.setItem('userId', res.data.data.id)
 						localStorage.setItem('userNp', res.data.data.id + _this.url.client + res.data.data.randomAccessCode)
-						localStorage.setItem('token', res.data.data.token)
+						localStorage.setItem('token', res.data.data.token)*/
 
 						_this.$store.state.page.isLogin = true
 						_this.$vux.toast.show({

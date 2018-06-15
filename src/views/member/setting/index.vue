@@ -30,7 +30,7 @@
 			logout() {
 				var _this = this;
 				_this.$http.post(_this.url.user.logout, {
-					userId: localStorage.getItem('userId'),
+					userId: _this.$store.state.user.userId,
 					platformId: _this.url.platformId
 				}).then((res) => {
 					if(res.data.status == '00000000') {

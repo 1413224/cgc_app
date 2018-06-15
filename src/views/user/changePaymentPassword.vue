@@ -64,7 +64,7 @@
 				//获取用户信息
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
-						userId: localStorage['userId']
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -77,7 +77,7 @@
 				var _this = this
 				_this.$http.get(_this.url.user.getUserPayPassword, {
 					params: {
-						userId: localStorage.getItem('userId')
+						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -134,7 +134,7 @@
 				var _this = this
 				if(_this.oldpassword.length == 6) {
 					_this.$http.post(_this.url.user.authPayPassword, {
-						userId: localStorage['userId'],
+						userId: _this.$store.state.user.userId,
 						payPassword: _this.MD5(_this.oldpassword)
 					}).then((res) => {
 						if(res.data.status == "00000000") {
@@ -186,7 +186,7 @@
 				if(_this.mainApp.isphone(_this.phone)) {
 					_this.$refs.code.focus()
 					_this.$http.post(this.url.user.getVerificationCode1, {
-						userId:localStorage['userId'],
+						userId:_this.$store.state.user.userId,
 						type: 102
 					}).then(function(res) {
 						if(res.data.status == "00000000") {

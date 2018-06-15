@@ -76,7 +76,7 @@
 					},
 					confirm() {
 						let param = {
-							userId: localStorage['userId'],
+							userId: _this.$store.state.user.userId,
 							addressId: addressId
 						}
 						_this.$http.post(_this.url.user.deleteShippingAddress, param).then(resp => {
@@ -92,7 +92,7 @@
 			ischange(addressId, i) { // 设置默认地址
 				let _this = this
 				let param = {
-					userId: localStorage['userId'],
+					userId: _this.$store.state.user.userId,
 					addressId: addressId
 				}
 				_this.$http.put(_this.url.user.setDefaultShippingAddress, param).then(resp => {
@@ -109,7 +109,7 @@
 			getShippingAddress() { // 获取收货地址列表
 				let _this = this
 				let param = {
-					'userId': localStorage['userId'],
+					'userId': _this.$store.state.user.userId,
 					'pageSize': 20,
 					'curPage': 1
 				}
