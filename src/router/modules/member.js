@@ -219,13 +219,6 @@ const memberModule = [{
 		meta: {
 			title: '详细资料'
 		}
-	}, {
-		path: '/member/info/img',
-		name: 'infoimg',
-		component: resolve => require(['@/views/member/info/img'], resolve),
-		meta: {
-			title: '上传图片'
-		}
 	},
 	{
 		path: '/member/setting/changeCode',
@@ -491,6 +484,14 @@ const memberModule = [{
 		component: resolve => require(['@/views/member/join/index'], resolve),
 		meta: {
 			title: '企业加盟'
+		}
+	},
+	{
+		path: '/member/setting/opinion',
+		name: 'opinion',
+		component: resolve => require(['@/views/member/setting/opinion'], resolve),
+		meta: {
+			title: '意见反馈'
 		}
 	},
 	{

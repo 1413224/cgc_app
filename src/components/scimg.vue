@@ -2,7 +2,7 @@
 	<div id="demo">
 		<!-- 遮罩层 -->
 		<div class="container" id="container1" v-if="panel">
-			<div class="cropper-box" id="cropper-box">
+			<div class="cropper-box" :class="{'top46':vm.$store.state.page.isWx == false}" id="cropper-box">
 				<img id="image" :src="url" alt="" />
 			</div>
 			<button type="button" id="button" @click="commit">确定</button>
@@ -65,13 +65,13 @@
 				if(this.imgCropperData.accept.indexOf(type) == -1) {
 					this.panel = false;
 					this.Cancel()
-					alert("请选择我们支持的图片格式！");
+					alert("请选择我们支持的图片格式");
 					return false;
 				}
 				if(size > 5242880) {
 					this.panel = false;
 					this.Cancel()
-					alert("请选择5M以内的图片！");
+					alert("请选择5M以内的图片");
 					return false;
 				}
 
@@ -85,7 +85,7 @@
 						aspectRatio: 1, //裁剪容器的比例
 						viewMode: 1,
 						background: true, //是否在容器上显示网格背景
-						modal: true, //是否在剪裁框上显示黑色的模态窗口
+						modal: false, //是否在剪裁框上显示黑色的模态窗口
 						guides: true, //是否在剪裁框上显示虚线
 						zoomable: true, //是否允许放大缩小图片
 						rotatable: true, //是否允许旋转图片
@@ -189,6 +189,9 @@
 		position: fixed;
 		top: 0%;
 		width: 100%;
+	}
+	.top46{
+		top: 46px;
 	}
 	
 	#demo #button,

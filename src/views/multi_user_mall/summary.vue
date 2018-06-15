@@ -275,7 +275,7 @@
 			background: #fff;
 			border-radius: 10px 10px 0 0;
 			position: relative;
-			top: 0.4rem;
+			padding-top: 0.4rem;
 			width: 100%;
 			z-index: 4;
 			.nav {

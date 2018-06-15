@@ -7,7 +7,7 @@
 					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
 					<div class="avatar">
 						<router-link to="/member/info/index">
-							<img :src="images?images:'./static/images/mrtx.png'" alt="" />
+							<img :src="userInfo.avatar.original?userInfo.avatar.original:'./static/images/mrtx.png'" alt="" />
 						</router-link>
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:'未设置'}}</p>
 						<p class="status">{{userInfo.levelName?userInfo.levelName:'暂无等级'}}</p>
@@ -151,6 +151,7 @@
 			}
 		},
 		created() {
+			this.userInfo = JSON.parse(localStorage['userInfo'])
 			this.getUserInfo()
 		},
 		methods: {
@@ -166,9 +167,8 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						_this.userInfo = res.data.data
-						if(_this.userInfo.avatar.original) {
-							_this.images = _this.userInfo.avatar.original
+						if(_this.userInfo.avatar.original != res.data.data.avatar.original) {
+							_this.userInfo = res.data.data
 						}
 					}
 				})

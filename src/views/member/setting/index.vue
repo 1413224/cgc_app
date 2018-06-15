@@ -6,6 +6,7 @@
 				<cell class="list-item" title="个人信息" is-link link="/member/info/index"></cell>
 				<cell class="list-item" title="消息设置" is-link link="/member/message/setting"></cell>
 				<cell class="list-item" title="密码管理" is-link link="/user/changelist"></cell>
+				<cell class="list-item" title="意见反馈" is-link link="/member/setting/opinion"></cell>
 				<cell class="list-item" title="关于我们" is-link link="/member/setting/about"></cell>
 			</group>
 			<div class="logout-btn" @click="logout">退出登录</div>
