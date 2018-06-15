@@ -47,6 +47,7 @@
 		},
 		created() {
 			var _this = this
+			console.log(_this.$store.state.user.userId)
 
 			window.onorientationchange = function() {
 				if(window.orientation == 90 || window.orientation == -90) {
