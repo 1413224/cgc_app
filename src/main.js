@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
+import creatrStore from './store'
 import Vuex from 'vuex'
 import echatrs from 'echarts'
 import './assets/icons_font/iconfont.css'
@@ -19,6 +19,9 @@ import {base64_encode,base64_decode} from './global/course.js'
 
 Vue.prototype.base64_encode = base64_encode
 Vue.prototype.base64_decode = base64_decode
+
+Vue.use(Vuex)
+const store = creatrStore()
 
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
@@ -62,7 +65,7 @@ FastClick.attach(document.body);
 
 Vue.use(VueVideoPlayer)
 
-Vue.use(Vuex)
+
 Vue.directive('transfer-dom', TransferDom)
 Vue.component('group', Group)
 Vue.component('datetime-range', DatetimeRange)
