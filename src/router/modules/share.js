@@ -24,6 +24,7 @@ const share =[
 		component:()=>import('@/views/share/index'),//异步组件
 		meta: {
 			navShow: true,
+			navIndex:1,
 			title: '共享设备'
 		}
 	},

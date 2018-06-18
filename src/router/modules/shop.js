@@ -29,7 +29,7 @@ const shopModule = [
 		component: resolve => require(['@/views/shop/temporarily'], resolve),
 		meta: {
 			navShow: true,
-			navIndex:1,
+			// navIndex:1,
 			title:'信用商城'
 		}
 	},
@@ -39,7 +39,7 @@ const shopModule = [
 		component:  resolve => require(['@/views/shop/temporarily'], resolve),
 		meta: {
 			navShow: true,
-			navIndex:1,
+			// navIndex:1,
 			title:'信用商城'
 		}
 	},

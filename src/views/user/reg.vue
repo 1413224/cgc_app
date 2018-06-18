@@ -29,14 +29,14 @@
 				<span @click="isReg = !isReg">返回登录</span>
 			</div>
 		</div>
-		<div class="Thirdparty" v-if="isReg">
+		<!-- <div class="Thirdparty" v-if="isReg">
 			<p class="title"><span>第三方登录</span></p>
 			<div>
 				<img src="../../assets/images/user/weibo.png" alt="" />
 				<img @click="wxLogin" src="../../assets/images/user/weixin.png" alt="" />
 				<img src="../../assets/images/user/qq.png" alt="" />
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 

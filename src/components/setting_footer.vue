@@ -28,11 +28,17 @@
 							title: 'e消费',
 							url: '/index'
 						},
-						{
+						/*{
 							icon: './static/images/xysc.png',
 							iconIn: './static/images/xysc_active.png',
 							title: '信用商城',
 							url: '/shop'
+						},*/
+						{
+							icon: './static/images/xwfg.png',
+							iconIn: './static/images/zwfg.png',
+							title: '威伐光',
+							url: '/share'
 						},
 						{
 							icon: './static/images/zqm.png',
