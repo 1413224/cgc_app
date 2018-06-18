@@ -19,11 +19,11 @@
 					<span class="sg">注册即同意</span>
 					<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
 				</div>
-				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">立即登录 / 注册</x-button>
+				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">登录 / 注册</x-button>
 				<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-else>立即注册</x-button>
 			</div>
 			<div class="login-re" v-if="isReg">
-				<router-link to="/user/changeLoginPassword"><span>忘记密码?</span></router-link>
+				<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
 				<router-link to=""><span>短信验证登录</span></router-link>
 			</div>
 			<div class="login-re" v-else>
@@ -103,7 +103,7 @@
 					})
 					return false
 				}
-				
+
 				if(_this.password.length < 6 || _this.password.length > 25) {
 					_this.$vux.toast.show({
 						width: '60%',
@@ -472,7 +472,7 @@
 			padding: 10px 0px;
 			display: flex;
 			justify-content: space-between;
-			span {
+			.left {
 				color: #90A2C7;
 			}
 		}

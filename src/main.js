@@ -15,7 +15,7 @@ import FastClick from 'fastclick'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import VueLazyLoad from 'vue-lazyload'
-import {base64_encode,base64_decode} from './global/course.js'
+import { base64_encode, base64_decode } from './global/course.js'
 
 Vue.prototype.base64_encode = base64_encode
 Vue.prototype.base64_decode = base64_decode
@@ -30,12 +30,12 @@ Vue.prototype.merge = merge
 import mainApp from './global/global'
 Vue.prototype.mainApp = mainApp
 Vue.filter('getDate', function(value) {
-	if(value != 0){
+	if(value != 0) {
 		return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
-	}else{
+	} else {
 		return value
 	}
-	
+
 })
 
 import MD5 from 'js-md5'
@@ -64,7 +64,6 @@ Vue.use(VueLazyLoad, {
 FastClick.attach(document.body);
 
 Vue.use(VueVideoPlayer)
-
 
 Vue.directive('transfer-dom', TransferDom)
 Vue.component('group', Group)
@@ -176,40 +175,30 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	//判断是否是微信浏览器
-	let ua = window.navigator.userAgent.toLowerCase()
-	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-        // 跳转到微信授权页面
-        if(!store.state.user.openid){
-        	axios.get(url.origin.getAuthorizationUrl,{
-        		params:{
-        			platformId:'2018052100000001',
-        			type:1
-        		}
-        	}).then((res) => {
-        		
-        		if(res.data.status=='00000000'){
-        			let data = res.data
-        			window.location.href = data.data
-        		}
-        	});
-        }
-    }else{
-    	console.log("不是微信")
-    }
-    
-
-
-
-
-
-
-
-
+//	//判断是否是微信浏览器
+//	let ua = window.navigator.userAgent.toLowerCase()
+//	if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+//		// 跳转到微信授权页面
+//		if(!store.state.user.openid) {
+//			axios.get(url.origin.getAuthorizationUrl, {
+//				params: {
+//					platformId: '2018052100000001',
+//					type: 1
+//				}
+//			}).then((res) => {
+//				if(res.data.status == '00000000') {
+//					let data = res.data
+//					window.location.href = data.data
+//				}
+//			});
+//		}
+//	} else {
+//		console.log("不是微信")
+//	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
-	
+
 	store.state.page.isLogin = localStorage['isLogin']
 
 	if(to.path == '/user/reg') {
