@@ -4,25 +4,28 @@
 
 <script>
 	
-	export default {
-		data() {
-			return {
-				
-						
-			}
-		},
-		created() {
+export default {
+	data() {
+		return {
 			
-		},
-		methods: {
-			
-				
-			
-		},
-		components: {
-			
+					
 		}
+	},
+	created() {
+		this.getParams()
+	},
+	methods: {
+		getParams(){
+
+		}
+			
+		
+	},
+	components: {
+		
 	}
+		
+}
 </script>
 
 <style lang="less" scoped>

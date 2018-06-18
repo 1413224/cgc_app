@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
+import creatrStore from './store'
 import Vuex from 'vuex'
 import echatrs from 'echarts'
 import './assets/icons_font/iconfont.css'
@@ -19,6 +19,9 @@ import {base64_encode,base64_decode} from './global/course.js'
 
 Vue.prototype.base64_encode = base64_encode
 Vue.prototype.base64_decode = base64_decode
+
+Vue.use(Vuex)
+const store = creatrStore()
 
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
@@ -62,7 +65,7 @@ FastClick.attach(document.body);
 
 Vue.use(VueVideoPlayer)
 
-Vue.use(Vuex)
+
 Vue.directive('transfer-dom', TransferDom)
 Vue.component('group', Group)
 Vue.component('datetime-range', DatetimeRange)
@@ -172,6 +175,37 @@ methods.forEach(key => {
 })
 
 router.beforeEach(function(to, from, next) {
+
+	//判断是否是微信浏览器
+	let ua = window.navigator.userAgent.toLowerCase()
+	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        // 跳转到微信授权页面
+        if(!store.state.user.openid){
+        	axios.get(url.origin.getAuthorizationUrl,{
+        		params:{
+        			platformId:'2018052100000001',
+        			type:1
+        		}
+        	}).then((res) => {
+        		
+        		if(res.data.status=='00000000'){
+        			let data = res.data
+        			window.location.href = data.data
+        		}
+        	});
+        }
+    }else{
+    	console.log("不是微信")
+    }
+    
+
+
+
+
+
+
+
+
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []

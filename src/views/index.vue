@@ -4,7 +4,10 @@
 			<div class="content" style="padding-bottom: 0.2rem">
 				<swiper :options="swiperOption" class="swiper">
 					<swiper-slide v-for="(item, index) in demoList" :key="index">
-						<router-link :to="item.url">
+						<a v-if="item.wbu" @click="goUrl(item.url)">
+							<img :src="item.img">
+						</a>
+						<router-link v-else :to="item.url">
 							<img :src="item.img">
 						</router-link>
 					</swiper-slide>
@@ -233,7 +236,8 @@
 				],
 				demoList: [{
 						img: './static/index/lt.png',
-						url: ''
+						url: 'http://www.cgc999.com/app/index.php?i=7&c=entry&m=mx_shop&do=mobile&r=page_detail&pid=4',
+						wbu:true
 					},
 					{
 						img: './static/index/syjm.png',
@@ -423,6 +427,9 @@
 				//						}
 				//					})
 				//				})
+			},
+			goUrl(url){
+				window.location.href = url
 			}
 		},
 		components: {
