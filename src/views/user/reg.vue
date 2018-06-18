@@ -15,7 +15,8 @@
 			</group>
 			<div class="tip">
 				<div class="agreement" v-if="!isReg">
-					<check-icon :value.sync="isAgree"></check-icon><span class="sg">我已阅读并同意</span>
+					<!--<check-icon :value.sync="isAgree"></check-icon>-->
+					<span class="sg">注册即同意</span>
 					<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
 				</div>
 				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">立即登录 / 注册</x-button>
@@ -82,50 +83,93 @@
 		methods: {
 			submit() {
 				var _this = this
-				_this.showLoading = true
-				if(_this.mainApp.isphone(_this.mobile) && _this.password.length > 0) {
-					_this.isCheckLogin()
-				} else {
+
+				if(_this.mobile.length != 11) {
 					_this.$vux.toast.show({
 						width: '60%',
 						type: 'text',
 						position: 'middle',
-						text: '手机号码或密码格式不正确'
+						text: '手机号码长度不符合要求'
 					})
+					return false
 				}
 
+				if(!_this.mainApp.isphone(_this.mobile)) {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '手机号码格式不符合要求'
+					})
+					return false
+				}
+				
+				if(_this.password.length < 6 || _this.password.length > 25) {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '密码格式不符合要求'
+					})
+					return false
+				}
+
+				_this.showLoading = true
+				_this.isCheckLogin()
 				_this.showLoading = false
 			}, //注册
 			reg() {
 				var _this = this
-				if(_this.mainApp.isphone(_this.mobile) && _this.password.length > 0) {
-					_this.$http.post(this.url.user.userRegister, {
-						mobile: _this.mobile,
-						password: _this.password,
-						smsVerificationCode: _this.code,
-						platformId: _this.url.platformId,
-						parentUserId: _this.parentId
-					}).then(function(res) {
-						if(res.data.status == "00000000") {
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '注册成功',
-								onHide() {
-									_this.login()
-								}
-							})
-						}
-					})
-				} else {
+
+				if(_this.mobile.length != 11) {
 					_this.$vux.toast.show({
 						width: '60%',
 						type: 'text',
 						position: 'middle',
-						text: '手机号码或密码格式不正确'
+						text: '手机号码长度不符合要求'
 					})
+					return false
 				}
+
+				if(!_this.mainApp.isphone(_this.mobile)) {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '手机号码格式不符合要求'
+					})
+					return false
+				}
+
+				if(_this.password.length < 6 || _this.password.length > 25) {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '密码格式不符合要求'
+					})
+					return false
+				}
+
+				_this.$http.post(this.url.user.userRegister, {
+					mobile: _this.mobile,
+					password: _this.password,
+					smsVerificationCode: _this.code,
+					platformId: _this.url.platformId,
+					parentUserId: _this.parentId
+				}).then(function(res) {
+					if(res.data.status == "00000000") {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '注册成功',
+							onHide() {
+								_this.login()
+							}
+						})
+					}
+				})
 			},
 			////检测用户是否注册
 			isCheckLogin() {
@@ -162,6 +206,7 @@
 			//登录
 			login() {
 				var _this = this
+
 				_this.$http.post(this.url.user.userLogin, {
 					audience: 'user',
 					platformId: _this.url.platformId,
@@ -178,7 +223,7 @@
 						localStorage.setItem('_HASH_', hash)
 
 						localStorage.setItem('isLogin', true)
-						
+
 						_this.$vux.toast.show({
 							width: '50%',
 							type: 'text',
@@ -239,6 +284,31 @@
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
 					//					_this.$refs.password.focus()
+					var _this = this
+					_this.$nextTick(function() {
+						_this.$http.post(_this.url.user.checkUserExistsByMobile, {
+							mobile: _this.mobile
+						}).then(res => {
+							if(res.data.status == "00000000") {
+								if(res.data.data == '0') {
+									//未注册
+									_this.$dialog.show({
+										type: 'warning',
+										headMessage: '提示',
+										message: '该账户没有注册,是否立即注册?',
+										buttons: ['确定', '取消'],
+										canel() {
+											_this.$dialog.hide()
+										},
+										confirm() {
+											_this.$dialog.hide()
+											_this.isReg = false
+										}
+									})
+								}
+							}
+						})
+					})
 				}
 			},
 			//发送验证码
