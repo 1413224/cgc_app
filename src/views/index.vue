@@ -30,7 +30,9 @@
 							<marquee-item v-for="i in 5" :key="i" :duration='3000' class="align-middle">魅族手机成功加盟CGC全球智慧产业联盟</marquee-item>
 						</marquee>
 					</div>
-					<i style="margin-left: 0.8rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
+					<router-link to="/member/article/index">
+						<i style="margin-left: 0.8rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
+					</router-link>
 					<!--<router-link to="/member/article/index">
 						<div class="notMore">
 							<img src="../assets/images/shop/turn_right.png">
@@ -237,7 +239,7 @@
 				demoList: [{
 						img: './static/index/lt.png',
 						url: 'http://www.cgc999.com/app/index.php?i=7&c=entry&m=mx_shop&do=mobile&r=page_detail&pid=4',
-						wbu:true
+						wbu: true
 					},
 					{
 						img: './static/index/syjm.png',
@@ -266,17 +268,48 @@
 					}
 				],
 
-				navList:[
-					{title:'抽奖中心',img:'./static/images/cj.png',url:'/draw'},
-					{title:'邀请有奖',img:'./static/images/yq.png',url:'/member/purse/qrcode'},
-					{title:'推广助手',img:'./static/images/tg.png',url:'/member/generalize/index'},
+				navList: [{
+						title: '抽奖中心',
+						img: './static/images/cj.png',
+						url: '/draw'
+					},
+					{
+						title: '邀请有奖',
+						img: './static/images/yq.png',
+						url: '/member/purse/qrcode'
+					},
+					{
+						title: '推广助手',
+						img: './static/images/tg.png',
+						url: '/member/generalize/index'
+					},
 					// {title:'赚钱攻略',img:'./static/images/gl.png',url:'/member/strategy/index'},
-					{title:'会员权益',img:'./static/images/gl.png',url:'/member/benefits/index'},
-					{title:'充值有奖',img:'./static/images/cz.png',url:'/member/purse/recharge'},
-					{title:'我的优惠券',img:'./static/images/yh.png',url:'/member/coupon/index'},
+					{
+						title: '会员权益',
+						img: './static/images/gl.png',
+						url: '/member/benefits/index'
+					},
+					{
+						title: '充值有奖',
+						img: './static/images/cz.png',
+						url: '/member/purse/recharge'
+					},
+					{
+						title: '我的优惠券',
+						img: './static/images/yh.png',
+						url: '/member/coupon/index'
+					},
 					// {title:'会员权益',img:'./static/images/hy.png',url:'/member/benefits/index'},
-					{title:'我的会员',img:'./static/images/hy.png',url:'/member/vip/index'},
-					{title:'我的资产',img:'./static/images/zc.png',url:'/member/purse/wallet'},
+					{
+						title: '我的会员',
+						img: './static/images/hy.png',
+						url: '/member/vip/index'
+					},
+					{
+						title: '我的资产',
+						img: './static/images/zc.png',
+						url: '/member/purse/wallet'
+					},
 				],
 				allianceList: [{
 						title: '本地服务',
@@ -428,7 +461,7 @@
 				//					})
 				//				})
 			},
-			goUrl(url){
+			goUrl(url) {
 				window.location.href = url
 			}
 		},
