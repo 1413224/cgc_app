@@ -299,7 +299,7 @@
 			.title {
 				font-size: 0.36rem;
 				color: rgba(26, 38, 66, 1);
-				margin: 0.6rem 0;
+				margin: 0.6rem 0 0.2rem 0.1rem;
 			}
 			.b-w {
 				width: 5.78rem;

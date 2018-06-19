@@ -282,8 +282,8 @@
 			nameChange(val) {
 				var _this = this
 				if(val.length == 11) {
-//					_this.$refs.phone.blur()
-//					_this.$refs.password.focus()
+					_this.$refs.phone.blur()
+					_this.$refs.password.focus()
 					var _this = this
 					_this.$nextTick(function() {
 						_this.$http.post(_this.url.user.checkUserExistsByMobile, {

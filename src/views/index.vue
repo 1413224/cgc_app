@@ -221,7 +221,7 @@
 								<p>{{item.mk}}</p>
 							</div>
 						</div>
-						<div class="zc-btn">
+						<div class="zc-btn" @click="$router.push({path:'/user/reg'})">
 							立即注册
 						</div>
 					</div>
@@ -473,7 +473,12 @@
 			}
 		},
 		created() {
-			//			this.loc()
+			var _this = this
+			if(_this.$store.state.page.isLogin == 'true'){
+				_this.showNew2 = false
+			}else{
+				_this.showNew2 = true
+			}
 		},
 		mounted() {
 			this.onLoadArticle();

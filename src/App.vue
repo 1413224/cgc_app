@@ -32,7 +32,8 @@
 			...mapState({
 				direction: state => state.page.direction,
 				includeList: state => state.page.includeList,
-				isWx: state => state.page.isWx
+				isWx: state => state.page.isWx,
+				isLogin: state => state.page.isLogin
 			}),
 			viewTransition() {
 				if(!this.direction) return ''
@@ -85,6 +86,12 @@
 				this.$code.hide()
 				this.$dialog.hide()
 				this.$scImg.hide()
+			},
+			isLogin(){
+				console.log(this.isLogin)
+				if(this.isLogin == false){
+					localStorage.removeItem('userInfo')
+				}
 			}
 		}
 	}

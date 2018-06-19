@@ -23,8 +23,6 @@ Vue.prototype.base64_decode = base64_decode
 Vue.use(Vuex)
 const store = creatrStore()
 
-
-
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
 
@@ -177,34 +175,37 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-//	//判断是否是微信浏览器
-//	let ua = window.navigator.userAgent.toLowerCase()
-//	if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-//		// 跳转到微信授权页面
-//		if(!store.state.user.openid) {
-//			axios.get(url.origin.getAuthorizationUrl, {
-//				params: {
-//					platformId: '2018052100000001',
-//					type: 1
-//				}
-//			}).then((res) => {
-//				if(res.data.status == '00000000') {
-//					let data = res.data
-//					window.location.href = data.data
-//				}
-//			});
-//		}
-//	} else {
-//		console.log("不是微信")
-//	}
+	//	//判断是否是微信浏览器
+	//	let ua = window.navigator.userAgent.toLowerCase()
+	//	if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+	//		// 跳转到微信授权页面
+	//		if(!store.state.user.openid) {
+	//			axios.get(url.origin.getAuthorizationUrl, {
+	//				params: {
+	//					platformId: '2018052100000001',
+	//					type: 1
+	//				}
+	//			}).then((res) => {
+	//				if(res.data.status == '00000000') {
+	//					let data = res.data
+	//					window.location.href = data.data
+	//				}
+	//			});
+	//		}
+	//	} else {
+	//		console.log("不是微信")
+	//	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
-	
+
 	store.state.page.isLogin = localStorage['isLogin']
-	
+
 	let info = base64_decode(localStorage['_HASH_'])
-	store.state.user.userId = info.id
+	
+	if(info) {
+		store.state.user.userId = info.id
+	}
 
 	if(to.path == '/user/reg') {
 		to.meta.keepAlive = true
