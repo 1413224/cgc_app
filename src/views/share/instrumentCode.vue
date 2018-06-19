@@ -34,7 +34,7 @@
 
 				<div class="price">
 					<div class="select">请选择价格套餐</div>
-					<div class="item" v-for="(item,index) in priceSetList">
+					<div class="item" v-for="(item,index) in priceSetList" :key="index">
 						<div class="left">
 							<p>{{ item.time}}分钟</p>
 							<p>{{ item.type}}</p>

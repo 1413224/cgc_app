@@ -26,11 +26,11 @@
 		</div>
 		<div class="nav-brief">
 			<div class="main">
-				<div class="left">
+				<div class="left" @click="showProduct()">
 					<span>威伐光介绍</span>
 				</div>
 				<div class="right">
-					<div class="cont">
+					<div class="cont" @click="goTreatment()">
 						<span>治疗指引</span>
 					</div>
 					<div class="cont bg">
@@ -311,6 +311,9 @@
 			},
 			btnQrcode () {
 				this.$router.push({ name: 'shareQrcode', params: { url: 'https://www.baidu.com/' }})
+			},
+			goTreatment(){
+				this.$router.push('/share/guidance')
 			}
 		}
 	}

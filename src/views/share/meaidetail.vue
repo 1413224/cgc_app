@@ -22,7 +22,7 @@
 				
 		        <div class="commentsList">
 		            <div class="list">
-		            	<li class="li-comments" v-for="item in 8">
+		            	<li class="li-comments" v-for="(item,index) in 8" :key="index">
 		            		<div class="comments_author">
 		            			<img src="../../assets/images/shop/photo.png">
 		            			<span class="name">陈独秀</span>

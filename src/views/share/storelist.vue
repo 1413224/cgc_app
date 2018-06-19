@@ -26,7 +26,7 @@
 					<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
 					<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
 				</li>
-				<li v-for="item in items" @click="next(item.areaId,item.name)">
+				<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
 					<span>{{item.name}}</span>
 					<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
 				</li>
