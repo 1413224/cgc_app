@@ -204,7 +204,10 @@ router.beforeEach(function(to, from, next) {
 	store.state.page.isLogin = localStorage['isLogin']
 	
 	let info = base64_decode(localStorage['_HASH_'])
-	store.state.user.userId = info.id
+
+	if(info){
+		store.state.user.userId = info.id
+	}
 
 	if(to.path == '/user/reg') {
 		to.meta.keepAlive = true
