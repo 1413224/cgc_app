@@ -13,7 +13,9 @@ import OrderEval from '@/views/share/orderEval'
 import UseTime from '@/views/share/usetime'
 import Qrcode from '@/views/share/qrcode'
 import instrumentCode from '@/views/share/instrumentCode'
+import guidance from '@/views/share/guidance'
 import ceshi from '@/views/share/ceshi'
+
 
 
 const share =[
@@ -145,6 +147,14 @@ const share =[
 		component:resolve => require(['@/views/share/instrumentCode'], resolve),
 		meta: {
 			title: '仪器扫码'
+		}
+	},
+	{
+		path: '/share/guidance',
+		name: 'guidance',
+		component:resolve => require(['@/views/share/guidance'], resolve),
+		meta: {
+			title: '治疗指导'
 		}
 	},
 	{

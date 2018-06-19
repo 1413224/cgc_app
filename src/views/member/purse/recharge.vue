@@ -2,11 +2,15 @@
 	<div class="recharge-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="item">
-			<div>
+			<!-- <div>
 				<span>当前平台</span><span>{{info.name}}</span>
 			</div>
 			<div>
 				<span>当前积分</span><span>{{userInfo.availablePoints}}</span>
+			</div> -->
+			<div class="jifen">
+				<div class="price">{{userInfo.availablePoints}}<span>通用积分</span></div>
+				<div class="ptai">当前平台：<span>{{info.name}}</span></div>
 			</div>
 		</div>
 		<div class="change-box">
@@ -14,7 +18,7 @@
 				<span>通用积分充值</span><span @click="record">充值记录</span>
 			</div>
 			<div class="change-row">
-				<div v-for="(item,index) in moneyList" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.rechargeId)" v-if="moneyList.length>0">
+				<div v-for="(item,index) in moneyList" :key="index" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.rechargeId)" v-if="moneyList.length>0">
 					<div class="box" :class="{'nohas':item.null}">
 						<p>{{item.money}}元</p>
 						<p>赠送{{item.integral}}积分</p>
@@ -55,7 +59,7 @@
 	export default {
 		data() {
 			return {
-				title: '积分充值',
+				title: '通用积分充值',
 				moneyIndex: 0, //套餐默认选中
 				ptIndex: 0,
 				list: [{
@@ -73,12 +77,12 @@
 				}],
 				show1: false,
 				moneyList: [],
-
 				info: {},
 				userInfo: {}
 			}
 		},
 		created() {
+
 			if(localStorage['userInfo']) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
 			}
@@ -104,12 +108,12 @@
 			changeMoney(index, id) {
 				this.moneyIndex = index
 
-				this.$vux.toast.show({
-					width: '50%',
-					type: 'text',
-					position: 'top',
-					text: id
-				})
+				// this.$vux.toast.show({
+				// 	width: '50%',
+				// 	type: 'text',
+				// 	position: 'top',
+				// 	text: id
+				// })
 			},
 			changePt(index) {
 				this.ptIndex = index
@@ -174,7 +178,8 @@
 		height: 100%;
 		position: relative;
 		font-family: PingFangSC-Medium;
-		background-color: #F5F6FA;
+		// background-color: #F5F6FA;
+		background-color: #fff;
 		.item {
 			padding: 0.31rem 0.22rem;
 			box-sizing: border-box;
@@ -184,16 +189,40 @@
 			justify-content: space-between;
 			flex-direction: column;
 			margin-bottom: 0.2rem;
-			div {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				font-size: 0.28rem;
-				span:nth-child(1) {
-					color: rgba(144, 162, 199, 1);
+			// div {
+			// 	display: flex;
+			// 	align-items: center;
+			// 	justify-content: space-between;
+			// 	font-size: 0.28rem;
+			// 	span:nth-child(1) {
+			// 		color: rgba(144, 162, 199, 1);
+			// 	}
+			// 	span:nth-child(2) {
+			// 		color: #1A2642
+			// 	}
+			// }
+			.jifen{
+				text-align: center;
+				.price{
+					font-size: .5rem;
+					font-weight: bold;
+					overflow: hidden;
+					white-space:nowrap;
+					text-overflow: ellipsis;
+					span{
+						font-weight: bold;
+						font-size: .32rem;
+						display: inline-block;
+						margin-left: .1rem;
+					}
 				}
-				span:nth-child(2) {
-					color: #1A2642
+				.ptai{
+					color: #90A2C7;
+					font-size: .28rem;
+					margin-top: .1rem;
+					span{
+						color: #333;
+					}
 				}
 			}
 		}
@@ -219,6 +248,8 @@
 			padding: 0 0.22rem 0.58rem 0.22rem;
 			background-color: white;
 			margin-bottom: 0.21rem;
+			border-top: 1px solid #EBEFF7;
+			border-bottom: 1px solid #EBEFF7;
 			.change-tip {
 				height: 1.13rem;
 				display: flex;

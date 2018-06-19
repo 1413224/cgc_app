@@ -22,7 +22,7 @@
 						<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
 						<div class="list">
 							<ul>
-								<li class="clearfix" v-for="item in disclick">
+								<li class="clearfix" v-for="(item,index) in disclick" :key="index">
 									<div class="left">
 										<img src="../../assets/images/share/md_logo.png" alt="">
 									</div>

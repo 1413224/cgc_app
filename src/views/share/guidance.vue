@@ -27,8 +27,8 @@
 				<div class="zhiliao" v-show="nowIndex==1">
 					<img src="../../assets/images/share/treatment.png" alt="">
 				</div> -->
-				<div class="pro">
-					<img src="../../assets/images/share/producted.png" alt="">
+				<div class="zhiliao">
+					<img src="../../assets/images/share/treatment.png" alt="">
 				</div>
 			</div>
 		</div>
@@ -44,7 +44,7 @@
 		data() {
 			return {
 				// title:"产品指引",
-				title:"产品介绍",
+				title:"治疗指导",
 				tabsParam:['产品介绍','治疗指导'],
 				nowIndex:0,//默认第一个tab为选中状态
 			}

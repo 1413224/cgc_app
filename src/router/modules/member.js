@@ -286,7 +286,7 @@ const memberModule = [{
 		name: 'recharge',
 		component: resolve => require(['@/views/member/purse/recharge'], resolve),
 		meta: {
-			title: '积分充值'
+			title: '通用积分充值'
 		}
 	},
 	{
