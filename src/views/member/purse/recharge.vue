@@ -69,13 +69,14 @@
 				}],
 				show1: false,
 				moneyList: [],
-
 				info: {},
 				userInfo:{}
 			}
 		},
 		created() {
-			this.userInfo = JSON.parse(localStorage['userInfo'])
+			if(localStorage['userInfo']){
+				this.userInfo = JSON.parse(localStorage['userInfo'])
+			}
 			this.getRechargeList()
 		},
 		mounted() {},
