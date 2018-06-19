@@ -449,10 +449,21 @@
 
 				showNew: false, //购物奖励弹窗
 				showNew2: true, //新人奖励弹窗
-				zcList:[
-					{jf:'通用积分',money:'10',mk:'无门槛全场使用'},
-					{jf:'通用积分',money:'20',mk:'满50减10'},
-					{jf:'通用积分',money:'30',mk:'无门槛全场使用'},
+				zcList: [{
+						jf: '通用积分',
+						money: '10',
+						mk: '无门槛全场使用'
+					},
+					{
+						jf: '通用积分',
+						money: '20',
+						mk: '满50减10'
+					},
+					{
+						jf: '通用积分',
+						money: '30',
+						mk: '无门槛全场使用'
+					},
 				]
 			}
 		},
@@ -492,10 +503,9 @@
 			.zc_box {
 				.zc_content {
 					position: relative;
-					height: 8.7rem;
 					background: url(../../static/images/zc_bg.png) no-repeat;
 					background-size: 100% 100%;
-					padding: 2.27rem 0.2rem 0 0.2rem;
+					padding: 2rem 0.2rem 0.2rem 0.2rem;
 					box-sizing: border-box;
 					.item_box {
 						background: url(../../static/images/it_bg.png) no-repeat;
@@ -503,7 +513,7 @@
 						padding: 0.3rem;
 						box-sizing: border-box;
 						display: flex;
-						margin-bottom:0.2rem;
+						margin-bottom: 0.2rem;
 						div:nth-child(1) {
 							width: 3.5rem;
 							display: flex;
@@ -544,6 +554,9 @@
 								color: rgba(115, 134, 173, 1);
 							}
 						}
+					}
+					.item_box:last-child {
+						margin-bottom: 0px!important;
 					}
 				}
 				.gb_img {

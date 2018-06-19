@@ -23,6 +23,8 @@ Vue.prototype.base64_decode = base64_decode
 Vue.use(Vuex)
 const store = creatrStore()
 
+
+
 import merge from 'webpack-merge'
 Vue.prototype.merge = merge
 
