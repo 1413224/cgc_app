@@ -2,7 +2,7 @@
 	<section>
 		<!-- 弹出框 -->
 		<div v-transfer-dom class="vue-dialog">
-			<x-dialog v-model="showDialog" :hide-on-blur="true" @on-hide="ishide">
+			<x-dialog v-model="showDialog" :hide-on-blur="false" @on-hide="ishide">
 				<div class="dia">
 					<div class="img"><img :src="'./static/images/'+type+'.png'"></div>
 					<div class="dia_top">
@@ -150,7 +150,7 @@
 			width: 73%;
 			max-width: 73%;
 			background-color: rgba(255, 255, 255, 0);
-			z-index: 111111111111111111111111;
+			z-index: 9999;
 		}
 	}
 </style>

@@ -288,8 +288,8 @@
 			font-size: 0.34rem;
 			color: rgba(26, 38, 66, 1);
 			img {
-				width: 0.76rem;
-				height: 0.76rem;
+				width: 0.9rem;
+				height: 0.9rem;
 				margin-right: 0.35rem;
 				border-radius: 50%;
 			}

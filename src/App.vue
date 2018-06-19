@@ -9,7 +9,7 @@
 		<!--图片预览插件-->
 		<lg-preview v-if="$store.state.page.ispreview"></lg-preview>
 		<settingFooter v-if="$route.meta.navShow"></settingFooter>
-		<div v-transfer-dom>
+		<div v-transfer-dom class="dia">
 			<x-dialog v-model="orientation" class="dialog-demo" hide-on-blur>
 				<div class="img-box">
 					<img src="../static/images/orientation.jpg" style="max-width:100%">
@@ -32,7 +32,8 @@
 			...mapState({
 				direction: state => state.page.direction,
 				includeList: state => state.page.includeList,
-				isWx: state => state.page.isWx
+				isWx: state => state.page.isWx,
+				isLogin: state => state.page.isLogin
 			}),
 			viewTransition() {
 				if(!this.direction) return ''
@@ -85,6 +86,12 @@
 				this.$code.hide()
 				this.$dialog.hide()
 				this.$scImg.hide()
+			},
+			isLogin(){
+				console.log(this.isLogin)
+				if(this.isLogin == false){
+					localStorage.removeItem('userInfo')
+				}
 			}
 		}
 	}
@@ -96,7 +103,7 @@
 	}
 	
 	.weui-dialog {
-		background-color: transparent;
+		background-color: transparent !important;
 		z-index: 10001;
 	}
 	

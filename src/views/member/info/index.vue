@@ -38,7 +38,7 @@
 				images: '', //图片数组
 				userInfo: {},
 				auth: '',
-				isC:true
+				isC: true
 			}
 		},
 		created() {
@@ -61,6 +61,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.userInfo = res.data.data
+						
+						localStorage.setItem('userInfo', JSON.stringify(res.data.data))
+						
 						if(res.data.data.avatar.original) {
 							_this.images = res.data.data.avatar.original
 						}
@@ -113,11 +116,11 @@
 				_this.$scImg.show({
 					panel: true,
 					e: e,
-					Confirm(){
+					Confirm() {
 						_this.isC = true
 						_this.getUserInfo()
 					},
-					Cancel(){
+					Cancel() {
 						_this.isC = true
 					}
 				})

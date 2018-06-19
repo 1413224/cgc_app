@@ -97,7 +97,6 @@ axios.interceptors.response.use(res => {
 		}
 	})
 	if(res.data.status != '00000000' && res.data.status != 1) {
-		localStorage.setItem('isLogin',false)
 		if(res.data.status == '401') {
 			router.replace({
 				path: '/user/reg'
@@ -108,6 +107,7 @@ axios.interceptors.response.use(res => {
 				position: 'middle',
 				width: '50%'
 			})
+			localStorage.setItem('isLogin', false)
 		} else if(res.data.status == 'utils007' || res.data.status == 'utils010' && URL != '/user/v1/user/getBasicInfo') {
 			router.replace({
 				path: '/user/reg'
@@ -118,6 +118,9 @@ axios.interceptors.response.use(res => {
 				position: 'middle',
 				width: '60%'
 			})
+			localStorage.setItem('isLogin', false)
+		} else if(res.data.status == 'utils007' || res.data.status == 'utils010' && URL == '/user/v1/user/getBasicInfo') {
+			localStorage.setItem('isLogin', false)
 		} else if(URL != '/user/v1/user/getBasicInfo') {
 			Vue.$vux.toast.show({
 				text: res.data.message,

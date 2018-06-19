@@ -27,23 +27,26 @@
 		methods: {
 			submit() {
 				let _this = this
-				if(_this.name.length > 0) {
+				if(_this.name.length > 0 && _this.name.trim() != "") {
 					let param = {
 						userId: _this.$store.state.user.userId,
 						nickname: _this.name
 					}
-					_this.$http.post(_this.url.user.changeNickname, param).then(resp => {
-						_this.$vux.toast.show({
-							type: 'text',
-							text: '修改成功'
-						})
-						_this.$router.go(-1)
+					_this.$http.post(_this.url.user.changeNickname, param).then(res => {
+						if(res.data.status == "00000000") {
+							_this.$vux.toast.show({
+								type: 'text',
+								text: '修改成功'
+							})
+							_this.$router.go(-1)
+						}
 					})
 				} else {
 					_this.$vux.toast.show({
 						type: 'text',
-						position: 'top',
-						text: '请填写昵称'
+						width: '60%',
+						position: 'middle',
+						text: '昵称不符合要求'
 					})
 				}
 			}

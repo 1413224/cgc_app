@@ -193,7 +193,7 @@
 		<div>
 
 			<!--购物奖励弹窗-->
-			<x-dialog v-model="showNew" class="xrBox">
+			<x-dialog v-model="showNew" class="xrBox" :dialog-style="transparent">
 				<div class="p_box">
 					<img @click="showNew = false" class="xr_img" src="../../static/images/xr_bg.png" alt="" />
 
@@ -208,7 +208,7 @@
 			</x-dialog>
 
 			<!--新人奖励弹窗-->
-			<x-dialog v-model="showNew2" class="zcBox">
+			<x-dialog v-model="showNew2" class="zcBox" :dialog-style="transparent">
 				<div class="zc_box">
 					<div class="zc_content">
 						<div class="item_box" v-for="(item,index) in zcList" :key="index">
@@ -221,7 +221,7 @@
 								<p>{{item.mk}}</p>
 							</div>
 						</div>
-						<div class="zc-btn">
+						<div class="zc-btn" @click="$router.push({path:'/user/reg'})">
 							立即注册
 						</div>
 					</div>
@@ -473,7 +473,12 @@
 			}
 		},
 		created() {
-			//			this.loc()
+			var _this = this
+			if(_this.$store.state.page.isLogin == 'true'){
+				_this.showNew2 = false
+			}else{
+				_this.showNew2 = true
+			}
 		},
 		mounted() {
 			this.onLoadArticle();

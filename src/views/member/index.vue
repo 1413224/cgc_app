@@ -11,7 +11,7 @@
 							<img v-else :src="'./static/images/mrtx.png'" alt="">
 						</router-link>
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:'未设置'}}</p>
-						<p class="status">{{userInfo.levelName?userInfo.levelName:'暂无等级'}}</p>
+						<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>
 					</div>
 
 					<div class="account">
@@ -19,7 +19,7 @@
 							<div class="universal">
 								<p>
 									<div class="num">
-										<p class="money">{{userInfo.balance?userInfo.balance:0}}</p>
+										<p class="money">{{info.balance?info.balance:0}}</p>
 										<!--<badge></badge>-->
 									</div>
 								</p>
@@ -29,7 +29,7 @@
 						<router-link to="/member/earnings/credit">
 							<div class="universal">
 								<div class="num">
-									<p class="money">{{userInfo.availablePoints?userInfo.availablePoints:0}}</p>
+									<p class="money">{{info.availablePoints?info.availablePoints:0}}</p>
 
 								</div>
 								<p class="universalAccount">信用积分</p>
@@ -160,11 +160,12 @@
 					},*/
 				],
 				yhqTip: '5张快过期',
-				isLogin: false
+				isLogin: false,
+				info: {}
 			}
 		},
 		created() {
-			
+
 			if(this.$store.state.page.isLogin == 'true') {
 				this.isLogin = true
 			} else {
@@ -174,13 +175,14 @@
 			}
 			if(localStorage['userInfo'] && this.isLogin) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
-				this.getUserInfo()
 			}
+
+			this.getUserInfo()
 		},
 		methods: {
 			getUserInfo() {
 				var _this = this
-				
+
 				//获取用户信息
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
@@ -188,9 +190,16 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+						_this.info = res.data.data
 						if(_this.userInfo.avatar.original != res.data.data.avatar.original) {
 							_this.userInfo = res.data.data
 						}
+						if(_this.userInfo.nickname != res.data.data.nickname) {
+							_this.userInfo = res.data.data
+						}
+					}else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401'){
+						_this.isLogin = false
+						localStorage.removeItem('userInfo')
 					}
 				})
 			},
