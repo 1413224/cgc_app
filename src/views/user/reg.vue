@@ -50,7 +50,7 @@
 		name: 'reg',
 		data() {
 			return {
-				title: '用户登录', //头部标题
+				title: '用户登录/注册', //头部标题
 				mobile: '', //手机号码
 				password: '', //密码
 				code: '', //验证码

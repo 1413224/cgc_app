@@ -19,7 +19,7 @@
 			      	<x-textarea :max="200" name="detail" placeholder="分享你的购买心得" :height="137" :show-counter="true"></x-textarea>
 			    </group>
 			    <div class="upload">
-			    	<div class="imgUpload"  v-for="(item,index) in imgList" @click="cindex(index)">
+			    	<div class="imgUpload"  v-for="(item,index) in imgList" @click="cindex(index)" :key="index">
 			    		<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png"/>
 			    		<input class="upinput" type="file" @change="cone" />
 			    		<div class="bigPic" v-show="[imgList.length ? imgList.length >0 : imgList.length =0]">

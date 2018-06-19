@@ -27,11 +27,11 @@
 					<img src="../assets/images/index/notice.png" alt="">
 					<div style="padding-left: 0.15rem">
 						<marquee>
-							<marquee-item v-for="i in 5" :key="i" :duration='3000' class="align-middle">魅族手机成功加盟CGC全球智慧产业联盟</marquee-item>
+							<marquee-item v-for="(item,index) in articleList" :key="index" @click.native="goArticleDetail(item.url)" :duration='3000' class="align-middle">{{item.name}}</marquee-item>
 						</marquee>
 					</div>
-					<router-link to="/member/article/index">
-						<i style="margin-left: 0.8rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
+					<router-link to="/member/article/index" class=",ore">
+						<i style="margin-left:0.3rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
 					</router-link>
 					<!--<router-link to="/member/article/index">
 						<div class="notMore">
@@ -237,6 +237,8 @@
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import { Card, Marquee, MarqueeItem } from 'vux'
 	import BScroll from 'better-scroll'
+	import url from '../config/url'
+	import Qs from 'qs'
 	//	import AMap from 'AMap'
 	export default {
 		data() {
@@ -449,7 +451,7 @@
 					//						]
 					//					}
 				],
-
+				articleList:[],
 				showNew: false, //购物奖励弹窗
 				showNew2: true, //新人奖励弹窗
 				zcList: [{
@@ -470,13 +472,44 @@
 				]
 			}
 		},
-		created() {},
-		mouted() {
-
+		created() {
+			//			this.loc()
 		},
+		mounted() {
+			this.onLoadArticle();
+		},
+
 		methods: {
 			goUrl(url) {
 				window.location.href = url
+			},
+			onLoadArticle(){
+				let _this = this
+				// let parJson = {
+				// 	pagesize:6,
+				// 	page: 1
+				// }
+				// let par = Qs.stringify(parJson)
+				_this.$http.post(url.article.getArticleLists).then((res) => {
+					if(res.status == 200 && res.data != null){
+						
+						_this.articleList = res.data.result.lists
+						// console.log(_this.articleList)
+					}else{
+						Vue.$vux.toast.show({
+							text: "请求快讯失败",
+							type: 'text',
+							position: 'middle',
+							width: '50%'
+						})
+					}
+					
+				}).catch((err) => {
+					console.log(err);
+				});
+			},
+			goArticleDetail(uri){
+				window.location.href = uri;
 			}
 		},
 		components: {
@@ -702,6 +735,17 @@
 			font-family: PingFangSC-Light;
 			color: rgba(66, 88, 132, 1);
 			font-size: 0.24rem;
+			.vux-marquee{
+				width:5rem !important;
+				line-height:32px;
+				font-size: 14px;
+				.align-middle{
+					// display: inline-block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+			}
 			img {
 				float: left;
 				width: 0.6rem;

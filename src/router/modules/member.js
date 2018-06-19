@@ -87,7 +87,7 @@ const memberModule = [{
 		name: 'reg',
 		component: resolve => require(['@/views/user/reg'], resolve),
 		meta: {
-			title: '用户登录',
+			title: '用户登录/注册',
 			keepAlive: true
 		}
 	},
