@@ -319,7 +319,6 @@
 					params: data
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						if(res.data.data) {
 							_this.list = res.data.data.list
 						}
@@ -519,7 +518,6 @@
 			},
 			distanceChange(val) {
 				var _this = this
-				console.log(val)
 				for(var i = 0; i < _this.logolist.length; i++) {
 					if(_this.logolist[i] == val) {
 						_this.distanceIndex = i

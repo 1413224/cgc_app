@@ -39,7 +39,7 @@
 	.load-bw{
 		width: 1.1rem;
 		height: 1.1rem;
-		border-radius: 8px;
+		border-radius: 4px;
 		background-color: white;
 		position: relative;
 		margin: 0 auto;

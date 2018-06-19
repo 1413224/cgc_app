@@ -21,11 +21,11 @@
 								<div class="list" v-for="(item,index) in list" :key="index">
 									<div class="he">
 										<div class="user-img">
-											<img :src="item.avatar.original?item.avatar.original:'./static/images/mrtx.png'" />
+											<img v-if="item.avatar" :src="item.avatar.original?item.avatar.original:'./static/images/mrtx.png'" />
 										</div>
 										<div class="user-text">
-											<p>手机号码：{{item.mobile}}</p>
-											<p>名称：{{item.nickname?item.nickname:'未设置'}}</p>
+											<p v-if="item.mobile">手机号码：{{item.mobile}}</p>
+											<p v-else>名称：{{item.nickname?item.nickname:'未设置'}}</p>
 											<p>加入时间：{{item.registerTime | getDate}}</p>
 										</div>
 									</div>
