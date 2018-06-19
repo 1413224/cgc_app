@@ -27,11 +27,11 @@
 					<img src="../assets/images/index/notice.png" alt="">
 					<div style="padding-left: 0.15rem">
 						<marquee>
-							<marquee-item v-for="i in 5" :key="i" :duration='3000' class="align-middle">魅族手机成功加盟CGC全球智慧产业联盟</marquee-item>
+							<marquee-item v-for="(item,index) in articleList" :key="index" @click.native="goArticleDetail(item.url)" :duration='3000' class="align-middle">{{item.name}}</marquee-item>
 						</marquee>
 					</div>
-					<router-link to="/member/article/index">
-						<i style="margin-left: 0.8rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
+					<router-link to="/member/article/index" class=",ore">
+						<i style="margin-left:0.3rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
 					</router-link>
 					<!--<router-link to="/member/article/index">
 						<div class="notMore">
@@ -197,6 +197,8 @@
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import { Card, Marquee, MarqueeItem } from 'vux'
 	import BScroll from 'better-scroll'
+	import url from '../config/url'
+	import Qs from 'qs'
 	//	import AMap from 'AMap'
 	export default {
 		data() {
@@ -408,61 +410,47 @@
 					//							}
 					//						]
 					//					}
-				]
+				],
+				articleList:[]
 			}
 		},
 		created() {
 			//			this.loc()
 		},
-		mouted() {
-
+		mounted() {
+			this.onLoadArticle();
 		},
 		methods: {
-			loc() {
-				var _this = this
-				var map, geolocation;
-				//加载地图，调用浏览器定位服务
-				map = new AMap.Map('container', {
-					resizeEnable: true
-				});
-				map.plugin('AMap.Geolocation', function() {
-					geolocation = new AMap.Geolocation({
-						enableHighAccuracy: true, //是否使用高精度定位，默认:true
-						timeout: 10000, //超过10秒后停止定位，默认：无穷大
-					});
-					map.addControl(geolocation);
-					geolocation.getCurrentPosition();
-					AMap.event.addListener(geolocation, 'complete', function(data) {
-						_this.address = data.addressComponent.city //返回城市定位
-					});
-				});
-				//				wx.config({
-				//					debug: true,
-				//					appId: "wx957ff39bdac082af",
-				//					timestamp: Date.parse(new Date()),
-				//					nonceStr: Math.random().toString(36).substring(2),
-				//					signature: "6b3af35b304341aff8b551924b385ce48d20c85b",
-				//					jsApiList: ['getLocation']
-				//				})
-				//				wx.ready(function() {
-				//					wx.getLocation({
-				//						type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-				//						success: function(res) {
-				//							alert(123)
-				//							var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-				//							var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-				//							var speed = res.speed; // 速度，以米/每秒计
-				//							var accuracy = res.accuracy; // 位置精度
-				//							getBaiduPosition(latitude, longitude);
-				//						},
-				//						cancel: function(res) {
-				//							alert('用户拒绝授权获取地理位置');
-				//						}
-				//					})
-				//				})
-			},
 			goUrl(url) {
 				window.location.href = url
+			},
+			onLoadArticle(){
+				let _this = this
+				// let parJson = {
+				// 	pagesize:6,
+				// 	page: 1
+				// }
+				// let par = Qs.stringify(parJson)
+				_this.$http.post(url.article.getArticleLists).then((res) => {
+					if(res.status == 200 && res.data != null){
+						
+						_this.articleList = res.data.result.lists
+						// console.log(_this.articleList)
+					}else{
+						Vue.$vux.toast.show({
+							text: "请求快讯失败",
+							type: 'text',
+							position: 'middle',
+							width: '50%'
+						})
+					}
+					
+				}).catch((err) => {
+					console.log(err);
+				});
+			},
+			goArticleDetail(uri){
+				window.location.href = uri;
 			}
 		},
 		components: {
@@ -561,6 +549,17 @@
 			font-family: PingFangSC-Light;
 			color: rgba(66, 88, 132, 1);
 			font-size: 0.24rem;
+			.vux-marquee{
+				width:5rem !important;
+				line-height:32px;
+				font-size: 14px;
+				.align-middle{
+					// display: inline-block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+			}
 			img {
 				float: left;
 				width: 0.6rem;

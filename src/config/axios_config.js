@@ -99,7 +99,7 @@ axios.interceptors.response.use(res => {
 	if(res.data.status != '00000000' && res.data.status != 1) {
 		localStorage.setItem('isLogin',false)
 		if(res.data.status == '401') {
-			router.push({
+			router.replace({
 				path: '/user/reg'
 			})
 			Vue.$vux.toast.show({

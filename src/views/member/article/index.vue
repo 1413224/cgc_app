@@ -21,12 +21,12 @@
 			                <!--<p>您还没有任何关注哦</p>-->
 			                <!--<a href="{php echo mobileUrl('stores')}">去逛逛</a>-->
 			                <!--</div>-->
-			                <div class="new" v-for="item in articleList"  :class="item.imgNumber==1?'oneImage':''">
+			                <div class="new" v-for="(item,index) in articleList" :key="index"  :class="item.imgNumber==1?'oneImage':''">
 			                	<a :href="item.url">
 				                    <p class="newTitle">{{item.name}}!</p>
 				                    <div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
 				                    <div class="imgList" v-show="item.imgNumber>1">
-                            			<img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2'>
+                            			<img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2' :key="index">
                             		</div>
 				                    <p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
 				                    <div class="clear"></div>
@@ -133,7 +133,7 @@
 							if( response.status == 200 && response.data != null&&response.data.result.page == _this.page){
 								_this.articleList = _this.articleList.concat(response.data.result.lists)
 							}
-							console.log(_this.articleList);
+							// console.log(_this.articleList);
 							if(len == _this.articleList.length){
 								_this.showNomore = true;
 							}
@@ -154,7 +154,7 @@
 					if( response.status == 200 && response.data != null){
 						_this.articleList = response.data.result.lists
 					}
-					console.log(_this.articleList);
+					// console.log(_this.articleList);
 				}).catch(function (error) {
 					console.log(error);
 				});
