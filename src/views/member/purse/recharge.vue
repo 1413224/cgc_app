@@ -25,7 +25,11 @@
 				</div>
 			</div>
 		</div>
-		<p class="gy">充值未到账?</p>
+		<div class="recharge_tip">
+			<p class="gy-title">通用积分说明</p>
+			<p class="gy">1.CGC通用积分充值后会即时到达会员账户钱包，不会过期，但无法提现或转赠他人；</p>
+			<p class="gy">2.CGC通用积分可以在全球联盟企业和e消费任何APP商城1:1抵现金通用，没有额度限制；</p>
+		</div>
 
 		<div class="btn-box">
 			<x-button class="add-btn" @click.native="submit">确认充值</x-button>
@@ -71,11 +75,13 @@
 				moneyList: [],
 
 				info: {},
-				userInfo:{}
+				userInfo: {}
 			}
 		},
 		created() {
-			this.userInfo = JSON.parse(localStorage['userInfo'])
+			if(localStorage['userInfo']) {
+				this.userInfo = JSON.parse(localStorage['userInfo'])
+			}
 			this.getRechargeList()
 		},
 		mounted() {},
@@ -92,7 +98,6 @@
 					if(res.data.status == "00000000") {
 						_this.info = res.data.data
 						_this.moneyList = res.data.data.pageBean.list
-						console.log(_this.info)
 					}
 				})
 			},
@@ -170,12 +175,6 @@
 		position: relative;
 		font-family: PingFangSC-Medium;
 		background-color: #F5F6FA;
-		.gy {
-			text-align: center;
-			font-size: 0.24rem;
-			font-family: PingFangSC-Regular;
-			color: rgba(144, 162, 199, 1);
-		}
 		.item {
 			padding: 0.31rem 0.22rem;
 			box-sizing: border-box;
@@ -198,6 +197,24 @@
 				}
 			}
 		}
+		.recharge_tip {
+			padding: 0.4rem 0.22rem 0.4rem 0.22rem;
+			background-color: white;
+			.gy-title {
+				font-size: 0.32rem;
+				font-family: PingFangSC-Medium;
+				color: rgba(26, 38, 66, 1);
+				margin-bottom: 0.4rem;
+			}
+			.gy {
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(144, 162, 199, 1);
+			}
+			.gy:last-child {
+				margin-top: 0.35rem;
+			}
+		}
 		.change-box {
 			padding: 0 0.22rem 0.58rem 0.22rem;
 			background-color: white;
@@ -213,6 +230,7 @@
 				}
 				span:nth-child(2) {
 					font-size: 0.24rem;
+					color: #90A2C7;
 				}
 			}
 			.change-row {
@@ -246,14 +264,15 @@
 					}
 					.box {
 						width: 1.91rem;
-						background: rgba(26, 38, 66, 1);
+						background: white;
 						box-shadow: 0px 2px 10px 0px rgba(26, 38, 66, 0.4);
 						border-radius: 3px;
-						color: white;
+						color: #336FFF;
 						padding: 0 0.1rem;
 						box-sizing: border-box;
 						p:nth-child(2) {
 							font-size: 0.20rem;
+							color: #90A2C7;
 						}
 					}
 					.nohas {
@@ -265,6 +284,9 @@
 						color: white;
 						background: #336fff;
 						transition: all 0.2s linear;
+						p:nth-child(2) {
+							color: white;
+						}
 					}
 				}
 				.ptActive {
