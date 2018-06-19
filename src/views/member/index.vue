@@ -164,6 +164,7 @@
 			}
 		},
 		created() {
+			
 			if(this.$store.state.page.isLogin == 'true') {
 				this.isLogin = true
 			} else {
@@ -179,12 +180,10 @@
 		methods: {
 			getUserInfo() {
 				var _this = this
-				// //获取用户信息
-				// var info = _this.$store
-
+				
+				//获取用户信息
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
-						// userId: localStorage['userId']
 						userId: _this.$store.state.user.userId
 					}
 				}).then((res) => {

@@ -221,6 +221,9 @@
 								<p>{{item.mk}}</p>
 							</div>
 						</div>
+						<div class="zc-btn">
+							立即注册
+						</div>
 					</div>
 
 					<img @click="showNew2 = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
@@ -534,11 +537,23 @@
 		padding-bottom: 1rem;
 		.zcBox {
 			.zc_box {
+				.zc-btn {
+					width: 5.16rem;
+					height: 0.8rem;
+					line-height: 0.8rem;
+					background: rgba(255, 204, 9, 1);
+					border-radius: 4px;
+					font-size: 0.34rem;
+					font-family: PingFangSC-Semibold;
+					color: rgba(209, 14, 22, 1);
+					margin: 0 auto;
+					margin-top: 0.35rem;
+				}
 				.zc_content {
 					position: relative;
 					background: url(../../static/images/zc_bg.png) no-repeat;
 					background-size: 100% 100%;
-					padding: 2rem 0.2rem 0.2rem 0.2rem;
+					padding: 2rem 0.2rem 0.35rem 0.2rem;
 					box-sizing: border-box;
 					.item_box {
 						background: url(../../static/images/it_bg.png) no-repeat;
