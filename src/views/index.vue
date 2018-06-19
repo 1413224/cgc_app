@@ -189,7 +189,44 @@
 				</div>-->
 			</div>
 		</div>
-		<div id='container'></div>
+
+		<div>
+
+			<!--购物奖励弹窗-->
+			<x-dialog v-model="showNew" class="xrBox">
+				<div class="p_box">
+					<img @click="showNew = false" class="xr_img" src="../../static/images/xr_bg.png" alt="" />
+
+					<div class="p_content">
+						<p>本次消费奖励</p>
+						<p>7.20 <span>通用积分</span></p>
+						<p>通用积分将自动存入您的资产余额</p>
+					</div>
+
+					<img @click="showNew = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
+				</div>
+			</x-dialog>
+
+			<!--新人奖励弹窗-->
+			<x-dialog v-model="showNew2" class="zcBox">
+				<div class="zc_box">
+					<div class="zc_content">
+						<div class="item_box" v-for="(item,index) in zcList" :key="index">
+							<div>
+								<p>{{item.jf}}</p>
+								<p>自动存入通用积分</p>
+							</div>
+							<div>
+								<p>¥ <span>{{item.money}}</span></p>
+								<p>{{item.mk}}</p>
+							</div>
+						</div>
+					</div>
+
+					<img @click="showNew2 = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
+				</div>
+			</x-dialog>
+		</div>
 	</section>
 </template>
 
@@ -408,59 +445,22 @@
 					//							}
 					//						]
 					//					}
+				],
+
+				showNew: false, //购物奖励弹窗
+				showNew2: true, //新人奖励弹窗
+				zcList:[
+					{jf:'通用积分',money:'10',mk:'无门槛全场使用'},
+					{jf:'通用积分',money:'20',mk:'满50减10'},
+					{jf:'通用积分',money:'30',mk:'无门槛全场使用'},
 				]
 			}
 		},
-		created() {
-			//			this.loc()
-		},
+		created() {},
 		mouted() {
 
 		},
 		methods: {
-			loc() {
-				var _this = this
-				var map, geolocation;
-				//加载地图，调用浏览器定位服务
-				map = new AMap.Map('container', {
-					resizeEnable: true
-				});
-				map.plugin('AMap.Geolocation', function() {
-					geolocation = new AMap.Geolocation({
-						enableHighAccuracy: true, //是否使用高精度定位，默认:true
-						timeout: 10000, //超过10秒后停止定位，默认：无穷大
-					});
-					map.addControl(geolocation);
-					geolocation.getCurrentPosition();
-					AMap.event.addListener(geolocation, 'complete', function(data) {
-						_this.address = data.addressComponent.city //返回城市定位
-					});
-				});
-				//				wx.config({
-				//					debug: true,
-				//					appId: "wx957ff39bdac082af",
-				//					timestamp: Date.parse(new Date()),
-				//					nonceStr: Math.random().toString(36).substring(2),
-				//					signature: "6b3af35b304341aff8b551924b385ce48d20c85b",
-				//					jsApiList: ['getLocation']
-				//				})
-				//				wx.ready(function() {
-				//					wx.getLocation({
-				//						type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-				//						success: function(res) {
-				//							alert(123)
-				//							var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-				//							var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-				//							var speed = res.speed; // 速度，以米/每秒计
-				//							var accuracy = res.accuracy; // 位置精度
-				//							getBaiduPosition(latitude, longitude);
-				//						},
-				//						cancel: function(res) {
-				//							alert('用户拒绝授权获取地理位置');
-				//						}
-				//					})
-				//				})
-			},
 			goUrl(url) {
 				window.location.href = url
 			}
@@ -474,13 +474,126 @@
 		},
 	}
 </script>
-
+<style lang="less">
+	.zcBox {
+		.weui-dialog {
+			width: 6.4rem;
+			max-width: 100%;
+		}
+	}
+</style>
 <style lang="less" scoped>
 	@import '~vux/src/styles/1px.less';
 	#appIndex {
 		background-color: #F5F6FA;
 		overflow-x: hidden;
 		padding-bottom: 1rem;
+		.zcBox {
+			.zc_box {
+				.zc_content {
+					position: relative;
+					height: 8.7rem;
+					background: url(../../static/images/zc_bg.png) no-repeat;
+					background-size: 100% 100%;
+					padding: 2.27rem 0.2rem 0 0.2rem;
+					box-sizing: border-box;
+					.item_box {
+						background: url(../../static/images/it_bg.png) no-repeat;
+						background-size: 100% 100%;
+						padding: 0.3rem;
+						box-sizing: border-box;
+						display: flex;
+						margin-bottom:0.2rem;
+						div:nth-child(1) {
+							width: 3.5rem;
+							display: flex;
+							flex-direction: column;
+							align-items: flex-start;
+							justify-content: space-between;
+							p:nth-child(1) {
+								font-size: 0.28rem;
+								font-family: PingFangSC-Medium;
+								color: rgba(15, 24, 45, 1);
+							}
+							p:nth-child(2) {
+								font-size: 0.24rem;
+								font-family: PingFangSC-Regular;
+								color: rgba(115, 134, 173, 1);
+							}
+						}
+						div:nth-child(2) {
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: space-between;
+							height: 100%;
+							p:nth-child(1) {
+								font-size: 0.26rem;
+								font-family: PingFangSC-Regular;
+								color: rgba(242, 48, 48, 1);
+								span {
+									font-size: 0.6rem;
+									font-family: PingFangSC-Medium;
+									color: rgba(242, 48, 48, 1);
+								}
+							}
+							p:nth-child(2) {
+								font-size: 0.24rem;
+								font-family: PingFangSC-Regular;
+								color: rgba(115, 134, 173, 1);
+							}
+						}
+					}
+				}
+				.gb_img {
+					width: 0.82rem;
+					height: 0.82rem;
+					margin-top: 0.33rem;
+				}
+			}
+		}
+		.xrBox {
+			.p_box {
+				position: relative;
+				.xr_img {
+					width: 100%;
+					height: auto;
+				}
+				.p_content {
+					width: 100%;
+					position: absolute;
+					top: 49%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					p:nth-child(1) {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(164, 113, 57, 1);
+					}
+					p:nth-child(2) {
+						font-size: 0.68rem;
+						font-family: PingFangSC-Semibold;
+						color: rgba(242, 48, 48, 1);
+						span {
+							font-size: 0.24rem;
+							font-family: PingFangSC-Regular;
+							color: rgba(242, 48, 48, 1);
+						}
+					}
+					p:nth-child(3) {
+						font-size: 0.22rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(164, 113, 57, 1);
+					}
+				}
+				.gb_img {
+					width: 0.82rem;
+					height: 0.82rem;
+					margin-top: 0.33rem;
+				}
+			}
+		}
 		.auto-img {
 			width: 100%;
 			height: auto;

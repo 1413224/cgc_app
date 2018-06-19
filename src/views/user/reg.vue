@@ -16,7 +16,7 @@
 			<div class="tip">
 				<div class="agreement" v-if="!isReg">
 					<!--<check-icon :value.sync="isAgree"></check-icon>-->
-					<span class="sg">注册即同意</span>
+					<span class="sg">点击下方按钮即同意</span>
 					<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
 				</div>
 				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">登录 / 注册</x-button>
@@ -24,7 +24,7 @@
 			</div>
 			<div class="login-re" v-if="isReg">
 				<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
-				<router-link to=""><span>短信验证登录</span></router-link>
+				<!--<router-link to=""><span>短信验证登录</span></router-link>-->
 			</div>
 			<div class="login-re" v-else>
 				<span @click="isReg = !isReg">返回登录</span>
@@ -184,7 +184,7 @@
 								_this.$dialog.show({
 									type: 'warning',
 									headMessage: '提示',
-									message: '该账户没有注册,是否立即注册?',
+									message: '该账户不存在,是否立即注册?',
 									buttons: ['确定', '取消'],
 									canel() {
 										_this.$dialog.hide()
