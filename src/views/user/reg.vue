@@ -383,19 +383,6 @@
 					_this.reduce()
 				}, 1000)
 			},
-			wxLogin() {
-				var _this = this
-				_this.$http.get(_this.url.user.getAuthorizationUrl, {
-					params: {
-						platformId: _this.url.platformId,
-						type: 1
-					}
-				}).then((res) => {
-					_this.$http.get(res.data.data).then((res) => {
-						console.log(res)
-					})
-				})
-			},
 			backLogin(){
 				this.isCp = false
 				this.isReg = !this.isReg
