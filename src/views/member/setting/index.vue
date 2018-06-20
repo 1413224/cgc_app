@@ -9,7 +9,7 @@
 				<cell class="list-item" title="意见反馈" is-link link="/member/setting/opinion"></cell>
 				<cell class="list-item" title="关于我们" is-link link="/member/setting/about"></cell>
 			</group>
-			<div v-if="$store.state.page.isLogin" class="logout-btn" @click="logout">退出登录</div>
+			<div v-if="$store.state.page.isLogin == 'true'" class="logout-btn" @click="logout">退出登录</div>
 		</div>
 	</div>
 </template>
@@ -42,7 +42,7 @@
 							position: 'middle',
 							text: '退出成功'
 						})
-						_this.$router.push({
+						_this.$router.replace({
 							path: '/user/reg'
 						})
 						localStorage.removeItem('userInfo')

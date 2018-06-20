@@ -10,8 +10,9 @@
 							<img v-if="userInfo.avatar" :src="userInfo.avatar.original?userInfo.avatar.original:'./static/images/mrtx.png'" alt="" />
 							<img v-else :src="'./static/images/mrtx.png'" alt="">
 						</router-link>
-						<p class="nickname">{{userInfo.nickname?userInfo.nickname:'未设置'}}</p>
-						<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>
+						<p class="nickname">{{userInfo.nickname?userInfo.nickname:userInfo.mobile}}</p>
+						<!--<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>-->
+						<p class="bj" @click="$router.push({path:'/member/info/data'})">编辑个人资料 <i class="icon iconfont icon-arrow-right"></i></p>
 					</div>
 
 					<div class="account">
@@ -100,7 +101,7 @@
 				</router-link>
 			</section>
 			<section>
-				<group gutter="0">
+				<group gutter="0" style="margin-bottom: 0.2rem;">
 					<cell v-for="(item,index) in infoList" :key="index" class="info-item" :title="item.text" is-link :link="item.url">
 						<img slot="icon" :src="item.img">
 					</cell>
@@ -125,16 +126,6 @@
 						url: '/member/coupon/index'
 					},
 					{
-						img: './static/member/m_index12.png',
-						text: '多商户商城',
-						url: '/multi_user_mall/summary'
-					},
-					/*{
-						img: './static/member/member_2.png',
-						text: '我的订单',
-						url: '/shop/my_order'
-					},*/
-					{
 						img: './static/member/member_3.png',
 						text: '我的关注',
 						url: '/member/follow/index'
@@ -144,6 +135,22 @@
 						text: '收货地址',
 						url: '/member/address/index'
 					},
+					{
+						img: './static/member/member_4.png',
+						text: '积分商城',
+						url: '/shop'
+					},
+					{
+						img: './static/member/m_index12.png',
+						text: '多商户商城',
+						url: '/multi_user_mall/summary'
+					},
+					/*{
+						img: './static/member/member_2.png',
+						text: '我的订单',
+						url: '/shop/my_order'
+					},*/
+					
 					{
 						img: './static/member/m_index17.png',
 						text: '幸运抽奖',
@@ -197,7 +204,7 @@
 						if(_this.userInfo.nickname != res.data.data.nickname) {
 							_this.userInfo = res.data.data
 						}
-					}else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401'){
+					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401') {
 						_this.isLogin = false
 						localStorage.removeItem('userInfo')
 					}
@@ -251,6 +258,13 @@
 				font-size: 0.38rem;
 				color: #FFFFFF;
 				letter-spacing: 0;
+			}
+			.bj {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #FFFFFF;
+				font-size: 0.24rem;
 			}
 			.status {
 				font-family: PingFangSC-Regular;

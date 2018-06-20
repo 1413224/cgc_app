@@ -3,14 +3,17 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="list">
 			<group gutter="0">
-				<cell class="list-item user-img" title="头像编辑" is-link>
-					<div class="up-box">
-						<div class="tx">
-							<img :src="images?images:'./static/images/mrtx.png'" />
+				<div style="position: relative;">
+					<cell class="list-item user-img" title="头像编辑" is-link>
+						<div class="up-box">
+							<div class="tx">
+								<img :src="images?images:'./static/images/mrtx.png'" />
+							</div>
 						</div>
-						<input v-if="isC" class="upinput" id="upinput" type="file" @change="up2" ref="input" />
-					</div>
-				</cell>
+					</cell>
+					<input v-if="isC" class="upinput" id="upinput" type="file" @change="up2" ref="input" />
+				</div>
+
 				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>
 			</group>
 			<group>
@@ -61,9 +64,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.userInfo = res.data.data
-						
+
 						localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-						
+
 						if(res.data.data.avatar.original) {
 							_this.images = res.data.data.avatar.original
 						}
@@ -178,24 +181,25 @@
 			}
 			.user-img {
 				height: 1.5rem;
+				position: relative;
 				.up-box {
 					position: relative;
 					width: 1rem;
 					height: 1rem;
 					overflow: hidden;
-					.upinput {
-						opacity: 0;
-						z-index: 11;
-						position: absolute;
-						top: 0;
-						right: 0;
-						width: 100%;
-						height: 100%;
-					}
 					img {
 						z-index: 1;
 					}
 				}
+			}
+			.upinput {
+				opacity: 0;
+				z-index: 11;
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 100%;
+				height: 100%;
 			}
 		}
 	}
