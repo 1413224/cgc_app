@@ -20,6 +20,9 @@ const user = {
           state = newUser;
           console.log('登录成功后，用户为:',state)
         },
+        getOpenId:(state,openid) =>{
+          state.openid = openid
+        }
       },
       //Action 通过 store.dispatch 方法触发
       actions: {

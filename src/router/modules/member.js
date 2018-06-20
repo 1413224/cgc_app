@@ -53,6 +53,7 @@ import vip from '@/views/member/vip/index'
 import generalize from '@/views/member/generalize/index'
 import wxpay from '@/views/member/pay/wxgzhpay'
 import oriza from '@/views/member/oriza/oriza'
+import grant  from '@/views/member/oriza/grant'
 
 const memberModule = [{
 		path: '/index',
@@ -507,6 +508,14 @@ const memberModule = [{
 		path:'/member/oriza',
 		name:'wxoriza',
 		component: resolve => require(['@/views/member/oriza/oriza'], resolve),
+		meta: {
+			title: '微信授权'
+		}
+	},
+	{
+		path:'/member/oriza/grant',
+		name:'grant',
+		component: resolve => require(['@/views/member/oriza/grant'], resolve),
 		meta: {
 			title: '微信授权'
 		}
