@@ -269,5 +269,24 @@ var mainApp = {
 	getCs(name) {
 		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
 	},
+	xss:{
+		//html节点内容,html属性
+		escapeHtml:function(str){
+			if(!str) return '';
+			str = str.replace(/&/g,'&amp;');
+			str = str.replace(/</g,'&lt;');
+			str = str.replace(/>/g,'&gt;');
+			str = str.replace(/"/g,'&quto;');
+			str = str.replace(/'/g,'&#39;');
+			
+			// str = str.replace(/ /g,'&#32;');
+			return str;
+		},
+		escapeForJs:function(str){
+			if(!str) return '';
+			str = str.replace(/"/g,'\\"');
+			return str;
+		}
+	}
 }
 export default mainApp
