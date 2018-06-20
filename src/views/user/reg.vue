@@ -1,36 +1,37 @@
 <template>
 	<div class="reg-box">
-		<settingHeader :title="title"></settingHeader>
-		<div class="content">
-			<div class="login-box">
-				<img :src="'./static/member/login-img.png'" />
-			</div>
-			<group gutter="0" class="input-div">
-				<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
-				<x-input class="input-item" ref="phone" v-model="mobile" placeholder="手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
-				<x-input class="input-item" ref="password" v-model="password" placeholder="登录密码" type="password" @on-change="passwordChange"></x-input>
-				<x-input v-if="!isReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
-					<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
-				</x-input>
-			</group>
-			<div class="tip">
-				<div class="agreement" v-if="!isReg">
-					<!--<check-icon :value.sync="isAgree"></check-icon>-->
-					<span class="sg">点击下方按钮即同意</span>
-					<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
+		<div style="position: relative;height: 100%;">
+			<settingHeader :title="title"></settingHeader>
+			<div class="content">
+				<div class="login-box">
+					<img :src="'./static/member/login-img.png'" />
 				</div>
-				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">登录 / 注册</x-button>
-				<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-else>立即注册</x-button>
+				<group gutter="0" class="input-div">
+					<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
+					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
+					<x-input class="input-item" ref="password" v-model="password" placeholder="登录密码" type="password" @on-change="passwordChange"></x-input>
+					<x-input v-if="!isReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
+						<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
+					</x-input>
+				</group>
+				<div class="tip">
+					<div class="agreement" v-if="!isReg">
+						<!--<check-icon :value.sync="isAgree"></check-icon>-->
+						<span class="sg">点击下方按钮即同意</span>
+						<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
+					</div>
+					<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">{{isCp?'立即登录':'登录 / 注册'}}</x-button>
+					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-else>立即注册</x-button>
+				</div>
+				<div class="login-re" v-if="isReg">
+					<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
+					<!--<router-link to=""><span>短信验证登录</span></router-link>-->
+				</div>
+				<div class="login-re" v-else>
+					<span @click="backLogin">返回登录</span>
+				</div>
 			</div>
-			<div class="login-re" v-if="isReg">
-				<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
-				<!--<router-link to=""><span>短信验证登录</span></router-link>-->
-			</div>
-			<div class="login-re" v-else>
-				<span @click="isReg = !isReg">返回登录</span>
-			</div>
-		</div>
-		<!-- <div class="Thirdparty" v-if="isReg">
+			<!-- <div class="Thirdparty" v-if="isReg">
 			<p class="title"><span>第三方登录</span></p>
 			<div>
 				<img src="../../assets/images/user/weibo.png" alt="" />
@@ -38,6 +39,7 @@
 				<img src="../../assets/images/user/qq.png" alt="" />
 			</div>
 		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -65,7 +67,8 @@
 				token: '',
 				isAgree: true,
 				parentId: '',
-				frompath: ''
+				frompath: '',
+				isCp:false
 			}
 		},
 		created() {
@@ -181,21 +184,30 @@
 						if(res.data.status == "00000000") {
 							if(res.data.data == '0') {
 								//未注册
-								_this.$dialog.show({
-									type: 'warning',
-									headMessage: '提示',
-									message: '该账户不存在,是否立即注册?',
-									buttons: ['确定', '取消'],
-									canel() {
-										_this.$dialog.hide()
-									},
-									confirm() {
-										_this.$dialog.hide()
-										_this.isReg = false
-									}
+								//								_this.$dialog.show({
+								//									type: 'warning',
+								//									headMessage: '提示',
+								//									message: '该账户不存在,是否立即注册?',
+								//									buttons: ['确定', '取消'],
+								//									canel() {
+								//										_this.$dialog.hide()
+								//									},
+								//									confirm() {
+								//										_this.$dialog.hide()
+								//										_this.isReg = false
+								//									}
+								//								})
+								_this.isReg = false
+								_this.isCp = false
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '该账户未注册'
 								})
 							} else {
 								//已注册
+								_this.isCp = true
 								_this.login()
 							}
 						}
@@ -281,9 +293,10 @@
 			//用户名输入改变时
 			nameChange(val) {
 				var _this = this
+				_this.isReg = true
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
-					_this.$refs.password.focus()
+					//					_this.$refs.password.focus()
 					var _this = this
 					_this.$nextTick(function() {
 						_this.$http.post(_this.url.user.checkUserExistsByMobile, {
@@ -292,19 +305,29 @@
 							if(res.data.status == "00000000") {
 								if(res.data.data == '0') {
 									//未注册
-									_this.$dialog.show({
-										type: 'warning',
-										headMessage: '提示',
-										message: '该账户没有注册,是否立即注册?',
-										buttons: ['确定', '取消'],
-										canel() {
-											_this.$dialog.hide()
-										},
-										confirm() {
-											_this.$dialog.hide()
-											_this.isReg = false
-										}
+									//									_this.$dialog.show({
+									//										type: 'warning',
+									//										headMessage: '提示',
+									//										message: '该账户没有注册,是否立即注册?',
+									//										buttons: ['确定', '取消'],
+									//										canel() {
+									//											_this.$dialog.hide()
+									//										},
+									//										confirm() {
+									//											_this.$dialog.hide()
+									//											_this.isReg = false
+									//										}
+									//									})
+									_this.isReg = false
+									_this.isCp = false
+									_this.$vux.toast.show({
+										width: '50%',
+										type: 'text',
+										position: 'middle',
+										text: '该账户未注册'
 									})
+								}else{
+									_this.isCp = true
 								}
 							}
 						})
@@ -372,6 +395,10 @@
 						console.log(res)
 					})
 				})
+			},
+			backLogin(){
+				this.isCp = false
+				this.isReg = !this.isReg
 			}
 		},
 		components: {
@@ -389,11 +416,11 @@
 <style lang="less">
 	.reg-box {
 		height: 100%;
+		overflow: hidden;
 		background-color: white;
 		padding: 0 0.5rem;
 		box-sizing: border-box;
 		user-select: none;
-		position: relative;
 		.login-box {
 			width: 100%;
 			height: 3.5rem;

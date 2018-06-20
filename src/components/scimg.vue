@@ -83,12 +83,13 @@
 					var image = document.getElementById('image')
 					_this.cropper = new Cropper(image, {
 						aspectRatio: 1, //裁剪容器的比例
-						viewMode: 1,
+						viewMode: 0,
 						background: true, //是否在容器上显示网格背景
 						modal: false, //是否在剪裁框上显示黑色的模态窗口
 						guides: true, //是否在剪裁框上显示虚线
 						zoomable: true, //是否允许放大缩小图片
 						rotatable: true, //是否允许旋转图片
+						movable: true,//是否允许拖动图片
 						ready: function() {
 							_this.croppable = true;
 						}
@@ -124,7 +125,7 @@
 					_this.$http.post(_this.url2.user.fileuploadImage, data).then((res) => {
 						if(res.data.status == '00000000') {
 							_this.$http.post(_this.url2.user.changeAvatar, {
-								userId: localStorage.getItem('userId'),
+								userId: _this.vm.$store.state.user.userId,
 								avatarId: res.data.data.fileId
 							}).then((res) => {
 								_this.vm.$vux.toast.show({
@@ -190,7 +191,8 @@
 		top: 0%;
 		width: 100%;
 	}
-	.top46{
+	
+	.top46 {
 		top: 46px;
 	}
 	
@@ -198,11 +200,11 @@
 	#demo #cancel {
 		position: fixed;
 		right: 0.5rem;
-		bottom: 0.8rem;
+		bottom: 0.3rem;
 		width: 2.7rem;
 		height: 0.88rem;
 		border: none;
-		border-radius: 1px;
+		border-radius: 3px;
 		background: white;
 	}
 	

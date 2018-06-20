@@ -42,7 +42,7 @@
 							position: 'middle',
 							text: '退出成功'
 						})
-						_this.$router.push({
+						_this.$router.replace({
 							path: '/user/reg'
 						})
 						localStorage.removeItem('userInfo')

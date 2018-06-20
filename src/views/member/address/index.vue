@@ -1,36 +1,38 @@
 <template>
 	<div class="address-box">
-		<settingHeader :title="title"></settingHeader>
-		<div v-if="list.length>0">
-			<div class="list" v-for="(item,index) in list" :key="index">
-				<div class="top">
-					<div class="pro">
-						<div>
-							<span>{{item.name}}</span>
-							<span class="label" v-if="item.remark">{{item.remark}}</span>
+		<div style="position: relative;height: 100%;">
+			<settingHeader :title="title"></settingHeader>
+			<div v-if="list.length>0">
+				<div class="list" v-for="(item,index) in list" :key="index">
+					<div class="top">
+						<div class="pro">
+							<div>
+								<span>{{item.name}}</span>
+								<span class="label" v-if="item.remark">{{item.remark}}</span>
+							</div>
+							<span>{{item.mobile}}</span>
 						</div>
-						<span>{{item.mobile}}</span>
+						<p>{{item.country}}{{item.province}}{{item.city}}{{item.area}} {{item.address}}</p>
 					</div>
-					<p>{{item.country}}{{item.province}}{{item.city}}{{item.area}} {{item.address}}</p>
-				</div>
-				<div class="bottom">
-					<div @click="ischange(item.addressId, index)">
-						<check-icon :value.sync="item.isDefault">设置为默认地址</check-icon>
-					</div>
-					<div>
-						<span @click="toEdit(item.addressId)">编辑</span>
-						<span @click="deleteAddress(item.addressId)">删除</span>
+					<div class="bottom">
+						<div @click="ischange(item.addressId, index)">
+							<check-icon :value.sync="item.isDefault">设置为默认地址</check-icon>
+						</div>
+						<div>
+							<span @click="toEdit(item.addressId)">编辑</span>
+							<span @click="deleteAddress(item.addressId)">删除</span>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div v-else style="background-color: white;height: 100%;">
-			<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
-		</div>
-		<div class="add-btn-box">
-			<router-link to="/member/address/edit">
-				<div class="add-btn">添加地址</div>
-			</router-link>
+			<div v-else style="background-color: white;height: 100%;">
+				<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
+			</div>
+			<div class="add-btn-box">
+				<router-link to="/member/address/edit">
+					<div class="add-btn">添加地址</div>
+				</router-link>
+			</div>
 		</div>
 	</div>
 </template>
@@ -46,14 +48,7 @@
 				list: []
 			}
 		},
-		created() { //判断是否微信端
-			var ua = navigator.userAgent.toLowerCase();
-			var isWeixin = ua.indexOf('micromessenger') != -1;
-			if(isWeixin) {
-				this.hShow = true;
-			} else {
-				this.hShow = false;
-			}
+		created() {
 			this.getShippingAddress()
 		},
 		methods: {
@@ -136,11 +131,11 @@
 
 <style lang="less" scoped>
 	.address-box {
-		background: #F5F6FA;
+		background-color: #F5F6FA;
 		padding-bottom: 1rem;
-		position: relative;
-		height: 100%;
 		box-sizing: border-box;
+		height: 100%;
+		overflow: hidden;
 		.settingHeader {
 			position: relative;
 		}
@@ -161,12 +156,11 @@
 		}
 		.add-btn-box {
 			width: 100%;
-			background: white;
+			background-color: white;
 			position: fixed;
 			bottom: 0;
 			left: 0;
 			height: 0.88rem;
-			box-sizing: border-box;
 			.add-btn {
 				height: 0.88rem;
 				line-height: 0.88rem;
@@ -200,7 +194,7 @@
 					align-items: center;
 					.label {
 						display: inline-block;
-						background:rgba(215,227,255,1);
+						background: rgba(215, 227, 255, 1);
 						border: 1px solid #1c70f1;
 						border-radius: 2px;
 						margin-left: 0.18rem;
