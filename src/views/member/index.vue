@@ -20,7 +20,7 @@
 							<div class="universal">
 								<p>
 									<div class="num">
-										<p class="money">{{info.balance?info.balance:0}}</p>
+										<p class="money">{{userInfo.balance?userInfo.balance:0}}</p>
 										<!--<badge></badge>-->
 									</div>
 								</p>
@@ -30,7 +30,7 @@
 						<router-link to="/member/earnings/credit">
 							<div class="universal">
 								<div class="num">
-									<p class="money">{{info.availablePoints?info.availablePoints:0}}</p>
+									<p class="money">{{userInfo.availablePoints?userInfo.availablePoints:0}}</p>
 
 								</div>
 								<p class="universalAccount">信用积分</p>
@@ -198,10 +198,7 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.info = res.data.data
-						if(_this.userInfo.avatar.original != res.data.data.avatar.original) {
-							_this.userInfo = res.data.data
-						}
-						if(_this.userInfo.nickname != res.data.data.nickname) {
+						if(_this.userInfo != res.data.data) {
 							_this.userInfo = res.data.data
 						}
 					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401') {
