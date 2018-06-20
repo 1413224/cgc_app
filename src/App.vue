@@ -88,7 +88,6 @@
 				this.$scImg.hide()
 			},
 			isLogin(){
-				console.log(this.isLogin)
 				if(this.isLogin == false){
 					localStorage.removeItem('userInfo')
 				}
