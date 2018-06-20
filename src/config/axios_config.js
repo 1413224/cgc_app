@@ -97,7 +97,7 @@ axios.interceptors.response.use(res => {
 		}
 	})
 	if(res.data.status != '00000000' && res.data.status != 1) {
-		if(res.data.status == '401') {
+		if(res.data.status == '401' && URL != '/user/v1/user/getBasicInfo') {
 			router.replace({
 				path: '/user/reg'
 			})
