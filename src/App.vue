@@ -109,7 +109,7 @@
 	}
 	
 	.weui-mask {
-		z-index: 10000;
+		z-index: 9998;
 	}
 	
 	.add-btn {

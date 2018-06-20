@@ -108,7 +108,7 @@ axios.interceptors.response.use(res => {
 				width: '50%'
 			})
 			localStorage.setItem('isLogin', false)
-		} else if(res.data.status == 'utils007' || res.data.status == 'utils010' && URL != '/user/v1/user/getBasicInfo') {
+		} else if((res.data.status == 'utils007' || res.data.status == 'utils010') && URL !== '/user/v1/user/getBasicInfo') {
 			router.replace({
 				path: '/user/reg'
 			})
@@ -119,7 +119,7 @@ axios.interceptors.response.use(res => {
 				width: '60%'
 			})
 			localStorage.setItem('isLogin', false)
-		} else if(res.data.status == 'utils007' || res.data.status == 'utils010' && URL == '/user/v1/user/getBasicInfo') {
+		} else if((res.data.status == 'utils007' || res.data.status == 'utils010') && URL == '/user/v1/user/getBasicInfo') {
 			localStorage.setItem('isLogin', false)
 		} else if(URL != '/user/v1/user/getBasicInfo') {
 			Vue.$vux.toast.show({
