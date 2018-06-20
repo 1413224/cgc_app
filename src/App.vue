@@ -9,7 +9,7 @@
 		<!--图片预览插件-->
 		<lg-preview v-if="$store.state.page.ispreview"></lg-preview>
 		<settingFooter v-if="$route.meta.navShow"></settingFooter>
-		<div v-transfer-dom>
+		<div v-transfer-dom class="dia">
 			<x-dialog v-model="orientation" class="dialog-demo" hide-on-blur>
 				<div class="img-box">
 					<img src="../static/images/orientation.jpg" style="max-width:100%">
@@ -102,7 +102,7 @@
 	}
 	
 	.weui-dialog {
-		background-color: transparent;
+		background-color: transparent !important;
 		z-index: 10001;
 	}
 	

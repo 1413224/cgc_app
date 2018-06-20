@@ -202,8 +202,8 @@ router.beforeEach(function(to, from, next) {
 	store.state.page.isLogin = localStorage['isLogin']
 
 	let info = base64_decode(localStorage['_HASH_'])
-	
-	if(info) {
+
+	if(info){
 		store.state.user.userId = info.id
 	}
 

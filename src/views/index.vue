@@ -193,7 +193,7 @@
 		<div>
 
 			<!--购物奖励弹窗-->
-			<x-dialog v-model="showNew" class="xrBox">
+			<x-dialog v-model="showNew" class="xrBox" :dialog-style="transparent">
 				<div class="p_box">
 					<img @click="showNew = false" class="xr_img" src="../../static/images/xr_bg.png" alt="" />
 
@@ -208,7 +208,7 @@
 			</x-dialog>
 
 			<!--新人奖励弹窗-->
-			<x-dialog v-model="showNew2" class="zcBox">
+			<x-dialog v-model="showNew2" class="zcBox" :dialog-style="transparent">
 				<div class="zc_box">
 					<div class="zc_content">
 						<div class="item_box" v-for="(item,index) in zcList" :key="index">

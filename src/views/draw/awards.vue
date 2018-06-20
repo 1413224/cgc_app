@@ -426,7 +426,7 @@
 		.weui-dialog {
 			width: 78.67%;
 			max-width: 78.67%;
-			z-index: 111111111111111111111111;
+			z-index: 9999;
 			border-radius: 0.16rem; 
 			top: 46%;
 		}
