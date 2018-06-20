@@ -174,12 +174,18 @@ methods.forEach(key => {
 })
 
 router.beforeEach(function(to, from, next) {
-
 	if(!store.state.user.openid && to.path != '/member/oriza'){
-		// alert(9)
 		window.localStorage.setItem("beforeLoginUrl",to.fullPath);//保存用户进入的url
-		next("/member/oriza");
-		return false;
+
+		let ua = window.navigator.userAgent.toLowerCase()
+		if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+			next("/member/oriza");
+		}else{
+			console.log("不是微信")
+		}
+
+		
+		// return false;
 	}
 
 	//缓存路由页面 注册协议

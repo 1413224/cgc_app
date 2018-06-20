@@ -68,7 +68,8 @@
 				isAgree: true,
 				parentId: '',
 				frompath: '',
-				isCp:false
+				isCp:false,
+				pid:''
 			}
 		},
 		created() {
@@ -219,12 +220,19 @@
 			login() {
 				var _this = this
 
+				let pid = this.$store.user.state.openid
+
+				alert(pid)
+				
+
 				_this.$http.post(this.url.user.userLogin, {
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
 					password: _this.MD5(_this.password),
-					terminal: _this.url.client
+					terminal: _this.url.client,
+					type: pid ? 1 : 0,
+					unionid: pid ? pid : ""
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 
