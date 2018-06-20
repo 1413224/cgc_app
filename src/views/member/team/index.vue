@@ -65,6 +65,7 @@
 	import settingHeader from '../../../components/setting_header'
 	import Loading from '../../../components/loading'
 	import noData from '../../../components/noData'
+	import Nomore from '../../../components/noMore'
 	import BScroll from 'better-scroll'
 	export default {
 		data() {
@@ -172,7 +173,8 @@
 			Grid,
 			GridItem,
 			Loading,
-			noData
+			noData,
+			Nomore
 		}
 	}
 </script>

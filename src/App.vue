@@ -56,6 +56,7 @@
 					_this.orientation = false;
 				}
 			}
+			//设置微信头部标题
 			if(this.$router.app._route.meta.title) {
 				document.title = this.$router.app._route.meta.title
 			}
@@ -87,6 +88,7 @@
 				this.$dialog.hide()
 				this.$scImg.hide()
 			},
+			//未登录 删除缓存个人信息
 			isLogin(){
 				if(this.isLogin == false){
 					localStorage.removeItem('userInfo')
