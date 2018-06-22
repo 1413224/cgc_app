@@ -114,6 +114,7 @@
 <script>
 	import { Badge, Cell, Group } from 'vux'
 	import settingHeader from '../../components/setting_header'
+import { setTimeout } from 'timers';
 	export default {
 		data() {
 			return {
@@ -173,6 +174,10 @@
 		},
 		created() {
 
+			// alert(this.$store.state.page.isLogin)
+
+			// alert(this.$store.state.user.userId)
+			
 			if(this.$store.state.page.isLogin == 'true') {
 				this.isLogin = true
 			} else {
@@ -180,8 +185,11 @@
 				localStorage.removeItem('userInfo')
 				this.$store.state.user.userId = ''
 			}
+
 			if(localStorage['userInfo'] && this.isLogin) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
+			}else{
+				this.userInfo = this.$store.state.page.userInfo
 			}
 
 			this.getUserInfo()

@@ -10,7 +10,9 @@ const user = {
         username: null,
         userstate: false,
         userId:userid,
-        openid:""
+        openid:"",
+        token:"",
+        accessCode:""
     },
   
     mutations: {
@@ -20,8 +22,18 @@ const user = {
           state = newUser;
           console.log('登录成功后，用户为:',state)
         },
-        getOpenId:(state,openid) =>{
+        getOpenId:(state,openid) => {
           state.openid = openid
+        },
+
+        getParams:(state,params) => {
+          state.openid = params.openId
+          state.userid = params.userId
+          state.accessCode = params.randomAccessCode
+          state.token = params.token
+        },
+        setUid:(state,param) => {
+          state.userId = param
         }
       },
       //Action 通过 store.dispatch 方法触发

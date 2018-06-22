@@ -284,8 +284,16 @@ var mainApp = {
 		},
 		escapeForJs:function(str){
 			if(!str) return '';
+			str = str.replace(/\\/g,'\\\\');
 			str = str.replace(/"/g,'\\"');
 			return str;
+		},
+		xssFilter:function(html){
+			if(!html) return "";
+			html = html.replace(/<\s*\/?script\s*>/g,'');
+			html = html.replace(/javascript:[^'"]*/g,'');
+			html = html.replace(/onerror\s*=\s*['"]?[^'"]*['"]?/g,'');
+			return html;
 		}
 	}
 }

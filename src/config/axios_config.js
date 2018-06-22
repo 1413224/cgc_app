@@ -36,7 +36,7 @@ axios.interceptors.request.use(config => {
 		info = base64_decode(_HASH_);
 
 	if(info) {
-
+		// alert(info.token)
 		token = info.token ? info.token : ""
 		id = info.id ? info.id : ""
 		randomAccessCode = info.randomAccessCode ? info.randomAccessCode : ""

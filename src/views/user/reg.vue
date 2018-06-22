@@ -220,20 +220,24 @@
 			login() {
 				var _this = this
 
-				let pid = this.$store.user.state.openid
+				let pid = this.$store.state.user.openid
 
-				alert(pid)
-				
-
-				_this.$http.post(this.url.user.userLogin, {
+				// alert(pid)
+				let params={
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
 					password: _this.MD5(_this.password),
 					terminal: _this.url.client,
-					type: pid ? 1 : 0,
-					unionid: pid ? pid : ""
-				}).then(function(res) {
+					// type: pid ? 1 : 0,
+					// unionid: pid ? pid : " "
+				}
+				if(pid){
+					params.type = 1;
+					params.unionid = pid;
+				}
+
+				_this.$http.post(this.url.user.userLogin, params).then(function(res) {
 					if(res.data.status == "00000000") {
 
 						let hash = base64_encode(res.data.data)
