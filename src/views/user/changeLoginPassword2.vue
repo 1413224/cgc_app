@@ -3,8 +3,8 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="content">
 			<group gutter="0" class="input-div">
-				<x-input class="input-item" ref="password" v-model="password" placeholder="输入六位新密码" type="password" :max="20"></x-input>
-				<x-input class="input-item" ref="password1" v-model="password1" placeholder="确认新密码" type="password" :max="20"></x-input>
+				<x-input class="input-item" ref="password" v-model="password" placeholder="输入6到25位新密码" type="password" :max="25"></x-input>
+				<x-input class="input-item" ref="password1" v-model="password1" placeholder="确认新密码" type="password" :max="25"></x-input>
 			</group>
 			<div class="tip">
 				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading">提交</x-button>
@@ -43,12 +43,12 @@
 					return false
 				}
 
-				if(_this.password.length > 20 || _this.password1.length > 20) {
+				if(_this.password.length > 25 || _this.password1.length > 25) {
 					_this.$vux.toast.show({
 						width: '50%',
 						type: 'text',
 						position: 'middle',
-						text: '密码不能超过20位'
+						text: '密码不能超过25位'
 					})
 					return false
 				}

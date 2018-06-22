@@ -189,47 +189,6 @@
 				</div>-->
 			</div>
 		</div>
-
-		<div>
-
-			<!--购物奖励弹窗-->
-			<x-dialog v-model="showNew" class="xrBox" :dialog-style="transparent">
-				<div class="p_box">
-					<img @click="showNew = false" class="xr_img" src="../../static/images/xr_bg.png" alt="" />
-
-					<div class="p_content">
-						<p>本次消费奖励</p>
-						<p>7.20 <span>通用积分</span></p>
-						<p>通用积分将自动存入您的资产余额</p>
-					</div>
-
-					<img @click="showNew = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
-				</div>
-			</x-dialog>
-
-			<!--新人奖励弹窗-->
-			<x-dialog v-model="showNew2" class="zcBox" :dialog-style="transparent">
-				<div class="zc_box">
-					<div class="zc_content">
-						<div class="item_box" v-for="(item,index) in zcList" :key="index">
-							<div>
-								<p>{{item.jf}}</p>
-								<p>自动存入通用积分</p>
-							</div>
-							<div>
-								<p>¥ <span>{{item.money}}</span></p>
-								<p>{{item.mk}}</p>
-							</div>
-						</div>
-						<div class="zc-btn" @click="$router.push({path:'/user/reg'})">
-							立即注册
-						</div>
-					</div>
-
-					<img @click="showNew2 = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
-				</div>
-			</x-dialog>
-		</div>
 	</section>
 </template>
 
@@ -451,34 +410,11 @@
 					//						]
 					//					}
 				],
-				articleList:[],
-				showNew: false, //购物奖励弹窗
-				showNew2: true, //新人奖励弹窗
-				zcList: [{
-						jf: '通用积分',
-						money: '10',
-						mk: '无门槛全场使用'
-					},
-					{
-						jf: '通用积分',
-						money: '20',
-						mk: '满50减10'
-					},
-					{
-						jf: '通用积分',
-						money: '30',
-						mk: '无门槛全场使用'
-					},
-				]
+				articleList: [],
 			}
 		},
 		created() {
-			var _this = this
-			if(_this.$store.state.page.isLogin == 'true'){
-				_this.showNew2 = false
-			}else{
-				_this.showNew2 = true
-			}
+			
 		},
 		mounted() {
 			this.onLoadArticle();
@@ -488,7 +424,7 @@
 			goUrl(url) {
 				window.location.href = url
 			},
-			onLoadArticle(){
+			onLoadArticle() {
 				let _this = this
 				// let parJson = {
 				// 	pagesize:6,
@@ -496,11 +432,11 @@
 				// }
 				// let par = Qs.stringify(parJson)
 				_this.$http.post(url.article.getArticleLists).then((res) => {
-					if(res.status == 200 && res.data != null){
-						
+					if(res.status == 200 && res.data != null) {
+
 						_this.articleList = res.data.result.lists
 						// console.log(_this.articleList)
-					}else{
+					} else {
 						Vue.$vux.toast.show({
 							text: "请求快讯失败",
 							type: 'text',
@@ -508,12 +444,12 @@
 							width: '50%'
 						})
 					}
-					
+
 				}).catch((err) => {
 					console.log(err);
 				});
 			},
-			goArticleDetail(uri){
+			goArticleDetail(uri) {
 				window.location.href = uri;
 			}
 		},
@@ -526,140 +462,12 @@
 		},
 	}
 </script>
-<style lang="less">
-	.zcBox {
-		.weui-dialog {
-			width: 6.4rem;
-			max-width: 100%;
-		}
-	}
-</style>
 <style lang="less" scoped>
 	@import '~vux/src/styles/1px.less';
 	#appIndex {
 		background-color: #F5F6FA;
 		overflow-x: hidden;
 		padding-bottom: 1rem;
-		.zcBox {
-			.zc_box {
-				.zc-btn {
-					width: 5.16rem;
-					height: 0.8rem;
-					line-height: 0.8rem;
-					background: rgba(255, 204, 9, 1);
-					border-radius: 4px;
-					font-size: 0.34rem;
-					font-family: PingFangSC-Semibold;
-					color: rgba(209, 14, 22, 1);
-					margin: 0 auto;
-					margin-top: 0.35rem;
-				}
-				.zc_content {
-					position: relative;
-					background: url(../../static/images/zc_bg.png) no-repeat;
-					background-size: 100% 100%;
-					padding: 2rem 0.2rem 0.35rem 0.2rem;
-					box-sizing: border-box;
-					.item_box {
-						background: url(../../static/images/it_bg.png) no-repeat;
-						background-size: 100% 100%;
-						padding: 0.3rem;
-						box-sizing: border-box;
-						display: flex;
-						margin-bottom: 0.2rem;
-						div:nth-child(1) {
-							width: 3.5rem;
-							display: flex;
-							flex-direction: column;
-							align-items: flex-start;
-							justify-content: space-between;
-							p:nth-child(1) {
-								font-size: 0.28rem;
-								font-family: PingFangSC-Medium;
-								color: rgba(15, 24, 45, 1);
-							}
-							p:nth-child(2) {
-								font-size: 0.24rem;
-								font-family: PingFangSC-Regular;
-								color: rgba(115, 134, 173, 1);
-							}
-						}
-						div:nth-child(2) {
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							align-items: center;
-							justify-content: space-between;
-							height: 100%;
-							p:nth-child(1) {
-								font-size: 0.26rem;
-								font-family: PingFangSC-Regular;
-								color: rgba(242, 48, 48, 1);
-								span {
-									font-size: 0.6rem;
-									font-family: PingFangSC-Medium;
-									color: rgba(242, 48, 48, 1);
-								}
-							}
-							p:nth-child(2) {
-								font-size: 0.24rem;
-								font-family: PingFangSC-Regular;
-								color: rgba(115, 134, 173, 1);
-							}
-						}
-					}
-					.item_box:last-child {
-						margin-bottom: 0px!important;
-					}
-				}
-				.gb_img {
-					width: 0.82rem;
-					height: 0.82rem;
-					margin-top: 0.33rem;
-				}
-			}
-		}
-		.xrBox {
-			.p_box {
-				position: relative;
-				.xr_img {
-					width: 100%;
-					height: auto;
-				}
-				.p_content {
-					width: 100%;
-					position: absolute;
-					top: 49%;
-					left: 50%;
-					transform: translate(-50%, -50%);
-					p:nth-child(1) {
-						font-size: 0.28rem;
-						font-family: PingFangSC-Regular;
-						color: rgba(164, 113, 57, 1);
-					}
-					p:nth-child(2) {
-						font-size: 0.68rem;
-						font-family: PingFangSC-Semibold;
-						color: rgba(242, 48, 48, 1);
-						span {
-							font-size: 0.24rem;
-							font-family: PingFangSC-Regular;
-							color: rgba(242, 48, 48, 1);
-						}
-					}
-					p:nth-child(3) {
-						font-size: 0.22rem;
-						font-family: PingFangSC-Regular;
-						color: rgba(164, 113, 57, 1);
-					}
-				}
-				.gb_img {
-					width: 0.82rem;
-					height: 0.82rem;
-					margin-top: 0.33rem;
-				}
-			}
-		}
 		.auto-img {
 			width: 100%;
 			height: auto;
@@ -740,11 +548,11 @@
 			font-family: PingFangSC-Light;
 			color: rgba(66, 88, 132, 1);
 			font-size: 0.24rem;
-			.vux-marquee{
-				width:5rem !important;
-				line-height:32px;
+			.vux-marquee {
+				width: 5rem !important;
+				line-height: 32px;
 				font-size: 14px;
-				.align-middle{
+				.align-middle {
 					// display: inline-block;
 					overflow: hidden;
 					text-overflow: ellipsis;

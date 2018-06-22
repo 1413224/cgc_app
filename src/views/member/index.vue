@@ -92,6 +92,60 @@
 					</ul>
 				</div>
 			</section>
+			<section v-if="isLogin">
+				<div class="order-box">
+					<p>我的订单</p>
+					<p>查看更多订单<i class="icon iconfont icon-arrow-right"></i></p>
+				</div>
+				<div class="navigation" style="margin-top: 0;">
+					<ul>
+						<li>
+							<router-link to="/member/purse/wallet">
+								<div class="li-box2">
+									<img :src="'./static/member/order-1.png'">
+									<!--<badge class="new"></badge>-->
+								</div>
+								<p>待付款</p>
+							</router-link>
+						</li>
+						<li>
+							<router-link to="/member/team/index">
+								<div class="li-box2">
+									<img :src="'./static/member/order-2.png'">
+									<!--<badge class="new"></badge>-->
+								</div>
+								<p>待发货</p>
+							</router-link>
+						</li>
+						<li>
+							<router-link to="/shop/my_order">
+								<div class="li-box2">
+									<img :src="'./static/member/order-3.png'">
+									<!--<badge class="new-account" text="2312"></badge>-->
+								</div>
+
+								<p>待收货</p>
+							</router-link>
+						</li>
+						<li>
+							<a @click="toQrcode(userInfo)">
+								<div class="li-box2">
+									<img :src="'./static/member/order-4.png'">
+								</div>
+								<p>待评价</p>
+							</a>
+						</li>
+						<li>
+							<a @click="toQrcode(userInfo)">
+								<div class="li-box2">
+									<img :src="'./static/member/order-5.png'">
+								</div>
+								<p>退款/售后</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</section>
 			<section>
 				<router-link to="/draw">
 					<div class="banner">
@@ -114,7 +168,7 @@
 <script>
 	import { Badge, Cell, Group } from 'vux'
 	import settingHeader from '../../components/setting_header'
-import { setTimeout } from 'timers';
+	import { setTimeout } from 'timers';
 	export default {
 		data() {
 			return {
@@ -122,27 +176,27 @@ import { setTimeout } from 'timers';
 				userInfo: {},
 				images: '',
 				infoList: [{
-						img: './static/member/member_1.png',
+						img: './static/member/m-index1.png',
 						text: '我的优惠券',
 						url: '/member/coupon/index'
 					},
 					{
-						img: './static/member/member_3.png',
+						img: './static/member/m-index2.png',
 						text: '我的关注',
 						url: '/member/follow/index'
 					},
 					{
-						img: './static/member/member_4.png',
+						img: './static/member/m-index3.png',
 						text: '收货地址',
 						url: '/member/address/index'
 					},
 					{
-						img: './static/member/member_4.png',
+						img: './static/member/m-index4.png',
 						text: '积分商城',
 						url: '/shop'
 					},
 					{
-						img: './static/member/m_index12.png',
+						img: './static/member/m-index5.png',
 						text: '多商户商城',
 						url: '/multi_user_mall/summary'
 					},
@@ -151,9 +205,9 @@ import { setTimeout } from 'timers';
 						text: '我的订单',
 						url: '/shop/my_order'
 					},*/
-					
+
 					{
-						img: './static/member/m_index17.png',
+						img: './static/member/m-index6.png',
 						text: '幸运抽奖',
 						url: '/draw'
 					},
@@ -174,10 +228,6 @@ import { setTimeout } from 'timers';
 		},
 		created() {
 
-			// alert(this.$store.state.page.isLogin)
-
-			// alert(this.$store.state.user.userId)
-			
 			if(this.$store.state.page.isLogin == 'true') {
 				this.isLogin = true
 			} else {
@@ -188,7 +238,7 @@ import { setTimeout } from 'timers';
 
 			if(localStorage['userInfo'] && this.isLogin) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
-			}else{
+			} else {
 				this.userInfo = this.$store.state.page.userInfo
 			}
 
@@ -383,6 +433,25 @@ import { setTimeout } from 'timers';
 								top: -2px;
 							}
 						}
+						.li-box2 {
+							position: relative;
+							width: 0.44rem;
+							height: 0.44rem;
+							img {
+								width: 100%;
+								height: auto;
+							}
+							.new {
+								position: absolute;
+								right: -3px;
+								top: -2px;
+							}
+							.new-account {
+								position: absolute;
+								right: -28px;
+								top: -2px;
+							}
+						}
 						p {
 							font-family: PingFangSC-Regular;
 							font-size: 0.24rem;
@@ -416,6 +485,40 @@ import { setTimeout } from 'timers';
 				vertical-align: sub;
 				margin-right: 0.13rem;
 			}
+		}
+		.order-box {
+			padding: 10px 15px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background-color: white;
+			position: relative;
+			p:nth-child(1) {
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+			}
+			p:nth-child(2),
+			i {
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(144, 162, 199, 1);
+			}
+		}
+		.order-box:after {
+			content: " ";
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 1px;
+			border-top: 1px solid #C7C7C7;
+			color: #D9D9D9;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+			left: 0px;
 		}
 	}
 </style>

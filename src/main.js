@@ -147,7 +147,13 @@ store.registerModule('vux', {
 })
 
 const history = window.sessionStorage
-history.clear()
+for(var i = 0, len = history.length; i < len; i++) {
+	var key = history.key(i)
+	var value = history.getItem(key)
+	if(key != 'isPopup' || key != '_openid_'){
+		history.removeItem(key)
+	}
+}
 let historyCount = history.getItem('count') * 1;
 
 let isPush = false
