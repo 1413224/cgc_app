@@ -1,4 +1,4 @@
-var isLogin = localStorage['isLogin']
+var isLogin = localStorage['isLogin'] ? localStorage['isLogin'] : false
 var userInfo = {}
 if(localStorage['userInfo']){
 	userInfo = JSON.parse(localStorage['userInfo'])

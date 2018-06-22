@@ -200,18 +200,21 @@ router.beforeEach(function(to, from, next) {
 	//			// return false;
 	//		}
 	//	}
-
+	console.log(store.state.page.isLogin)
 	//奖励弹窗
 	if(isPopup || sessionStorage.getItem('isPopup')) {
 		Vue.$popup.hide()
+		console.log(1)
 	} else {
 		if(store.state.page.isLogin != 'true' && to.path != '/user/reg') {
 			history.setItem('isPopup', 1)
 			Vue.$popup.show({
 				showZc: true
 			})
+			console.log(2)
 		} else {
 			Vue.$popup.hide()
+			console.log(3)
 		}
 	}
 

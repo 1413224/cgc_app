@@ -89,7 +89,7 @@
 						guides: true, //是否在剪裁框上显示虚线
 						zoomable: true, //是否允许放大缩小图片
 						rotatable: true, //是否允许旋转图片
-						movable: true,//是否允许拖动图片
+						movable: true, //是否允许拖动图片
 						ready: function() {
 							_this.croppable = true;
 						}
@@ -113,10 +113,9 @@
 				croppedCanvas = this.cropper.getCroppedCanvas();
 				// Round
 				roundedCanvas = this.getRoundedCanvas(croppedCanvas);
-				this.headerImage = roundedCanvas.toDataURL();
-				var imgdata = roundedCanvas.toBlob
+				this.headerImage = roundedCanvas.toDataURL()
 				//上传图片
-				this.cropper.getCroppedCanvas().toBlob(function(blob) {
+				croppedCanvas.toBlob(function(blob) {
 					var data = {
 						type: 'user',
 						name: '1',
@@ -143,7 +142,7 @@
 								position: 'middle',
 								text: '上传失败'
 							})
-							this.Cancel()
+							_this.Cancel()
 						}
 					})
 				});
@@ -170,6 +169,34 @@
 				);
 				context.fill();
 				return canvas;
+			},
+			processData(dataUrl) {
+				var binaryString = window.atob(dataUrl.split(',')[1]);
+				var arrayBuffer = new ArrayBuffer(binaryString.length);
+				var intArray = new Uint8Array(arrayBuffer);
+				for(var i = 0, j = binaryString.length; i < j; i++) {
+					intArray[i] = binaryString.charCodeAt(i);
+				}
+
+				var data = [intArray],
+					blob;
+
+				try {
+					blob = new Blob(data);
+				} catch(e) {
+					window.BlobBuilder = window.BlobBuilder ||
+						window.WebKitBlobBuilder ||
+						window.MozBlobBuilder ||
+						window.MSBlobBuilder;
+					if(e.name === 'TypeError' && window.BlobBuilder) {
+						var builder = new BlobBuilder();
+						builder.append(arrayBuffer);
+						blob = builder.getBlob(imgType); // imgType为上传文件类型，即 file.type
+					} else {
+						console.log('版本过低，不支持上传图片');
+					}
+				}
+				return blob;
 			}
 		},
 		watch: {
