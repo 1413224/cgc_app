@@ -157,7 +157,7 @@
 
 				_this.$http.post(this.url.user.userRegister, {
 					mobile: _this.mobile,
-					password: _this.password,
+					password: _this.MD5(_this.password),
 					smsVerificationCode: _this.code,
 					platformId: _this.url.platformId,
 					parentUserId: _this.parentId

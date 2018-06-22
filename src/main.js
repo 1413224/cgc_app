@@ -175,22 +175,23 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 	// alert(localStorage['isLogin'])
-	// alert(typeof(localStorage['isLogin']))
-	if(localStorage['isLogin'] == 'false'){
-		if(!store.state.user.openid && to.path != '/member/oriza'){
+	// alert(typeof(localStorage['isLogin']))	
+	// let openid = localStorage['_openid_'];
+	let openid = sessionStorage['_openid_'];
+
+	alert(openid)
+		if(!openid && (to.path != '/member/oriza')){
+			// alert(openid)
 			window.localStorage.setItem("beforeLoginUrl",to.fullPath);//保存用户进入的url
 
 			let ua = window.navigator.userAgent.toLowerCase()
 			if(ua.match(/MicroMessenger/i) == 'micromessenger'){
 				next("/member/oriza");
-			}else{
-				console.log("不是微信")
-			}
-
-			
+				return false;
+			}			
 			// return false;
 		}
-	}
+	
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
