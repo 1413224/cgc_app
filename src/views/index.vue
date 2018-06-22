@@ -239,7 +239,7 @@
 				],
 				demoList: [{
 						img: './static/index/lt.png',
-						url: 'http://www.cgc999.com/app/index.php?i=7&c=entry&m=mx_shop&do=mobile&r=page_detail&pid=4',
+						url: 'http://www.cgc999.com/app/index.php?i=7&c=entry&m=mx_shop&do=mobile&r=page_detail&pid=8',
 						wbu: true
 					},
 					{
