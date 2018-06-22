@@ -92,7 +92,7 @@
 		},
 		created() {
 			this.getUserInfo()
-			this.qrcodeVal = 'http://192.168.3.145:8080/#/user/reg?parentId=' + this.$store.state.user.userId
+			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
 			this.width = Number(document.body.clientWidth * 0.6773333333333333)
 		},
 		mounted() {},

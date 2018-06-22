@@ -102,9 +102,11 @@ Vue.config.productionTip = false
 import dialog from '@/components/dialog'
 import code from '@/components/code'
 import scimg from '@/components/scimg'
+import popup from '@/components/popup'
 Vue.use(dialog)
 Vue.use(code)
 Vue.use(scimg)
+Vue.use(popup)
 
 //引用动画库
 import animate from 'animate.css'
@@ -147,10 +149,14 @@ store.registerModule('vux', {
 })
 
 const history = window.sessionStorage
+
+var isPopup = history.getItem('isPopup')
+//history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
+
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' || key != '_openid_'){
+	if(key != 'isPopup' || key != '_openid_') {
 		history.removeItem(key)
 	}
 }
@@ -180,8 +186,7 @@ methods.forEach(key => {
 })
 
 router.beforeEach(function(to, from, next) {
-	// alert(localStorage['isLogin'])
-	// alert(typeof(localStorage['isLogin']))	
+
 	// let openid = localStorage['_openid_'];
 	let openid = sessionStorage['_openid_'];
 
@@ -198,6 +203,23 @@ router.beforeEach(function(to, from, next) {
 			// return false;
 		}
 	
+
+
+	//奖励弹窗
+	if(isPopup || sessionStorage.getItem('isPopup')) {
+		Vue.$popup.hide()
+	} else {
+		if(store.state.page.isLogin != 'true' && to.path != '/user/reg') {
+			history.setItem('isPopup', 1)
+			Vue.$popup.show({
+				showZc: true
+			})
+		} else {
+			Vue.$popup.hide()
+		}
+	}
+
+
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
