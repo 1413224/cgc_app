@@ -121,27 +121,27 @@
 				userInfo: {},
 				images: '',
 				infoList: [{
-						img: './static/member/member_1.png',
+						img: './static/member/m-index1.png',
 						text: '我的优惠券',
 						url: '/member/coupon/index'
 					},
 					{
-						img: './static/member/member_3.png',
+						img: './static/member/m-index2.png',
 						text: '我的关注',
 						url: '/member/follow/index'
 					},
 					{
-						img: './static/member/member_4.png',
+						img: './static/member/m-index3.png',
 						text: '收货地址',
 						url: '/member/address/index'
 					},
 					{
-						img: './static/member/member_4.png',
+						img: './static/member/m-index4.png',
 						text: '积分商城',
 						url: '/shop'
 					},
 					{
-						img: './static/member/m_index12.png',
+						img: './static/member/m-index5.png',
 						text: '多商户商城',
 						url: '/multi_user_mall/summary'
 					},
@@ -152,7 +152,7 @@
 					},*/
 					
 					{
-						img: './static/member/m_index17.png',
+						img: './static/member/m-index6.png',
 						text: '幸运抽奖',
 						url: '/draw'
 					},

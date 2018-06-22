@@ -31,11 +31,11 @@
 					<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
 				</li>
 			</ul>
-			<popup v-model="priceShang" id="distanceType" :show-mask="false">
+			<div id="distanceType" v-if="priceShang">
 				<group>
 					<radio class="opPrice" title="title" :options="opPrice" :value="listType" @on-change="changePrice"></radio>
 				</group>
-			</popup>
+			</div>
 		</div>
 
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
@@ -673,10 +673,12 @@
 	*/
 	
 	#distanceType {
+		width: 100%;
 		position: absolute;
 		top: 0.9rem;
 		bottom: inherit;
 		max-height: 500%;
+		z-index: 9999;
 	}
 	
 	.nav .vux-no-group-title {

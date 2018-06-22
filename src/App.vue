@@ -82,15 +82,15 @@
 				} else {
 					document.title = '大健康App'
 				}
-				
+
 				//自定义组件关闭
 				this.$code.hide()
 				this.$dialog.hide()
 				this.$scImg.hide()
 			},
 			//未登录 删除缓存个人信息
-			isLogin(){
-				if(this.isLogin == false){
+			isLogin() {
+				if(this.isLogin == false) {
 					localStorage.removeItem('userInfo')
 				}
 			}

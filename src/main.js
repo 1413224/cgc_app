@@ -203,7 +203,7 @@ router.beforeEach(function(to, from, next) {
 
 	let info = base64_decode(localStorage['_HASH_'])
 
-	if(info){
+	if(info) {
 		store.state.user.userId = info.id
 	}
 
@@ -318,14 +318,31 @@ router.beforeEach(function(to, from, next) {
 				++historyCount
 				history.setItem('count', historyCount)
 				to.path !== '/' && history.setItem(to.path, historyCount)
+
+				store.commit('UPDATE_DIRECTION', {
+					direction: ''
+				})
+
 				if(startX > 0) {
 					store.commit('UPDATE_DIRECTION', {
 						direction: 'forward'
 					})
 				} else {
-					store.commit('UPDATE_DIRECTION', {
-						direction: ''
-					})
+					if(store.state.page.direction == '') {
+						if(history.length > 2) {
+							store.commit('UPDATE_DIRECTION', {
+								direction: 'reverse'
+							})
+						}
+					} else if(store.state.page.direction == 'forward') {
+						store.commit('UPDATE_DIRECTION', {
+							direction: 'forward'
+						})
+					} else if(store.state.page.direction == 'reverse') {
+						store.commit('UPDATE_DIRECTION', {
+							direction: 'reverse'
+						})
+					}
 				}
 			}
 		}

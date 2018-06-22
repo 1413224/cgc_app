@@ -225,9 +225,8 @@
 							立即注册
 						</div>
 					</div>
-
-					<img @click="showNew2 = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
 				</div>
+				<img @click="showNew2 = false" class="gb_img" src="../../static/images/xr_gb.png" alt="" />
 			</x-dialog>
 		</div>
 	</section>
@@ -451,7 +450,7 @@
 					//						]
 					//					}
 				],
-				articleList:[],
+				articleList: [],
 				showNew: false, //购物奖励弹窗
 				showNew2: true, //新人奖励弹窗
 				zcList: [{
@@ -474,9 +473,9 @@
 		},
 		created() {
 			var _this = this
-			if(_this.$store.state.page.isLogin == 'true'){
+			if(_this.$store.state.page.isLogin == 'true') {
 				_this.showNew2 = false
-			}else{
+			} else {
 				_this.showNew2 = true
 			}
 		},
@@ -488,7 +487,7 @@
 			goUrl(url) {
 				window.location.href = url
 			},
-			onLoadArticle(){
+			onLoadArticle() {
 				let _this = this
 				// let parJson = {
 				// 	pagesize:6,
@@ -496,11 +495,11 @@
 				// }
 				// let par = Qs.stringify(parJson)
 				_this.$http.post(url.article.getArticleLists).then((res) => {
-					if(res.status == 200 && res.data != null){
-						
+					if(res.status == 200 && res.data != null) {
+
 						_this.articleList = res.data.result.lists
 						// console.log(_this.articleList)
-					}else{
+					} else {
 						Vue.$vux.toast.show({
 							text: "请求快讯失败",
 							type: 'text',
@@ -508,12 +507,12 @@
 							width: '50%'
 						})
 					}
-					
+
 				}).catch((err) => {
 					console.log(err);
 				});
 			},
-			goArticleDetail(uri){
+			goArticleDetail(uri) {
 				window.location.href = uri;
 			}
 		},
@@ -542,6 +541,11 @@
 		padding-bottom: 1rem;
 		.zcBox {
 			.zc_box {
+				height: 6rem;
+				background: url(../../static/images/zc_bg.png) no-repeat;
+				background-size: 100%;
+				position: relative;
+				padding-top: 2.27rem;
 				.zc-btn {
 					width: 5.16rem;
 					height: 0.8rem;
@@ -551,15 +555,16 @@
 					font-size: 0.34rem;
 					font-family: PingFangSC-Semibold;
 					color: rgba(209, 14, 22, 1);
-					margin: 0 auto;
-					margin-top: 0.35rem;
+					position: absolute;
+					left: 50%;
+					bottom: 0%;
+					transform: translate(-50%, -50%);
 				}
 				.zc_content {
-					position: relative;
-					background: url(../../static/images/zc_bg.png) no-repeat;
-					background-size: 100% 100%;
-					padding: 2rem 0.2rem 0.35rem 0.2rem;
+					padding: 0rem 0.2rem 0.35rem 0.2rem;
 					box-sizing: border-box;
+					height: 4.5rem;
+					overflow-y: auto;
 					.item_box {
 						background: url(../../static/images/it_bg.png) no-repeat;
 						background-size: 100% 100%;
@@ -612,11 +617,11 @@
 						margin-bottom: 0px!important;
 					}
 				}
-				.gb_img {
-					width: 0.82rem;
-					height: 0.82rem;
-					margin-top: 0.33rem;
-				}
+			}
+			.gb_img {
+				width: 0.82rem;
+				height: 0.82rem;
+				margin-top: 0.33rem;
 			}
 		}
 		.xrBox {
@@ -740,11 +745,11 @@
 			font-family: PingFangSC-Light;
 			color: rgba(66, 88, 132, 1);
 			font-size: 0.24rem;
-			.vux-marquee{
-				width:5rem !important;
-				line-height:32px;
+			.vux-marquee {
+				width: 5rem !important;
+				line-height: 32px;
 				font-size: 14px;
-				.align-middle{
+				.align-middle {
 					// display: inline-block;
 					overflow: hidden;
 					text-overflow: ellipsis;
