@@ -68,7 +68,8 @@
 				isAgree: true,
 				parentId: '',
 				frompath: '',
-				isCp:false
+				isCp:false,
+				pid:''
 			}
 		},
 		created() {
@@ -219,13 +220,24 @@
 			login() {
 				var _this = this
 
-				_this.$http.post(this.url.user.userLogin, {
+				let pid = this.$store.state.user.openid
+
+				// alert(pid)
+				let params={
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
 					password: _this.MD5(_this.password),
-					terminal: _this.url.client
-				}).then(function(res) {
+					terminal: _this.url.client,
+					// type: pid ? 1 : 0,
+					// unionid: pid ? pid : " "
+				}
+				if(pid){
+					params.type = 1;
+					params.unionid = pid;
+				}
+
+				_this.$http.post(this.url.user.userLogin, params).then(function(res) {
 					if(res.data.status == "00000000") {
 
 						let hash = base64_encode(res.data.data)

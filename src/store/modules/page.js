@@ -1,4 +1,8 @@
 var isLogin = localStorage['isLogin']
+var userInfo = {}
+if(localStorage['userInfo']){
+	userInfo = JSON.parse(localStorage['userInfo'])
+}
 const page = {
 	state: {
 		direction: 'forward',
@@ -9,7 +13,7 @@ const page = {
 		includeList:[],
 		ispreview:false,
 		isWx:true,
-		userInfo:{}
+		userInfo:userInfo
 	},
 	mutations: {
 		UPDATE_DIRECTION(state, payload) {
@@ -18,8 +22,14 @@ const page = {
 		UPDATE_DACK(state, payload) {
 			state.back = payload.back
 		},
-		UPDATE_LOADING(state, status) {
-			state.isLoading = status
+		UPDATE_LOADING(state, isLoading) {
+			state.isLoading = isLoading
+		},
+		UPDATE_USER_INFO(state, userInfo){
+			state.userInfo = userInfo
+		},
+		setIsLogin(state,isLogin){
+			state.isLogin = isLogin
 		}
 	}
 }

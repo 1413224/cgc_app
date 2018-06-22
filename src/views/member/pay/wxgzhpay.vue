@@ -11,6 +11,9 @@
 			}
 		},
 		created() {
+
+			// console.log(this.$route.query)
+
 			if (typeof WeixinJSBridge == "undefined"){
 			   if( document.addEventListener ){
 			       document.addEventListener('WeixinJSBridgeReady', this.wxPay, false);
@@ -38,19 +41,19 @@
 				    "feeType": "CNY",
 				    "goodsTag": "",
 				    "limitPay": "",
-				    "mchId": "1388332102",
-				    "nonceStr": "4YikgmsTL1Uz589Dj3qYVhFHriBnVKVE",
-				    "notifyUrl": "https://new.cgc999.com/apigw/pay/thirdparty/wechat/payNotify",
+				    "mchId": "",
+				    "nonceStr": "",
+				    "notifyUrl": "",
 				    "openId": "oWt0-v2aZpxag827DGfCz46xl-zU",
 				    "outTradeNo": Math.random().toString(36).substr(2),
 				    "productId": "",
 				    "sceneInfo": "",
 				    "sign": "",
-				    "signType": "MD5",
+				    "signType": "",
 				    "spbillCreateIp": "192.168.3.140",
 				    "timeExpire": "",
 				    "timeStart": "",
-				    "totalFee": 1,
+				    "totalFee": 1,//金额
 				    "tradeType": "JSAPI",
 				    "requestUrl":window.location.href
 				}).then((res)=>{

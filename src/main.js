@@ -147,7 +147,15 @@ store.registerModule('vux', {
 })
 
 const history = window.sessionStorage
-history.clear()
+//history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
+for(var i = 0, len = history.length; i < len; i++) {
+	var key = history.key(i)
+	var value = history.getItem(key)
+	if(key != 'isPopup' || key != '_openid_'){
+		history.removeItem(key)
+	}
+}
+
 let historyCount = history.getItem('count') * 1;
 
 let isPush = false
@@ -175,27 +183,21 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	//	//判断是否是微信浏览器
-	//	let ua = window.navigator.userAgent.toLowerCase()
-	//	if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-	//		// 跳转到微信授权页面
-	//		if(!store.state.user.openid) {
-	//			axios.get(url.origin.getAuthorizationUrl, {
-	//				params: {
-	//					platformId: '2018052100000001',
-	//					type: 1
-	//				}
-	//			}).then((res) => {
-	//				if(res.data.status == '00000000') {
-	//					let data = res.data
-	//					window.location.href = data.data
-	//				}
-	//			});
+	//	if(localStorage['isLogin'] == 'false'){
+	//		if(!store.state.user.openid && to.path != '/member/oriza'){
+	//			window.localStorage.setItem("beforeLoginUrl",to.fullPath);//保存用户进入的url
+	//
+	//			let ua = window.navigator.userAgent.toLowerCase()
+	//			if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+	//				next("/member/oriza");
+	//			}else{
+	//				console.log("不是微信")
+	//			}
+	//
+	//			
+	//			// return false;
 	//		}
-	//	} else {
-	//		console.log("不是微信")
 	//	}
-
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
