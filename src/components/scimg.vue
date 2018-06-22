@@ -29,7 +29,8 @@
 				url: "",
 				imgCropperData: {
 					accept: "image/gif, image/jpeg, image/png, image/jpg"
-				}
+				},
+				name: ''
 			};
 		},
 		methods: {
@@ -62,6 +63,7 @@
 
 				let type = files[0].type; //文件的类型，判断是否是图片
 				let size = files[0].size; //文件的大小，判断图片的大小
+				_this.name = files[0].name
 				if(this.imgCropperData.accept.indexOf(type) == -1) {
 					this.panel = false;
 					this.Cancel()
@@ -114,38 +116,38 @@
 				// Round
 				roundedCanvas = this.getRoundedCanvas(croppedCanvas);
 				this.headerImage = roundedCanvas.toDataURL()
+				var b = _this.dataURLtoFile(this.headerImage, _this.name)
+
 				//上传图片
-				croppedCanvas.toBlob(function(blob) {
-					var data = {
-						type: 'user',
-						name: '1',
-						file: blob
-					}
-					_this.$http.post(_this.url2.user.fileuploadImage, data).then((res) => {
-						if(res.data.status == '00000000') {
-							_this.$http.post(_this.url2.user.changeAvatar, {
-								userId: _this.vm.$store.state.user.userId,
-								avatarId: res.data.data.fileId
-							}).then((res) => {
-								_this.vm.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '上传成功'
-								})
-								_this.Confirm()
-							})
-						} else {
+				var data = {
+					type: 'user',
+					name: '1',
+					file: b
+				}
+				_this.$http.post(_this.url2.user.fileuploadImage, data).then((res) => {
+					if(res.data.status == '00000000') {
+						_this.$http.post(_this.url2.user.changeAvatar, {
+							userId: _this.vm.$store.state.user.userId,
+							avatarId: res.data.data.fileId
+						}).then((res) => {
 							_this.vm.$vux.toast.show({
 								width: '50%',
 								type: 'text',
 								position: 'middle',
-								text: '上传失败'
+								text: '上传成功'
 							})
-							_this.Cancel()
-						}
-					})
-				});
+							_this.Confirm()
+						})
+					} else {
+						_this.vm.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '上传失败'
+						})
+						_this.Cancel()
+					}
+				})
 			},
 			//canvas画图
 			getRoundedCanvas(sourceCanvas) {
@@ -170,33 +172,18 @@
 				context.fill();
 				return canvas;
 			},
-			processData(dataUrl) {
-				var binaryString = window.atob(dataUrl.split(',')[1]);
-				var arrayBuffer = new ArrayBuffer(binaryString.length);
-				var intArray = new Uint8Array(arrayBuffer);
-				for(var i = 0, j = binaryString.length; i < j; i++) {
-					intArray[i] = binaryString.charCodeAt(i);
+			dataURLtoFile(dataurl, filename) {
+				var arr = dataurl.split(','),
+					mime = arr[0].match(/:(.*?);/)[1],
+					bstr = atob(arr[1]),
+					n = bstr.length,
+					u8arr = new Uint8Array(n);
+				while(n--) {
+					u8arr[n] = bstr.charCodeAt(n);
 				}
-
-				var data = [intArray],
-					blob;
-
-				try {
-					blob = new Blob(data);
-				} catch(e) {
-					window.BlobBuilder = window.BlobBuilder ||
-						window.WebKitBlobBuilder ||
-						window.MozBlobBuilder ||
-						window.MSBlobBuilder;
-					if(e.name === 'TypeError' && window.BlobBuilder) {
-						var builder = new BlobBuilder();
-						builder.append(arrayBuffer);
-						blob = builder.getBlob(imgType); // imgType为上传文件类型，即 file.type
-					} else {
-						console.log('版本过低，不支持上传图片');
-					}
-				}
-				return blob;
+				return new File([u8arr], filename, {
+					type: mime
+				});
 			}
 		},
 		watch: {
