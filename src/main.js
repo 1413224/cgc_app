@@ -189,21 +189,18 @@ router.beforeEach(function(to, from, next) {
 
 	// let openid = localStorage['_openid_'];
 	let openid = sessionStorage['_openid_']
+	alert(openid)
 
-	// alert(openid)
-		if(!openid && (to.path != '/member/oriza')){
-			// alert(openid)
-			window.localStorage.setItem("beforeLoginUrl",to.fullPath);//保存用户进入的url
+	if(!openid && (to.path != '/member/oriza')) {
 
-			let ua = window.navigator.userAgent.toLowerCase()
-			if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-				next("/member/oriza")
-				return false
-			}			
-			// return false;
+		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
+
+		let ua = window.navigator.userAgent.toLowerCase()
+		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+			next("/member/oriza")
+			return false
 		}
-	
-
+	}
 
 	//奖励弹窗
 	if(isPopup || sessionStorage.getItem('isPopup')) {
@@ -219,7 +216,6 @@ router.beforeEach(function(to, from, next) {
 		}
 	}
 
-
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
@@ -227,7 +223,7 @@ router.beforeEach(function(to, from, next) {
 
 	let info = base64_decode(localStorage['_HASH_'])
 
-	if(info){
+	if(info) {
 		store.state.user.userId = info.id
 	}
 

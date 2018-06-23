@@ -9,7 +9,7 @@
 			</div>
 		</div>
 
-		<div class="nav">
+		<div class="nav1">
 			<div class="area" @click="onArea()">
 				<p class="areaDetail">{{region}}<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 			</div>
@@ -681,7 +681,7 @@
 		z-index: 9999;
 	}
 	
-	.nav .vux-no-group-title {
+	.nav1 .vux-no-group-title {
 		margin-top: 0!important;
 	}
 	
@@ -720,7 +720,7 @@
 		/*position:relative !important;*/
 	}
 	
-	.nav {
+	.nav1 {
 		border-top: 1px solid #eee;
 		width: 100%;
 		height: .9rem;
