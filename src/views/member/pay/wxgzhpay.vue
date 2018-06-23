@@ -32,6 +32,8 @@
 		methods: {
 			wxPay(){
 				console.log(window.location.href.split('#')[0])
+				var oid = sessionStorage['_openid_'];
+				alert(oid)
 				this.$http.post('/pay/v1/wechat/pay',{
 					"appid": "wx7a4933a7a3c33ec8",
 				    "attach": "",
@@ -41,21 +43,21 @@
 				    "feeType": "CNY",
 				    "goodsTag": "",
 				    "limitPay": "",
-				    "mchId": "",
-				    "nonceStr": "",
-				    "notifyUrl": "",
+				    // "mchId": "",
+				    // "nonceStr": "",
+				    // "notifyUrl": "",
 				    "openId": "oWt0-v2aZpxag827DGfCz46xl-zU",
 				    "outTradeNo": Math.random().toString(36).substr(2),
 				    "productId": "",
 				    "sceneInfo": "",
-				    "sign": "",
-				    "signType": "",
+				    // "sign": "",
+				    // "signType": "",
 				    "spbillCreateIp": "192.168.3.140",
 				    "timeExpire": "",
 				    "timeStart": "",
 				    "totalFee": 1,//金额
 				    "tradeType": "JSAPI",
-				    "requestUrl":window.location.href
+				    // "requestUrl":window.location.href
 				}).then((res)=>{
 					console.log(res)
 					let data=res.data.data
@@ -136,7 +138,9 @@
 
 				})
 			},
-
+			getParams(){
+				
+			}
 
 			
 		},
