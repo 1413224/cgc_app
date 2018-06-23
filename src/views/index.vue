@@ -189,6 +189,7 @@
 				</div>-->
 			</div>
 		</div>
+		<button @click="goPay()">支付页</button>
 	</section>
 </template>
 
@@ -423,6 +424,9 @@
 		methods: {
 			goUrl(url) {
 				window.location.href = url
+			},
+			goPay(){
+				this.$router.push({path:'/member/pay/wxgzhpay'})
 			},
 			onLoadArticle() {
 				let _this = this

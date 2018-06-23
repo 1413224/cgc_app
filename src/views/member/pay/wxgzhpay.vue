@@ -7,12 +7,12 @@
 	export default {
 		data() {
 			return {
-				
+				ip:""
 			}
 		},
 		created() {
 
-			// console.log(this.$route.query)
+
 
 			if (typeof WeixinJSBridge == "undefined"){
 			   if( document.addEventListener ){
@@ -25,15 +25,25 @@
 			   // onBridgeReady();
 			   this.wxPay();
 			}
-			/*console.log(Math.random().toString(36).substr(2))
-			this.wxPay();*/
+			
+			// this.getUserIP(function(ip){
+			// 	this.ip = ip;
+			// });
 		},
 
 		methods: {
 			wxPay(){
+				var _this = this;
 				console.log(window.location.href.split('#')[0])
 				var oid = sessionStorage['_openid_'];
-				alert(oid)
+				// alert(oid);
+
+				this.getUserIP(function(ip){
+					this.ip = ip;
+				});
+
+
+
 				this.$http.post('/pay/v1/wechat/pay',{
 					"appid": "wx7a4933a7a3c33ec8",
 				    "attach": "",
@@ -46,13 +56,13 @@
 				    // "mchId": "",
 				    // "nonceStr": "",
 				    // "notifyUrl": "",
-				    "openId": "oWt0-v2aZpxag827DGfCz46xl-zU",
+				    "openId": oid,
 				    "outTradeNo": Math.random().toString(36).substr(2),
 				    "productId": "",
 				    "sceneInfo": "",
 				    // "sign": "",
 				    // "signType": "",
-				    "spbillCreateIp": "192.168.3.140",
+				    "spbillCreateIp": _this.ip,
 				    "timeExpire": "",
 				    "timeStart": "",
 				    "totalFee": 1,//金额
@@ -82,26 +92,6 @@
 						]
 					});
 
-
-					/*wx.ready(function(){
-                         
-                    });*/
-     //                WeixinJSBridge.invoke(
-					//    'getBrandWCPayRequest', {
-					//        "appId":data.appId,     //公众号名称，由商户传入     
-					//        "timeStamp":data.timeStamp,         //时间戳，自1970年以来的秒数     
-					//        "nonceStr":data.nonceStr, //随机串     
-					//        "package":data.package,     
-					//        "signType":data.signType,         //微信签名方式：     
-					//        "paySign":data.signature //微信签名 
-					//    },
-					//    function(res){  
-					//    		console.log(res)
-					//         if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-					//        		alert(200)
-					//         }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-					//    }
-					// );
 					wx.chooseWXPay({  
 					    appId: data.appId,   
 					    timestamp:data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
@@ -110,36 +100,50 @@
 					    signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
 					    paySign: data.paySign, // 支付签名  
 					    success: function (res) {  
-					          alert(1)
+					        //   alert(1)
 					          console.log(res)
 					    },  
 					    cancel:function(res){  
 					           console.log(res)
 					    }  
-					});  
-
-
-					/*WeixinJSBridge.invoke(
-					   'getBrandWCPayRequest', {
-					       "appId":data.appId,     //公众号名称，由商户传入     
-					       "timeStamp":data.timeStamp,         //时间戳，自1970年以来的秒数     
-					       "nonceStr":data.nonceStr, //随机串     
-					       "package":data.package,     
-					       "signType":data.signType,         //微信签名方式：     
-					       "paySign":data.paySign //微信签名 
-					   },
-					   function(res){  
-					   		console.log(res)
-					        if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-					       		// alert(res.err_msg)
-					        }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-					   }
-					); */
+					});
 
 				})
 			},
-			getParams(){
-				
+			getUserIP(onNewIP){
+				var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+				var pc = new myPeerConnection({
+					iceServers: []
+				}),
+				noop = function() {},
+				localIPs = {},
+				ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+				key;
+
+				function iterateIP(ip) {
+					if (!localIPs[ip]) onNewIP(ip);
+					localIPs[ip] = true;
+				}
+
+				pc.createDataChannel("");
+
+				pc.createOffer().then(function(sdp) {
+					sdp.sdp.split('\n').forEach(function(line) {
+						if (line.indexOf('candidate') < 0) return;
+						line.match(ipRegex).forEach(iterateIP);
+					});
+					
+					pc.setLocalDescription(sdp, noop, noop);
+				}).catch(function(reason) {
+					// An error occurred, so handle the failure to connect
+				});
+
+				pc.onicecandidate = function(ice) {
+					if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+					ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
+				};
+
+
 			}
 
 			
