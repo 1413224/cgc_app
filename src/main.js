@@ -150,7 +150,6 @@ store.registerModule('vux', {
 
 const history = window.sessionStorage
 
-var isPopup = history.getItem('isPopup')
 //history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
 
 for(var i = 0, len = history.length; i < len; i++) {
@@ -199,20 +198,6 @@ router.beforeEach(function(to, from, next) {
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
 			next("/member/oriza")
 			return false
-		}
-	}
-
-	//奖励弹窗
-	if(isPopup || sessionStorage.getItem('isPopup')) {
-		Vue.$popup.hide()
-	} else {
-		if(store.state.page.isLogin != 'true' && to.path != '/user/reg') {
-			history.setItem('isPopup', 1)
-			Vue.$popup.show({
-				showZc: true
-			})
-		} else {
-			Vue.$popup.hide()
 		}
 	}
 
