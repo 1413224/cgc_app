@@ -29,7 +29,6 @@ export default {
 			}).then((res) => {
 				if(res.data.status == '00000000') {
 					let data = res.data
-					// console.log(res.data)
 					window.location.href = data.data
 				}
 			});
@@ -45,12 +44,12 @@ export default {
 			
 			if(openid){
 
-				this.$store.commit('getOpenId',openid);
-				// localStorage.setItem('_openid_',openid);
-				sessionStorage.setItem('_openid_',openid);
+				this.$store.commit('getOpenId',openid)
+				// localStorage.setItem('_openid_',openid)
+				sessionStorage.setItem('_openid_',openid)
 
 				if(uid && acscode && token){
-					// alert("存在信息")
+					
 					let hash = {
 						id : uid,
 						randomAccessCode : acscode,
@@ -59,7 +58,8 @@ export default {
 
 					localStorage.setItem('_HASH_', base64_encode(hash))
 
-					this.$store.state.page.isLogin = 'true'
+					_this.$store.state.page.isLogin = 'true'
+					
 					localStorage.setItem('isLogin', true)	
 					
 					//获取用户信息
@@ -73,13 +73,14 @@ export default {
 								_this.$store.commit('UPDATE_USER_INFO', res.data.data)
 					
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-								_this.$router.push({path:localStorage['beforeLoginUrl']});
+								
+								_this.$router.push({path:localStorage['beforeLoginUrl']})
 							}
 						})
 
 				}else{
 					
-					this.$router.push({path:localStorage['beforeLoginUrl']});
+					this.$router.push({path:localStorage['beforeLoginUrl']})
 				}
 				
 			}else{
@@ -94,8 +95,7 @@ export default {
 	},
 	watch:{
 		'$route': function (val) {
-			this.updateRouter();
-			console.log(val)
+			this.updateRouter()
 		}
 	}
 		
