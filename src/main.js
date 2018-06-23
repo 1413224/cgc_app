@@ -189,7 +189,7 @@ router.beforeEach(function(to, from, next) {
 	// let openid = localStorage['_openid_'];
 	let openid = sessionStorage['_openid_']
 	alert(openid)
-
+	alert(!openid && (to.path != '/member/oriza'))
 	if(!openid && (to.path != '/member/oriza')) {
 		alert(1)
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
@@ -200,7 +200,7 @@ router.beforeEach(function(to, from, next) {
 			return false
 		}
 	}
-
+    alert(6)
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
