@@ -85,21 +85,21 @@
 							path: localStorage['beforeLoginUrl']
 						})
 
-						//奖励弹窗
-						alert(sessionStorage.getItem('isPopup'))
-						alert(_this.$route.path)
-						if(sessionStorage.getItem('isPopup')) {
-							_this.$popup.hide()
-						} else {
-							if(_this.$store.state.page.isLogin != 'true' && _this.$route.path != '/user/reg') {
-								sessionStorage.setItem('isPopup', 1)
-								_this.$popup.show({
-									showZc: true
-								})
-							} else {
-								_this.$popup.hide()
-							}
-						}
+//						//奖励弹窗
+//						alert(sessionStorage.getItem('isPopup'))
+//						alert(_this.$route.path)
+//						if(sessionStorage.getItem('isPopup')) {
+//							_this.$popup.hide()
+//						} else {
+//							if(_this.$store.state.page.isLogin != 'true' && _this.$route.path != '/user/reg') {
+//								sessionStorage.setItem('isPopup', 1)
+//								_this.$popup.show({
+//									showZc: true
+//								})
+//							} else {
+//								_this.$popup.hide()
+//							}
+//						}
 					}
 
 				} else {
