@@ -196,7 +196,7 @@ router.beforeEach(function(to, from, next) {
 
 		let ua = window.navigator.userAgent.toLowerCase()
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-			next("/member/oriza")
+			next({path: '/member/oriza',replace:true})
 			return false
 		}
 	}
