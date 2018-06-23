@@ -191,7 +191,7 @@ router.beforeEach(function(to, from, next) {
 	alert(openid)
 
 	if(!openid && (to.path != '/member/oriza')) {
-
+		alert(1)
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 
 		let ua = window.navigator.userAgent.toLowerCase()

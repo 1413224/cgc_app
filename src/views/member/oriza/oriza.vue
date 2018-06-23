@@ -42,13 +42,13 @@
 				let token = this.$route.query.token
 
 				if(openid) {
-
+					alert(2)
 					this.$store.commit('getOpenId', openid)
 					// localStorage.setItem('_openid_',openid)
 					sessionStorage.setItem('_openid_', openid)
 
 					if(uid && acscode && token) {
-
+						alert(4)
 						let hash = {
 							id: uid,
 							randomAccessCode: acscode,
@@ -80,29 +80,30 @@
 						})
 
 					} else {
-
+						alert(5)
 						_this.$router.push({
 							path: localStorage['beforeLoginUrl']
 						})
 
-//						//奖励弹窗
-//						alert(sessionStorage.getItem('isPopup'))
-//						alert(_this.$route.path)
-//						if(sessionStorage.getItem('isPopup')) {
-//							_this.$popup.hide()
-//						} else {
-//							if(_this.$store.state.page.isLogin != 'true' && _this.$route.path != '/user/reg') {
-//								sessionStorage.setItem('isPopup', 1)
-//								_this.$popup.show({
-//									showZc: true
-//								})
-//							} else {
-//								_this.$popup.hide()
-//							}
-//						}
+						//						//奖励弹窗
+						//						alert(sessionStorage.getItem('isPopup'))
+						//						alert(_this.$route.path)
+						//						if(sessionStorage.getItem('isPopup')) {
+						//							_this.$popup.hide()
+						//						} else {
+						//							if(_this.$store.state.page.isLogin != 'true' && _this.$route.path != '/user/reg') {
+						//								sessionStorage.setItem('isPopup', 1)
+						//								_this.$popup.show({
+						//									showZc: true
+						//								})
+						//							} else {
+						//								_this.$popup.hide()
+						//							}
+						//						}
 					}
 
 				} else {
+					alert(3)
 					this.grant()
 				}
 			}
