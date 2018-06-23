@@ -149,8 +149,10 @@ store.registerModule('vux', {
 })
 
 const history = window.sessionStorage
+
 var isPopup = history.getItem('isPopup')
 //history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
+
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
@@ -185,38 +187,38 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	//	if(localStorage['isLogin'] == 'false'){
-	//		if(!store.state.user.openid && to.path != '/member/oriza'){
-	//			window.localStorage.setItem("beforeLoginUrl",to.fullPath);//保存用户进入的url
-	//
-	//			let ua = window.navigator.userAgent.toLowerCase()
-	//			if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-	//				next("/member/oriza");
-	//			}else{
-	//				console.log("不是微信")
-	//			}
-	//
-	//			
-	//			// return false;
-	//		}
-	//	}
-	console.log(store.state.page.isLogin)
+	// let openid = localStorage['_openid_'];
+	let openid = sessionStorage['_openid_']
+
+	// alert(openid)
+		if(!openid && (to.path != '/member/oriza')){
+			// alert(openid)
+			window.localStorage.setItem("beforeLoginUrl",to.fullPath);//保存用户进入的url
+
+			let ua = window.navigator.userAgent.toLowerCase()
+			if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+				next("/member/oriza")
+				return false
+			}			
+			// return false;
+		}
+	
+
+
 	//奖励弹窗
 	if(isPopup || sessionStorage.getItem('isPopup')) {
 		Vue.$popup.hide()
-		console.log(1)
 	} else {
 		if(store.state.page.isLogin != 'true' && to.path != '/user/reg') {
 			history.setItem('isPopup', 1)
 			Vue.$popup.show({
 				showZc: true
 			})
-			console.log(2)
 		} else {
 			Vue.$popup.hide()
-			console.log(3)
 		}
 	}
+
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
@@ -225,7 +227,7 @@ router.beforeEach(function(to, from, next) {
 
 	let info = base64_decode(localStorage['_HASH_'])
 
-	if(info) {
+	if(info){
 		store.state.user.userId = info.id
 	}
 
@@ -340,31 +342,14 @@ router.beforeEach(function(to, from, next) {
 				++historyCount
 				history.setItem('count', historyCount)
 				to.path !== '/' && history.setItem(to.path, historyCount)
-
-				store.commit('UPDATE_DIRECTION', {
-					direction: ''
-				})
-
 				if(startX > 0) {
 					store.commit('UPDATE_DIRECTION', {
 						direction: 'forward'
 					})
 				} else {
-					if(store.state.page.direction == '') {
-						if(history.length > 2) {
-							store.commit('UPDATE_DIRECTION', {
-								direction: 'reverse'
-							})
-						}
-					} else if(store.state.page.direction == 'forward') {
-						store.commit('UPDATE_DIRECTION', {
-							direction: 'forward'
-						})
-					} else if(store.state.page.direction == 'reverse') {
-						store.commit('UPDATE_DIRECTION', {
-							direction: 'reverse'
-						})
-					}
+					store.commit('UPDATE_DIRECTION', {
+						direction: ''
+					})
 				}
 			}
 		}

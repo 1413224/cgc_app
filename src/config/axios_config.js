@@ -5,7 +5,6 @@ import isload from '@/components/isload'
 import router from '@/router'
 import url from '../config/url.js'
 import { base64_decode } from '../global/course.js'
-import mainApp from '../global/global.js'
 
 import MD5 from 'js-md5'
 
@@ -13,8 +12,8 @@ Vue.use(isload)
 
 axios.defaults.retry = 4 //请求次数
 axios.defaults.retryDelay = 1000 //请求间隙
-//axios.defaults.baseURL = 'http://47.104.187.243:18666' // 请求默认地址
-axios.defaults.baseURL = 'http://39.108.208.106/apigw' // 请求默认地址
+axios.defaults.baseURL = '//domain.cgc999.com/apigw' // 请求默认地址
+//http://47.104.187.243:18666
 
 var URL = ""
 
@@ -47,16 +46,16 @@ axios.interceptors.request.use(config => {
 	} else {
 		token = ""
 	}
-		
-	let timestamp = mainApp.getServerDate()
-	
+
+	// console.log(token)
+
+	let timestamp = Math.round(new Date().getTime() / 1000)
 	let sign = ''
 	if(token && config.url.split('/')[2] != 'public') {
 
 		sign = MD5(config.url + timestamp + userNp)
 	} else {
 		sign = MD5(config.url + timestamp)
-
 	}
 
 	let type = 'application/json;charset=utf-8'

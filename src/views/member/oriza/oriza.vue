@@ -37,29 +37,30 @@ export default {
 		updateRouter(){
 			var _this = this
 			let openid = this.$route.query.openId
-			let params = this.$route.query
+			// let params = this.$route.query
 
 			let uid = this.$route.query.userId
 			let acscode = this.$route.query.randomAccessCode
 			let token = this.$route.query.token
-
-			if(openid){
-				this.$store.commit('getOpenId',openid);
-				this.$router.push({path:localStorage['beforeLoginUrl']});
-				
-				let t = uid && acscode && token
 			
+			if(openid){
+
+				this.$store.commit('getOpenId',openid);
+				// localStorage.setItem('_openid_',openid);
+				sessionStorage.setItem('_openid_',openid);
+
 				if(uid && acscode && token){
+					// alert("存在信息")
 					let hash = {
 						id : uid,
 						randomAccessCode : acscode,
 						token : token
 					}
+
 					localStorage.setItem('_HASH_', base64_encode(hash))
+
 					this.$store.state.page.isLogin = 'true'
-					localStorage.setItem('isLogin', true)
-					this.$store.state.user.userId = uid
-					this.$store.commit('setUid',uid)
+					localStorage.setItem('isLogin', true)	
 					
 					//获取用户信息
 						_this.$http.get(_this.url.user.getBasicInfo, {
@@ -68,11 +69,17 @@ export default {
 							}
 						}).then((res) => {
 							if(res.data.status == "00000000") {
+
 								_this.$store.commit('UPDATE_USER_INFO', res.data.data)
+					
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
+								_this.$router.push({path:localStorage['beforeLoginUrl']});
 							}
 						})
 
+				}else{
+					
+					this.$router.push({path:localStorage['beforeLoginUrl']});
 				}
 				
 			}else{
