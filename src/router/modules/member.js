@@ -505,6 +505,7 @@ const memberModule = [{
 	{
 		path:'/member/oriza',
 		name:'wxoriza',
+		replace:true,
 		component: resolve => require(['@/views/member/oriza/oriza'], resolve),
 		meta: {
 			title: '微信授权'
