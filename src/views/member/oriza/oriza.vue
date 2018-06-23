@@ -42,13 +42,11 @@
 				let token = this.$route.query.token
 
 				if(openid) {
-					alert(2)
 					this.$store.commit('getOpenId', openid)
 					// localStorage.setItem('_openid_',openid)
 					sessionStorage.setItem('_openid_', openid)
 
 					if(uid && acscode && token) {
-						alert(4)
 						let hash = {
 							id: uid,
 							randomAccessCode: acscode,
@@ -80,7 +78,6 @@
 						})
 
 					} else {
-						alert(5)
 						_this.$router.push({
 							path: localStorage['beforeLoginUrl']
 						})
@@ -103,7 +100,6 @@
 					}
 
 				} else {
-					alert(3)
 					this.grant()
 				}
 			}

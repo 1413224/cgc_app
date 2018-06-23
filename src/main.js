@@ -151,7 +151,8 @@ store.registerModule('vux', {
 const history = window.sessionStorage
 
 //history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
-
+let openid = sessionStorage['_openid_']
+alert(openid)
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
@@ -159,6 +160,7 @@ for(var i = 0, len = history.length; i < len; i++) {
 		history.removeItem(key)
 	}
 }
+alert(openid)
 let historyCount = history.getItem('count') * 1;
 
 let isPush = false
@@ -187,11 +189,7 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	// let openid = localStorage['_openid_'];
-	let openid = sessionStorage['_openid_']
-	alert(openid)
-	alert(!openid && (to.path != '/member/oriza'))
 	if(!openid && (to.path != '/member/oriza')) {
-		alert(1)
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 
 		let ua = window.navigator.userAgent.toLowerCase()
@@ -200,7 +198,6 @@ router.beforeEach(function(to, from, next) {
 			return false
 		}
 	}
-    alert(6)
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 
