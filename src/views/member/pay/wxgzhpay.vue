@@ -39,7 +39,7 @@
 				// alert(oid);
 
 				this.getUserIP(function(ip){
-					this.ip = ip;
+					_this.ip = ip;
 				});
 
 
@@ -62,10 +62,10 @@
 				    "sceneInfo": "",
 				    // "sign": "",
 				    // "signType": "",
-				    "spbillCreateIp": _this.ip,
+				    "spbillCreateIp": "192.168.3.142",
 				    "timeExpire": "",
 				    "timeStart": "",
-				    "totalFee": 1,//金额
+				    "totalFee": 0.01,//金额
 				    "tradeType": "JSAPI",
 				    // "requestUrl":window.location.href
 				}).then((res)=>{
