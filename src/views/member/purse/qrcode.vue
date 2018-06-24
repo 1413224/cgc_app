@@ -1,12 +1,25 @@
 <template>
 	<div class="qrcode-box">
 		<settingHeader :title="title"></settingHeader>
-		<!--有赚钱码-->
-		<div v-if="grade>=1">
-			<div class="bg">
-				<p class="title">我的赚钱码</p>
-				<div class="b-w">
-					<!--<img class="code" src="../../../assets/images/lock/qcode.png" />-->
+		<!--付款码-->
+		<div class="tgm" :class="$store.state.page.isWx?'top0':''" v-if="grade>=1 && qrcodeIndex == 0">
+			<div class="top">
+				<div>
+					<img :src="'./static/images/button0.png'" alt="" />
+					<p class="m">{{userInfo.mobile}}</p>
+					<div class="g">会员等级1</div>
+				</div>
+			</div>
+			<div class="printOrder" v-for="(v,k) in list">
+				<p class="tip">向营业员出示会员码完成会员积分或付款</p>
+				<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
+			</div>
+		</div>
+
+		<!--推广码-->
+		<div v-if="grade>=1 && qrcodeIndex == 1">
+			<div class="bg" :class="!$store.state.page.isWx?'top46':''">
+				<div class="b-w1">
 					<qrcode :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
 					<div class="bottom">
 						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
@@ -16,35 +29,11 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="b-y">
-				<div class="tip-box">
-					<div class="title">如何赚钱?</div>
-					<div class="text-box">
-						<div class="item">
-							<div>第一步：</div>
-							<div>转发商品链接或商品图片给微信好友；</div>
-						</div>
-						<div class="item">
-							<div>第二步：</div>
-							<div>从您转发的链接或图片进入商城的好友，系统将自动锁定成为您的客户，他们在微信商城中购买任何商品，您都可以获得CGC通用积分；</div>
-						</div>
-						<div class="item">
-							<div>第三步：</div>
-							<div>您可以在创业管理中心查看【我的团队】和【CGC通用积分明细】，CGC通用积分抵现金在CGC智慧产业联盟任何实体企业或彩融商城通用。</div>
-						</div>
-					</div>
-					<div class="text-box1">
-						<div class="item">
-							<div>说明：</div>
-							<div>分享后会带有独有的推荐码，您的好友访问之后买系统会自动检测并记录客户关系。如果您的好友已被其他人抢先发展成了客户，他就不能成为您的客户，以最早发展成为客户为准</div>
-						</div>
-					</div>
-				</div>
+				<p class="tip2">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
 			</div>
 		</div>
 		<!--未获得赚钱码-->
-		<div class="bg-w" v-else>
+		<div class="bg-w" v-if="grade == 0">
 			<div class="img-box">
 				<img src="../../../assets/images/member/IMG_3708@2x.png" />
 			</div>
@@ -74,12 +63,24 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="qrcode-f">
+			<div @click="qrcodeClick(0)">
+				<img :src="qrcodeIndex == 0?'./static/images/fkm-in.png':'./static/images/fkm.png'" alt="" />
+				<p :class="qrcodeIndex == 0?'blue':''">付款码</p>
+			</div>
+			<div @click="qrcodeClick(1)">
+				<img :src="qrcodeIndex == 1?'./static/images/tgm-in.png':'./static/images/tgm2.png'" alt="" />
+				<p :class="qrcodeIndex == 1?'blue':''">推广码</p>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 	import { Qrcode } from 'vux'
 	import settingHeader from '../../../components/setting_header'
+	import VueBarcode from '@xkeshi/vue-barcode'
 	export default {
 		data() {
 			return {
@@ -87,16 +88,45 @@
 				grade: 1,
 				width: '',
 				userInfo: {},
-				images:''
+				images: '',
+				qrcodeIndex: 0,
+				barcode_option: {
+					format: "CODE128",
+					displayValue: true, //是否默认显示条形码数据
+					textPosition: 'bottom', //条形码数据显示的位置
+					textAlign: 'center',
+					background: '#fff', //条形码背景颜色
+					valid: function(valid) {
+						console.log(valid)
+					},
+					width: '3',
+					height: '55',
+					fontSize: '22px', //字体大小,
+					text: ''
+				},
+				list: [{
+					barcodes: ''
+				}]
 			}
 		},
 		created() {
 			this.getUserInfo()
 			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
-			this.width = Number(document.body.clientWidth * 0.6773333333333333)
+			this.width = Number(document.body.clientWidth * 0.55)
+
+			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
 		},
 		mounted() {},
 		methods: {
+			qrcodeClick(index) {
+				var _this = this
+				this.qrcodeIndex = index
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'index': index
+					})
+				})
+			},
 			getUserInfo() {
 				var _this = this
 				//获取用户信息
@@ -107,6 +137,8 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.userInfo = res.data.data
+						_this.list[0].barcodes = res.data.data.mobile
+						_this.barcode_option.text = res.data.data.mobile
 						if(_this.userInfo.avatar.original) {
 							_this.images = _this.userInfo.avatar.original
 						}
@@ -116,7 +148,8 @@
 		},
 		components: {
 			settingHeader,
-			Qrcode
+			Qrcode,
+			'barcode': VueBarcode
 		}
 	}
 </script>
@@ -125,6 +158,86 @@
 	.qrcode-box {
 		height: 100%;
 		font-family: PingFangSC-Medium;
+		position: relative;
+		.top0{
+			top: 0!important;
+		}
+		.tgm {
+			position: relative;
+			position: absolute;
+			width: 100%;
+			bottom: 1.20rem;
+			top: 46px;
+			.top {
+				height: 2.6rem;
+				background: url(../../../../static/member/record-bg.png) no-repeat;
+				background-size: 100% 100%;
+				text-align: center;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				img {
+					width: 0.88rem;
+					height: 0.88rem;
+				}
+				.m {
+					font-size: 0.36rem;
+					font-family: PingFangSC-Medium;
+					color: rgba(255, 255, 255, 1);
+				}
+				.g {
+					font-size: 0.18rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(255, 255, 255, 1);
+				}
+			}
+			.printOrder {
+				text-align: center;
+				padding: 0 0.5rem;
+				box-sizing: border-box;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 100%;
+				.tip {
+					font-size: 0.24rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(144, 162, 199, 1);
+					margin-bottom: 0.2rem;
+				}
+				svg {
+					width: 100%;
+					height: 1.6rem;
+				}
+			}
+		}
+		.qrcode-f {
+			position: absolute;
+			bottom: 0%;
+			width: 100%;
+			height: 1.20rem;
+			background: rgba(228, 235, 251, 1);
+			display: flex;
+			div {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(144, 162, 199, 1);
+				img {
+					width: 0.4rem;
+					height: 0.4rem;
+					margin-bottom: 0.12rem;
+				}
+				.blue {
+					color: rgba(51, 111, 255, 1);
+				}
+			}
+		}
 		.qrcode {
 			text-align: center;
 		}
@@ -291,22 +404,37 @@
 				}
 			}
 		}
+		.top46 {
+			top: 46px!important;
+		}
 		.bg {
-			padding: 60px 0.44rem 1rem 0.44rem;
+			position: absolute;
+			top: 0;
+			bottom: 1.2rem;
+			width: 100%;
+			padding: 60px 0.44rem 0rem 0.44rem;
 			box-sizing: border-box;
-			background: url(../../../assets/images/member/qconde-bg.png) no-repeat;
-			background-size: 100%;
+			background: url(../../../../static/images/qrcode-bg.png) no-repeat;
+			background-size: 100% 100%;
 			.title {
 				font-size: 0.36rem;
 				color: rgba(26, 38, 66, 1);
 				margin: 0.6rem 0 0.2rem 0.1rem;
 			}
-			.b-w {
+			.tip2 {
+				text-align: center;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Medium;
+				color: rgba(255, 255, 255, 1);
+				margin-top: 0.2rem;
+			}
+			.b-w1 {
 				width: 5.78rem;
 				border-radius: 5px;
 				background-color: white;
 				margin: 0 auto;
-				padding:0.5rem 0.29rem;
+				padding: 0.5rem 0.29rem;
+				margin-top: 1rem;
 				.code {
 					width: 100%;
 					height: auto;

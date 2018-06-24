@@ -200,6 +200,9 @@
 						top: 0;
 						bottom: 0;
 						width: 100%;
+						.content{
+							height: 100%;
+						}
 					}
 					.null-box {
 						position: relative;

@@ -270,7 +270,7 @@
 		}
 		.tip {
 			padding: 10px 15px;
-			ont-family: PingFangSC-Regular;
+			font-family: PingFangSC-Regular;
 			font-size: 0.28rem;
 			color: #90A2C7;
 			letter-spacing: 0;

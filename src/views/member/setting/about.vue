@@ -1,7 +1,9 @@
 <template>
 	<div class="about-box">
 		<scoreheader :title="title"></scoreheader>
-		<img :src="'./static/member/login-img.png'" class="image"/>
+		<div class="img-top">
+			<img :src="'./static/member/login-img.png'" class="image" />
+		</div>
 		<group>
 			<cell title="当前版本" value="V1.0" class="about-cell"></cell>
 			<cell title="用户协议及隐私" is-link class="about-cell"></cell>
@@ -33,11 +35,17 @@
 	.about-box {
 		height: 100%;
 		background: #F5F8F9;
-		.image {
-			display: block;
-			width: 2rem;
-			height: auto;
-			margin: 0.71rem auto 0.88rem;
+		.img-top {
+			position: relative;
+			height: 3.74rem;
+			.image {
+				width: 2rem;
+				height: auto;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
 		}
 		.about-cell {
 			font-family: PingFangSC-Regular;

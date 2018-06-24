@@ -115,7 +115,7 @@
 		<!-- <div v-transfer-dom>
 			<popup v-model="show9" position="top">
 				<div class="position-vertical-demo">
-					<div class="twoClass">
+					<div class="twoClass1">
 						<div class="type-item" v-for="(item,index) in twoClass">
 							<span :class="{'twoActive':twoIndex == index}" @click="twoChange(index,item)">{{item}}</span>
 						</div>
@@ -394,7 +394,7 @@
 </script>
 
 <style lang="less">
-	.twoClass {
+	.twoClass1 {
 		display: flex;
 		flex-wrap: wrap;
 		padding: 0.2rem 0;

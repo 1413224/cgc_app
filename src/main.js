@@ -151,16 +151,16 @@ store.registerModule('vux', {
 const history = window.sessionStorage
 
 //history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
-let openid = sessionStorage['_openid_']
-alert(openid)
+let openid = history.getItem('_openid_')
+
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' || key != '_openid_') {
+	if(key != 'isPopup' && key != '_openid_') {
 		history.removeItem(key)
 	}
 }
-alert(openid)
+
 let historyCount = history.getItem('count') * 1;
 
 let isPush = false
@@ -194,7 +194,8 @@ router.beforeEach(function(to, from, next) {
 
 		let ua = window.navigator.userAgent.toLowerCase()
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-			next({path: '/member/oriza',replace:true})
+			router.replace('/member/oriza')
+//			next({path: '/member/oriza',replace:true})
 			return false
 		}
 	}
