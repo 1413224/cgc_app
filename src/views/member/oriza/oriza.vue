@@ -17,7 +17,6 @@
 		},
 		methods: {
 			grant() {
-
 				let _this = this;
 				// 跳转到微信授权页面
 				_this.$http.get(_this.url.origin.getAuthorizationUrl, {
@@ -72,14 +71,16 @@
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
 
 								_this.$router.push({
-									path: localStorage['beforeLoginUrl']
+									//path: localStorage['beforeLoginUrl']
+									path: '/index'
 								})
 							}
 						})
 
 					} else {
 						_this.$router.push({
-							path: localStorage['beforeLoginUrl']
+							//path: localStorage['beforeLoginUrl']
+							path: '/index'
 						})
 
 						//						//奖励弹窗

@@ -5,9 +5,9 @@
 		<div class="tgm" :class="$store.state.page.isWx?'top0':''" v-if="grade>=1 && qrcodeIndex == 0">
 			<div class="top">
 				<div>
-					<img :src="'./static/images/button0.png'" alt="" />
+					<img :src="images?images:'./static/images/mrtx.png'" alt="" />
 					<p class="m">{{userInfo.mobile}}</p>
-					<div class="g">会员等级1</div>
+					<div class="g">{{userInfo.levelName}}</div>
 				</div>
 			</div>
 			<div class="printOrder" v-for="(v,k) in list">
