@@ -40,13 +40,14 @@
 				let uid = this.$route.query.userId
 				let acscode = this.$route.query.randomAccessCode
 				let token = this.$route.query.token
-
+				
 				if(openid) {
 					this.$store.commit('getOpenId', openid)
 					// localStorage.setItem('_openid_',openid)
 					sessionStorage.setItem('_openid_', openid)
-
+					// alert(1)
 					if(uid && acscode && token) {
+						// alert(2)
 						let hash = {
 							id: uid,
 							randomAccessCode: acscode,
@@ -72,14 +73,16 @@
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
 
 								_this.$router.push({
-									path: localStorage['beforeLoginUrl']
+									// path: localStorage['beforeLoginUrl']
+									path:'/index'
 								})
 							}
 						})
 
 					} else {
 						_this.$router.push({
-							path: localStorage['beforeLoginUrl']
+							// path: localStorage['beforeLoginUrl']
+							path:'/index'
 						})
 
 						//						//奖励弹窗

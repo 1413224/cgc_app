@@ -151,7 +151,7 @@ store.registerModule('vux', {
 const history = window.sessionStorage
 
 //history.clear()  刷新保留奖励判断值 isPopup _openid_  只有关闭页面才清除
-let openid = history.getItem('_openid_')
+// let openid = history.getItem('_openid_')
 
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
@@ -188,14 +188,15 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	// let openid = localStorage['_openid_'];
+	let openid = sessionStorage['_openid_'];
+	// alert(openid)
 	if(!openid && (to.path != '/member/oriza')) {
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 
 		let ua = window.navigator.userAgent.toLowerCase()
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-			router.replace('/member/oriza')
-//			next({path: '/member/oriza',replace:true})
+			// router.replace('/member/oriza')
+			next({path: '/member/oriza'})
 			return false
 		}
 	}
