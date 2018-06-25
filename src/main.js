@@ -15,43 +15,56 @@ import FastClick from 'fastclick'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import VueLazyLoad from 'vue-lazyload'
+import mainApp from './global/global'   //时间控件  全局时间过滤器
 import { base64_encode, base64_decode } from './global/course.js'
+import MD5 from 'js-md5'
+import axios from './config/axios_config'
+import url from './config/url'
+//组件插件
+import dialog from '@/components/dialog'
+import code from '@/components/code'
+import scimg from '@/components/scimg'
+import popup from '@/components/popup'
+import animate from 'animate.css'//引用动画库
+import { LoadingPlugin, DatetimePlugin, ToastPlugin } from 'vux'//全局load
+import echarts from 'echarts'//echart
+import merge from 'webpack-merge'
+import vuePicturePreview from 'vue-picture-preview'
+import { BusPlugin } from 'vux'
+
+FastClick.attach(document.body);
 
 Vue.prototype.base64_encode = base64_encode
 Vue.prototype.base64_decode = base64_decode
 
-Vue.use(Vuex)
-const store = creatrStore()
-
-import merge from 'webpack-merge'
-Vue.prototype.merge = merge
-
-//时间控件  全局时间过滤器
-import mainApp from './global/global'
-Vue.prototype.mainApp = mainApp
-Vue.filter('getDate', function(value) {
-	if(value != 0) {
-		return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
-	} else {
-		return value
-	}
-
-})
-
-import MD5 from 'js-md5'
 Vue.prototype.MD5 = MD5
-
-import vuePicturePreview from 'vue-picture-preview'
-Vue.use(vuePicturePreview)
-
-import axios from './config/axios_config'
 Vue.prototype.$http = axios //定义axios组件用法  this.$http(opt).then(fn)
 
-import url from './config/url'
 Vue.prototype.url = url //全局url路径
 Vue.prototype.url2 = url //全局url路径
 
-Vue.config.silent = true
+Vue.prototype.$echarts = echarts
+Vue.prototype.merge = merge
+
+Vue.prototype.mainApp = mainApp
+//组件插件
+Vue.use(dialog)
+Vue.use(code)
+Vue.use(scimg)
+Vue.use(popup)
+
+Vue.use(Vuex)
+Vue.use(animate)
+//全局load
+Vue.use(LoadingPlugin)
+Vue.use(DatetimePlugin)
+Vue.use(ToastPlugin)
+
+Vue.use(vuePicturePreview)
+Vue.use(VueVideoPlayer)
+Vue.use(BusPlugin)
+
+const store = creatrStore()
 
 // 懒加载图片
 Vue.use(VueLazyLoad, {
@@ -61,9 +74,15 @@ Vue.use(VueLazyLoad, {
 })
 // --------------------------------
 
-FastClick.attach(document.body);
+Vue.filter('getDate', function(value) {
+	if(value != 0) {
+		return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
+	} else {
+		return value
+	}
+})
 
-Vue.use(VueVideoPlayer)
+Vue.config.silent = true
 
 Vue.directive('transfer-dom', TransferDom)
 Vue.component('group', Group)
@@ -97,31 +116,6 @@ Vue.component('swipeout-item', SwipeoutItem)
 Vue.component('swipeout-button', SwipeoutButton)
 
 Vue.config.productionTip = false
-
-//组件插件
-import dialog from '@/components/dialog'
-import code from '@/components/code'
-import scimg from '@/components/scimg'
-import popup from '@/components/popup'
-Vue.use(dialog)
-Vue.use(code)
-Vue.use(scimg)
-Vue.use(popup)
-
-//引用动画库
-import animate from 'animate.css'
-Vue.use(animate)
-//全局load
-import { LoadingPlugin, DatetimePlugin, ToastPlugin } from 'vux'
-Vue.use(LoadingPlugin)
-Vue.use(DatetimePlugin)
-Vue.use(ToastPlugin)
-//echart
-import echarts from 'echarts'
-Vue.prototype.$echarts = echarts
-
-import { BusPlugin } from 'vux'
-Vue.use(BusPlugin)
 
 //判断是否微信端
 var ua = navigator.userAgent.toLowerCase()
