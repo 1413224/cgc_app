@@ -23,10 +23,12 @@
 <!--_this.$dialog.show({ type: '', headMessage: '', message: '', buttons: [''], canel() { }, confirm() { } })-->
 <script>
 	import { XDialog } from 'vux'
-
 	export default {
+		directives: {
+			TransferDom: {}
+		},
 		props: {
-			headMessage:String,
+			headMessage: String,
 			message: String,
 			closing: Boolean, //按钮点击是否自动关闭
 			clickDelay: Number, //按钮点击延迟多少时间关闭  
@@ -73,7 +75,7 @@
 					_this.showDialog = true
 				}
 			},
-			ishide(){}
+			ishide() {}
 		}
 	}
 </script>

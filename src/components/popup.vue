@@ -1,7 +1,7 @@
 <template>
 	<div class="tc-box">
 		<!--购物奖励弹窗-->
-		<x-dialog v-model="showSr" class="xrBox" :dialog-style="transparent">
+		<x-dialog v-model="showSr" class="xrBox">
 			<div class="p_box">
 				<img @click="showNew = false" class="xr_img" :src="'./static/images/xr_bg.png'" alt="" />
 
@@ -16,7 +16,7 @@
 		</x-dialog>
 
 		<!--新人奖励弹窗-->
-		<x-dialog v-model="showZc" class="zcBox" :dialog-style="transparent">
+		<x-dialog v-model="showZc" class="zcBox">
 			<div class="zc_box">
 				<div class="zc_content">
 					<div class="item_box" v-for="(item,index) in zcList" :key="index">
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+	import { XDialog } from 'vux'
 	export default {
 		props: {
 			showSr: {
@@ -51,10 +52,11 @@
 				default: false
 			},
 		},
+		components: {
+			XDialog
+		},
 		data() {
 			return {
-				showSr: false,
-				showZc: false,
 				zcList: [{
 						jf: '通用积分',
 						money: '10',
