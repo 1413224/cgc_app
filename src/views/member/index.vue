@@ -99,44 +99,44 @@
 				</div>
 				<div class="navigation" style="margin-top: 0;">
 					<ul>
-						<li>
-							<router-link to="/member/purse/wallet">
+						<li @click="toOrder(0)">
+							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-1.png'">
 									<!--<badge class="new"></badge>-->
 								</div>
 								<p>待付款</p>
-							</router-link>
+							</a>
 						</li>
-						<li>
-							<router-link to="/member/team/index">
+						<li @click="toOrder(1)">
+							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-2.png'">
 									<!--<badge class="new"></badge>-->
 								</div>
 								<p>待发货</p>
-							</router-link>
+							</a>
 						</li>
-						<li>
-							<router-link to="/shop/my_order">
+						<li @click="toOrder(2)">
+							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-3.png'">
 									<!--<badge class="new-account" text="2312"></badge>-->
 								</div>
 
 								<p>待收货</p>
-							</router-link>
+							</a>
 						</li>
-						<li>
-							<a @click="toQrcode(userInfo)">
+						<li @click="toOrder(3)">
+							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-4.png'">
 								</div>
 								<p>待评价</p>
 							</a>
 						</li>
-						<li>
-							<a @click="toQrcode(userInfo)">
+						<li @click="toOrder(4)">
+							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-5.png'">
 								</div>
@@ -245,6 +245,15 @@
 			this.getUserInfo()
 		},
 		methods: {
+			toOrder(index) {
+				var _this = this
+				_this.$router.push({
+					path: '/shop/my_order',
+					query: {
+						tabIndex: index
+					}
+				})
+			},
 			getUserInfo() {
 				var _this = this
 
@@ -512,7 +521,7 @@
 			bottom: 0;
 			right: 0;
 			height: 1px;
-			border-top: 1px solid #C7C7C7;
+			border-top: 1px solid #D9D9D9;
 			color: #D9D9D9;
 			-webkit-transform-origin: 0 0;
 			transform-origin: 0 0;

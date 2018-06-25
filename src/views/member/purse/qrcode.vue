@@ -70,11 +70,11 @@
 			</div>
 
 			<div class="qrcode-f">
-				<div @click="qrcodeClick(0)">
+				<div @click="qrcodeClick(0,'付款码')">
 					<img :src="qrcodeIndex == 0?'./static/images/fkm-in.png':'./static/images/fkm.png'" alt="" />
 					<p :class="qrcodeIndex == 0?'blue':''">付款码</p>
 				</div>
-				<div @click="qrcodeClick(1)">
+				<div @click="qrcodeClick(1,'推广码')">
 					<img :src="qrcodeIndex == 1?'./static/images/tgm-in.png':'./static/images/tgm2.png'" alt="" />
 					<p :class="qrcodeIndex == 1?'blue':''">推广码</p>
 				</div>
@@ -121,17 +121,23 @@
 			this.width = Number(document.body.clientWidth * 0.55)
 
 			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
+			document.title = this.$route.query.text
+			this.title = this.$route.query.text
 		},
 		mounted() {},
 		methods: {
-			qrcodeClick(index) {
+			qrcodeClick(index, text) {
 				var _this = this
-				this.qrcodeIndex = index
+				_this.qrcodeIndex = index
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
-						'index': index
+						'index': index,
+						'text': text
 					})
 				})
+
+				document.title = _this.$route.query.text
+				_this.title = _this.$route.query.text
 			},
 			getUserInfo() {
 				var _this = this
@@ -171,7 +177,7 @@
 			position: relative;
 			position: absolute;
 			width: 100%;
-			bottom: 1.20rem;
+			bottom: 1.2rem;
 			top: 46px;
 			.top {
 				height: 2.6rem;

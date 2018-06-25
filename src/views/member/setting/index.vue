@@ -5,7 +5,7 @@
 			<group gutter="0">
 				<cell class="list-item" title="个人信息" is-link link="/member/info/index"></cell>
 				<cell class="list-item" title="消息设置" is-link link="/member/message/setting"></cell>
-				<cell class="list-item" title="密码管理" is-link link="/user/changelist"></cell>
+				<cell class="list-item" title="密码管理" is-link link="/user/changelist" v-if="$store.state.page.isLogin == 'true'"></cell>
 				<cell class="list-item" title="意见反馈" is-link link="/member/setting/opinion"></cell>
 				<cell class="list-item" title="关于我们" is-link link="/member/setting/about"></cell>
 			</group>
@@ -23,7 +23,9 @@
 				title: '账户设置'
 			}
 		},
-		created() {},
+		created() {
+
+		},
 		mounted() {
 
 		},
@@ -38,12 +40,21 @@
 
 					},
 					confirm() {
-						_this.$http.post(_this.url.user.logout, {
+
+						var params = {
 							audience: _this.url.client,
 							userId: _this.$store.state.user.userId,
-							platformId: _this.url.platformId,
-							unionid: sessionStorage['_openid_']
-						}).then((res) => {
+							platformId: _this.url.platformId
+						}
+
+						var unionid = sessionStorage['_openid_']
+
+						if(unionid) {
+							params.unionid = unionid
+							params.type = 1
+						}
+
+						_this.$http.post(_this.url.user.logout, params).then((res) => {
 							if(res.data.status == '00000000') {
 								_this.$vux.toast.show({
 									width: '50%',

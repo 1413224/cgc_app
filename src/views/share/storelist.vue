@@ -664,6 +664,10 @@
 	}
 </script>
 <style>
+	.vux-popup-mask {
+		z-index: 700!important;
+	}
+	
 	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
 	}
