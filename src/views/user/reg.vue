@@ -9,7 +9,7 @@
 				<group gutter="0" class="input-div">
 					<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
 					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
-					<x-input class="input-item" ref="password" v-model="password" placeholder="登录密码" type="password" @on-change="passwordChange"></x-input>
+					<x-input class="input-item" ref="password" v-model="password" placeholder="请输入6~25位数的登录密码" type="password" @on-change="passwordChange"></x-input>
 					<x-input v-if="!isReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
 						<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
 					</x-input>
@@ -68,8 +68,8 @@
 				isAgree: true,
 				parentId: '',
 				frompath: '',
-				isCp:false,
-				pid:''
+				isCp: false,
+				pid: ''
 			}
 		},
 		created() {
@@ -113,7 +113,7 @@
 						width: '60%',
 						type: 'text',
 						position: 'middle',
-						text: '密码格式不符合要求'
+						text: '密码长度不符合要求'
 					})
 					return false
 				}
@@ -150,7 +150,7 @@
 						width: '60%',
 						type: 'text',
 						position: 'middle',
-						text: '密码格式不符合要求'
+						text: '密码长度不符合要求'
 					})
 					return false
 				}
@@ -223,7 +223,7 @@
 				let pid = this.$store.state.user.openid
 
 				// alert(pid)
-				let params={
+				let params = {
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
@@ -232,7 +232,7 @@
 					// type: pid ? 1 : 0,
 					// unionid: pid ? pid : " "
 				}
-				if(pid){
+				if(pid) {
 					params.type = 1;
 					params.unionid = pid;
 				}
@@ -309,7 +309,27 @@
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
 					//					_this.$refs.password.focus()
-					var _this = this
+					
+					if(_this.mobile.length != 11) {
+						_this.$vux.toast.show({
+							width: '60%',
+							type: 'text',
+							position: 'middle',
+							text: '手机号码长度不符合要求'
+						})
+						return false
+					}
+
+					if(!_this.mainApp.isphone(_this.mobile)) {
+						_this.$vux.toast.show({
+							width: '60%',
+							type: 'text',
+							position: 'middle',
+							text: '手机号码格式不符合要求'
+						})
+						return false
+					}
+					
 					_this.$nextTick(function() {
 						_this.$http.post(_this.url.user.checkUserExistsByMobile, {
 							mobile: _this.mobile
@@ -338,7 +358,7 @@
 										position: 'middle',
 										text: '该账户未注册'
 									})
-								}else{
+								} else {
 									_this.isCp = true
 								}
 							}
@@ -395,7 +415,7 @@
 					_this.reduce()
 				}, 1000)
 			},
-			backLogin(){
+			backLogin() {
 				this.isCp = false
 				this.isReg = !this.isReg
 			}

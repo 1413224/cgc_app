@@ -11,8 +11,11 @@
 				</div>
 			</div>
 			<div class="printOrder" v-for="(v,k) in list">
-				<p class="tip">向营业员出示会员码完成会员积分或付款</p>
-				<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
+				<div v-if="$store.state.page.isLogin == 'true'">
+					<p class="tip">向营业员出示会员码完成会员积分或付款</p>
+					<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
+				</div>
+				<p v-else>请先登录再体验此功能</p>
 			</div>
 		</div>
 
@@ -20,7 +23,8 @@
 		<div v-if="grade>=1 && qrcodeIndex == 1">
 			<div class="bg" :class="!$store.state.page.isWx?'top46':''">
 				<div class="b-w1">
-					<qrcode :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
+					<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
+					<div style="text-align: center;margin: 0 auto;" v-else :style="{ width: width + 'px',height: width + 'px',lineHeight: width + 'px'}">请先登录再体验此功能</div>
 					<div class="bottom">
 						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
 						<div>
@@ -29,7 +33,7 @@
 						</div>
 					</div>
 				</div>
-				<p class="tip2">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
+				<p class="tip2" @click="$router.push({path:'/member/benefits/index'})">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
 			</div>
 		</div>
 		<!--未获得赚钱码-->
@@ -97,7 +101,7 @@
 					textAlign: 'center',
 					background: '#fff', //条形码背景颜色
 					valid: function(valid) {
-						console.log(valid)
+						
 					},
 					width: '3',
 					height: '55',
@@ -159,7 +163,7 @@
 		height: 100%;
 		font-family: PingFangSC-Medium;
 		position: relative;
-		.top0{
+		.top0 {
 			top: 0!important;
 		}
 		.tgm {
