@@ -1,81 +1,83 @@
 <template>
 	<div class="qrcode-box">
-		<settingHeader :title="title"></settingHeader>
-		<!--付款码-->
-		<div class="tgm" :class="$store.state.page.isWx?'top0':''" v-if="grade>=1 && qrcodeIndex == 0">
-			<div class="top">
-				<div>
-					<img :src="images?images:'./static/images/mrtx.png'" alt="" />
-					<p class="m">{{userInfo.mobile}}</p>
-					<div class="g">{{userInfo.levelName}}</div>
-				</div>
-			</div>
-			<div class="printOrder" v-for="(v,k) in list">
-				<div v-if="$store.state.page.isLogin == 'true'">
-					<p class="tip">向营业员出示会员码完成会员积分或付款</p>
-					<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
-				</div>
-				<p v-else>请先登录再体验此功能</p>
-			</div>
-		</div>
-
-		<!--推广码-->
-		<div v-if="grade>=1 && qrcodeIndex == 1">
-			<div class="bg" :class="!$store.state.page.isWx?'top46':''">
-				<div class="b-w1">
-					<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
-					<div style="text-align: center;margin: 0 auto;" v-else :style="{ width: width + 'px',height: width + 'px',lineHeight: width + 'px'}">请先登录再体验此功能</div>
-					<div class="bottom">
+		<div style="position: relative;height: 100%;">
+			<settingHeader :title="title"></settingHeader>
+			<!--付款码-->
+			<div class="tgm" :class="$store.state.page.isWx?'top0':''" v-if="grade>=1 && qrcodeIndex == 0">
+				<div class="top">
+					<div>
 						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
-						<div>
-							<p>{{userInfo.nickname}}</p>
-							<!--<p>{{userInfo.mobile}}</p>-->
+						<p class="m">{{userInfo.mobile}}</p>
+						<div class="g">{{userInfo.levelName}}</div>
+					</div>
+				</div>
+				<div class="printOrder" v-for="(v,k) in list">
+					<div v-if="$store.state.page.isLogin == 'true'">
+						<p class="tip">向营业员出示会员码完成会员积分或付款</p>
+						<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
+					</div>
+					<p v-else>请先登录再体验此功能</p>
+				</div>
+			</div>
+
+			<!--推广码-->
+			<div v-if="grade>=1 && qrcodeIndex == 1">
+				<div class="bg" :class="!$store.state.page.isWx?'top46':''">
+					<div class="b-w1">
+						<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
+						<div style="text-align: center;margin: 0 auto;" v-else :style="{ width: width + 'px',height: width + 'px',lineHeight: width + 'px'}">请先登录再体验此功能</div>
+						<div class="bottom">
+							<img :src="images?images:'./static/images/mrtx.png'" alt="" />
+							<div>
+								<p>{{userInfo.nickname}}</p>
+								<!--<p>{{userInfo.mobile}}</p>-->
+							</div>
+						</div>
+					</div>
+					<p class="tip2" @click="$router.push({path:'/member/benefits/index'})">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
+				</div>
+			</div>
+			<!--未获得赚钱码-->
+			<div class="bg-w" v-if="grade == 0">
+				<div class="img-box">
+					<img src="../../../assets/images/member/IMG_3708@2x.png" />
+				</div>
+				<div class="middle">
+					<p>暂未满足条件</p>
+					<p>专享3大权益 每月预计可赚2000+</p>
+					<div @click="$router.push({path:'/member/purse/hasqrcode'})">
+						查看条件 <i class="icon iconfont icon-arrow-right"></i>
+					</div>
+				</div>
+				<div class="bottom">
+					<div class="title">
+						权益一 · 每月优惠券
+					</div>
+					<div class="bg-y">
+						<div class="one">
+							<span>120</span><span>元</span>
+						</div>
+						<div class="two">
+							<p>威伐光体验卷</p>
+							<p>全国通用</p>
+						</div>
+						<div class="three">
+							<i></i>
+							<div>领取礼卷</div>
 						</div>
 					</div>
 				</div>
-				<p class="tip2" @click="$router.push({path:'/member/benefits/index'})">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
 			</div>
-		</div>
-		<!--未获得赚钱码-->
-		<div class="bg-w" v-if="grade == 0">
-			<div class="img-box">
-				<img src="../../../assets/images/member/IMG_3708@2x.png" />
-			</div>
-			<div class="middle">
-				<p>暂未满足条件</p>
-				<p>专享3大权益 每月预计可赚2000+</p>
-				<div @click="$router.push({path:'/member/purse/hasqrcode'})">
-					查看条件 <i class="icon iconfont icon-arrow-right"></i>
-				</div>
-			</div>
-			<div class="bottom">
-				<div class="title">
-					权益一 · 每月优惠券
-				</div>
-				<div class="bg-y">
-					<div class="one">
-						<span>120</span><span>元</span>
-					</div>
-					<div class="two">
-						<p>威伐光体验卷</p>
-						<p>全国通用</p>
-					</div>
-					<div class="three">
-						<i></i>
-						<div>领取礼卷</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="qrcode-f">
-			<div @click="qrcodeClick(0)">
-				<img :src="qrcodeIndex == 0?'./static/images/fkm-in.png':'./static/images/fkm.png'" alt="" />
-				<p :class="qrcodeIndex == 0?'blue':''">付款码</p>
-			</div>
-			<div @click="qrcodeClick(1)">
-				<img :src="qrcodeIndex == 1?'./static/images/tgm-in.png':'./static/images/tgm2.png'" alt="" />
-				<p :class="qrcodeIndex == 1?'blue':''">推广码</p>
+			<div class="qrcode-f">
+				<div @click="qrcodeClick(0)">
+					<img :src="qrcodeIndex == 0?'./static/images/fkm-in.png':'./static/images/fkm.png'" alt="" />
+					<p :class="qrcodeIndex == 0?'blue':''">付款码</p>
+				</div>
+				<div @click="qrcodeClick(1)">
+					<img :src="qrcodeIndex == 1?'./static/images/tgm-in.png':'./static/images/tgm2.png'" alt="" />
+					<p :class="qrcodeIndex == 1?'blue':''">推广码</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -101,7 +103,7 @@
 					textAlign: 'center',
 					background: '#fff', //条形码背景颜色
 					valid: function(valid) {
-						
+
 					},
 					width: '3',
 					height: '55',
@@ -162,7 +164,6 @@
 	.qrcode-box {
 		height: 100%;
 		font-family: PingFangSC-Medium;
-		position: relative;
 		.top0 {
 			top: 0!important;
 		}
@@ -190,7 +191,7 @@
 					color: rgba(255, 255, 255, 1);
 				}
 				.g {
-					font-size: 0.18rem;
+					font-size: 0.22rem;
 					font-family: PingFangSC-Regular;
 					color: rgba(255, 255, 255, 1);
 				}
@@ -205,7 +206,7 @@
 				transform: translate(-50%, -50%);
 				width: 100%;
 				.tip {
-					font-size: 0.24rem;
+					font-size: 0.26rem;
 					font-family: PingFangSC-Regular;
 					color: rgba(144, 162, 199, 1);
 					margin-bottom: 0.2rem;
@@ -217,7 +218,7 @@
 			}
 		}
 		.qrcode-f {
-			position: absolute;
+			position: fixed;
 			bottom: 0%;
 			width: 100%;
 			height: 1.20rem;
@@ -414,8 +415,9 @@
 		.bg {
 			position: absolute;
 			top: 0;
-			bottom: 1.2rem;
+			bottom: 0;
 			width: 100%;
+			height: 100%;
 			padding: 60px 0.44rem 0rem 0.44rem;
 			box-sizing: border-box;
 			background: url(../../../../static/images/qrcode-bg.png) no-repeat;
@@ -427,7 +429,7 @@
 			}
 			.tip2 {
 				text-align: center;
-				font-size: 0.28rem;
+				font-size: 0.30rem;
 				font-family: PingFangSC-Medium;
 				color: rgba(255, 255, 255, 1);
 				margin-top: 0.2rem;

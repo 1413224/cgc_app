@@ -1,6 +1,6 @@
 <template>
 	<div class="storelist-box1" style="height: 100%;background-color: white;">
-		<settingHeader :title="title"></settingHeader>
+		<settingHeader style="z-index: 700;position: relative;" :title="title"></settingHeader>
 
 		<div class="searchBox">
 			<div class="search">
@@ -10,32 +10,36 @@
 		</div>
 
 		<div class="nav1">
-			<div class="area" @click="onArea()">
-				<p class="areaDetail">{{region}}<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+			<div class="pr">
+				<div class="area" @click="onArea()">
+					<p class="areaDetail">{{region}}<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+				</div>
+				<div class="price" @click="onPrice()">
+					<p>{{priceType}}<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+				</div>
+				<div class="type" @click="onScreening()">
+					<p>{{screening}}<img src="../../assets/images/shop/screen.png" alt=""></p>
+				</div>
+				<ul class="address animated" :class="isActive? 'maskTive' : ''">
+					<li class="category">
+						<i class="iconfont">&#xe60b;</i>
+						<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
+						<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
+						<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
+					</li>
+					<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
+						<span>{{item.name}}</span>
+						<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
+					</li>
+				</ul>
 			</div>
-			<div class="price" @click="onPrice()">
-				<p>{{priceType}}<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
-			</div>
-			<div class="type" @click="onScreening()">
-				<p>{{screening}}<img src="../../assets/images/shop/screen.png" alt=""></p>
-			</div>
-			<ul class="address animated" :class="isActive? 'maskTive' : ''">
-				<li class="category">
-					<i class="iconfont">&#xe60b;</i>
-					<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
-					<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
-					<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
-				</li>
-				<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
-					<span>{{item.name}}</span>
-					<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
-				</li>
-			</ul>
-			<div id="distanceType" v-if="priceShang" class="fadeInDown animated">
-				<group>
-					<radio class="opPrice" title="title" :options="opPrice" :value="listType" @on-change="changePrice"></radio>
-				</group>
-			</div>
+			<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
+				<div id="distanceType" v-if="priceShang" style="animation-duration:0.3s">
+					<group>
+						<radio class="opPrice" title="title" :options="opPrice" :value="listType" @on-change="changePrice"></radio>
+					</group>
+				</div>
+			</transition>
 		</div>
 
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
@@ -76,7 +80,7 @@
 		<div style="height: 100%;" v-if="show1">
 			<div v-transfer-dom class="screen">
 				<popup v-model='show1' position="right">
-					<div class="wrapper2" ref="wrapper2">
+					<div :class="{'h':!$store.state.page.isWx}" class="wrapper2" ref="wrapper2">
 						<div class="content">
 							<div class="screening">
 								<div class="logo">
@@ -405,20 +409,21 @@
 			},
 			onScreening() {
 				//点击筛选
+				this.show1 = !this.show1
+
+				console.log(this.show1)
+
 				if(this.show1) {
-					this.show1 = false;
-				} else {
-					this.show1 = true
-				}
-				this.$nextTick(() => {
-					this.scroll2 = new BScroll(this.$refs.wrapper2, {
-						click: true,
-						scrollY: true,
-						pullUpLoad: {
-							threshold: -30
-						}
+					this.$nextTick(() => {
+						this.scroll2 = new BScroll(this.$refs.wrapper2, {
+							click: true,
+							scrollY: true,
+							pullUpLoad: {
+								threshold: -30
+							}
+						})
 					})
-				})
+				}
 
 				//地址选择框消失
 				this.hide();
@@ -680,13 +685,13 @@
 		top: 0.9rem;
 		bottom: inherit;
 		max-height: 500%;
-		z-index: 9999;
+		z-index: 600;
 	}
 	
 	.nav1 .vux-no-group-title {
 		margin-top: 0!important;
 	}
-
+	
 	.opPrice .vux-radio-label {
 		font-size: 0.24rem!important;
 	}
@@ -726,10 +731,17 @@
 		border-top: 1px solid #eee;
 		width: 100%;
 		height: .9rem;
-		display: flex;
-		align-items: center;
-		position: relative;
 		border-bottom: 1px solid #D8DFF0;
+		position: relative;
+		.pr {
+			width: 100%;
+			height: 100%;
+			z-index: 700;
+			display: flex;
+			align-items: center;
+			position: relative;
+			background-color: white;
+		}
 		.areaDetail {
 			width: 2rem;
 			text-align: center;
@@ -988,6 +1000,8 @@
 		background: #fff;
 		padding-bottom: 0.14rem;
 		border-top: 0.01rem solid #D8DFF0;
+		position: relative;
+		z-index: 700;
 		.search {
 			position: relative;
 			width: 92%;
@@ -1026,8 +1040,9 @@
 
 <style lang="less" scoped>
 	.wrapper2 {
-		height: 90%;
+		height: 80%;
 		overflow: hidden;
+		z-index: 750;
 		.content {
 			padding-top: 0.4rem;
 			padding-bottom: 0.7rem;
@@ -1036,6 +1051,8 @@
 	
 	.screen {
 		height: 100%;
+		position: relative;
+		z-index: 800;
 	}
 	
 	.screen .vux-popup-dialog {

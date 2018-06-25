@@ -7,12 +7,27 @@
 				<p>{{typeTitle}}</p>
 			</div>
 			<div class="screen-box">
-				<div @click="lookAll" style="color: #336fff;">
-					查看全部
+				<div class="sxi">
+					<div class="label" @click="lookAll" style="color: #336fff;">
+						查看全部
+					</div>
+					<div class="label" @click="show8 = !show8">
+						<span>筛选</span><img src="../../../assets/images/index/shaixuan.png" alt="" />
+					</div>
 				</div>
-				<div @click="show8 = true">
-					<span>筛选</span><img src="../../../assets/images/index/shaixuan.png" alt="" />
-				</div>
+				<!--筛选菜单栏-->
+				<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
+					<div class="po" v-if="show8" style="animation-duration:0.3s">
+						<div class="position-vertical-demo">
+							<div class="twoClass">
+								<div class="type-item" v-for="(item,index) in xyClass">
+									<span :class="{'twoActive':twoIndex == index}" @click="twoChange(index,item)">{{item.title}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+				<div class="mask animated" :class="show8? 'maskTive' : ''" @click="show8 = false"></div>
 			</div>
 			<div class="wrapper" ref="wrapper">
 				<div class="content">
@@ -34,19 +49,6 @@
 					<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
 				</div>
 			</div>
-		</div>
-
-		<!--筛选菜单栏-->
-		<div v-transfer-dom>
-			<popup v-model="show8" position="top">
-				<div class="position-vertical-demo">
-					<div class="twoClass">
-						<div class="type-item" v-for="(item,index) in xyClass">
-							<span :class="{'twoActive':twoIndex == index}" @click="twoChange(index,item)">{{item.title}}</span>
-						</div>
-					</div>
-				</div>
-			</popup>
 		</div>
 	</div>
 </template>
@@ -88,13 +90,13 @@
 				curPage: 1,
 				pageSize: 20,
 				balanceInfo: {},
-				type: '',
+				type: 1,
 				typeTitle: ''
 			}
 		},
 		created() {
 			this.list = []
-			this.type = this.$route.query.type
+			this.type = this.$route.query.type ? this.$route.query.type : 1
 			if(this.$route.query.type == 3) {
 				this.twoIndex = 2
 				this.typeTitle = '充值奖励'
@@ -167,6 +169,7 @@
 				this.twoIndex = 0
 				this.curPage = 1
 				this.typeTitle = '全部列表'
+				this.show8 = false
 				this.$router.replace({
 					query: this.merge(this.$route.query, {
 						'type': 1
@@ -201,34 +204,34 @@
 			LoadData() {
 				var _this = this
 				_this.curPage++
-				_this.$http.get(_this.url.user.getMyPointsList, {
-					params: {
-						userId: _this.$store.state.user.userId,
-						type: _this.type,
-						curPage: _this.curPage,
-						pageSize: _this.pageSize,
-						islist: true
-					}
-				}).then((res) => {
-					if(res.data.status == '00000000') {
-						_this.balanceInfo = res.data.data
-						if(res.data.data.pageBean.list.length > 0) {
-							_this.list = _this.list.concat(res.data.data.pageBean.list)
-							_this.show = true
-							_this.showNo = false
-
-						} else {
-							_this.show = false
-							_this.showNo = true
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '已经到底了'
-							})
+					_this.$http.get(_this.url.user.getMyPointsList, {
+						params: {
+							userId: _this.$store.state.user.userId,
+							type: _this.type,
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
 						}
-					}
-				})
+					}).then((res) => {
+						if(res.data.status == '00000000') {
+							_this.balanceInfo = res.data.data
+							if(res.data.data.pageBean.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.pageBean.list)
+								_this.show = true
+								_this.showNo = false
+
+							} else {
+								_this.show = false
+								_this.showNo = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
+						}
+					})
 			}
 		},
 		components: {
@@ -297,6 +300,8 @@
 				justify-content: center;
 				flex-direction: column;
 				color: rgba(255, 255, 255, 1);
+				z-index: 750;
+				position: relative;
 				p:nth-child(1) {
 					font-size: 0.70rem;
 				}
@@ -307,20 +312,48 @@
 			.screen-box {
 				height: 0.87rem;
 				line-height: 0.87rem;
-				padding: 0 0.30rem;
-				box-sizing: border-box;
-				position: relative;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				font-size: 0.28rem;
-				div {
-					img {
-						width: 0.20rem;
-						height: 0.20rem;
-						color: rgba(26, 38, 66, 1);
-						margin-left: 0.13rem;
+				.sxi {
+					padding: 0 0.30rem;
+					box-sizing: border-box;
+					position: relative;
+					z-index: 750;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					font-size: 0.28rem;
+					background-color: white;
+					.label {
+						img {
+							width: 0.20rem;
+							height: 0.20rem;
+							color: rgba(26, 38, 66, 1);
+							margin-left: 0.13rem;
+						}
 					}
+				}
+				.po {
+					width: 100%;
+					z-index: 716;
+					position: absolute;
+					left: 0;
+					box-sizing: border-box;
+					border-top: 1px solid #eee;
+				}
+				.mask {
+					display: none;
+					position: fixed;
+					top: 2.65rem;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.5);
+					opacity: 0;
+					z-index: 500;
+					transition: opacity 800ms;
+				}
+				.maskTive {
+					display: block!important;
+					opacity: 1!important;
 				}
 			}
 			.screen-box:after {

@@ -189,17 +189,20 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_'];
-	// alert(openid)
+
 	if(!openid && (to.path != '/member/oriza')) {
+
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 
 		let ua = window.navigator.userAgent.toLowerCase()
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-			// router.replace('/member/oriza')
-			next({path: '/member/oriza'})
+			next({
+				path: '/member/oriza'
+			})
 			return false
 		}
 	}
+
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
 

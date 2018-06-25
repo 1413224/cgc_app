@@ -147,6 +147,8 @@
 						})
 						_this.Cancel()
 					}
+				}).catch((res)=>{
+					_this.Cancel()
 				})
 			},
 			//canvas画图

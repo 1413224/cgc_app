@@ -9,7 +9,7 @@
 				<cell class="list-item" title="意见反馈" is-link link="/member/setting/opinion"></cell>
 				<cell class="list-item" title="关于我们" is-link link="/member/setting/about"></cell>
 			</group>
-			<div v-if="$store.state.page.isLogin == 'true'" class="logout-btn" @click="logout">退出登录1</div>
+			<div v-if="$store.state.page.isLogin == 'true'" class="logout-btn" @click="logout">退出登录</div>
 		</div>
 	</div>
 </template>
@@ -41,7 +41,8 @@
 						_this.$http.post(_this.url.user.logout, {
 							audience: _this.url.client,
 							userId: _this.$store.state.user.userId,
-							platformId: _this.url.platformId
+							platformId: _this.url.platformId,
+							unionid: sessionStorage['_openid_']
 						}).then((res) => {
 							if(res.data.status == '00000000') {
 								_this.$vux.toast.show({

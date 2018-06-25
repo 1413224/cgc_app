@@ -160,7 +160,8 @@
 					password: _this.MD5(_this.password),
 					smsVerificationCode: _this.code,
 					platformId: _this.url.platformId,
-					parentUserId: _this.parentId
+					parentUserId: _this.parentId,
+					unionid: sessionStorage['_openid_']
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 						_this.$vux.toast.show({
@@ -220,17 +221,14 @@
 			login() {
 				var _this = this
 
-				let pid = this.$store.state.user.openid
+				let pid = sessionStorage['_openid_']
 
-				// alert(pid)
 				let params = {
 					audience: 'user',
 					platformId: _this.url.platformId,
 					mobile: _this.mobile,
 					password: _this.MD5(_this.password),
-					terminal: _this.url.client,
-					// type: pid ? 1 : 0,
-					// unionid: pid ? pid : " "
+					terminal: _this.url.client
 				}
 				if(pid) {
 					params.type = 1;
@@ -309,7 +307,7 @@
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
 					//					_this.$refs.password.focus()
-					
+
 					if(_this.mobile.length != 11) {
 						_this.$vux.toast.show({
 							width: '60%',
@@ -329,7 +327,7 @@
 						})
 						return false
 					}
-					
+
 					_this.$nextTick(function() {
 						_this.$http.post(_this.url.user.checkUserExistsByMobile, {
 							mobile: _this.mobile
