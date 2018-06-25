@@ -31,7 +31,7 @@
 					<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
 				</li>
 			</ul>
-			<div id="distanceType" v-if="priceShang">
+			<div id="distanceType" v-if="priceShang" class="fadeInDown animated">
 				<group>
 					<radio class="opPrice" title="title" :options="opPrice" :value="listType" @on-change="changePrice"></radio>
 				</group>
@@ -632,19 +632,21 @@
 				})
 			},
 			provice() {
-				this.items = this.proviceItem;
-				this.addressKey = 1;
+				this.items = this.proviceItem
+				this.addressKey = 1
+				this.cityItem = null
+				this.districtItem = null
 			},
 			city() {
 				if(this.cityItem) {
-					this.items = this.cityItem;
-					this.addressKey = 2;
+					this.items = this.cityItem
+					this.addressKey = 2
 				}
 			},
 			district() {
 				if(this.districtItem) {
-					this.items = this.districtItem;
-					this.addressKey = 3;
+					this.items = this.districtItem
+					this.addressKey = 3
 				}
 			},
 			hide() {
@@ -684,7 +686,7 @@
 	.nav1 .vux-no-group-title {
 		margin-top: 0!important;
 	}
-	
+
 	.opPrice .vux-radio-label {
 		font-size: 0.24rem!important;
 	}

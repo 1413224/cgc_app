@@ -18,7 +18,7 @@
 		<div class="bottom">
 			<div class="title">
 				<div>积分来源</div>
-				<div @click="$router.push({path:'/member/score/strategy'})">积分攻略<img :src="thao" alt="" /></div>
+				<div @click="$router.push({path:'/member/benefits/index'})">积分攻略<img :src="thao" alt="" /></div>
 			</div>
 			<div class="b-list">
 				<group :gutter='0'>

@@ -9,7 +9,7 @@
 				<cell class="list-item" title="意见反馈" is-link link="/member/setting/opinion"></cell>
 				<cell class="list-item" title="关于我们" is-link link="/member/setting/about"></cell>
 			</group>
-			<div v-if="$store.state.page.isLogin == 'true'" class="logout-btn" @click="logout">退出登录</div>
+			<div v-if="$store.state.page.isLogin == 'true'" class="logout-btn" @click="logout">退出登录1</div>
 		</div>
 	</div>
 </template>
@@ -30,25 +30,35 @@
 		methods: {
 			logout() {
 				var _this = this;
-				_this.$http.post(_this.url.user.logout, {
-					audience: _this.url.client,
-					userId: _this.$store.state.user.userId,
-					platformId: _this.url.platformId
-				}).then((res) => {
-					if(res.data.status == '00000000') {
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '退出成功'
+				_this.$dialog.show({
+					type: 'warning',
+					headMessage: '提示',
+					message: '确定退出登录吗?',
+					canel() {
+
+					},
+					confirm() {
+						_this.$http.post(_this.url.user.logout, {
+							audience: _this.url.client,
+							userId: _this.$store.state.user.userId,
+							platformId: _this.url.platformId
+						}).then((res) => {
+							if(res.data.status == '00000000') {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '退出成功'
+								})
+								_this.$router.replace({
+									path: '/user/reg'
+								})
+								localStorage.removeItem('userInfo')
+								localStorage.setItem('isLogin', false)
+								_this.$store.state.page.isLogin = false
+								localStorage.removeItem('_HASH_')
+							}
 						})
-						_this.$router.replace({
-							path: '/user/reg'
-						})
-						localStorage.removeItem('userInfo')
-						localStorage.setItem('isLogin',false)
-						_this.$store.state.page.isLogin = false
-						localStorage.removeItem('_HASH_')
 					}
 				})
 			}

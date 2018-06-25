@@ -48,9 +48,7 @@
 							<div class="null-box" v-else>
 								<img src="../../../assets/images/index/null-data.png" alt="" />
 								<p>暂无伙伴</p>
-								<router-link to="/member/purse/qrcode">
-									<div class="add-btn">我要邀请</div>
-								</router-link>
+								<div @click="toQrcode" class="add-btn">我要邀请</div>
 							</div>
 						</div>
 					</div>
@@ -109,7 +107,10 @@
 			toQrcode() {
 				var _this = this
 				_this.$router.push({
-					path: '/member/purse/qrcode'
+					path: '/member/purse/qrcode',
+					query: {
+						index: 1
+					}
 				})
 			},
 			//上拉加载
@@ -200,7 +201,7 @@
 						top: 0;
 						bottom: 0;
 						width: 100%;
-						.content{
+						.content {
 							height: 100%;
 						}
 					}
