@@ -96,6 +96,14 @@ export default {
 				icon: './static/member/wechapaid.png',
 				key: '3',
 				value: '微信支付'
+			},{
+				icon: './static/member/qqpay.png',
+				key: '4',
+				value: 'QQ钱包支付'
+			},{
+				icon: './static/member/jdpay.png',
+				key: '5',
+				value: '京东支付'
 			}],
 			selectItem: 0
 		}
