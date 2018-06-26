@@ -245,8 +245,6 @@
 						localStorage.setItem('_HASH_', hash)
 
 						localStorage.setItem('isLogin', true)
-						
-						_this.$store.state.page.isLogin = true
 
 						_this.$vux.toast.show({
 							width: '50%',
