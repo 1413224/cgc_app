@@ -103,36 +103,6 @@
 								shopname: '4女装U宽腿牛仔裤(水洗产品)',
 								size: '颜色:蓝色；尺码:L/170修身',
 								num: '1'
-							},
-							{
-								shopname: '5女装U宽腿牛仔裤(水洗产品)',
-								size: '颜色:蓝色；尺码:L/170修身',
-								num: '1'
-							},
-							{
-								shopname: '6女装U宽腿牛仔裤(水洗产品)',
-								size: '颜色:蓝色；尺码:L/170修身',
-								num: '1'
-							},
-							{
-								shopname: '7女装U宽腿牛仔裤(水洗产品)',
-								size: '颜色:蓝色；尺码:L/170修身',
-								num: '1'
-							},
-							{
-								shopname: '8女装U宽腿牛仔裤(水洗产品)',
-								size: '颜色:蓝色；尺码:L/170修身',
-								num: '1'
-							},
-							{
-								shopname: '9女装U宽腿牛仔裤(水洗产品)',
-								size: '颜色:蓝色；尺码:L/170修身',
-								num: '1'
-							},
-							{
-								shopname: '10女装U宽腿牛仔裤(水洗产品)',
-								size: '颜色:蓝色；尺码:L/170修身',
-								num: '1'
 							}
 						],
 						score: '100',
@@ -217,32 +187,6 @@
 						score: '100',
 						money: '30',
 						btnStatus: ["提醒发货"]
-					},
-					{
-						store: '优衣库专卖店',
-						status: 2,
-						statusContent: '卖家已发货',
-						shopList: [{
-							shopname: '女装U宽腿牛仔裤(水洗产品)',
-							size: '颜色:蓝色；尺码:L/170修身',
-							num: '1'
-						}],
-						score: '100',
-						money: '30',
-						btnStatus: ["确认收货", "查看物流"]
-					},
-					{
-						store: '优衣库专卖店',
-						status: 3,
-						statusContent: '交易成功',
-						shopList: [{
-							shopname: '女装U宽腿牛仔裤(水洗产品)',
-							size: '颜色:蓝色；尺码:L/170修身',
-							num: '1'
-						}],
-						score: '100',
-						money: '30',
-						btnStatus: ["确认收货", "退货", "查看物流"]
 					},
 					{
 						store: '优衣库冒牌店',
@@ -519,7 +463,6 @@
 	}
 	
 	.box2 {
-		background-color: white;
 		.box-head {
 			margin-top: 0.25rem;
 			height: 0.8rem;
@@ -549,6 +492,7 @@
 			}
 		}
 		.box-detail {
+			background-color: white;
 			.shop-detail {
 				height: 1.7rem;
 				padding-right: 0.2rem;

@@ -116,15 +116,26 @@
 			}
 		},
 		created() {
+			this.$vux.toast.show({
+				width: '60%',
+				type: 'text',
+				position: 'middle',
+				text: '请先登录再体验此功能'
+			})
+			if(this.$store.state.page.isLogin == 'false') {
+				this.$router.replace({
+					path: '/user/reg'
+				})
+			}
+
 			this.getUserInfo()
 			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
 			this.width = Number(document.body.clientWidth * 0.55)
 
 			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
-			document.title = this.$route.query.text
-			this.title = this.$route.query.text
+			document.title = this.$route.query.text ? this.$route.query.text : '我的赚钱码'
+			this.title = this.$route.query.text ? this.$route.query.text : '我的赚钱码'
 		},
-		mounted() {},
 		methods: {
 			qrcodeClick(index, text) {
 				var _this = this

@@ -1,6 +1,7 @@
 import o_success from '@/views/shop/o_success'
 import t_success from '@/views/shop/t_success'
 import my_order from '@/views/shop/my_order'
+import my_order2 from '@/views/shop/my_order2'
 import shop from '@/views/shop/temporarily'
 import shop_cart from '@/views/shop/shop_cart'
 import confirm from '@/views/shop/confirm'
@@ -47,6 +48,14 @@ const shopModule = [
 		path: '/shop/my_order', //我的订单
 		name: 'my_order',
 		component:  resolve => require(['@/views/shop/my_order'], resolve),
+		meta: {
+			title:'我的订单'
+		}
+	},
+	{
+		path: '/shop/my_order2', //我的订单
+		name: 'my_order2',
+		component:  resolve => require(['@/views/shop/my_order2'], resolve),
 		meta: {
 			title:'我的订单'
 		}
