@@ -72,7 +72,7 @@
 							</router-link>
 						</li>
 						<li>
-							<router-link to="/shop/my_order">
+							<router-link to="/shop/my_order2">
 								<div class="li-box">
 									<img src="../../assets/images/member/member_account.png">
 									<!--<badge class="new-account" text="2312"></badge>-->
@@ -248,9 +248,9 @@
 			toOrder(index) {
 				var _this = this
 				_this.$router.push({
-					path: '/shop/my_order',
+					path: '/shop/my_order2',
 					query: {
-						tabIndex: index
+						tabNo: true
 					}
 				})
 			},
