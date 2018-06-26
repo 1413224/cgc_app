@@ -1,6 +1,12 @@
 <template>
 	<section class='myOrder' style="height: 100%">
 		<settingHeader :title="title"></settingHeader>
+		<div class="searchBox">
+			<div class="search">
+				<img src="../../assets/images/shop/search.png">
+				<input type="text" placeholder="搜索心仪的门店" @click="goSearch">
+			</div>
+		</div>
 		<tab :line-width="1" :scroll-threshold="5" custom-bar-width="30px">
 	      <tab-item selected @on-item-click="onLookAll">全部</tab-item>
 	      <tab-item @on-item-click="onItemClick">待付款</tab-item>
@@ -10,9 +16,9 @@
 	    </tab>
 		<div class="wrapper" ref="wrapper" >
 			<div class="content">
-			    <div class="box" v-if=" test == true">
+			    <div class="box" v-if="test == true && orderList">
 			        <div class="box2">
-			            <div class="shop-box" v-for="(order,index) in orderList">
+			            <div class="shop-box" v-for="(order,index) in orderList" :key="index">
 			    			<div class="box-head">
 			    				<div class="fl">
 			    					<img src="../../assets/images/shop/UNIQLO.png" alt="" class='shop-logo'>
@@ -23,7 +29,7 @@
 			    				<div class="clear"></div>
 			    			</div>
 			    			<div class="box-detail" @click="goOrderdetails">
-			    				<div class="shop-detail" v-for="(item,sIndex) in order.shopList">
+			    				<div class="shop-detail" v-for="(item,sIndex) in order.shopList" :key="sIndex">
 			    					<img src="../../assets/images/shop/order_detail1.png" alt="" class='fl'>
 			    					<div class="fl shop-details">
 			    						<p class="shop-name">{{item.shopname}}</p>
@@ -43,7 +49,7 @@
 			    			</div>
 			    			<div class="box-bottom">
 			    				<div class="shop-btn btn-status1 fr" @click="goRouter(order.btnStatus[0])">{{order.btnStatus[0]}}</div>
-			    				<div class="shop-btn fr" @click="showAlert(btn)" v-for="(btn,cIndex) in order.btnStatus" v-if="cIndex>0">
+			    				<div class="shop-btn fr" @click="showAlert(btn)" v-for="(btn,cIndex) in order.btnStatus" :key="cIndex" v-if="cIndex>0">
 			    					<span>{{btn}}</span>
 			    				</div>
 			    			</div>
@@ -319,8 +325,55 @@
 </script>
 
 <style lang="less" scoped>
+.myOrder{
+	.searchBox {
+		width: 100%;
+		background: #fff;
+		padding-bottom: 0.14rem;
+		border-top: 0.01rem solid #D8DFF0;
+		position: relative;
+		z-index: 700;
+		.search {
+			position: relative;
+			width: 92%;
+			margin: 0 auto;
+			padding-top: 0.14rem;
+			img {
+				position: absolute;
+				width: 5%;
+				top: 0.25rem;
+				left: 0.26rem;
+			}
+			input {
+				width: 100%;
+				background: #F5F6FA;
+				border-radius: 2px;
+				color: #1A2642;
+				font-size: 0.24rem;
+				padding: 0.14rem 0.1rem 0.12rem 0.78rem;
+				box-sizing: border-box;
+			}
+			input::-webkit-input-placeholder {
+				color: #90A2C7 !important; // WebKit browsers 
+			}
+			input:-moz-placeholder {
+				color: #90A2C7 !important; // Mozilla Firefox 4 to 18 
+			}
+			input::-moz-placeholder {
+				color: #90A2C7 !important; //Mozilla Firefox 19+ /
+			}
+			input:-ms-input-placeholder {
+				color: #90A2C7 !important; //Internet Explorer 10+ */
+			}
+		}
+	}
+}
+
 	.wrapper {
-		height: 93.2%;
+		// height: 93.2%;
+		position:absolute;
+		top:142px;
+		width: 100%;
 		background-color: #F5F6FA;
 		overflow: hidden;
 	}
