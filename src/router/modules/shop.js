@@ -22,6 +22,8 @@ import summary from '@/views/shop/temporarily'
 import store_qrcode from '@/views/multi_user_mall/store_qrcode'
 import shop_log from '@/views/shop/shop_log'
 
+// import fisOrderDetail from '@/views/shop/fisOrderDetail'
+
 const shopModule = [
 	// 商城模块
 	{
