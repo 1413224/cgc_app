@@ -14,12 +14,9 @@ const webpackConfig = {
   entry: {
     app: './src/main.js'
   },
-  // externals:{//不需要打包
-  //   'vue':'Vue',
-  //   'vue-router':'VueRouter',
-  //   'vuex':'Vuex',
-  //   'axios':'axios'
-  // },
+  externals:{//不需要打包
+    'echarts':'echarts'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

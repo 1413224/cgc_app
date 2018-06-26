@@ -4,13 +4,13 @@
 		<div class="nav">
 			<div class="pr">
 				<div class="area" @click="onType">
-					<p>类型<i class="iconfont" :class="typeShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+					<p>{{defaultType}}<i class="iconfont" :class="typeShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 				</div>
 				<div class="price" @click="onStatus">
-					<p>状态<i class="iconfont" :class="statusShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+					<p>{{defaultStatus}}<i class="iconfont" :class="statusShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 				</div>
 				<div class="type" @click="onDate">
-					<p>领取时间<i class="iconfont" :class="dateShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+					<p>{{defaultTime}}<i class="iconfont" :class="dateShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 				</div>
 			</div>
 			<!--筛选菜单栏-->
@@ -41,7 +41,7 @@
 			<div class="wrapper" :class="{'top46':$store.state.page.isWx}" ref="wrapper">
 				<div class="content">
 					<div v-if="couponList.length>0">
-						<div v-for="(item,index) in couponList" :style="[!item.show?mb:'']" class="roll">
+						<div v-for="(item,index) in couponList" :key="index" :style="[!item.show?mb:'']" class="roll">
 							<!-- -->
 							<div class="rollOne">
 								<div class="right">
@@ -112,6 +112,9 @@
 				twoIndex: 0,
 				drawerShow: false,
 				show: false,
+				defaultType:"类型",
+				defaultStatus:"状态",
+				defaultTime:"领取时间",
 				couponType: ['全部', '未使用', '已使用', '已过期'],
 				twoClass: ['所有优惠券', '体验券', '满减券', '折扣券'],
 				title: '我的优惠券',
@@ -219,6 +222,7 @@
 					_this.par.type = parseInt(value)
 					_this.changeRouter(_this.par)
 					_this.getCouponList(_this.par)
+					_this.defaultType = label
 					_this.typeShang = false
 				}, 50)
 			},
@@ -234,6 +238,7 @@
 					_this.par.status = parseInt(value)
 					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
+					_this.defaultStatus = label
 					_this.statusShang = false
 				}, 50)
 			},
@@ -249,6 +254,7 @@
 					_this.par.timeType = parseInt(value);
 					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
+					_this.defaultTime = label
 					_this.dateShang = false;
 				}, 50);
 			},

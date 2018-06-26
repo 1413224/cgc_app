@@ -6,7 +6,7 @@
 				<div class="content">
 					<swiper :options="swiperOption" class="swiper">
 				        <swiper-slide v-for="(item,index) in demoList" :key="index">
-				        	<img v-lazy="item">
+				        	<img :src="item">
 				        </swiper-slide>
 				        <div class="swiper-pagination" slot="pagination"></div>
 			        </swiper>
@@ -198,8 +198,22 @@
 	height: 100%;
 	background: #E32921;
 }
+.settingHeader ~ .wrapper{
+	position: absolute;
+	top:.9rem;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	background: #E32921;
+}
 .wrapper {
-	height: 100%;
+	// height: 100%;
+	position: absolute;
+	top:0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	overflow: hidden;
 	background: #E32921;
 }
