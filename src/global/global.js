@@ -266,6 +266,15 @@ var mainApp = {
 			return true
 		}
 	},
+	isqq(qq) {
+		var reg = /^[\d]{5,13}$/
+
+		if(!reg.test(qq)) {
+			return false
+		} else {
+			return true
+		}
+	},
 	getCs(name) {
 		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
 	},

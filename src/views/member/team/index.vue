@@ -5,12 +5,12 @@
 			<div class="top">
 				<div class="middle">
 					<p>{{totalNums}}</p>
-					<p>合伙人( 人 )</p>
+					<p>合伙人</p>
 				</div>
-				<div class="right" @click="toQrcode">
+				<!--<div class="right" @click="toQrcode">
 					<img src="../../../assets/images/member/yq@2x.png" />
 					<span>我要邀请</span>
-				</div>
+				</div>-->
 			</div>
 
 			<div class="list-box">
@@ -21,7 +21,8 @@
 								<div class="list" v-for="(item,index) in list" :key="index">
 									<div class="he">
 										<div class="user-img">
-											<img v-if="item.avatar" :src="item.avatar.original?item.avatar.original:'./static/images/mrtx.png'" />
+											<img v-if="item.avatar" :src="item.avatar.original" />
+											<img v-else :src="'./static/images/mrtx.png'" />
 										</div>
 										<div class="user-text">
 											<p v-if="item.mobile">手机号码：{{item.mobile}}</p>

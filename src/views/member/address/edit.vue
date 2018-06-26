@@ -151,7 +151,7 @@
 					})
 					return
 				}
-				if(_this.info.email && !_this.mainApp.isemail(_this.info.email)) {
+				if(!_this.mainApp.isemail(_this.info.email)) {
 					_this.$vux.toast.show({
 						type: 'text',
 						width: '50%',

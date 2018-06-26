@@ -74,8 +74,8 @@
 				contactnum: '',
 				showsex: false,
 				showrec: false,
-				sexlist: ['男', '女','未设置'],
-				reclist: ['小学', '初中', '高中', '大专', '本科'],
+				sexlist: ['男', '女', '保密'],
+				reclist: ['小学', '初中', '高中', '大专', '本科','硕士','博士'],
 				txt: '<span>请选择性别</span>',
 				backImages: [],
 				pindex: 0,
@@ -87,13 +87,16 @@
 				imgdata: null,
 				token: '',
 				fileIdList: [],
-				instance: ''
+				instance: '',
+				maxDate: ''
 			}
 		},
 		created() {
+			var _this = this
+
 			this.getUserInfo()
 
-			var _this = this
+			_this.maxDate = _this.getDate()
 		},
 		mounted() {
 
@@ -113,12 +116,12 @@
 					if(res.data.status == '00000000') {
 						var info = res.data.data
 						_this.gender = info.gender
-						if(info.gender == 1){
+						if(info.gender == 1) {
 							_this.sex = '男'
-						}else if(info.gender == 2){
+						} else if(info.gender == 2) {
 							_this.sex = '女'
-						}else{
-							_this.sex = '未设置'
+						} else {
+							_this.sex = '保密'
 						}
 						_this.xl = info.education
 						if(info.education == 0) {
@@ -131,6 +134,10 @@
 							_this.education = '大专'
 						} else if(info.education == 4) {
 							_this.education = '本科'
+						}else if(info.education == 5) {
+							_this.education = '硕士'
+						} else if(info.education == 6) {
+							_this.education = '博士'
 						}
 						_this.birthday = _this.mainApp.frDateTimehp.getFormatDateTamp(info.birthday * 1000)
 						_this.wxnum = info.wechat
@@ -163,8 +170,8 @@
 				} else if(val == 1) {
 					this.sex = '女'
 					this.gender = 2
-				}else if(val == 2){
-					this.sex = '未设置'
+				} else if(val == 2) {
+					this.sex = '保密'
 					this.gender = 0
 				}
 			},
@@ -180,6 +187,10 @@
 					this.education = '大专'
 				} else if(val == 4) {
 					this.education = '本科'
+				} else if(val == 5) {
+					this.education = '硕士'
+				} else if(val == 6) {
+					this.education = '博士'
 				}
 			},
 			showDate() {
@@ -190,6 +201,7 @@
 					cancelText: '取消',
 					clearText: '请选择日期',
 					minYear: '1970',
+					endDate: _this.maxDate,
 					onConfirm(val) {
 						_this.birthday = val
 					}
@@ -236,8 +248,8 @@
 				}
 				_this.$http.post(_this.url.user.fileuploadImage, data).then((res) => {
 					if(res.data.status == '00000000') {
-						_this.$set(_this.backImages,_this.pindex,res.data.data.fileUrl)
-						_this.$set(_this.fileIdList,_this.pindex,res.data.data.fileId)
+						_this.$set(_this.backImages, _this.pindex, res.data.data.fileUrl)
+						_this.$set(_this.fileIdList, _this.pindex, res.data.data.fileId)
 					}
 				})
 			},
@@ -247,6 +259,16 @@
 			},
 			changeUserInfo() {
 				var _this = this
+				
+				if(!_this.mainApp.isqq(_this.qq) && _this.qq) {
+					_this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'middle',
+						text: 'qq格式不符合要求'
+					})
+					return false
+				}
 
 				if(!_this.mainApp.isemail(_this.email) && _this.email) {
 					_this.$vux.toast.show({
@@ -292,6 +314,19 @@
 						_this.getUserInfo()
 					}
 				})
+			},
+			getDate() {
+				var date = new Date();
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var day = date.getDate();
+				if(month < 10) {
+					month = "0" + month;
+				}
+				if(day < 10) {
+					day = "0" + day;
+				}
+				return year + "-" + month + "-" + day;
 			}
 		},
 		components: {

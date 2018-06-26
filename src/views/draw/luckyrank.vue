@@ -2,10 +2,12 @@
 	<section style="background-color: #E32921;height: 100%;">
 		<div class="luckyrank">
 			<settingHeader :title="title"></settingHeader>
-			<tab active-color="#E32921" custom-bar-width="80px" default-color="#333">
-				<tab-item :selected="tabIndex == 0" @on-item-click="showNumber">中奖次数</tab-item>
-				<tab-item :selected="tabIndex == 1" @on-item-click="showMoney">中奖累计金额</tab-item>
-			</tab>
+			<div style="height: 0.98rem;">
+				<tab active-color="#E32921" custom-bar-width="80px" default-color="#333">
+					<tab-item :selected="tabIndex == 0" @on-item-click="showNumber">中奖次数</tab-item>
+					<tab-item :selected="tabIndex == 1" @on-item-click="showMoney">中奖累计金额</tab-item>
+				</tab>
+			</div>
 			<div class="wrapper" ref="wrapper">
 				<div class="content">
 					<!-- 排行前3名 -->
@@ -262,7 +264,7 @@
 </script>
 
 <style lang="less" scoped>
-	.settingHeader + .vux-tab-wrap ~ .wrapper{
+	.settingHeader+.vux-tab-wrap~.wrapper {
 		position: absolute;
 		top: 100px;
 		left: 0;
@@ -270,10 +272,10 @@
 		bottom: 0;
 		overflow: hidden;
 	}
+	
 	.wrapper {
-		// height: 92.4%;
 		position: absolute;
-		top: 52px;
+		top: 0.98rem;
 		left: 0;
 		right: 0;
 		bottom: 0;
@@ -467,7 +469,7 @@
 	
 	.rankData {
 		width: 90%;
-    	margin: 0px auto;
+		margin: 0px auto;
 		.weui-cells {
 			margin-top: 0;
 		}

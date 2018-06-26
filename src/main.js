@@ -16,7 +16,7 @@ import FastClick from 'fastclick'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import VueLazyLoad from 'vue-lazyload'
-import mainApp from './global/global'   //时间控件  全局时间过滤器
+import mainApp from './global/global' //时间控件  全局时间过滤器
 import { base64_encode, base64_decode } from './global/course.js'
 import MD5 from 'js-md5'
 import axios from './config/axios_config'
@@ -26,9 +26,9 @@ import dialog from '@/components/dialog'
 import code from '@/components/code'
 import scimg from '@/components/scimg'
 import popup from '@/components/popup'
-import animate from 'animate.css'//引用动画库
-import { LoadingPlugin, DatetimePlugin, ToastPlugin } from 'vux'//全局load
-import echarts from 'echarts'//echart
+import animate from 'animate.css' //引用动画库
+import { LoadingPlugin, DatetimePlugin, ToastPlugin } from 'vux' //全局load
+import echarts from 'echarts' //echart
 import merge from 'webpack-merge'
 import vuePicturePreview from 'vue-picture-preview'
 import { BusPlugin } from 'vux'
@@ -184,8 +184,8 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_'];
-
-	if(!openid && (to.path != '/member/oriza')) {
+	
+	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
 
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 
