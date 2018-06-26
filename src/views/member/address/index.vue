@@ -2,7 +2,7 @@
 	<div class="address-box">
 		<div style="position: relative;height: 100%;">
 			<settingHeader :title="title"></settingHeader>
-			<div v-if="list.length>0">
+			<div v-if="list.length>0" style="padding-bottom: 1rem;">
 				<div class="list" v-for="(item,index) in list" :key="index">
 					<div class="top">
 						<div class="pro">
@@ -132,10 +132,7 @@
 <style lang="less" scoped>
 	.address-box {
 		background-color: #F5F6FA;
-		padding-bottom: 1rem;
-		box-sizing: border-box;
 		height: 100%;
-		overflow: hidden;
 		.settingHeader {
 			position: relative;
 		}

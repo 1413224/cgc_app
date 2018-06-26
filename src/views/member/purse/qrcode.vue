@@ -148,8 +148,8 @@
 					})
 				})
 
-				document.title = _this.$route.query.text
-				_this.title = _this.$route.query.text
+				document.title = text
+				_this.title = text
 			},
 			getUserInfo() {
 				var _this = this

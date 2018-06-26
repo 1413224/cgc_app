@@ -664,7 +664,7 @@
 	}
 </script>
 <style>
-	.vux-popup-mask {
+	.storelist-box1 .vux-popup-mask {
 		z-index: 700!important;
 	}
 	

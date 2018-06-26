@@ -63,7 +63,7 @@
 							<div @click="lookAllp(item.pList.length)">显示全部 <img :class="{'r':showAll}" src="../../../static/member/yhq-down.png" alt="" /></div>
 						</div>
 						<div class="order_bottom">
-							<span class="num">共 {{item.aNum}}件</span>
+							<span class="num">共 {{item.aNum}} 件</span>
 							<span>合计：<i>{{item.aJg}}</i>元</span>
 							<span class="yf">(含运费{{item.pyf}}) </span>
 							<span> +<i>{{item.pzf}}</i>信用积分</span>
@@ -676,7 +676,6 @@
 		}
 		.tab_box {
 			height: 0.82rem;
-			margin-bottom: 0.2rem;
 		}
 		.order_list_box {
 			.wrapper {
@@ -687,8 +686,8 @@
 				background: rgba(245, 246, 250, 1);
 				z-index: 11;
 			}
-			.top0{
-				top: 0!important;
+			.top0 {
+				top: 0.2rem!important;
 			}
 			.order_item {
 				background: white;
@@ -714,7 +713,7 @@
 							color: rgba(26, 38, 66, 1);
 							overflow: hidden;
 							text-overflow: ellipsis;
-							display: -webkit-box;
+							white-space: nowrap;
 							-webkit-line-clamp: 1;
 							-webkit-box-orient: vertical;
 						}
