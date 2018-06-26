@@ -85,6 +85,14 @@ const shopModule = [
 		}
 	},
 	{
+		path: '/shop/fisOrderDetail', //订单详情(虚拟订单)
+		name: 'fisOrderDetail',
+		component: resolve => require(['@/views/shop/fisOrderDetail'], resolve),
+		meta: {
+			title:'订单详情'
+		}
+	},
+	{
 		path: '/shop/theme_goods', //主题商品
 		name: 'theme_goods',
 		component: resolve => require(['@/views/shop/theme_goods'], resolve),
