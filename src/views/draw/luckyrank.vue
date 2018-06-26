@@ -262,8 +262,21 @@
 </script>
 
 <style lang="less" scoped>
+	.settingHeader + .vux-tab-wrap ~ .wrapper{
+		position: absolute;
+		top: 100px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+	}
 	.wrapper {
-		height: 92.4%;
+		// height: 92.4%;
+		position: absolute;
+		top: 52px;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		overflow: hidden;
 	}
 	
@@ -453,6 +466,8 @@
 	}
 	
 	.rankData {
+		width: 90%;
+    	margin: 0px auto;
 		.weui-cells {
 			margin-top: 0;
 		}

@@ -11,7 +11,7 @@
 						<div class="g">{{userInfo.levelName}}</div>
 					</div>
 				</div>
-				<div class="printOrder" v-for="(v,k) in list">
+				<div class="printOrder" v-for="(v,index) in list" :key="index">
 					<div v-if="$store.state.page.isLogin == 'true'">
 						<p class="tip">向营业员出示会员码完成会员积分或付款</p>
 						<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
@@ -116,13 +116,14 @@
 			}
 		},
 		created() {
-			this.$vux.toast.show({
-				width: '60%',
-				type: 'text',
-				position: 'middle',
-				text: '请先登录再体验此功能'
-			})
+			
 			if(this.$store.state.page.isLogin == 'false') {
+				this.$vux.toast.show({
+					width: '60%',
+					type: 'text',
+					position: 'middle',
+					text: '请先登录再体验此功能'
+				})
 				this.$router.replace({
 					path: '/user/reg'
 				})
