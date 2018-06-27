@@ -127,7 +127,8 @@
 						var params={
 							cateid:id,
 							page:_this.page,
-							pagesize:10
+							pagesize:10,
+							islist:true
 						}
 						let par = Qs.stringify(params)
 
