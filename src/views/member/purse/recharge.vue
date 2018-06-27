@@ -10,7 +10,7 @@
 			</div> -->
 			<div class="jifen">
 				<div class="price">{{userInfo.availablePoints}}<span>通用积分</span></div>
-				<div class="ptai">当前平台：<span>{{info.name}}</span></div>
+				<div class="ptai">当前平台：<span>{{info.name?info.name:'当前平台不可用'}}</span></div>
 			</div>
 		</div>
 		<div class="change-box">
@@ -201,26 +201,26 @@
 			// 		color: #1A2642
 			// 	}
 			// }
-			.jifen{
+			.jifen {
 				text-align: center;
-				.price{
+				.price {
 					font-size: .5rem;
 					font-weight: bold;
 					overflow: hidden;
-					white-space:nowrap;
+					white-space: nowrap;
 					text-overflow: ellipsis;
-					span{
+					span {
 						font-weight: bold;
 						font-size: .32rem;
 						display: inline-block;
 						margin-left: .1rem;
 					}
 				}
-				.ptai{
+				.ptai {
 					color: #90A2C7;
 					font-size: .28rem;
 					margin-top: .1rem;
-					span{
+					span {
 						color: #333;
 					}
 				}

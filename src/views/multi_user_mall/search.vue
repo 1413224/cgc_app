@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="searchBox">
 			<div class="searchInput">
-				<img src="../../assets/images/shop/search.png">
+				<img :src="'./static/images/ss.png'" />
 				<input type="text" placeholder="搜索商品" @click="showCanel" ref="search" @focus="showCanel">
 			</div>
 			<p class="canel" v-if="canel == true" @click="back">取消</p>
@@ -66,12 +66,12 @@
 			margin: 0;
 			background: #fff;
 			height: 0.83rem;
-			margin-left: 0.26rem;
+			margin:0 0.26rem;
 			li{
 				width: 100%;
 				list-style: none;
 				line-height: 0.83rem;
-				border-bottom: 1px solid #DEDCDC;
+				border-bottom: 1px solid #D8DFF0;
 			}
 		}
 	}
@@ -80,15 +80,16 @@
 .searchBox{
 	width: 100%;
 	background: #fff;
-	padding-bottom: 0.14rem;
 	border-top: 0.01rem solid #D8DFF0;
 	border-bottom: 0.01rem solid #D8DFF0;
+	display: flex;
+    align-items: center;
 	.searchInput{
 		position: relative;
 		width: 80%;
 		margin: 0;
 		margin-left: 0.29rem;
-		padding-top: 0.14rem;
+		padding: 0.14rem 0;
 		float: left;
 		img{
 			position: absolute;
@@ -97,11 +98,15 @@
 			left: 0.26rem;
 		}
 		input{
+			vertical-align: middle;
 			width: 100%;
-			background: #E4EBFB;
+			background: #F5F6FA;
 			border-radius: 2px;
 			color: #1A2642;
-			padding: 0.14rem 0.1rem 0.12rem 0.78rem;
+			height: 0.59rem;
+			line-height: 0.59rem;
+			vertical-align: middle;
+			padding: 0rem 0.1rem 0rem 0.78rem;
 			box-sizing: border-box;
 		}
 		input::-webkit-input-placeholder {
@@ -123,7 +128,6 @@
 		font-size: 0.24rem;
 		text-align: center;
 		margin-left: 0.33rem;
-		margin-top: 0.3rem;
 	}
 }
 </style>

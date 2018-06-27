@@ -131,7 +131,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.fundInfo = res.data.data
-						_this.userImg = _this.fundInfo.avatar.original
+						if(_this.fundInfo.avatar) {
+							_this.userImg = _this.fundInfo.avatar.original
+						}
 						_this.isshowFund = _this.fundInfo.isshowFund
 					}
 				})

@@ -4,7 +4,7 @@
 
 		<div class="searchBox">
 			<div class="search">
-				<img src="../../assets/images/shop/search.png">
+				<img :src="'./static/images/ss.png'" />
 				<input type="text" placeholder="搜索心仪的门店" @click="goSearch">
 			</div>
 		</div>
@@ -664,9 +664,6 @@
 	}
 </script>
 <style>
-	.storelist-box1 .vux-popup-mask {
-		z-index: 700!important;
-	}
 	
 	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
@@ -740,7 +737,7 @@
 		.pr {
 			width: 100%;
 			height: 100%;
-			z-index: 700;
+			z-index: 15;
 			display: flex;
 			align-items: center;
 			position: relative;
@@ -770,10 +767,12 @@
 				overflow: hidden;
 				text-align: left;
 				font-size: 0.24rem;
-				line-height: 0.72rem;
+				line-height: 0.85rem;
+				height: 0.85rem;
+				box-sizing: border-box;
 				border-top: 1px solid #D8DFF0;
 				/*border-bottom: 1px solid #c8c7cc;*/
-				padding: 0 0.22rem;
+				padding: 0 0.35rem;
 				list-style: none;
 			}
 			.category {
@@ -935,7 +934,7 @@
 		height: 100%;
 		background: rgba(0, 0, 0, 0.5);
 		opacity: 0;
-		z-index: 500;
+		z-index: 11;
 		transition: opacity 800ms;
 	}
 	
@@ -1005,7 +1004,7 @@
 		padding-bottom: 0.14rem;
 		border-top: 0.01rem solid #D8DFF0;
 		position: relative;
-		z-index: 700;
+		z-index: 15;
 		.search {
 			position: relative;
 			width: 92%;
@@ -1023,8 +1022,11 @@
 				border-radius: 2px;
 				color: #1A2642;
 				font-size: 0.24rem;
-				padding: 0.14rem 0.1rem 0.12rem 0.78rem;
+				height: 0.59rem;
+				line-height: 0.59rem;
+				padding: 0rem 0.1rem 0rem 0.78rem;
 				box-sizing: border-box;
+				vertical-align: middle;
 			}
 			input::-webkit-input-placeholder {
 				color: #90A2C7 !important; // WebKit browsers 
@@ -1091,14 +1093,18 @@
 				color: #1A2642;
 				.item {
 					width: 1.92rem;
-					margin: 0 0.18rem 0.1rem 0;
-					padding: 0.26rem 0;
+					height: 0.66rem;
+					line-height: 0.66rem;
+					margin: 0 0.18rem 0.18rem 0;
+					border-radius: 3px;
 				}
 				.distance {
 					width: 96%;
 					background: #F5F6FA;
-					padding: 0.22rem;
+					height: 0.7rem;
+					line-height: 0.7rem;
 					box-sizing: border-box;
+					border-radius: 3px;
 					.weui-cell__bd>.weui-input {
 						text-align: center!important;
 					}

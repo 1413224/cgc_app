@@ -380,9 +380,9 @@
 			},
 			//点击全选
 			isallcheck() {
-				this.proidList = [] //重置商品id数组
-				this.storeidList = [] //重置店铺id数组
-				this.storeidList2 = [] //重置店铺id数组
+				this.lmidList = [] //重置商品id数组
+				this.lyidList = [] //重置店铺id数组
+				this.proidList = [] //重置店铺id数组
 
 				if(this.index == 2) {
 					if(this.allprCheck == true) {
