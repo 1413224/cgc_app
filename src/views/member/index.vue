@@ -95,7 +95,7 @@
 			<section v-if="isLogin">
 				<div class="order-box">
 					<p>我的订单</p>
-					<p>查看更多订单<i class="icon iconfont icon-arrow-right"></i></p>
+					<p @click="$router.push({path:'/shop/my_order2'})">查看更多订单<i class="icon iconfont icon-arrow-right"></i></p>
 				</div>
 				<div class="navigation" style="margin-top: 0;">
 					<ul>

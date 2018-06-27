@@ -270,7 +270,7 @@ const memberModule = [{
 		name: 'qrcode',
 		component: resolve => require(['@/views/member/purse/qrcode'], resolve),
 		meta: {
-			title: '我的赚钱码'
+			title: '付款码'
 		}
 	}, {
 		path: '/member/purse/hasqrcode',

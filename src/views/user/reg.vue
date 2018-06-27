@@ -250,7 +250,7 @@
 							width: '50%',
 							type: 'text',
 							position: 'middle',
-							text: '登陆成功'
+							text: '登录成功'
 						})
 
 						//获取用户信息

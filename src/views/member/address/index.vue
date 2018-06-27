@@ -15,8 +15,12 @@
 						<p>{{item.country}}{{item.province}}{{item.city}}{{item.area}} {{item.address}}</p>
 					</div>
 					<div class="bottom">
-						<div @click="ischange(item.addressId, index)">
+						<div v-if="!item.isDefault" @click="ischange(item.addressId, index, item.isDefault)">
 							<check-icon :value.sync="item.isDefault">设置为默认地址</check-icon>
+						</div>
+						<div v-else class="vux-check-icon">
+							<i class="weui-icon weui_icon_success weui-icon-success"></i>
+							<i>设置为默认地址</i>
 						</div>
 						<div>
 							<span @click="toEdit(item.addressId)">编辑</span>
@@ -84,7 +88,7 @@
 					}
 				})
 			},
-			ischange(addressId, i) { // 设置默认地址
+			ischange(addressId, i, state) { // 设置默认地址
 				let _this = this
 				let param = {
 					userId: _this.$store.state.user.userId,

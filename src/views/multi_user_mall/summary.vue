@@ -235,6 +235,8 @@
 					input {
 						width: 4.14rem;
 						height: 0.54rem;
+						line-height: 0.54rem;
+						vertical-align: middle;
 						border-radius: 0.27rem;
 						background: rgba(255, 255, 255, 0.5);
 						/*color: #fff;*/

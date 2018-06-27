@@ -17,7 +17,7 @@
 				</div>
 				<Loading v-if="show"></Loading>
 				<Nomore v-if="showNo"></Nomore>
-				<noData v-if="list.length == 0" :status="2" stateText="暂无变更记录"></noData>
+				<noData v-if="list.length == 0" :status="2" stateText="暂无收益记录"></noData>
 			</div>
 		</div>
 	</div>

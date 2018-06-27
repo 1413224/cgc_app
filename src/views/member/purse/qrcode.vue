@@ -8,7 +8,7 @@
 					<div>
 						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
 						<p class="m">{{userInfo.mobile}}</p>
-						<div class="g">{{userInfo.levelName}}</div>
+						<div class="g">{{userInfo.levelName?userInfo.levelName:'暂无等级'}}</div>
 					</div>
 				</div>
 				<div class="printOrder" v-for="(v,index) in list" :key="index">
@@ -21,7 +21,7 @@
 			</div>
 
 			<!--推广码-->
-			<div v-if="grade>=1 && qrcodeIndex == 1">
+			<div style="padding-bottom: 1.2rem;height: 100%;" v-if="grade>=1 && qrcodeIndex == 1">
 				<div class="bg" :class="!$store.state.page.isWx?'top46':''">
 					<div class="b-w1">
 						<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
@@ -90,7 +90,7 @@
 	export default {
 		data() {
 			return {
-				title: '我的二维码',
+				title: '付款码',
 				grade: 1,
 				width: '',
 				userInfo: {},
@@ -107,7 +107,7 @@
 					},
 					width: '3',
 					height: '55',
-					fontSize: '22px', //字体大小,
+					fontSize: '28px', //字体大小,
 					text: ''
 				},
 				list: [{
@@ -116,7 +116,7 @@
 			}
 		},
 		created() {
-			
+
 			if(this.$store.state.page.isLogin == 'false') {
 				this.$vux.toast.show({
 					width: '60%',
@@ -134,13 +134,14 @@
 			this.width = Number(document.body.clientWidth * 0.55)
 
 			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
-			document.title = this.$route.query.text ? this.$route.query.text : '我的赚钱码'
-			this.title = this.$route.query.text ? this.$route.query.text : '我的赚钱码'
+			document.title = this.$route.query.text ? this.$route.query.text : '付款码'
+			this.title = this.$route.query.text ? this.$route.query.text : '付款码'
 		},
 		methods: {
 			qrcodeClick(index, text) {
 				var _this = this
 				_this.qrcodeIndex = index
+				
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'index': index,
@@ -148,8 +149,10 @@
 					})
 				})
 
-				document.title = text
-				_this.title = text
+				_this.$nextTick(function() {
+					document.title = text
+					_this.title = text
+				})
 			},
 			getUserInfo() {
 				var _this = this
@@ -436,7 +439,7 @@
 			bottom: 0;
 			width: 100%;
 			height: 100%;
-			padding: 60px 0.44rem 0rem 0.44rem;
+			padding: 60px 0.44rem 1.2rem 0.44rem;
 			box-sizing: border-box;
 			background: url(../../../../static/images/qrcode-bg.png) no-repeat;
 			background-size: 100% 100%;
@@ -450,7 +453,7 @@
 				font-size: 0.30rem;
 				font-family: PingFangSC-Medium;
 				color: rgba(255, 255, 255, 1);
-				margin-top: 0.2rem;
+				margin-top: 0.3rem;
 			}
 			.b-w1 {
 				width: 5.78rem;

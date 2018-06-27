@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="px" v-if="!tabNo">
 			<div class="search">
-				<div class="ss_box_left">
+				<div class="ss_box_left" @click="$router.push({path:'/multi_user_mall/search'})">
 					<input type="text" placeholder="搜索商品" />
 					<img :src="'./static/images/ss.png'" />
 				</div>
@@ -45,7 +45,7 @@
 								<p v-if="item.orderStatus == 6">交易取消</p>
 							</div>
 						</div>
-						<div class="order_middle" @click="toDetail" v-for="(i,index) in item.pList" :key="index" v-if="(index+1) <= showNum" :class="{'m':index <= showNum - 2}">
+						<div class="order_middle" @click="toDetail" v-for="(i,index2) in item.pList" :key="index2" v-if="(index2+1) <= item.showNum" :class="[{'m':(index2 != item.pList.length - 1) && item.pList.length <= 10},{'m':(index2 != item.showNum - 1 && index2 != item.pList.length - 1) && item.pList.length > 10}]">
 							<div class="left">
 								<img :src="'./static/images/cai2.png'" />
 							</div>
@@ -60,7 +60,7 @@
 						</div>
 
 						<div class="look_all_box" v-if="item.pList.length > 10">
-							<div @click="lookAllp(item.pList.length)">显示全部 <img :class="{'r':showAll}" src="../../../static/member/yhq-down.png" alt="" /></div>
+							<div @click="lookAllp(item.pList.length,index)">{{item.showAll?'收起':'显示全部'}} <img :class="{'r':item.showAll}" :src="'./static/member/yhq-down.png'" alt="" /></div>
 						</div>
 						<div class="order_bottom">
 							<span class="num">共 {{item.aNum}} 件</span>
@@ -182,6 +182,7 @@
 				typeOrderIndex: 0, //订单类型
 				typeDateIndex: 0, //时间类型
 				tabNo: false, //隐藏tab
+				showIndex: '',
 				sList: [{
 					logo: './static/images/ss.png',
 					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
@@ -191,7 +192,79 @@
 					pyf: 10,
 					pzf: 1200000,
 					pStatus: 0,
+					showNum: 10,
+					showAll:false,
 					pList: [{
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
+						pLogo: './static/images/ss.png',
+						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
+						pXhao: '颜色:蓝色；尺码:L/170修身',
+						pNum: 1,
+						pJg: '1200000',
+						pType: 0
+					}, {
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
 						pXhao: '颜色:蓝色；尺码:L/170修身',
@@ -208,6 +281,8 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 0,
+					showNum: 10,
+					showAll:false,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -435,9 +510,9 @@
 			typeDate(index) {
 				this.typeDateIndex = index
 			},
-			lookAllp(length) {
-				this.showAll = !this.showAll
-				this.showNum = this.showAll ? length : 10
+			lookAllp(length, index) {
+				this.sList[index].showAll = !this.sList[index].showAll
+				this.sList[index].showNum = this.sList[index].showAll ? length : 10
 			},
 			//付款
 			pay() {
@@ -705,9 +780,9 @@
 						img {
 							width: 0.36rem;
 							height: 0.36rem;
+							margin-right: 0.23rem;
 						}
 						p {
-							margin-left: 0.23rem;
 							font-size: 0.28rem;
 							font-family: PingFangSC-Regular;
 							color: rgba(26, 38, 66, 1);
