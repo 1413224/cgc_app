@@ -664,9 +664,7 @@
 	}
 </script>
 <style>
-	.storelist-box1 .vux-popup-mask {
-		z-index: 700!important;
-	}
+	
 	
 	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
@@ -708,6 +706,10 @@
 <style lang="less" scoped>
 	.storelistMask {
 		top: 3rem!important;
+	}
+
+	.storelist-box1 .vux-popup-mask {
+		z-index: 700!important;
 	}
 	
 	.h {

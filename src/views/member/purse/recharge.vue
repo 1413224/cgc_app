@@ -175,11 +175,12 @@
 
 <style lang="less">
 	.recharge-box {
-		height: 100%;
+		// height: 100%;
 		position: relative;
 		font-family: PingFangSC-Medium;
 		// background-color: #F5F6FA;
 		background-color: #fff;
+		padding-bottom: 1.6rem;
 		.item {
 			padding: 0.31rem 0.22rem;
 			box-sizing: border-box;
@@ -331,11 +332,12 @@
 			}
 		}
 		.btn-box {
-			position: absolute;
+			position: fixed;
 			bottom: 0;
 			width: 100%;
 			padding: 0.25rem;
 			box-sizing: border-box;
+			background: #fff;
 			.add-btn {
 				height: 0.88rem;
 				line-height: 0.88rem;

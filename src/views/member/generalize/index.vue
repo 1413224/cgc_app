@@ -4,8 +4,8 @@
 		<div class="alerts-tob">
 			<swiper :options="swiperOption" class="swiper">
 		        <swiper-slide v-for="(item, index) in tabData" :key="index">
-		        	<div class="tab-item" :class="{'tab-item-active':actTab == index}" @click="actTab = index">
-	                    {{item}}
+		        	<div class="tab-item" :class="{'tab-item-active':actTab == index}" @click="onLoadDataFirst(index,item.cateid)">
+	                    {{item.name}}
 	                </div>
 		        </swiper-slide>
 		    </swiper>
@@ -13,85 +13,26 @@
        </div>
        <div class="wrapper" ref="wrapper">
 			<div class="content">
-		       <div class="news">
-			        <!-- <div id="pullrefresh" class="mui-content mui-scroll-wrapper"> -->
-			            <!-- <div class="mui-scroll"> -->
-			                <!--<div class="flag" v-if="showNull">-->
-			                <!--<img src="../addons/mx_shop/resources/cgc/images/my_care3.png">-->
-			                <!--<p>您还没有任何关注哦</p>-->
-			                <!--<a href="{php echo mobileUrl('stores')}">去逛逛</a>-->
-			                <!--</div>-->
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new">
-			                    <p class="newTitle">CGC区块链共享经济云服务平台为企业增效可持续发展保驾护航!</p>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <div class="new oneImage">
-			                    <p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p>
-			                    <div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-			                    <p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p>
-			                    <div class="clear"></div>
-			                </div>
-			                <!-- <div class="new" :class="item.imgNumber==1?'oneImage':''" v-for="item in items">
-			                    <a :href="item.url">
-			                        <p class="newTitle">{{item.name}}!</p>
-			                        <div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
-			                        <div class="imgList" v-show="item.imgNumber>1">
-			                            <img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2'> -->
-			                            <!--<img src="../addons/mx_shop/resources/cgc/images/index/index01.jpg" alt="">-->
-			                            <!--<img src="../addons/mx_shop/resources/cgc/images/index/index01.jpg" alt="">-->
-			                        <!-- </div>
-			                        <p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
-			                        <div class="clear"></div>
-			                    </a>
-			                </div>
-			                <input type="hidden" value="{$token}" id="token"> -->
-			            <!-- </div> -->
-			        <!-- </div> -->
+		       <div class="news">   
+					<noData v-if="showNull" :status="2" stateText="暂无数据"></noData>
+
+					<div class="new" :class="{'oneImage':item.imgs.length>0}" v-for="(item,index) in articleList" :key="index">
+						<a :href="item.url">
+							<p class="newTitle">{{item.name}}</p>
+							<!-- ../../../assets/images/member/index01.jpg -->
+							<div class="right" v-if="item.imgs.length"><img :src='item.imgs[0]' alt=""></div>
+							<p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
+							<div class="clear"></div>
+						</a>
+					</div>
+
+					<!-- <div class="new oneImage">
+						<p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p >
+						<div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
+						<p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p >
+						<div class="clear"></div>
+					</div> -->
+
 			    </div>
 			    <loading v-if="show"></loading>
 		    	<noMore v-if="showNomore"></noMore>
@@ -103,18 +44,33 @@
 	import settingHeader from '../../../components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import BScroll from 'better-scroll'
+	import noData from '../../../components/noData'
 	import Loading from '../../../components/loading'
 	import noMore from '../../../components/noMore'
+	import url from '../../../config/url'
+	import Qs from 'qs'
+	// import { setTimeout } from 'timers';
 	export default {
 		data(){
 			return {
 				title:'推广助手',
-				tabData:['新闻类','活动类','品牌类','视频推广','领导关怀'],
+				// tabData:['新闻类','活动类','品牌类','视频推广','领导关怀'],
+				tabData:[
+					{
+						cateid:'1',
+						name:'快讯'
+					}
+				],
+				firseId:0,
 				swiperOption:{
 					slidesPerView : 'auto',
 					spaceBetween : 20,
 				},
 				actTab:0,
+				articleList: [],
+				page:1,
+				cateid:0,
+				showNull:false,
 				show:false,
 				showNomore: false,
 			}
@@ -124,13 +80,17 @@
 			swiper,
 			swiperSlide,
 			Loading,
-			noMore
+			noMore,
+			noData
 		},
 		mounted() {
-			this.InitScroll()
+			this.InitScroll();
+			this.getArticleCategory();
 		},
 		methods:{
+			
 			InitScroll() {
+				var _this = this
 				this.$nextTick(() => {
 					if(!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
@@ -141,8 +101,10 @@
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							this.show = true;
-							this.LoadData()
+							// this.show = true;
+							_this.page++;
+							// alert(_this.page)
+							_this.onLoadData(_this.actTab,_this.cateid)
 							this.$nextTick(function() {
 								this.scroll.finishPullUp();
 								this.scroll.refresh();
@@ -153,17 +115,88 @@
 					}
 				})
 			},
-			LoadData() {
-				// var _this = this
-				// setTimeout(function(){
-				// 	_this.show = false;
-				// 	let obj = [{ shopname: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5', money: '3598', score: '266'},
-				// 	{ shopname: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5', money: '3598', score: '266'}];
-				// 	_this.shopList = _this.shopList.concat(obj);
-				// 	console.log(_this.shopList);
-				// 	// _this.showNomore = true;
-				// },3000)
+			onLoadData(index,id) {
+				var _this = this
+					_this.show = true
+
+				if(_this.showNomore){
+					_this.show = false;
+				}else{
+					setTimeout(() => {
+						// let len = _this.articleList.length;
+						var params={
+							cateid:id,
+							page:_this.page,
+							pagesize:10
+						}
+						let par = Qs.stringify(params)
+
+						_this.$http.post(url.article.getArticleLists,par).then((res) => {
+							if(res.status == 200 && res.data != null){
+
+								_this.show = false
+
+								_this.articleList = _this.articleList.concat(res.data.result.lists)
+
+								if(_this.articleList.length == 0){
+									_this.showNull = true
+								}else{
+									_this.showNull = false
+								}
+
+								// if(len == _this.articleList.length){
+								// 	_this.showNomore = true;
+								// }
+								if(res.data.result.lists.length < 10){
+									// _this.show = false
+									_this.showNomore = true
+								}
+
+							}
+						});
+					},1500)
+				}
 			},
+			getArticleCategory(){
+				var _this = this
+				_this.$http.post(url.article.getArticleCategory).then((res) => {
+					if(res.status == 200 && res.data != null){
+						_this.tabData = res.data.result.lists
+						_this.firseId = JSON.parse(res.data.result.lists[0].cateid)
+						// alert(_this.firseId)
+						_this.onLoadDataFirst(0,_this.firseId)
+						// console.log(res)
+					}
+				});
+			},
+			onLoadDataFirst(index,id){
+				let _this = this
+				_this.actTab = index 
+				_this.show = false
+				_this.showNomore = false
+				_this.page = 1
+				_this.cateid = id
+
+				var params={
+					cateid:id,
+					page:1,
+					pagesize:10
+				}
+
+				let par = Qs.stringify(params)
+				_this.$http.post(url.article.getArticleLists,par).then((res) => {
+					if(res.status == 200 && res.data != null){
+						_this.articleList = res.data.result.lists
+
+						if(_this.articleList.length == 0){
+							_this.showNull = true
+						}else{
+							_this.showNull = false
+						}
+
+					}
+				});
+			}
 		}
 	}
 </script>
@@ -174,7 +207,12 @@
 		padding: 0 0.1rem;
 		background: #fff;
 		.wrapper {
-			height: 91.8%;
+			// height: 91.8%;
+			position: absolute;
+			top: 2rem;
+			left: 0;
+			right: 0;
+			bottom: 0;
 			overflow: hidden;
 			/*padding-bottom: 1rem;*/
 		}

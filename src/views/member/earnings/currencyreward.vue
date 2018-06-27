@@ -20,7 +20,7 @@
 					<div class="po" v-if="show8" style="animation-duration:0.3s">
 						<div class="position-vertical-demo">
 							<div class="twoClass">
-								<div class="type-item" v-for="(item,index) in tyClass">
+								<div class="type-item" v-for="(item,index) in tyClass" :key="index">
 									<span :class="{'twoActive':twoIndex == index}" @click="twoChange(index,item)">{{item.title}}</span>
 								</div>
 							</div>
@@ -35,7 +35,7 @@
 					<div v-if="list.length >0">
 						<div class="list-box">
 							<ul>
-								<li v-for="item in list" @click="toDetail(item.balanceId)">
+								<li v-for="(item,index) in list" @click="toDetail(item.balanceId)" :key="index">
 									<div>
 										<p>{{item.remark}}</p>
 										<p>{{item.createTime | getDate}}</p>

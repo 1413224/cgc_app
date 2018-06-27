@@ -14,41 +14,21 @@
        <div class="wrapper" ref="wrapper">
 			<div class="content">
 		       <div class="news">
-			        <!-- <div id="pullrefresh" class="mui-content mui-scroll-wrapper"> -->
-			            <!-- <div class="mui-scroll"> -->
-			                <!--<div class="flag" v-if="showNull">-->
-			                <!--<img src="../addons/mx_shop/resources/cgc/images/my_care3.png">-->
-			                <!--<p>您还没有任何关注哦</p>-->
-			                <!--<a href="{php echo mobileUrl('stores')}">去逛逛</a>-->
-			                <!--</div>-->
-			                <div class="new" v-for="(item,index) in articleList" :key="index"  :class="item.imgNumber==1?'oneImage':''">
-			                	<a :href="item.url">
-				                    <p class="newTitle">{{item.name}}!</p>
-				                    <div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
-				                    <div class="imgList" v-show="item.imgNumber>1">
-                            			<img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2' :key="index">
-                            		</div>
-				                    <p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
-				                    <div class="clear"></div>
-			                	</a>
-			                </div>
+
+				   <noData v-if="showNull" :status="2" stateText="暂无数据"></noData>
+
+					<div class="new" v-for="(item,index) in articleList" :key="index"  :class="item.imgNumber==1?'oneImage':''">
+						<a :href="item.url">
+							<p class="newTitle">{{item.name}}!</p>
+							<div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
+							<div class="imgList" v-show="item.imgNumber>1">
+								<img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2' :key="index">
+							</div>
+							<p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
+							<div class="clear"></div>
+						</a>
+					</div>
 			                
-			                <!-- <div class="new" :class="item.imgNumber==1?'oneImage':''" v-for="item in items">
-			                    <a :href="item.url">
-			                        <p class="newTitle">{{item.name}}!</p>
-			                        <div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
-			                        <div class="imgList" v-show="item.imgNumber>1">
-			                            <img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2'> -->
-			                            <!--<img src="../addons/mx_shop/resources/cgc/images/index/index01.jpg" alt="">-->
-			                            <!--<img src="../addons/mx_shop/resources/cgc/images/index/index01.jpg" alt="">-->
-			                        <!-- </div>
-			                        <p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
-			                        <div class="clear"></div>
-			                    </a>
-			                </div>
-			                <input type="hidden" value="{$token}" id="token"> -->
-			            <!-- </div> -->
-			        <!-- </div> -->
 			    </div>
 			    <loading v-if="show"></loading>
 		    	<noMore v-if="showNomore"></noMore>
@@ -62,6 +42,7 @@
 	import BScroll from 'better-scroll'
 	import Loading from '../../../components/loading'
 	import noMore from '../../../components/noMore'
+	import noData from '../../../components/noData'
 	import url from '../../../config/url'
 	import Qs from 'qs'
 	export default {
@@ -73,6 +54,7 @@
 					slidesPerView : 'auto',
 					spaceBetween : 20,
 				},
+				showNull:false,
 				actTab:0,
 				show:false,
 				showNomore: false,
@@ -134,6 +116,13 @@
 								_this.articleList = _this.articleList.concat(response.data.result.lists)
 							}
 							// console.log(_this.articleList);
+
+							if(_this.articleList.length == 0){
+									_this.showNull = true
+								}else{
+									_this.showNull = false
+								}
+
 							if(len == _this.articleList.length){
 								_this.showNomore = true;
 							}
@@ -146,7 +135,7 @@
 			getData(){
 				let _this = this;
 				let parJson = {
-					pagesize:6,
+					pagesize:10,
 					page: 1
 				}
 				let par = Qs.stringify(parJson)
