@@ -261,6 +261,8 @@
 			changeUserInfo() {
 				var _this = this
 				
+				console.log(_this.birthday)
+				
 				if(!_this.mainApp.isqq(_this.qq) && _this.qq) {
 					_this.$vux.toast.show({
 						width: '50%',

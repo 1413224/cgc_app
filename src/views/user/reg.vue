@@ -17,8 +17,8 @@
 				<div class="tip">
 					<div class="agreement" v-if="!isReg">
 						<!--<check-icon :value.sync="isAgree"></check-icon>-->
-						<span class="sg">点击下方按钮即同意</span>
-						<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
+						<span>点击下方按钮即同意</span>
+						<router-link to="/member/setting/agreement"><p class="sg">《CGC平台注册协议》</p></router-link>
 					</div>
 					<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">{{isCp?'立即登录':'登录 / 注册'}}</x-button>
 					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-else>立即注册</x-button>
@@ -28,7 +28,7 @@
 					<!--<router-link to=""><span>短信验证登录</span></router-link>-->
 				</div>
 				<div class="login-re" v-else>
-					<span @click="backLogin">返回登录</span>
+					<span @click="backLogin" class="left">返回登录</span>
 				</div>
 			</div>
 			<!-- <div class="Thirdparty" v-if="isReg">
@@ -491,8 +491,11 @@
 				align-items: center;
 				justify-content: center;
 				height: 0.4rem;
+				span{
+					color: #A0A0A0;
+				}
 				.sg {
-					color: #60719D;
+					color: #336FFF;
 				}
 				.vux-check-icon {
 					.weui-icon {

@@ -91,7 +91,7 @@
 						guides: true, //是否在剪裁框上显示虚线
 						zoomable: true, //是否允许放大缩小图片
 						rotatable: true, //是否允许旋转图片
-						movable: true, //是否允许拖动图片
+						dragMode: 'move', //是否允许拖动图片
 						ready: function() {
 							_this.croppable = true;
 						}

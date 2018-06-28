@@ -968,6 +968,9 @@
 					box-sizing: border-box;
 					height: 1rem;
 					position: relative;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
 					.btn {
 						display: flex;
 						justify-content: flex-end;
