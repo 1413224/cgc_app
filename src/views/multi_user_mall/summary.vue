@@ -17,7 +17,7 @@
 			</swiper>
 		</div>
 		<div class="wrap">
-			<div class="nav">
+			<div class="nav2">
 				<ul>
 					<li @click="showProduct">
 						<img src="../../assets/images/multi_user_mall/product.png">
@@ -280,7 +280,7 @@
 			padding-top: 0.4rem;
 			width: 100%;
 			z-index: 4;
-			.nav {
+			.nav2 {
 				ul {
 					width: 100%;
 					display: flex;
@@ -405,11 +405,15 @@
 					.more {
 						font-weight: normal;
 						color: #60719D;
-						font-size: .32rem;
-						display: block;
+						font-size: .28rem;
 						vertical-align: bottom;
 						text-align: center;
-						margin: 0.1rem 0;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						i{
+							font-size: 0.5rem;
+						}
 					}
 					li {
 						padding: .3rem .05rem .3rem 0;

@@ -193,7 +193,7 @@
 					pzf: 1200000,
 					pStatus: 0,
 					showNum: 10,
-					showAll:false,
+					showAll: false,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -282,7 +282,7 @@
 					pzf: 1000,
 					pStatus: 0,
 					showNum: 10,
-					showAll:false,
+					showAll: false,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -377,7 +377,7 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 0,
-					showNum:10,
+					showNum: 10,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -395,7 +395,7 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 0,
-					showNum:10,
+					showNum: 10,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -413,7 +413,7 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 1,
-					showNum:10,
+					showNum: 10,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -431,7 +431,7 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 1,
-					showNum:10,
+					showNum: 10,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -449,7 +449,7 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 1,
-					showNum:10,
+					showNum: 10,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -467,7 +467,7 @@
 					pyf: 10,
 					pzf: 1000,
 					pStatus: 1,
-					showNum:10,
+					showNum: 10,
 					pList: [{
 						pLogo: './static/images/ss.png',
 						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
@@ -661,6 +661,20 @@
 	}
 	
 	.my_order_box {
+		.settingHeader~.px {
+			position: fixed;
+			top: 46px;
+			width: 100%;
+			z-index: 15;
+		}
+		.settingHeader~.order_list_box .wrapper {
+			position: absolute;
+			top: 2.8rem;
+			bottom: 0;
+			width: 100%;
+			background: #f5f6fa;
+			z-index: 11;
+		}
 		.px {
 			position: fixed;
 			top: 0;

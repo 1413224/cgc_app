@@ -213,6 +213,7 @@
 				for(var i = 0; i < file.length; i++) {
 					if(file.length > 3) {
 						this.$vux.toast.show({
+							width:'60%',
 							text: '最多只能上传三张照片',
 							type: 'text'
 						})
