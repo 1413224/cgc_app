@@ -38,7 +38,7 @@
 					</div>
 				</div>
 			</div>
-			<button class="nav-btn">立即体验</button>
+			<button class="nav-btn" @click="qrCode()">立即体验</button>
 		</div>
 		<!-- <button class="qr-btn" @click="btnQrcode">生成二维码</button> -->
 		<img src="../../assets/images/share/partner-bg.png" class="image"/>
@@ -314,6 +314,16 @@
 			},
 			goTreatment(){
 				this.$router.push('/share/guidance')
+			},
+			qrCode(){
+				wx.config({
+					debug:true,
+					appId:'wx7a4933a7a3c33ec8',
+					timestamp:"",
+					nonceStr:'',
+					signature:'',
+					jsApiList: ['checkJsApi', 'scanQRCode']
+				});
 			}
 		}
 	}

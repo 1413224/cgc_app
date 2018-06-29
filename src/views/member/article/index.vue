@@ -59,7 +59,8 @@
 				show:false,
 				showNomore: false,
 				articleList: [],
-				page: 1
+				page: 1,
+				flag:true
 			}
 		},
 		components:{
@@ -75,19 +76,29 @@
 		},
 		methods:{
 			InitScroll() {
+				var _this = this
 				this.$nextTick(() => {
 					if(!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: 0, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								threshold: -50, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							this.LoadData()
+							// _this.flag = true
+							
+								if(_this.flag==true){
+									_this.flag = false
+									this.LoadData()
+								}
+								// this.LoadData()
+							
 							this.$nextTick(function() {
+								// _this.flag = false
 								this.scroll.finishPullUp();
+								
 								this.scroll.refresh();
 							});
 						})
@@ -99,11 +110,10 @@
 			LoadData() {
 				var _this = this
 				_this.show = true
+
 				if(_this.showNomore){
 					_this.show = false;
 				}else{
-					setTimeout(function(){
-						_this.show = false;
 						_this.page ++;
 						let len = _this.articleList.length;
 						let parJson = {
@@ -112,6 +122,7 @@
 						}
 						let par = Qs.stringify(parJson)
 						_this.$http.post(url.article.getArticleLists,par).then(function (response) {
+							_this.show = false
 							if( response.status == 200 && response.data != null&&response.data.result.page == _this.page){
 								_this.articleList = _this.articleList.concat(response.data.result.lists)
 							}
@@ -129,7 +140,7 @@
 						}).catch(function (error) {
 							console.log(error);
 						});
-					},3000)
+					_this.flag = true
 				}
 			},
 			getData(){
