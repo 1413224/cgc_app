@@ -7,8 +7,10 @@
 				<div class="item">
 					<div class="periodVideo">{{ periodVideo}}</div>
 					<div class="player">
-						<video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions" @pause="onPlayerPause($event)">
-						</video-player>
+						<d-player ref="player" @fullscreen="fs" @pause="stop" @play="playerStop = false" :options="options"></d-player>
+						<div @click="bf" v-if="playerStop" class="btn-box">
+							<img :src="'./static/draw/lottery_index8.png'" alt="" />
+						</div>
 					</div>
 				</div>
 
@@ -108,38 +110,34 @@
 	import settingHeader from '../../components/setting_header'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
+
+	import VueDPlayer from 'vue-dplayer'
+	import 'vue-dplayer/dist/vue-dplayer.css'
 	export default {
 		components: {
 			swiper,
 			swiperSlide,
 			settingHeader,
 			Loading,
-			noMore
+			noMore,
+			'd-player': VueDPlayer
 		},
 		data() {
 			return {
 				periodVideo: '第1235期 抽奖视频',
-				playerOptions: {
-					height: '200',
-					controlBar: {
-						volumePanel: {
-							inline: false
-						}
-					},
-					width: document.documentElement.clientWidth,
-					muted: true,
-					language: 'zh-CN',
-					controls: true,
-					loop: true,
-					fluid: true,
-					sources: [{
-						type: "video/mp4",
-						src: "./static/video/movie.mp4",
-					}],
-					poster: "./static/images/video.jpg",
-					notSupportedMessage: '此视频暂无法播放，请稍后再试',
-					controlBar: {
-						fullscreenToggle: true
+				options: {
+					autoplay: false, //自动播放
+					theme: '#FADFA3', //主体颜色
+					loop: false, //循环播放
+					lang: 'zh-cn', //语言
+					screenshot: false, //视频截图
+					hotkey: false, //启动热键
+					logo: './static/images/video.jpg', //左上角logo
+					volume: 0.7, //音量
+					mutex: true, //多个视频同时播放
+					video: {
+						url: './static/video/movie.mp4',
+						pic: './static/images/video.jpg'
 					}
 				},
 				show: false,
@@ -222,6 +220,9 @@
 					slidesPerView: 'auto',
 					spaceBetween: 10
 				},
+
+				player: {},
+				playerStop: true
 			}
 		},
 		computed: {
@@ -230,14 +231,22 @@
 			}
 		},
 		mounted() {
-			setTimeout(() => {
-				// let videoId= ;
-				document.getElementById('vjs_video_3').className = 'video-js vjs_video_3-dimensions vjs-controls-enabled vjs-v6 vjs-has-started vjs-paused vjs-user-active';
-				console.log('dynamic change options', this.player)
-			}, 0)
 			this.InitScroll()
+
+			this.player = this.$refs.player.dp
+			document.getElementsByClassName('dplayer-full-in-icon')[0].style.display = 'none'
 		},
 		methods: {
+			fs() {
+				this.player.fullScreen.request('browser')
+			},
+			bf() {
+				this.player.play()
+				this.playerStop = false
+			},
+			stop() {
+				this.playerStop = true
+			},
 			periodActive(index) {
 				console.log('[][', index)
 				this.act3 = index
@@ -245,25 +254,6 @@
 			//中奖人员 一等奖
 			actice(index) {
 				this.act1 = index
-			},
-			playerReadied(player) {
-				const track = new videojs.AudioTrack({
-					id: 'my-spanish-audio-track',
-					kind: 'translation',
-					label: 'Spanish',
-					language: 'zh-CN'
-				})
-				player.audioTracks().addTrack(track)
-				const audioTrackList = player.audioTracks()
-				audioTrackList.addEventListener('change', function() {
-					for(let i = 0; i < audioTrackList.length; i++) {
-						const track = audioTrackList[i]
-						if(track.enabled) {
-							videojs.log(track.label)
-							return
-						}
-					}
-				})
 			},
 			InitScroll() {
 				this.$nextTick(() => {
@@ -550,13 +540,12 @@
 	.pastwrap {
 		.item {
 			width: 100%;
-			position: relative;
 			.periodVideo {
 				background-color: rgba(0, 0, 0, 0);
 				height: 0.5rem;
 				color: #bdbdbd;
 				position: absolute;
-				top: 0;
+				top: 0.1rem;
 				left: 0.1rem;
 				z-index: 11;
 				font-size: 0.3rem;
@@ -564,26 +553,23 @@
 			}
 			.player {
 				width: 100%;
-				.vjs_video_2786-dimensions {
-					width: 7.5rem;
-				}
-				.vjs-paused .vjs-big-play-button,
-				.vjs-paused.vjs-has-started .vjs-big-play-button {
-					display: block;
-				}
-				.video-js .vjs-big-play-button,
-				.vjs-playing.vjs-has-started .vjs-big-play-button {
-					display: none;
+				height: 4.2rem;
+				position: relative;
+				.btn-box {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					width: 0.8rem;
+					height: 0.8rem;
 					border-radius: 50%;
-					border-radius: 50%;
-					-moz-border-radius: 50%;
-					-webkit-border-radius: 50%;
-				}
-				.video-js .vjs-big-play-button {
-					height: 1rem;
-					width: 1rem;
-					top: 35%;
-					left: 43%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background-color: rgba(119, 120, 124, 0.8);
+					img {
+						width: 60%;
+					}
 				}
 			}
 		}

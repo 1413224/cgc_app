@@ -37,22 +37,17 @@ axios.interceptors.request.use(config => {
 		info = base64_decode(_HASH_);
 
 	if(info) {
-		// alert(info.token)
 		token = info.token ? info.token : ""
 		id = info.id ? info.id : ""
 		randomAccessCode = info.randomAccessCode ? info.randomAccessCode : ""
-
 		userNp = id + url.client + randomAccessCode
 	} else {
 		token = ""
 	}
 
-	// console.log(token)
-
 	let timestamp = Math.round(new Date().getTime() / 1000)
 	let sign = ''
 	if(token && config.url.split('/')[2] != 'public') {
-
 		sign = MD5(config.url + timestamp + userNp)
 	} else {
 		sign = MD5(config.url + timestamp)

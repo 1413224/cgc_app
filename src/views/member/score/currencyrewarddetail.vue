@@ -38,7 +38,7 @@
 					<cell class="info-item" :title="balanceDetail.nickname" v-if="balanceDetail.type == 5">
 						<div class="up-box">
 							<span>{{balanceDetail.mobile}}</span>
-							<img class="tx" :src="balanceDetail.avatar.original" />
+							<img class="tx" :src="images?images:'./static/images/mrtx.png'" />
 						</div>
 					</cell>
 				</group>
@@ -56,6 +56,7 @@
 				title: '通用积分详情',
 				balanceDetail: {},
 				total: 0,
+				images: ''
 			}
 		},
 		created() {
@@ -77,6 +78,9 @@
 					if(res.data.status == "00000000") {
 						console.log(res.data.data)
 						_this.balanceDetail = res.data.data
+						if(res.data.data.avatar) {
+							_this.images = res.data.data.avatar.original
+						}
 						_this.total = Number(res.data.data.profit + res.data.data.forzenProfit)
 					}
 				})
@@ -131,24 +135,22 @@
 			font-size: 0.28rem;
 			color: #464646;
 			height: 0.6rem;
+			.up-box {
+				display: flex;
+				align-items: center;
+				.tx {
+					width: 0.6rem;
+					height: 0.6rem;
+					border-radius: 50%;
+					vertical-align: middle;
+					margin-left: 0.2rem;
+				}
+			}
 			.vux-label {
 				color: #90A2C7;
 			}
 			.weui-cell__ft {
 				color: #1A2642;
-			}
-		}
-		.info-item {
-			font-family: PingFangSC-Regular;
-			font-size: 0.28rem;
-			color: #1A2642;
-			letter-spacing: 0;
-			height: 0.6rem;
-			.tx {
-				width: 0.6rem;
-				height: 0.6rem;
-				border-radius: 50%;
-				vertical-align: middle;
 			}
 		}
 		.purse-box1 {

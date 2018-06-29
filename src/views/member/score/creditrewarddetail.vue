@@ -21,10 +21,10 @@
 					<cell class="info-item" title="说明" :value="pointDetail.remark"></cell>
 					<cell class="info-item" title="创建时间" :value="pointDetail.createTime | getDate"></cell>
 					<cell class="info-item" title="订单编号" :value="pointDetail.orderSn" v-if="pointDetail.type == 1 || pointDetail.type == 4"></cell>
-					<cell class="info-item" :title="pointDetail.nickname" v-if="pointDetail.type == 5">
+					<cell class="info-item" title="被推荐人" v-if="pointDetail.type == 5">
 						<div class="up-box">
 							<span>{{pointDetail.mobile}}</span>
-							<img class="tx" :src="pointDetail.avatar.original" />
+							<img class="tx" :src="images?images:'./static/images/mrtx.png'" />
 						</div>
 					</cell>
 				</group>
@@ -49,7 +49,8 @@
 		data() {
 			return {
 				title: '信用积分详情',
-				pointDetail: {}
+				pointDetail: {},
+				images: ''
 			}
 		},
 		created() {
@@ -69,6 +70,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.pointDetail = res.data.data
+						if(res.data.data.avatar) {
+							_this.images = res.data.data.avatar.original
+						}
 					}
 				})
 			},
@@ -122,6 +126,17 @@
 			font-size: 0.28rem;
 			color: #464646;
 			height: 0.6rem;
+			.up-box {
+				display: flex;
+				align-items: center;
+				.tx {
+					width: 0.6rem;
+					height: 0.6rem;
+					border-radius: 50%;
+					vertical-align: middle;
+					margin-left: 0.2rem;
+				}
+			}
 			.vux-label {
 				color: #90A2C7;
 			}

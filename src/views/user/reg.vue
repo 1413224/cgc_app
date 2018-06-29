@@ -154,6 +154,16 @@
 					})
 					return false
 				}
+				
+				if(_this.code.length != 4) {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '验证码长度不符合要求'
+					})
+					return false
+				}
 
 				_this.$http.post(this.url.user.userRegister, {
 					mobile: _this.mobile,
@@ -521,6 +531,7 @@
 			justify-content: space-between;
 			.left {
 				color: #90A2C7;
+				font-size: 0.26rem;
 			}
 		}
 		.Thirdparty {

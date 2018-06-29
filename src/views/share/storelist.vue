@@ -2,10 +2,10 @@
 	<div class="storelist-box1" style="height: 100%;background-color: white;">
 		<settingHeader style="z-index: 700;position: relative;" :title="title"></settingHeader>
 
-		<div class="searchBox">
+		<div class="searchBox" @click="goSearch">
 			<div class="search">
 				<img :src="'./static/images/ss.png'" />
-				<input type="text" placeholder="搜索心仪的门店" @click="goSearch">
+				<input type="text" placeholder="搜索心仪的门店" readonly="readonly">
 			</div>
 		</div>
 
