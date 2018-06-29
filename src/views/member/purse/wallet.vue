@@ -15,9 +15,11 @@
 		<div class="tip-box">
 			<div class="top">
 				<div class="one-item">
-					<div>
+					<div style="display: flex;align-items: center;">
 						<span>通用积分</span>
-						<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
+						<div style="height: 100%;padding: 0 0.3rem;">
+							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
+						</div>
 					</div>
 					<p>{{fundInfo.isshowFund?fundInfo.balance:'****'}}</p>
 				</div>
@@ -57,9 +59,11 @@
 		<div class="tip-box">
 			<div class="top">
 				<div class="one-item">
-					<div>
+					<div style="display: flex;align-items: center;">
 						<span>信用积分</span>
-						<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
+						<div style="height: 100%;padding: 0 0.3rem;">
+							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
+						</div>
 					</div>
 					<p>{{fundInfo.isshowFund?fundInfo.availablePoints:'****'}}</p>
 				</div>

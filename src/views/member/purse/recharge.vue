@@ -297,7 +297,8 @@
 					.box {
 						width: 1.91rem;
 						background: white;
-						box-shadow: 0px 2px 10px 0px rgba(26, 38, 66, 0.4);
+						/*box-shadow: 0px 2px 10px 0px rgba(26, 38, 66, 0.4);*/
+						border: 1px solid rgba(26, 38, 66, 0.4);
 						border-radius: 3px;
 						color: #336FFF;
 						padding: 0 0.1rem;
@@ -316,6 +317,7 @@
 						color: white;
 						background: #336fff;
 						transition: all 0.2s linear;
+						border: none;
 						p:nth-child(2) {
 							color: white;
 						}

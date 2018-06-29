@@ -278,7 +278,7 @@
 					{
 						title: '邀请有奖',
 						img: './static/images/yq.png',
-						url: '/member/purse/qrcode'
+						url: "/member/purse/qrcode?index=1"
 					},
 					{
 						title: '推广助手',

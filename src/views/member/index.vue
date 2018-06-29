@@ -268,7 +268,7 @@
 						if(_this.userInfo != res.data.data) {
 							_this.userInfo = res.data.data
 						}
-					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401') {
+					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401' || res.data.status == 'user-0009') {
 						_this.isLogin = false
 						localStorage.removeItem('userInfo')
 					}
@@ -277,7 +277,10 @@
 			toQrcode(info) {
 				var _this = this
 				_this.$router.push({
-					path: '/member/purse/qrcode'
+					path: '/member/purse/qrcode',
+					query:{
+						index:1
+					}
 				})
 			}
 		},

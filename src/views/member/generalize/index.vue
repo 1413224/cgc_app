@@ -216,10 +216,17 @@
 		height: 100%;
 		padding: 0 0.1rem;
 		background: #fff;
-		.wrapper {
-			// height: 91.8%;
+		.settingHeader + .alerts-tob ~ .wrapper{
 			position: absolute;
 			top: 2rem;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			overflow: hidden;
+		}
+		.wrapper {
+			position: absolute;
+			top: 1rem;
 			left: 0;
 			right: 0;
 			bottom: 0;
@@ -235,7 +242,7 @@
 		    font-size: 0.28rem;
 		    height: auto;
 		    border-bottom: 1px solid #D8DFF0;
-		    box-shadow:0.03rem 0.13rem 0.08rem rgba(216,223,240,0.2);
+		    /*box-shadow:0.03rem 0.13rem 0.08rem rgba(216,223,240,0.2);*/
 		    .white{
 			    position: absolute;
 			    background: white;
@@ -272,7 +279,10 @@
 				}
 
 				.tab-item-active{
-				    color: #7386AD;
+				    color: #336fff;
+				    border-bottom: 1px solid #336fff;
+				   box-sizing: border-box;
+				   height: 100%;
 				}
 			}
 		}

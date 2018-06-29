@@ -4,7 +4,7 @@
 			<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="">
 			<div>
 				<p class='shop-name'>{{pinfo.name}}</p>
-				<p class='shop-size' v-if="pinfo.isAlliance == 1">{{pinfo.allianceConcern}}关注</p>
+				<p class='shop-size' v-if="pinfo.isAlliance == 1">{{pinfo.allianceConcern}}人关注</p>
 				<p class='shop-size' v-if="pinfo.isChains == 1">{{pinfo.chainsConcern}}人关注</p>
 			</div>
 		</div>

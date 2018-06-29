@@ -8,8 +8,8 @@
 				</div>
 				<group gutter="0" class="input-div">
 					<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
-					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
-					<x-input class="input-item" ref="password" v-model="password" placeholder="请输入6~25位数的登录密码" type="password" @on-change="passwordChange"></x-input>
+					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="请输入手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
+					<x-input class="input-item" ref="password" v-model="password" :placeholder="isReg?'请输入登录密码':'请输入6~25位数的登录密码'" type="password" @on-change="passwordChange"></x-input>
 					<x-input v-if="!isReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
 						<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
 					</x-input>
@@ -17,8 +17,8 @@
 				<div class="tip">
 					<div class="agreement" v-if="!isReg">
 						<!--<check-icon :value.sync="isAgree"></check-icon>-->
-						<span class="sg">点击下方按钮即同意</span>
-						<router-link to="/member/setting/agreement">《CGC平台注册协议》</router-link>
+						<span>点击下方按钮即同意</span>
+						<router-link to="/member/setting/agreement"><p class="sg">《CGC平台注册协议》</p></router-link>
 					</div>
 					<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">{{isCp?'立即登录':'登录 / 注册'}}</x-button>
 					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-else>立即注册</x-button>
@@ -28,7 +28,7 @@
 					<!--<router-link to=""><span>短信验证登录</span></router-link>-->
 				</div>
 				<div class="login-re" v-else>
-					<span @click="backLogin">返回登录</span>
+					<span @click="backLogin" class="left">返回登录</span>
 				</div>
 			</div>
 			<!-- <div class="Thirdparty" v-if="isReg">
@@ -151,6 +151,16 @@
 						type: 'text',
 						position: 'middle',
 						text: '密码长度不符合要求'
+					})
+					return false
+				}
+				
+				if(_this.code.length != 4) {
+					_this.$vux.toast.show({
+						width: '60%',
+						type: 'text',
+						position: 'middle',
+						text: '验证码长度不符合要求'
 					})
 					return false
 				}
@@ -491,8 +501,11 @@
 				align-items: center;
 				justify-content: center;
 				height: 0.4rem;
+				span{
+					color: #A0A0A0;
+				}
 				.sg {
-					color: #60719D;
+					color: #336FFF;
 				}
 				.vux-check-icon {
 					.weui-icon {
@@ -513,11 +526,12 @@
 			border: none!important;
 		}
 		.login-re {
-			padding: 10px 0px;
+			padding: 10px 15px;
 			display: flex;
 			justify-content: space-between;
 			.left {
 				color: #90A2C7;
+				font-size: 0.26rem;
 			}
 		}
 		.Thirdparty {

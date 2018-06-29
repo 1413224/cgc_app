@@ -67,7 +67,7 @@
 
 						localStorage.setItem('userInfo', JSON.stringify(res.data.data))
 
-						if(res.data.data.avatar.original) {
+						if(res.data.data.avatar) {
 							_this.images = res.data.data.avatar.original
 						}
 					}

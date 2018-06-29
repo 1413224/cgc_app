@@ -5,7 +5,7 @@
 			<img :src="'./static/member/login-img.png'" class="image" />
 		</div>
 		<group>
-			<cell title="当前版本" value="V1.0" class="about-cell"></cell>
+			<cell title="当前版本" value="V 1.0" class="about-cell"></cell>
 			<cell title="用户协议及隐私" is-link class="about-cell"></cell>
 		</group>
 	</div>

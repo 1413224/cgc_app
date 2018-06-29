@@ -37,22 +37,17 @@ axios.interceptors.request.use(config => {
 		info = base64_decode(_HASH_);
 
 	if(info) {
-		// alert(info.token)
 		token = info.token ? info.token : ""
 		id = info.id ? info.id : ""
 		randomAccessCode = info.randomAccessCode ? info.randomAccessCode : ""
-
 		userNp = id + url.client + randomAccessCode
 	} else {
 		token = ""
 	}
 
-	// console.log(token)
-
 	let timestamp = Math.round(new Date().getTime() / 1000)
 	let sign = ''
 	if(token && config.url.split('/')[2] != 'public') {
-
 		sign = MD5(config.url + timestamp + userNp)
 	} else {
 		sign = MD5(config.url + timestamp)
@@ -99,6 +94,7 @@ axios.interceptors.response.use(res => {
 	})
 	if(res.data.status != '00000000' && res.data.status != 1) {
 		if(res.data.status == '401' && URL != '/user/v1/user/getBasicInfo') {
+			//未登录状态  返回登录页面
 			router.replace({
 				path: '/user/reg'
 			})
@@ -109,20 +105,39 @@ axios.interceptors.response.use(res => {
 				width: '50%'
 			})
 			localStorage.setItem('isLogin', false)
-		} else if((res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == 'apigw004') && URL !== '/user/v1/user/getBasicInfo') {
+		} else if((res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == 'apigw004' || res.data.status == 'user-0009') && URL !== '/user/v1/user/getBasicInfo') {
+			//重复登录   用户不存在 不是获取个人信息接口 返回登录页面
 			router.replace({
 				path: '/user/reg'
 			})
+			
+			if(res.data.status == 'user-0009'){
+				var t = '用户不存在，请重新注册'
+			}else{
+				var t = '登录已过期,请重新登录'
+			}
+
 			Vue.$vux.toast.show({
-				text: '登录已过期,请重新登录',
+				text: t,
+				type: 'text',
+				position: 'middle',
+				width: '60%'
+			})
+			localStorage.setItem('isLogin', false)
+		} else if(res.data.status == 'user-0009' && URL == '/user/v1/user/getBasicInfo') {
+			//用户不存在 获取个人信息接口 不返回登录页面
+			Vue.$vux.toast.show({
+				text: '用户不存在，请重新注册',
 				type: 'text',
 				position: 'middle',
 				width: '60%'
 			})
 			localStorage.setItem('isLogin', false)
 		} else if((res.data.status == 'utils007' || res.data.status == 'utils010') && URL == '/user/v1/user/getBasicInfo') {
+			//重复登录 获取个人信息接口 改变登录状态
 			localStorage.setItem('isLogin', false)
 		} else if(URL != '/user/v1/user/getBasicInfo') {
+			//其他接口 提示
 			Vue.$vux.toast.show({
 				text: res.data.message,
 				type: 'text',

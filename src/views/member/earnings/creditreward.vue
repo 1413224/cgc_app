@@ -161,6 +161,7 @@
 				_this.show8 = false
 				_this.show = false
 				_this.showNo = false
+				_this.curPage = 1
 				_this.list = []
 				_this.getMyPointsList()
 			},
@@ -312,6 +313,7 @@
 			.screen-box {
 				height: 0.87rem;
 				line-height: 0.87rem;
+				position: relative;
 				.sxi {
 					padding: 0 0.30rem;
 					box-sizing: border-box;
@@ -337,7 +339,6 @@
 					position: absolute;
 					left: 0;
 					box-sizing: border-box;
-					border-top: 1px solid #eee;
 				}
 				.mask {
 					display: none;
@@ -370,6 +371,7 @@
 				-webkit-transform: scaleY(0.5);
 				transform: scaleY(0.5);
 				left: 0px;
+				z-index: 800;
 			}
 			.list-box {
 				padding: 0 0.30rem;
