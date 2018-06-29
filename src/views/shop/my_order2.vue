@@ -735,7 +735,9 @@
 					width: 0.32rem;
 					height: 0.32rem;
 					position: absolute;
-					left: 0.26rem;
+					left: 0.4rem;
+					top: 50%;
+					transform: translate(-50%,-50%);
 				}
 			}
 		}

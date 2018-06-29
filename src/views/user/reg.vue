@@ -8,8 +8,8 @@
 				</div>
 				<group gutter="0" class="input-div">
 					<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
-					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
-					<x-input class="input-item" ref="password" v-model="password" placeholder="请输入6~25位数的登录密码" type="password" @on-change="passwordChange"></x-input>
+					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="请输入手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
+					<x-input class="input-item" ref="password" v-model="password" :placeholder="isReg?'请输入登录密码':'请输入6~25位数的登录密码'" type="password" @on-change="passwordChange"></x-input>
 					<x-input v-if="!isReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
 						<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
 					</x-input>
@@ -526,7 +526,7 @@
 			border: none!important;
 		}
 		.login-re {
-			padding: 10px 0px;
+			padding: 10px 15px;
 			display: flex;
 			justify-content: space-between;
 			.left {
