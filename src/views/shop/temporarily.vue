@@ -4,7 +4,7 @@
 		<div class="stay-tuned">
 			<img src="../../assets/images/shop/stay.png" alt="">
 			<p class="prompt">
-				敬请期待....
+				敬请期待
 			</p>
 		</div>
 	</section>

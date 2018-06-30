@@ -111,7 +111,7 @@
 					}).then((res) => {
 						if(res.data.status == "00000000") {
 							if(res.data.data.list.length > 0) {
-								_this.list = res.data.data.list
+								_this.list = _this.list.concat(res.data.data.list)
 								_this.show = true
 								_this.showNo = false
 							} else {

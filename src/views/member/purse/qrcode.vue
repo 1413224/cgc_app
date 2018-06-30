@@ -141,7 +141,7 @@
 			qrcodeClick(index, text) {
 				var _this = this
 				_this.qrcodeIndex = index
-				
+
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'index': index,
@@ -177,6 +177,17 @@
 			settingHeader,
 			Qrcode,
 			'barcode': VueBarcode
+		},
+		watch: {
+			qrcodeIndex() {
+				if(this.qrcodeIndex == 0) {
+					document.title = '付款码'
+					this.title = '付款码'
+				} else {
+					document.title = '推荐码'
+					this.title = '推荐码'
+				}
+			}
 		}
 	}
 </script>
