@@ -73,6 +73,7 @@
 				showNull:false,
 				show:false,
 				showNomore: false,
+				flage:true
 			}
 		},
 		components:{
@@ -97,14 +98,15 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: 0, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								threshold: -50, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							// this.show = true;
-							_this.page++;
-							// alert(_this.page)
-							_this.onLoadData(_this.actTab,_this.cateid)
+							if(_this.flage == true){
+								_this.flage = false
+								_this.page++;
+								_this.onLoadData(_this.actTab,_this.cateid)
+							}
 							this.$nextTick(function() {
 								this.scroll.finishPullUp();
 								this.scroll.refresh();
@@ -122,9 +124,12 @@
 				if(_this.showNomore){
 					_this.show = false;
 				}else{
-					setTimeout(() => {
-						// let len = _this.articleList.length;
-						var params={
+					// setTimeout(() => {
+					// 	// let len = _this.articleList.length;
+						
+					// },1500)
+					// let len = _this.articleList.length;
+					var params={
 							cateid:id,
 							page:_this.page,
 							pagesize:10
@@ -132,6 +137,7 @@
 						let par = Qs.stringify(params)
 
 						_this.$http.post(url.article.getArticleLists,par).then((res) => {
+							_this.show = false
 							if(res.status == 200 && res.data != null){
 
 								_this.show = false
@@ -153,8 +159,10 @@
 								}
 
 							}
+						}).catch((error)=>{
+							console.log(error)
 						});
-					},1500)
+					_this.flage = true
 				}
 			},
 			getArticleCategory(){
@@ -171,11 +179,13 @@
 			},
 			onLoadDataFirst(index,id){
 				let _this = this
+				_this.flage = true
 				_this.actTab = index 
 				_this.show = false
 				_this.showNomore = false
 				_this.page = 1
 				_this.cateid = id
+				
 
 				var params={
 					cateid:id,
