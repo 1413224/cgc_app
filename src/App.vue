@@ -67,7 +67,24 @@
 			settingFooter
 		},
 		methods: {
-
+			//检测是否设置支付密码
+			getUserPayPassword() {
+				var _this = this
+				_this.$http.get(_this.url.user.getUserPayPassword, {
+					params: {
+						userId: _this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data == 2) {
+							sessionStorage.setItem('isPay', 1)
+							_this.$popup.show({
+								showPay: true
+							})
+						}
+					}
+				})
+			},
 		},
 		watch: {
 			'$route' (to, from, next) {
@@ -80,30 +97,45 @@
 
 				if(isWeixin) {
 					if(sessionStorage['_openid_']) {
-						if(sessionStorage.getItem('isPopup')) {
+
+						//控制新人奖励弹窗
+						if(sessionStorage.getItem('isZc')) {
 							_this.$popup.hide()
 						} else {
 							if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/reg') {
-								sessionStorage.setItem('isPopup', 1)
+								sessionStorage.setItem('isZc', 1)
 								_this.$popup.show({
 									showZc: true
 								})
-							} else {
-								_this.$popup.hide()
+							}
+						}
+						//控制设置密码弹窗
+						if(sessionStorage.getItem('isPay')) {
+							_this.$popup.hide()
+						} else {
+							if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/reg') {
+								_this.getUserPayPassword()
 							}
 						}
 					}
 				} else {
-					if(sessionStorage.getItem('isPopup')) {
+					//控制新人奖励弹窗
+					if(sessionStorage.getItem('isZc')) {
 						_this.$popup.hide()
 					} else {
 						if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/reg') {
-							sessionStorage.setItem('isPopup', 1)
+							sessionStorage.setItem('isZc', 1)
 							_this.$popup.show({
 								showZc: true
 							})
-						} else {
-							_this.$popup.hide()
+						}
+					}
+					//控制设置密码弹窗
+					if(sessionStorage.getItem('isPay')) {
+						_this.$popup.hide()
+					} else {
+						if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/reg') {
+							_this.getUserPayPassword()
 						}
 					}
 				}

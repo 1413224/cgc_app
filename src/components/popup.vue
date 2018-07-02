@@ -4,13 +4,11 @@
 		<x-dialog v-model="showSr" class="xrBox">
 			<div class="p_box">
 				<img @click="showNew = false" class="xr_img" :src="'./static/images/xr_bg.png'" alt="" />
-
 				<div class="p_content">
 					<p>本次消费奖励</p>
 					<p>7.20 <span>通用积分</span></p>
 					<p>通用积分将自动存入您的资产余额</p>
 				</div>
-
 				<img @click="showSr = false" class="gb_img" :src="'./static/images/xr_gb.png'" alt="" />
 			</div>
 		</x-dialog>
@@ -36,6 +34,21 @@
 			</div>
 			<img @click="showZc = false" class="gb_img" :src="'./static/images/xr_gb.png'" alt="" />
 		</x-dialog>
+
+		<!--新人奖励弹窗-->
+		<x-dialog v-model="showPay" class="payBox">
+			<div class="pay_box">
+				<div class="pay_content">
+					<img :src="'./static/images/payphone.png'" />
+					<p class="one">请设置支付密码</p>
+					<p class="two">用于交易、付款、收货等操作</p>
+					<div class="pay-btn" @click="toPay">
+						立即设置
+					</div>
+				</div>
+			</div>
+			<img @click="showPay = false" class="gb_img" :src="'./static/images/xr_gb.png'" alt="" />
+		</x-dialog>
 	</div>
 </template>
 
@@ -48,6 +61,10 @@
 				default: false
 			},
 			showZc: {
+				type: Boolean,
+				default: false
+			},
+			showPay: {
 				type: Boolean,
 				default: false
 			},
@@ -83,11 +100,15 @@
 		},
 		methods: {
 			toReg() {
-				this.showNew2 = false
 				this.vm.$router.push({
 					path: '/user/reg'
 				})
-			}
+			},
+			toPay() {
+				this.vm.$router.push({
+					path: '/user/changePaymentPassword'
+				})
+			},
 		}
 	}
 </script>
@@ -99,8 +120,59 @@
 			max-width: 100%;
 		}
 	}
+	
+	.payBox {
+		.weui-dialog {
+			width: 6.10rem;
+			height: 6.33rem;
+			max-width: 100%;
+		}
+	}
 </style>
 <style lang="less" scoped>
+	.payBox {
+		.pay_content {
+			padding: 0.44rem 0.23rem;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background: rgba(255, 255, 255, 1);
+			border-radius: 3px;
+			img {
+				width: 4.33rem;
+				height: 2.66rem;
+			}
+			.one {
+				font-size: 0.32rem;
+				font-family: PingFangSC-Medium;
+				color: rgba(26, 38, 66, 1);
+				margin: 0.26rem 0 0.14rem 0;
+			}
+			.two {
+				font-size: 0.26rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(144, 162, 199, 1);
+			}
+			.pay-btn {
+				width: 5.71rem;
+				height: 0.8rem;
+				line-height: 0.8rem;
+				background: rgba(51, 111, 255, 1);
+				font-size: 0.32rem;
+				font-family: PingFangSC-Medium;
+				color: rgba(255, 255, 255, 1);
+				margin-top: 0.6rem;
+				border-radius: 3px;
+			}
+		}
+		.gb_img {
+			width: 0.82rem;
+			height: 0.82rem;
+			margin-top: 0.33rem;
+		}
+	}
+	
 	.zcBox {
 		.zc_box {
 			.zc-btn {

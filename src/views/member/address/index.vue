@@ -79,11 +79,14 @@
 							addressId: addressId
 						}
 						_this.$http.post(_this.url.user.deleteShippingAddress, param).then(resp => {
-							_this.$vux.toast.show({
-								type: 'text',
-								text: '成功删除'
-							})
-							_this.getShippingAddress()
+							if(resp.data.status === '00000000') {
+								_this.$vux.toast.show({
+									type: 'text',
+									text: '已删除该收货地址',
+									width:'60%'
+								})
+								_this.getShippingAddress()
+							}
 						})
 					}
 				})
@@ -115,10 +118,12 @@
 				_this.$http.get(_this.url.user.getShippingAddress, {
 					params: param
 				}).then(resp => {
-					_this.list = resp.data.data.list
-					_this.list.forEach(function(value) {
-						value.isDefault = !!value.isDefault
-					})
+					if(resp.data.status === '00000000') {
+						_this.list = resp.data.data.list
+						_this.list.forEach(function(value) {
+							value.isDefault = !!value.isDefault
+						})
+					}
 				})
 
 			}

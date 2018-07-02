@@ -409,12 +409,11 @@
 	.searchBox {
 		width: 100%;
 		background: #fff;
-		padding-bottom: 0.14rem;
+		padding: 0.14rem 0;
 		.search {
 			position: relative;
 			width: 92%;
 			margin: 0 auto;
-			padding-top: 0.14rem;
 			img {
 				width: 0.32rem;
 				height: 0.32rem;
