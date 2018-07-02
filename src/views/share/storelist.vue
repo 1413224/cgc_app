@@ -177,7 +177,7 @@
 					}
 				],
 				show1: false,
-				logoTitle: '门店',
+				logoTitle: '距离',
 				logolist: [5, 10, 20, 50, 100],
 				screeningContent: [{
 						title: '美食',
@@ -397,6 +397,8 @@
 				})
 			},
 			onArea() {
+				this.curPage = 1
+				
 				//点击区域
 				if(this.areaShang) {
 					this.hide();
@@ -410,8 +412,8 @@
 			onScreening() {
 				//点击筛选
 				this.show1 = !this.show1
-
-				console.log(this.show1)
+				
+				this.curPage = 1
 
 				if(this.show1) {
 					this.$nextTick(() => {
@@ -429,6 +431,9 @@
 				this.hide();
 			},
 			onPrice() {
+				
+				this.curPage = 1
+				
 				//点击价格
 				if(this.priceShang) {
 					this.hide();

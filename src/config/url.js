@@ -55,8 +55,8 @@ var url = {
 		getChainsConcern: uri1 + '/v1/enterprise/getChainsConcern', //获取用户是否关注联盟企业角色
 		getEnterpriseListInfo: uri1 + '/public/v1/enterprise/getEnterpriseListInfo', //获取产业联盟企业列表信息接口
 	},
-	origin:{
-		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl',//微信授权
+	origin: {
+		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //微信授权
 	},
 	draw: {
 		getReviewLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=copy.getReviewLists', //往期回顾
@@ -64,7 +64,7 @@ var url = {
 	},
 	zone: {
 		area: '/area/v1/area/level', //区域地址
-		address: '/area/v1/area/getInfo' //三级联动地址
+		address: '/area/public/v1/area/getInfo' //三级联动地址
 	},
 	// 快讯
 	article: {

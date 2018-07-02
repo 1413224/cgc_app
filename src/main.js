@@ -182,7 +182,7 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_'];
-	
+
 //	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
 //
 //		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url

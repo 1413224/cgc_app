@@ -67,12 +67,46 @@
 			settingFooter
 		},
 		methods: {
-			
+
 		},
 		watch: {
 			'$route' (to, from, next) {
 
 				var _this = this
+
+				//判断是否微信端   奖励弹窗  
+				var ua = navigator.userAgent.toLowerCase()
+				var isWeixin = ua.indexOf('micromessenger') != -1
+
+				if(isWeixin) {
+					if(sessionStorage['_openid_']) {
+						if(sessionStorage.getItem('isPopup')) {
+							_this.$popup.hide()
+						} else {
+							if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/reg') {
+								sessionStorage.setItem('isPopup', 1)
+								_this.$popup.show({
+									showZc: true
+								})
+							} else {
+								_this.$popup.hide()
+							}
+						}
+					}
+				} else {
+					if(sessionStorage.getItem('isPopup')) {
+						_this.$popup.hide()
+					} else {
+						if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/reg') {
+							sessionStorage.setItem('isPopup', 1)
+							_this.$popup.show({
+								showZc: true
+							})
+						} else {
+							_this.$popup.hide()
+						}
+					}
+				}
 
 				//路由切换返回顶部
 				document.body.scrollTop = 0

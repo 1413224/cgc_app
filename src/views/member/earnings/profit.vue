@@ -150,7 +150,7 @@
 			box-sizing: border-box;
 			z-index: 15;
 			background-color: white;
-			font-size: 0.28rem;
+			font-size: 0.30rem;
 		}
 		.top:before {
 			content: " ";
@@ -187,7 +187,7 @@
 				align-items: center;
 				justify-content: space-between;
 				position: relative;
-				font-size: 0.28rem;
+				font-size: 0.30rem;
 			}
 			ul>li:before {
 				content: " ";

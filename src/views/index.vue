@@ -418,15 +418,19 @@
 			
 		},
 		mounted() {
-			this.onLoadArticle();
+
+			this.onLoadArticle()
+
 		},
 
 		methods: {
 			goUrl(url) {
 				window.location.href = url
 			},
-			goPay(){
-				this.$router.push({path:'/member/pay/wxgzhpay'})
+			goPay() {
+				this.$router.push({
+					path: '/member/pay/wxgzhpay'
+				})
 			},
 			onLoadArticle() {
 				let _this = this
