@@ -42,7 +42,6 @@
 		},
 		data() {
 			return {
-				isWx: '',
 				orientation: false
 			}
 		},
@@ -92,10 +91,7 @@
 				var _this = this
 
 				//判断是否微信端   奖励弹窗  
-				var ua = navigator.userAgent.toLowerCase()
-				var isWeixin = ua.indexOf('micromessenger') != -1
-
-				if(isWeixin) {
+				if(_this.isWx) {
 					if(sessionStorage['_openid_']) {
 
 						//控制新人奖励弹窗

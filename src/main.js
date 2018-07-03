@@ -149,7 +149,7 @@ const history = window.sessionStorage
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' && key != '_openid_') {
+	if(key != 'isPopup' && key != 'isPay' && key != '_openid_') {
 		history.removeItem(key)
 	}
 }
@@ -181,8 +181,8 @@ methods.forEach(key => {
 
 router.beforeEach(function(to, from, next) {
 
-	let openid = sessionStorage['_openid_'];
-
+	let openid = sessionStorage['_openid_']
+	
 	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg') && (to.path != '/multi_user_mall')) {
 
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url

@@ -71,8 +71,8 @@
 					title: '全部列表',
 					type: 1
 				}, {
-					title: '消费',
-					type: 2
+					title: '购物奖励',
+					type: 4
 				}, {
 					title: '充值奖励',
 					type: 3
@@ -100,9 +100,9 @@
 			if(this.$route.query.type == 3) {
 				this.twoIndex = 2
 				this.typeTitle = '充值奖励'
-			} else if(this.$route.query.type == 2) {
+			} else if(this.$route.query.type == 4) {
 				this.twoIndex = 1
-				this.typeTitle = '消费'
+				this.typeTitle = '购物奖励'
 			} else if(this.$route.query.type == 6) {
 				this.twoIndex = 3
 				this.typeTitle = '中奖奖励'

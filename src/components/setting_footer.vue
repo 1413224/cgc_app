@@ -1,7 +1,7 @@
 <template>
 	<div class="footer-box">
 		<div class="b-top">
-			<div class="item" v-for="(item,index) in barList" :class="{'factive':($route.meta.navIndex == index||$route.meta.navIndex == '/')}">
+			<div class="item" v-for="(item,index) in barList" :class="{'factive':($route.meta.navIndex == index||$route.meta.navIndex == '/')}" @click="itemActive(index)">
 				<router-link :to="item.url">
 					<img class="icon" :class="{'zqm':index == 2}" :src="[$route.meta.navIndex == index?item.iconIn:item.icon]" />
 					<p v-if="index!=2">{{item.title}}</p>
@@ -43,7 +43,7 @@
 						{
 							icon: './static/images/zqm.png',
 							iconIn: './static/images/zqm.png',
-							url: '/member/purse/qrcode'
+							url: ''
 						},
 						{
 							icon: './static/images/cylm.png',
@@ -62,7 +62,41 @@
 			}
 		},
 		methods: {
+			itemActive(index) {
+				var _this = this
+				
+				_this.$popup.hide()
+				
+				if(index == 2) {
+					
+					var uri = window.location.href.split('#')[0] //截取#前面的路径
 
+					_this.$http.post(_this.url.zf.wxScan, {
+						appid: 'wx7a4933a7a3c33ec8',
+						url: uri
+					}).then((res) => {
+						wx.config({
+							debug: false,
+							appId: 'wx7a4933a7a3c33ec8',
+							timestamp: res.data.data.timestamp,
+							nonceStr: res.data.data.nonceStr,
+							signature: res.data.data.signature,
+							jsApiList: ['checkJsApi', 'scanQRCode']
+						})
+
+						wx.ready(function() {
+							//点击按钮扫描二维码
+							wx.scanQRCode({
+								needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+								scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+								success: function(res) {
+									alert(res)
+								}
+							})
+						})
+					})
+				}
+			}
 		}
 	}
 </script>

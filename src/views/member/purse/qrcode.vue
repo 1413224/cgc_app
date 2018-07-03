@@ -23,18 +23,20 @@
 			<!--推广码-->
 			<div style="padding-bottom: 1.2rem;height: 100%;" v-if="grade>=1 && qrcodeIndex == 1">
 				<div class="bg" :class="!$store.state.page.isWx?'top46':''">
-					<div class="b-w1">
-						<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
-						<div style="text-align: center;margin: 0 auto;" v-else :style="{ width: width + 'px',height: width + 'px',lineHeight: width + 'px'}">请先登录再体验此功能</div>
-						<div class="bottom">
-							<img :src="images?images:'./static/images/mrtx.png'" alt="" />
-							<div>
-								<p>{{userInfo.nickname}}</p>
-								<!--<p>{{userInfo.mobile}}</p>-->
+					<div>
+						<div class="b-w1">
+							<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
+							<div style="text-align: center;margin: 0 auto;" v-else :style="{ width: width + 'px',height: width + 'px',lineHeight: width + 'px'}">请先登录再体验此功能</div>
+							<div class="bottom">
+								<img :src="images?images:'./static/images/mrtx.png'" alt="" />
+								<div>
+									<p>{{userInfo.nickname}}</p>
+									<!--<p>{{userInfo.mobile}}</p>-->
+								</div>
 							</div>
 						</div>
+						<p class="tip2" @click="$router.push({path:'/member/benefits/index'})">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
 					</div>
-					<p class="tip2" @click="$router.push({path:'/member/benefits/index'})">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
 				</div>
 			</div>
 			<!--未获得赚钱码-->
@@ -447,10 +449,10 @@
 		.bg {
 			position: absolute;
 			top: 0;
-			bottom: 0;
+			bottom: 1.2rem;
 			width: 100%;
-			height: 100%;
-			padding: 60px 0.44rem 1.2rem 0.44rem;
+			height: 110%;
+			padding: 60px 0.44rem 0rem 0.44rem;
 			box-sizing: border-box;
 			background: url(../../../../static/images/qrcode-bg.png) no-repeat;
 			background-size: 100% 100%;
@@ -465,6 +467,7 @@
 				font-family: PingFangSC-Medium;
 				color: rgba(255, 255, 255, 1);
 				margin-top: 0.3rem;
+				height: 2rem;
 			}
 			.b-w1 {
 				width: 5.78rem;
