@@ -10,7 +10,7 @@
 				<div class="log-list" v-if="list.length>0">
 					<ul>
 						<li v-for="item in list">
-							<p>{{item.dayTime || getDate}}</p>
+							<p>{{item.dayTime | getDate}}</p>
 							<p>+ {{item.totalBalance}}</p>
 						</li>
 					</ul>

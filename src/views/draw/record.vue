@@ -57,7 +57,7 @@
 									<div class="dia_content">
 										<p class="title">{{headMessage}}</p>
 										<p class="note">{{message}}</p>
-										<div class="btnList">{{btnText}}</div>
+										<div class="btnList" @click="$router.push({path:'/draw/awards'})">{{btnText}}</div>
 									</div>
 								</div>
 								<div class="close" @click="showDialog=false"><img src="../../assets/images/draw/open.png"></div>

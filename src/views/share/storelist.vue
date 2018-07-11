@@ -71,7 +71,7 @@
 					<noMore v-if="showNoMore"></noMore>
 				</div>
 				<div style="margin-top: 3px;">
-					<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
+					<noData v-if="list.length == 0" :status="2" stateText="暂无门店"></noData>
 				</div>
 			</div>
 		</div>
@@ -235,6 +235,9 @@
 				countryId: 1,
 				provinceId: '',
 				cityId: '',
+				isprovince: '',
+				iscity: '',
+				isdistrict: '',
 				areaId: '',
 				distance: 5,
 				lat: '',
@@ -588,7 +591,9 @@
 					_this.isActive = false
 					_this.maskActive = false
 
-					_this.region = _this.region + name
+					_this.isdistrict = name
+
+					_this.region = _this.isprovince + _this.iscity + _this.isdistrict
 
 					_this.areaId = id //区级ID
 					_this.getEnterpriseListInfo()
@@ -596,13 +601,15 @@
 					_this.$router.replace({
 						query: _this.merge(_this.$route.query, {
 							'areaId': id,
-							'region': _this.region
+							'region': _this.isprovince + _this.iscity + _this.isdistrict
 						})
 					})
 					return
 				} else if(this.addressKey == 1) {
 
-					_this.region = name
+					_this.isprovince = name
+
+					_this.region = _this.isprovince
 
 					_this.provinceId = id //省级ID
 					_this.getEnterpriseListInfo()
@@ -610,12 +617,13 @@
 					_this.$router.replace({
 						query: _this.merge(_this.$route.query, {
 							'provinceId': id,
-							'region': _this.region
+							'region': _this.isprovince
 						})
 					})
 				} else if(_this.addressKey == 2) {
 
-					_this.region = _this.region + name
+					_this.iscity = name
+					_this.region = _this.isprovince + _this.iscity
 
 					_this.cityId = id //市级ID
 					_this.getEnterpriseListInfo()
@@ -623,7 +631,7 @@
 					_this.$router.replace({
 						query: _this.merge(_this.$route.query, {
 							'cityId': id,
-							'region': _this.region
+							'region': _this.isprovince + _this.iscity
 						})
 					})
 				}
@@ -645,30 +653,44 @@
 				this.$refs.address.scrollTop = 0
 			},
 			provice() {
-				this.items = this.proviceItem
-				this.addressKey = 1
-				this.cityItem = null
-				this.cityId = ''
-				this.areaId = ''
-				this.districtItem = null
-				
-				this.$refs.address.scrollTop = 0
+				var _this = this
+
+				_this.items = _this.proviceItem
+				_this.addressKey = 1
+
+				_this.region = _this.isprovince
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'cityId': _this.cityId,
+						'region': _this.isprovince
+					})
+				})
+
+				_this.$refs.address.scrollTop = 0
 			},
 			city() {
-				this.areaId = ''
-				if(this.cityItem) {
-					this.items = this.cityItem
-					this.addressKey = 2
-				}
+				var _this = this
 				
-				this.$refs.address.scrollTop = 0
+				if(_this.cityItem) {
+					_this.items = _this.cityItem
+					_this.addressKey = 2
+				}
+				_this.region = _this.isprovince + _this.iscity
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'cityId': _this.cityId,
+						'region': _this.isprovince + _this.iscity
+					})
+				})
+
+				_this.$refs.address.scrollTop = 0
 			},
 			district() {
 				if(this.districtItem) {
 					this.items = this.districtItem
 					this.addressKey = 3
 				}
-				
+				this.region = this.isprovince + this.iscity + this.isdistrict
 				this.$refs.address.scrollTop = 0
 			},
 			hide() {

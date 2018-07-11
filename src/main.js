@@ -81,6 +81,14 @@ Vue.filter('getDate', function(value) {
 	}
 })
 
+Vue.filter('getDate2', function(value) {
+	if(value != 0) {
+		return mainApp.frDateTimehp.getFormatDateTamp(value * 1000)
+	} else {
+		return value
+	}
+})
+
 Vue.config.silent = true
 
 Vue.directive('transfer-dom', TransferDom)
@@ -183,18 +191,18 @@ router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
 	
-	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg') && (to.path != '/multi_user_mall')) {
-
-		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
-
-		let ua = window.navigator.userAgent.toLowerCase()
-		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-			next({
-				path: '/member/oriza'
-			})
-			return false
-		}
-	}
+//	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg') && (to.path != '/multi_user_mall')) {
+//
+//		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
+//
+//		let ua = window.navigator.userAgent.toLowerCase()
+//		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+//			next({
+//				path: '/member/oriza'
+//			})
+//			return false
+//		}
+//	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []

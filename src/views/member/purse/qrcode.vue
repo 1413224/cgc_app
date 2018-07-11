@@ -1,85 +1,72 @@
 <template>
 	<div class="qrcode-box">
-		<div style="position: relative;height: 100%;">
-			<settingHeader :title="title"></settingHeader>
-			<!--付款码-->
-			<div class="tgm" :class="$store.state.page.isWx?'top0':''" v-if="grade>=1 && qrcodeIndex == 0">
-				<div class="top">
-					<div>
-						<img :src="images?images:'./static/images/mrtx.png'" alt="" />
-						<p class="m">{{userInfo.mobile}}</p>
-						<div class="g">{{userInfo.levelName?userInfo.levelName:'暂无等级'}}</div>
+		<settingHeader :title="title"></settingHeader>
+		<div class="hym" v-if="qrcodeIndex == 0">
+			<div class="middle-box">
+				<div class="bw-box" v-if="noOpen">
+					<div class="box">
+						<img :src="'./static/qrcode/cgc-code.png'" alt="" />
+						<p class="tip">扫码付全面升级，欢迎体验</p>
+						<p class="xy">点击下方按钮即同意 <span>《CGC全球智慧产业联盟扫码付款用户协议》</span></p>
+						<div class="btn" @click="open">立即开启</div>
 					</div>
 				</div>
-				<div class="printOrder" v-for="(v,index) in list" :key="index">
-					<div v-if="$store.state.page.isLogin == 'true'">
-						<p class="tip">向营业员出示会员码完成会员积分或付款</p>
-						<barcode :value="v.barcodes" :options="barcode_option" tag="svg"></barcode>
+				<div class="bw-box2" v-else>
+					<div class="da">
+						<div class="top">
+							<img v-if="userInfo.avatar" :src="userInfo.avatar.original" alt="" />
+							<img v-else :src="'./static/images/mrtx.png'" alt="" />
+							<p>{{userInfo.mobile}}</p>
+						</div>
+						<div class="bottom">
+							<p class="tip">向营业员出示会员码完成会员积分或付款</p>
+							<barcode :value="barcodes" :options="barcode_option" tag="svg"></barcode>
+						</div>
 					</div>
-					<p v-else>请先登录再体验此功能</p>
+					<div class="tip-box">
+						<img :src="'./static/qrcode/laba.png'" alt="" /> 买单报手机号，赢5000元大奖！
+					</div>
 				</div>
-			</div>
 
-			<!--推广码-->
-			<div style="padding-bottom: 1.2rem;height: 100%;" v-if="grade>=1 && qrcodeIndex == 1">
-				<div class="bg" :class="!$store.state.page.isWx?'top46':''">
-					<div>
-						<div class="b-w1">
-							<qrcode v-if="$store.state.page.isLogin == 'true'" :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
-							<div style="text-align: center;margin: 0 auto;" v-else :style="{ width: width + 'px',height: width + 'px',lineHeight: width + 'px'}">请先登录再体验此功能</div>
-							<div class="bottom">
-								<img :src="images?images:'./static/images/mrtx.png'" alt="" />
-								<div>
-									<p>{{userInfo.nickname}}</p>
-									<!--<p>{{userInfo.mobile}}</p>-->
-								</div>
-							</div>
-						</div>
-						<p class="tip2" @click="$router.push({path:'/member/benefits/index'})">赚积分攻略 <i class="icon iconfont icon-arrow-right"></i></p>
-					</div>
+				<div class="bottom-tip">
+					<p>请在标记有</p>
+					<img :src="'./static/qrcode/e-logo.png'" alt="" />
+					<p>的商户使用</p>
 				</div>
 			</div>
-			<!--未获得赚钱码-->
-			<div class="bg-w" v-if="grade == 0">
-				<div class="img-box">
-					<img src="../../../assets/images/member/IMG_3708@2x.png" />
-				</div>
-				<div class="middle">
-					<p>暂未满足条件</p>
-					<p>专享3大权益 每月预计可赚2000+</p>
-					<div @click="$router.push({path:'/member/purse/hasqrcode'})">
-						查看条件 <i class="icon iconfont icon-arrow-right"></i>
+		</div>
+		<div class="tgm" v-if="qrcodeIndex == 1">
+			<div class="bw-box3">
+				<div class="all">
+					<div class="top">
+						<qrcode :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
+					</div>
+					<div class="bottom">
+						<img class="tx" v-if="userInfo.avatar" :src="userInfo.avatar.original" alt="" />
+						<img class="tx" v-else :src="'./static/images/mrtx.png'" alt="" />
+						<p class="name">{{userInfo.mobile}}</p>
 					</div>
 				</div>
-				<div class="bottom">
-					<div class="title">
-						权益一 · 每月优惠券
-					</div>
-					<div class="bg-y">
-						<div class="one">
-							<span>120</span><span>元</span>
-						</div>
-						<div class="two">
-							<p>威伐光体验卷</p>
-							<p>全国通用</p>
-						</div>
-						<div class="three">
-							<i></i>
-							<div>领取礼卷</div>
-						</div>
-					</div>
-				</div>
+				<p class="tip">让好友扫二维码或长按保存图片后发送给好友</p>
 			</div>
+		</div>
 
-			<div class="qrcode-f">
-				<div @click="qrcodeClick(0,'付款码')">
-					<img :src="qrcodeIndex == 0?'./static/images/fkm-in.png':'./static/images/fkm.png'" alt="" />
-					<p :class="qrcodeIndex == 0?'blue':''">付款码</p>
-				</div>
-				<div @click="qrcodeClick(1,'推广码')">
-					<img :src="qrcodeIndex == 1?'./static/images/tgm-in.png':'./static/images/tgm2.png'" alt="" />
-					<p :class="qrcodeIndex == 1?'blue':''">推广码</p>
-				</div>
+		<div class="qrcode-f" :class="qrcodeIndex == 0?'blue':'red'">
+			<div @click="qrcodeClick(0,'会员码')">
+				<img :src="qrcodeIndex == 0?'./static/qrcode/hym-in.png':'./static/qrcode/hym.png'" alt="" />
+				<p :class="qrcodeIndex == 0?'white':''">会员码</p>
+			</div>
+			<div @click="qrcodeClick(1,'推广码')">
+				<img :src="qrcodeIndex == 1?'./static/qrcode/tgm-in.png':'./static/qrcode/tgm.png'" alt="" />
+				<p :class="qrcodeIndex == 1?'white':''">推广码</p>
+			</div>
+			<div @click="scan">
+				<img :src="'./static/qrcode/sys.png'" alt="" />
+				<p>扫一扫</p>
+			</div>
+			<div @click="$router.push({path:'/member/purse/commercial'})">
+				<img :src="'./static/qrcode/zcsh.png'" alt="" />
+				<p>支持商户</p>
 			</div>
 		</div>
 	</div>
@@ -92,7 +79,7 @@
 	export default {
 		data() {
 			return {
-				title: '付款码',
+				title: '我的二维码',
 				grade: 1,
 				width: '',
 				userInfo: {},
@@ -109,12 +96,12 @@
 					},
 					width: '3',
 					height: '55',
-					fontSize: '28px', //字体大小,
+					fontSize: '26px', //字体大小,
 					text: ''
 				},
-				list: [{
-					barcodes: ''
-				}]
+				barcodes: '',
+
+				noOpen: false,
 			}
 		},
 		created() {
@@ -131,15 +118,59 @@
 				})
 			}
 
-			this.getUserInfo()
-			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
-			this.width = Number(document.body.clientWidth * 0.66)
-
 			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
-			document.title = this.$route.query.text ? this.$route.query.text : '付款码'
-			this.title = this.$route.query.text ? this.$route.query.text : '付款码'
+			document.title = this.$route.query.text ? this.$route.query.text : '会员码'
+			this.title = this.$route.query.text ? this.$route.query.text : '会员码'
+
+			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
+			this.width = Number(document.body.clientWidth * 0.6866666666666666)
+
+			this.getUserInfo()
 		},
 		methods: {
+			open() {
+				var _this = this
+				_this.noOpen = false
+			},
+			scan() {
+				//微信扫一扫
+				var _this = this
+
+				var uri = window.location.href.split('#')[0] //截取#前面的路径
+
+				_this.$http.post(_this.url.zf.wxScan, {
+					appid: 'wx7a4933a7a3c33ec8',
+					url: uri
+				}).then((res) => {
+					wx.config({
+						debug: false,
+						appId: 'wx7a4933a7a3c33ec8',
+						timestamp: res.data.data.timestamp,
+						nonceStr: res.data.data.nonceStr,
+						signature: res.data.data.signature,
+						jsApiList: ['checkJsApi', 'scanQRCode']
+					})
+
+					wx.ready(function() {
+						//点击按钮扫描二维码
+						wx.scanQRCode({
+							needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+							scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+							success: function(res) {
+								alert(res)
+							},
+							fail: function(res) {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '使用失败'
+								})
+							}
+						})
+					})
+				})
+			},
 			qrcodeClick(index, text) {
 				var _this = this
 				_this.qrcodeIndex = index
@@ -166,11 +197,8 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.userInfo = res.data.data
-						_this.list[0].barcodes = res.data.data.mobile
+						_this.barcodes = res.data.data.mobile
 						_this.barcode_option.text = res.data.data.mobile
-						if(_this.userInfo.avatar.original) {
-							_this.images = _this.userInfo.avatar.original
-						}
 					}
 				})
 			},
@@ -183,8 +211,8 @@
 		watch: {
 			qrcodeIndex() {
 				if(this.qrcodeIndex == 0) {
-					document.title = '付款码'
-					this.title = '付款码'
+					document.title = '会员码'
+					this.title = '会员码'
 				} else {
 					document.title = '推荐码'
 					this.title = '推荐码'
@@ -194,60 +222,217 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	.qrcode-box {
 		height: 100%;
-		font-family: PingFangSC-Medium;
-		.top0 {
-			top: 0!important;
-		}
-		.tgm {
+		overflow: hidden;
+		.hym {
+			height: 100%;
 			position: relative;
-			position: absolute;
-			width: 100%;
-			bottom: 1.2rem;
-			top: 46px;
-			.top {
-				height: 2.6rem;
-				background: url(../../../../static/member/record-bg.png) no-repeat;
-				background-size: 100% 100%;
-				text-align: center;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				img {
-					width: 0.88rem;
-					height: 0.88rem;
+			background: linear-gradient(#5EC3FF, #106FE3);
+			.middle-box {
+				position: absolute;
+				top: 20%;
+				left: 50%;
+				transform: translate(-50%, -20%);
+				.bw-box {
+					width: 6.93rem;
+					height: 7.92rem;
+					background: rgba(255, 255, 255, 1);
+					border-radius: 5px;
+					padding: 0.46rem 0.58rem;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					.box {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						img {
+							width: 1.8rem;
+							height: 1.8rem;
+							margin-bottom: 0.68rem;
+							margin-top: 0.5rem;
+						}
+						.tip {
+							font-size: 0.34rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(26, 38, 66, 1);
+							margin-bottom: 1.13rem;
+						}
+						.xy {
+							font-size: 0.32rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(26, 38, 66, 1);
+							text-align: center;
+							margin-bottom: 0.45rem;
+							span {
+								color: #336FFF;
+							}
+						}
+						.btn {
+							width: 5.76rem;
+							height: 0.82rem;
+							line-height: 0.82rem;
+							background: rgba(203, 24, 28, 1);
+							border-radius: 3px;
+							font-size: 0.32rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(255, 255, 255, 1);
+							text-align: center;
+						}
+					}
 				}
-				.m {
-					font-size: 0.36rem;
-					font-family: PingFangSC-Medium;
-					color: rgba(255, 255, 255, 1);
+				.bw-box2 {
+					background: rgba(255, 255, 255, 1);
+					border-radius: 5px;
+					position: relative;
+					overflow: hidden;
+					.da {
+						width: 6.93rem;
+						height: 7.92rem;
+						padding: 0.12rem;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						flex-direction: column;
+						box-sizing: border-box;
+					}
+					.tip-box {
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						width: 100%;
+						height: 0.66rem;
+						background-color: rgb(250, 221, 219);
+						display: flex;
+						align-items: center;
+						font-size: 0.28rem;
+						font-family: PingFang-SC-Medium;
+						color: rgba(227, 41, 33, 1);
+						img {
+							width: 0.32rem;
+							height: auto;
+							margin: 0 0.30rem 0 0.38rem;
+						}
+					}
+					.top {
+						width: 100%;
+						height: 2.25rem;
+						position: relative;
+						display: flex;
+						align-items: center;
+						padding: 0 0.56rem;
+						box-sizing: border-box;
+						img {
+							width: 1.37rem;
+							height: 1.37rem;
+							margin-right: 0.31rem;
+						}
+						p {
+							font-size: 0.38rem;
+							font-family: PingFang-SC-Heavy;
+							color: rgba(26, 38, 66, 1);
+						}
+					}
+					.top:after {
+						content: " ";
+						position: absolute;
+						left: 0;
+						bottom: 0;
+						right: 0;
+						height: 1px;
+						border-bottom: 1px solid #D9D9D9;
+						color: #D9D9D9;
+						-webkit-transform-origin: 0 100%;
+						transform-origin: 0 100%;
+						-webkit-transform: scaleY(0.5);
+						transform: scaleY(0.5);
+					}
+					.bottom {
+						flex: 1;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						flex-direction: column;
+						width: 100%;
+						.tip {
+							font-size: 0.24rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(144, 162, 199, 1);
+						}
+						svg {
+							width: 100%;
+							height: 1.6rem;
+						}
+					}
 				}
-				.g {
-					font-size: 0.22rem;
-					font-family: PingFangSC-Regular;
+				.bottom-tip {
+					display: flex;
+					font-size: 0.24rem;
+					font-family: PingFang-SC-Medium;
 					color: rgba(255, 255, 255, 1);
+					margin-top: 0.35rem;
+					justify-content: center;
+					p {
+						opacity: 0.5;
+					}
+					img {
+						width: 0.68rem;
+						height: 0.32rem;
+						margin: 0 0.15rem;
+					}
 				}
 			}
-			.printOrder {
-				text-align: center;
-				padding: 0 0.5rem;
-				box-sizing: border-box;
+		}
+		.tgm {
+			height: 100%;
+			background: url(../../../../static/qrcode/tgm-bg.png) no-repeat;
+			background-size: 100% 100%;
+			position: relative;
+			padding-bottom: 1rem;
+			.bw-box3 {
 				position: absolute;
-				top: 50%;
+				top: 48%;
 				left: 50%;
 				transform: translate(-50%, -50%);
-				width: 100%;
-				.tip {
-					font-size: 0.26rem;
-					font-family: PingFangSC-Regular;
-					color: rgba(144, 162, 199, 1);
-					margin-bottom: 0.2rem;
+				.all {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					flex-direction: column;
+					padding: 0.39rem 0.46rem;
+					width: 6.08rem;
+					background: rgba(255, 255, 255, 1);
+					border-radius: 5px;
+					box-sizing: border-box;
+					.bottom {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						position: relative;
+						margin-top: 0.17rem;
+						.tx {
+							width: 0.95rem;
+							height: 0.95rem;
+							border-radius: 50%;
+							margin-right: 0.43rem;
+						}
+						.name {
+							font-size: 0.28rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(26, 38, 66, 1);
+						}
+					}
 				}
-				svg {
-					width: 100%;
-					height: 1.6rem;
+				.tip {
+					font-size: 0.24rem;
+					font-family: PingFang-SC-Regular;
+					color: rgba(255, 255, 255, 1);
+					margin-top: 0.26rem;
+					text-align: center;
 				}
 			}
 		}
@@ -255,9 +440,10 @@
 			position: fixed;
 			bottom: 0%;
 			width: 100%;
-			height: 1.20rem;
-			background: rgba(228, 235, 251, 1);
 			display: flex;
+			padding: 0.21rem 0;
+			box-sizing: border-box;
+			z-index: 15;
 			div {
 				flex: 1;
 				display: flex;
@@ -268,258 +454,28 @@
 				font-family: PingFangSC-Regular;
 				color: rgba(144, 162, 199, 1);
 				img {
-					width: 0.4rem;
-					height: 0.4rem;
+					width: 0.6rem;
+					height: auto;
 					margin-bottom: 0.12rem;
 				}
-				.blue {
-					color: rgba(51, 111, 255, 1);
+				p {
+					font-size: 0.24rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(255, 255, 255, 1);
+					opacity: 0.5;
 				}
-			}
-		}
-		.qrcode {
-			text-align: center;
-		}
-		/*2*/
-		.bg-w {
-			height: 100%;
-			background: white;
-			position: relative;
-			.img-box {
-				height: 3.75rem;
-				position: relative;
-				img {
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -50%);
-					width: -webkit-fill-available;
-					height: auto;
-				}
-			}
-			.middle {
-				font-family: PingFangSC-Medium;
-				color: rgba(26, 38, 66, 1);
-				text-align: center;
-				padding: 0.23rem;
-				p:nth-child(1) {
-					font-size: 0.36rem;
-					margin-bottom: 0.11rem;
-				}
-				p:nth-child(2) {
-					font-size: 0.28rem;
-				}
-				div {
-					width: 6rem;
-					height: 0.9rem;
-					line-height: 0.9rem;
-					text-align: center;
-					margin: 0.67rem auto;
-					background: linear-gradient(90deg, rgba(94, 195, 255, 1), rgba(16, 111, 227, 1));
-					border-radius: 45px;
+				.white {
 					color: white;
-				}
-			}
-			.bottom {
-				font-family: PingFangSC-Regular;
-				padding: 0 0.46rem;
-				.title {
-					font-size: 0.32rem;
-					color: rgba(26, 38, 66, 1);
-				}
-				.bg-y {
-					width: 100%;
-					height: 1rem;
-					margin-top: 0.31rem;
-					background: rgba(216, 223, 240, 1);
-					border-radius: 6px;
-					padding: 0 0.24rem;
-					display: flex;
-					align-items: center;
-					font-family: PingFangSC-Regular;
-					color: rgba(26, 38, 66, 1);
-					box-sizing: border-box;
-					.one {
-						padding-right: 0.24rem;
-						border-right: 1px dashed #1A2642;
-						span:nth-child(1) {
-							font-size: 0.48rem;
-						}
-						span:nth-child(2) {
-							font-size: 0.20rem;
-						}
-					}
-					.two {
-						padding: 0 0.24rem;
-						color: rgba(26, 38, 66, 1);
-						p:nth-child(1) {
-							font-size: 0.28rem;
-							font-family: PingFangSC-Medium;
-						}
-						p:nth-child(2) {
-							font-size: 0.24rem;
-							font-family: PingFangSC-Regular;
-						}
-					}
-					.three {
-						flex: 1;
-						div {
-							width: 1.34rem;
-							height: 0.46rem;
-							line-height: 0.46rem;
-							text-align: center;
-							color: white;
-							background: rgba(26, 38, 66, 1);
-							border-radius: 23px;
-							float: right;
-							padding: 0.05rem 0.19rem;
-						}
-					}
-				}
-			}
-		}
-		.bg-w:before {
-			content: " ";
-			position: absolute;
-			left: 0;
-			top: 0;
-			right: 0;
-			height: 1px;
-			border-top: 1px solid #D9D9D9;
-			color: #D9D9D9;
-			-webkit-transform-origin: 0 0;
-			transform-origin: 0 0;
-			-webkit-transform: scaleY(0.5);
-			transform: scaleY(0.5);
-			left: 0px;
-		}
-		/*1*/
-		.b-y {
-			padding: 0 0.44rem 2.56rem 0.44rem;
-			background: #ff7e09;
-			.tip-box {
-				.title {
-					height: 0.75rem;
-					font-size: 0.30rem;
-					font-family: PingFangSC-Medium;
 					color: rgba(255, 255, 255, 1);
-					position: relative;
-				}
-				.text-box,
-				.text-box1 {
-					padding: 0.18rem 0.18rem 0.34rem 0.18rem;
-					font-size: 0.28rem;
-					font-family: PingFangSC-Regular;
-					color: rgba(255, 255, 255, 1);
-					position: relative;
-					.item {
-						display: flex;
-						div:nth-child(1) {
-							width: 1.2rem;
-						}
-						div:nth-child(2) {
-							flex: 1;
-						}
-					}
-					.item:nth-child(2) {
-						margin: 0.25rem 0;
-					}
-				}
-				.title:after,
-				.text-box:after {
-					content: " ";
-					position: absolute;
-					left: 0;
-					bottom: 0;
-					right: 0;
-					height: 1px;
-					border-top: 1px solid white;
-					color: #D9D9D9;
-					-webkit-transform-origin: 0 0;
-					transform-origin: 0 0;
-					-webkit-transform: scaleY(0.5);
-					transform: scaleY(0.5);
-					left: 0px;
+					opacity: 1;
 				}
 			}
 		}
-		.top46 {
-			top: 46px!important;
+		/*.blue{
+			background-color: #106FE3;
 		}
-		.bg {
-			position: absolute;
-			top: 0;
-			bottom: 1.2rem;
-			width: 100%;
-			height: 110%;
-			padding: 60px 0.44rem 0rem 0.44rem;
-			box-sizing: border-box;
-			background: url(../../../../static/images/qrcode-bg.png) no-repeat;
-			background-size: 100% 100%;
-			.title {
-				font-size: 0.36rem;
-				color: rgba(26, 38, 66, 1);
-				margin: 0.6rem 0 0.2rem 0.1rem;
-			}
-			.tip2 {
-				text-align: center;
-				font-size: 0.30rem;
-				font-family: PingFangSC-Medium;
-				color: rgba(255, 255, 255, 1);
-				margin-top: 0.3rem;
-				height: 2rem;
-			}
-			.b-w1 {
-				width: 5.78rem;
-				border-radius: 5px;
-				background-color: white;
-				margin: 0 auto;
-				padding: 0.5rem 0.29rem;
-				margin-top: 1rem;
-				.code {
-					width: 100%;
-					height: auto;
-				}
-				.bottom {
-					display: flex;
-					align-items: center;
-					margin-top: 0.5rem;
-					position: relative;
-					padding-top: 0.32rem;
-					img {
-						width: 1rem;
-						height: 1rem;
-						margin-right: 0.22rem;
-						border-radius: 50%;
-					}
-					div {
-						font-family: PingFangSC-Regular;
-						p:nth-child(1) {
-							font-size: 0.32rem;
-							color: rgba(26, 38, 66, 1);
-						}
-						p:nth-child(2) {
-							font-size: 0.28rem;
-							color: rgba(115, 134, 173, 1);
-						}
-					}
-				}
-				.bottom:before {
-					content: " ";
-					position: absolute;
-					left: 0;
-					top: 0;
-					right: 0;
-					height: 1px;
-					border-top: 1px solid #D9D9D9;
-					color: #D9D9D9;
-					-webkit-transform-origin: 0 0;
-					transform-origin: 0 0;
-					-webkit-transform: scaleY(0.5);
-					transform: scaleY(0.5);
-					left: 0px;
-				}
-			}
-		}
+		.red{
+			background-color: rgb(254,73,65);
+		}*/
 	}
 </style>

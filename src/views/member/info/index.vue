@@ -11,7 +11,7 @@
 							</div>
 						</div>
 					</cell>
-					<input v-if="isC" class="upinput" id="upinput" type="file" @change="up2" ref="input" />
+					<input v-if="isC" class="upinput" id="upinput" type="file" @change="up2" accept="image/*" ref="input" />
 				</div>
 
 				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>

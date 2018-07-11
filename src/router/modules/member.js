@@ -25,6 +25,7 @@ import resetCode from '@/views/member/setting/resetCode'
 import purseindex from '@/views/member/purse/index'
 import pursewallet from '@/views/member/purse/wallet'
 import qrcode from '@/views/member/purse/qrcode'
+import commercial from '@/views/member/purse/commercial'
 import hasqrcode from '@/views/member/purse/hasqrcode'
 import banlancelog from '@/views/member/purse/banlancelog'
 import banlance from '@/views/member/purse/banlance'
@@ -49,6 +50,7 @@ import agreement from '@/views/member/setting/agreement'
 import preview from '@/views/member/setting/preview'
 import article from '@/views/member/article/index'
 import vip from '@/views/member/vip/index'
+import vipright from '@/views/member/vip/right'
 import generalize from '@/views/member/generalize/index'
 import wxpay from '@/views/member/pay/wxgzhpay'
 import oriza from '@/views/member/oriza/oriza'
@@ -270,7 +272,14 @@ const memberModule = [{
 		name: 'qrcode',
 		component: resolve => require(['@/views/member/purse/qrcode'], resolve),
 		meta: {
-			title: '付款码'
+			title: '会员码'
+		}
+	},{
+		path: '/member/purse/commercial',
+		name: 'commercial',
+		component: resolve => require(['@/views/member/purse/commercial'], resolve),
+		meta: {
+			title: '支持商户'
 		}
 	}, {
 		path: '/member/purse/hasqrcode',
@@ -433,10 +442,17 @@ const memberModule = [{
 	},
 	{
 		path: '/member/vip/index',
-		name: 'vip',
+		name: 'vipindex',
 		component: resolve => require(['@/views/member/vip/index'], resolve),
 		meta: {
-			title: '会员等级'
+			title: '会员权益'
+		}
+	},{
+		path: '/member/vip/right',
+		name: 'vipright',
+		component: resolve => require(['@/views/member/vip/right'], resolve),
+		meta: {
+			title: '企业权益'
 		}
 	},
 	{
@@ -507,7 +523,7 @@ const memberModule = [{
 		name:'wxoriza',
 		component: resolve => require(['@/views/member/oriza/oriza'], resolve),
 		meta: {
-			title: '微信授权'
+			title: ''
 		}
 	}
 ]

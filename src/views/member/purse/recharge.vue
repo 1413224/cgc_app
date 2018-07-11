@@ -28,15 +28,15 @@
 					<p class="gy">暂无充值套餐</p>
 				</div>
 			</div>
+
+			<div class="btn-box">
+				<x-button class="add-btn" @click.native="submit">确认充值</x-button>
+			</div>
 		</div>
 		<div class="recharge_tip">
 			<p class="gy-title">通用积分说明</p>
 			<p class="gy">1.CGC通用积分充值后会即时到达会员账户钱包，不会过期，但无法提现或转赠他人；</p>
 			<p class="gy">2.CGC通用积分可以在全球联盟企业和e消费任何APP商城1:1抵现金通用，没有额度限制；</p>
-		</div>
-
-		<div class="btn-box">
-			<x-button class="add-btn" @click.native="submit">确认充值</x-button>
 		</div>
 
 		<div v-transfer-dom>
@@ -180,7 +180,6 @@
 		font-family: PingFangSC-Medium;
 		// background-color: #F5F6FA;
 		background-color: #fff;
-		padding-bottom: 1.6rem;
 		.item {
 			padding: 0.31rem 0.22rem;
 			box-sizing: border-box;
@@ -205,14 +204,14 @@
 			.jifen {
 				text-align: center;
 				.price {
-					font-size: .5rem;
+					font-size: .82rem;
 					font-weight: bold;
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 					span {
 						font-weight: bold;
-						font-size: .32rem;
+						font-size: .38rem;
 						display: inline-block;
 						margin-left: .1rem;
 					}
@@ -246,11 +245,11 @@
 			}
 		}
 		.change-box {
-			padding: 0 0.22rem 0.58rem 0.22rem;
+			padding: 0 0.22rem 0.56rem 0.22rem;
 			background-color: white;
-			margin-bottom: 0.21rem;
 			border-top: 1px solid #EBEFF7;
 			border-bottom: 1px solid #EBEFF7;
+			box-sizing: border-box;
 			.change-tip {
 				height: 1.13rem;
 				display: flex;
@@ -270,7 +269,7 @@
 				background: white;
 				flex-wrap: wrap;
 				.row-item {
-					flex: 1;
+					width: 33.333%;
 					max-width: 33.333%;
 					div {
 						margin: 0.1rem auto;
@@ -295,10 +294,11 @@
 						}
 					}
 					.box {
-						width: 1.91rem;
+						width: 2.18rem;
+						height: 1.60rem;
 						background: white;
 						/*box-shadow: 0px 2px 10px 0px rgba(26, 38, 66, 0.4);*/
-						border: 1px solid rgba(26, 38, 66, 0.4);
+						border: 1px solid #336FFF;
 						border-radius: 3px;
 						color: #336FFF;
 						padding: 0 0.1rem;
@@ -334,13 +334,11 @@
 			}
 		}
 		.btn-box {
-			position: fixed;
-			bottom: 0;
-			width: 100%;
-			padding: 0.25rem;
+			margin-top: 0.68rem;
 			box-sizing: border-box;
 			background: #fff;
 			.add-btn {
+				width: 6.18rem;
 				height: 0.88rem;
 				line-height: 0.88rem;
 				background: rgba(51, 111, 255, 1);

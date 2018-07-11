@@ -1,10 +1,10 @@
 <template>
 	<div class="my_order_box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="px" v-if="!tabNo">
+		<div class="px" v-if="!tabNo && !tabNo2">
 			<div class="search">
-				<div class="ss_box_left" @click="$router.push({path:'/multi_user_mall/search'})">
-					<input type="text" placeholder="搜索商品" />
+				<div class="ss_box_left" @click="orderSearch()">
+					<input ref="searchInput" placeholder="订单编号/商品编号/商品名称" type="text" readonly="readonly" />
 					<img :src="'./static/images/ss.png'" />
 				</div>
 				<div class="ss_box_right" @click="showS">
@@ -18,110 +18,74 @@
 			</div>
 		</div>
 		<div class="order_list_box">
-			<div class="wrapper" ref="wrapper" :class="{'top0':tabNo}">
-				<div class="content">
-					<div class="order_item" v-for="(item,index) in sList">
+			<div class="wrapper" ref="wrapper" :class="[{'top02':tabNo},{'bw':orderList.length  == 0},{'top0':tabNo2}]">
+				<div class="content" ref="content" :class="{'top50':showLoading2}">
+					<transition enter-active-class="zoomIn animated" leave-active-class="slideOutUp animated" :duration="{ enter: 500, leave: 1000 }">
+						<div class="jz-loading" v-if="showLoading2">
+							
+							<img v-if="move" class="jiantou" :class="{'r180':huan}" :src="'./static/images/jiantou.png'" alt="" />
+							<img v-else :src="'./static/images/loading.gif'" alt="" />
+							<p>{{changeTip}}</p>
+						</div>
+					</transition>
+
+					<div class="order_item" v-for="(item,index) in orderList" v-if="orderList.length > 0">
 						<div class="order_top">
-							<div class="left">
-								<img :src="'./static/images/alliance2.png'" alt="" />
-								<p>{{item.storeName}}</p>
+							<div class="left" @click="toShopDetail(item.enterpriseId)">
+								<img :src="'./static/images/shopLogo.png'" alt="" />
+								<p>{{item.shopName}}</p>
 								<i class="icon iconfont icon-arrow-right"></i>
 							</div>
-							<!--虚拟商品-->
-							<div class="right" v-if="item.pStatus == 0">
-								<p v-if="item.orderStatus == 0">待付款</p>
-								<p v-if="item.orderStatus == 1">交易成功</p>
-								<p v-if="item.orderStatus == 2">交易关闭</p>
-								<p v-if="item.orderStatus == 3">交易异常</p>
-							</div>
-							<!--共享设备-->
-							<div class="right" v-if="item.pStatus == 1">
-								<p v-if="item.orderStatus == 0">待付款</p>
-								<p v-if="item.orderStatus == 1">未使用</p>
-								<p v-if="item.orderStatus == 2">使用中</p>
-								<p v-if="item.orderStatus == 3">继续使用</p>
-								<p v-if="item.orderStatus == 4">使用失败</p>
-								<p v-if="item.orderStatus == 5">已完成</p>
-								<p v-if="item.orderStatus == 6">交易取消</p>
+							<!--线下门店 1 -->
+							<!--实物商品 2 -->
+							<!--共享服务 3 -->
+							<!--点餐 4 -->
+							<!--酒店 5 -->
+							<!--门票 6 -->
+							<!--游戏 7 -->
+							<!--手机充值 8 -->
+							<!--电影票 9 -->
+							<!--演出票 10 -->
+							<!--加油卡 11 -->
+							<div class="right">
+								<p>{{item.statusName}}</p>
 							</div>
 						</div>
-						<div class="order_middle" @click="toDetail" v-for="(i,index2) in item.pList" :key="index2" v-if="index2+1 <= item.showNum" :class="[{'m':(index2 != item.pList.length - 1) && item.pList.length <= 10},{'m':(index2 != item.showNum - 1 && index2 != item.pList.length - 1) && item.pList.length > 10}]">
+						<div class="order_middle" @click="toDetail" v-for="(i,index2) in item.items" :key="index2" v-if="index2+1 <= item.showNum" :class="[{'m':(index2 != item.items.length - 1) && item.items.length <= 10},{'m':(index2 != item.showNum - 1 && index2 != item.items.length - 1) && item.items.length > 10}]">
 							<div class="left">
-								<img :src="'./static/images/cai2.png'" />
+								<img v-if="i.thumb" :src="i.thumb.original" />
+								<img v-else :src="'./static/images/cai2.png'" />
 							</div>
 							<div class="middle">
-								<p class="name">{{i.pName}}</p>
-								<p class="pinfo">{{i.pXhao}}</p>
+								<p class="name">{{i.goodsName}}</p>
+								<p class="pinfo">{{i.skuName}}</p>
 							</div>
 							<div class="right">
-								<p class="price">¥ {{i.pJg}}</p>
-								<p class="num">x {{i.pNum}}</p>
+								<p class="price">¥ {{i.pieceTruePrice}}</p>
+								<p class="num">x {{i.number}}</p>
 							</div>
 						</div>
 
-						<div class="look_all_box" v-if="item.pList.length > 10">
-							<div @click="lookAllp(item.pList.length,index)">{{item.showAll?'收起':'显示全部'}} <img :class="{'r':item.showAll}" :src="'./static/member/yhq-down.png'" alt="" /></div>
+						<div class="look_all_box" v-if="item.items.length > 10">
+							<div @click="lookAllp(item.items.length,index)">{{item.showAll?'收起':'显示全部'}} <img :class="{'r':item.showAll}" :src="'./static/member/yhq-down.png'" alt="" /></div>
 						</div>
 						<div class="order_bottom">
-							<span class="num">共 {{item.aNum}} 件 </span>
-							<span>合计：<i>{{item.aJg}}</i>元</span>
-							<span class="yf">(含运费{{item.pyf}}) </span>
-							<span> +<i>{{item.pzf}}</i>信用积分</span>
+							<span class="num">共 {{item.totalItems}} 件 </span>
+							<span>合计：<i>{{item.actualPrice}}</i>元</span>
+							<span class="yf">(含运费{{item.freight}}) </span>
+							<span v-if="item.points > 0"> + <i>{{item.points}}</i>信用积分</span>
 						</div>
 						<div class="order_bth_box">
-							<!--虚拟商品-->
-							<div v-if="item.pStatus == 0">
-								<div class="btn" v-if="item.orderStatus == 0">
-									<div @click="cancellationOrder">取消订单</div>
-									<div @click="pay">付款</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 1">
-									<div @click="deleteOrder">删除订单</div>
-									<div @click="toEvaluate">评价</div>
-									<div>再次充值</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 2">
-									<div>删除订单</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 3">
-									<div>联系商家</div>
-									<div>申请售后</div>
-								</div>
-							</div>
-							<!--共享设备-->
-							<div v-if="item.pStatus == 1">
-								<div class="btn" v-if="item.orderStatus == 0">
-									<div @click="cancellationOrder">取消订单</div>
-									<div @click="pay">付款</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 1">
-									<div @click="deleteOrder">去使用</div>
-									<div @click="toEvaluate">联系商家</div>
-									<div>导航到店</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 2">
-									<div>结束使用</div>
-									<div>暂停使用</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 3">
-									<div>结束使用</div>
-									<div>重新启动</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 4">
-									<div>联系商家</div>
-									<div>启动</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 5">
-									<div>评价</div>
-									<div>删除</div>
-									<div>发票详情</div>
-								</div>
-								<div class="btn" v-if="item.orderStatus == 6">
-									<div>删除订单</div>
+							<div>
+								<div class="btn">
+									<div v-if="item.canEvaluate == 1">评价</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					<Loading v-if="showLoading"></Loading>
+					<noMore v-if="showNo"></noMore>
+					<noData v-if="orderList.length == 0" :status="2" stateText="暂无订单"></noData>
 				</div>
 			</div>
 		</div>
@@ -141,7 +105,7 @@
 							<div class="type_item" :class="{'blue':typeDateIndex == index}" v-for="(item,index) in typeDateList" @click="typeDate(index)">{{item}}</div>
 						</div>
 					</div>
-					<div class="screen_btn">确定</div>
+					<div class="screen_btn" @click="determine">确定</div>
 				</div>
 			</popup>
 		</div>
@@ -153,6 +117,7 @@
 	import BScroll from 'better-scroll'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
+	import noData from '../../components/noData'
 	export default {
 		data() {
 			return {
@@ -161,349 +126,177 @@
 					name: '全部',
 					bg: 0
 				}, {
-					name: '待付款',
-					bg: 99
+					name: '待处理',
+					bg: 0
 				}, {
-					name: '待收货',
-					bg: 5
-				}, {
-					name: '待评价',
+					name: '进行中',
 					bg: 0
 				}, {
 					name: '已完成',
 					bg: 0
+				}, {
+					name: '已取消',
+					bg: 0
 				}],
 				tabIndex: 0,
 				showAll: false,
-				showNum: 10,
 				show: false,
-				typeOrderList: ['全部分类', '线下门店', '实物商品', '共享服务'],
-				typeDateList: ['近三个月', '近半年', '今年内'],
+				showNum: 10,
+				showLoading: false,
+				showLoading2: false,
+				changeTip: '松手开始刷新',
+				showNo: false,
+				typeOrderList: ['全部分类', '线下门店', '实物商品', '共享服务', '点餐', '酒店', '门票', '游戏', '手机充值', '电影票', '演出票', '加油卡'],
+				typeDateList: ['全部', '近三个月', '近半年', '今年内'],
 				typeOrderIndex: 0, //订单类型
 				typeDateIndex: 0, //时间类型
 				tabNo: false, //隐藏tab
+				tabNo2: false,
 				showIndex: '',
-				sList: [{
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 0,
-					aNum: 1,
-					aJg: '1200000',
-					pyf: 10,
-					pzf: 1200000,
-					pStatus: 0,
-					showNum: 10,
-					showAll: false,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '1200000',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 1,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 0,
-					showNum: 10,
-					showAll: false,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}, {
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 3,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 0,
-					showNum: 10,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 2,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 0,
-					showNum: 10,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 1,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 1,
-					showNum: 10,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 4,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 1,
-					showNum: 10,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 3,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 1,
-					showNum: 10,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}, {
-					logo: './static/images/ss.png',
-					storeName: '妍小姐韩国中国区广州市番禺天安门店102号',
-					orderStatus: 2,
-					aNum: 1,
-					aJg: '120',
-					pyf: 10,
-					pzf: 1000,
-					pStatus: 1,
-					showNum: 10,
-					pList: [{
-						pLogo: './static/images/ss.png',
-						pName: '回力凉鞋男沙滩鞋休闲鞋夏季男士两用凉拖鞋 耐磨露趾软底爸爸凉鞋 黑色 41',
-						pXhao: '颜色:蓝色；尺码:L/170修身',
-						pNum: 1,
-						pJg: '120',
-						pType: 0
-					}]
-				}]
+				type: 0, //订单类型
+				status: 0, //订单状态
+				timeType: 0, //订单时间
+				curPage: 1, //订单页码
+				pageSize: 10, //一页10条
+				keyword: '',
+				lastOrderTime: '',
+				orderList: [],
+				timeOut: '',
+				move: true,
+				huan: false
 			}
 		},
 		components: {
 			settingHeader,
 			Loading,
 			noMore,
-			BScroll
+			BScroll,
+			noData
 		},
 		created() {
 
 			if(this.$route.query.tabNo) {
 				this.tabNo = true
+
+			} else if(this.$route.query.tabNo2) {
+				this.tabNo2 = true
 			}
 
-			this.tabIndex = this.$route.query.tabIndex ? this.$route.query.tabIndex : 0
+			this.tabIndex = this.$route.query.tabIndex ? this.$route.query.tabIndex : 0 //tab栏 index
+			this.status = this.$route.query.status ? this.$route.query.status : 0 //订单状态
 
-			this.InitScroll()
+			this.typeOrderIndex = this.$route.query.typeOrderIndex ? this.$route.query.typeOrderIndex : 0 //筛选订单类型 index
+			this.type = this.$route.query.type ? this.$route.query.type : 0 //订单类型
+
+			this.typeDateIndex = this.$route.query.typeDateIndex ? this.$route.query.typeDateIndex : 0 //筛选订单时间 index
+			this.timeType = this.$route.query.timeType ? this.$route.query.timeType : 0 //订单时间
+
+			this.keyword = this.$route.query.keyword ? this.$route.query.keyword : '' //keyword
 		},
-		mounted() {},
+		mounted() {
+			this.getOrderList()
+		},
 		methods: {
+			getOrderList(time) {
+				var _this = this
+
+				if(time) {
+					var obj = {
+						//userId: _this.$store.state.user.userId,
+						userId: 'userDev01',
+						type: _this.type,
+						status: _this.status,
+						timeType: _this.timeType,
+						pageSize: _this.pageSize,
+						curPage: _this.curPage,
+						keyword: _this.keyword,
+						lastOrderTime: time,
+						islist: true
+					}
+					var orderUrl = _this.url.order.getNewOrderList
+				} else {
+					var obj = {
+						//userId: _this.$store.state.user.userId,
+						userId: 'userDev01',
+						type: _this.type,
+						status: _this.status,
+						timeType: _this.timeType,
+						pageSize: _this.pageSize,
+						curPage: _this.curPage,
+						keyword: _this.keyword
+					}
+					var orderUrl = _this.url.order.getOrderList
+				}
+
+				_this.$http.get(orderUrl, {
+					params: obj
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+
+						if(time) {
+							_this.orderList = res.data.data.list.concat(_this.orderList)
+						} else {
+							_this.orderList = res.data.data.list
+						}
+
+						for(var i = 0; i < _this.orderList.length; i++) {
+							_this.orderList[i].showAll = false
+							_this.orderList[i].showNum = 10
+						}
+
+						_this.InitScroll()
+
+						_this.showNo = false
+
+						if(time) {
+							_this.changeTip = '刷新成功'
+
+							_this.timeOut = setTimeout(function() {
+								_this.showLoading2 = false
+								_this.move = true
+							}, 800)
+
+						}
+					} else {
+						if(time) {
+							_this.changeTip = '刷新失败'
+
+							_this.timeOut = setTimeout(function() {
+								_this.showLoading2 = false
+								_this.move = true
+							}, 800)
+
+						}
+					}
+				})
+			},
+			toShopDetail(shopId) {
+				var _this = this
+
+				if(shopId) {
+					_this.$router.push({
+						path: '/multi_user_mall',
+						query: {
+							id: shopId
+						}
+					})
+				}
+			},
 			onItemClick(index) {
 				var _this = this
 
 				_this.tabIndex = index
+
+				_this.status = index
+
+				_this.curPage = 1
+
+				_this.getOrderList()
+
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
-						'tabIndex': index
+						'tabIndex': index,
+						'status': index
 					})
 				})
 			},
@@ -511,14 +304,52 @@
 				this.show = !this.show
 			},
 			typeOrder(index) {
-				this.typeOrderIndex = index
+				var _this = this
+
+				_this.typeOrderIndex = index
+
+				_this.type = index
+
+				_this.curPage = 1
+
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'typeOrderIndex': index,
+						'type': index
+					})
+				})
 			},
 			typeDate(index) {
-				this.typeDateIndex = index
+
+				var _this = this
+
+				_this.typeDateIndex = index
+
+				_this.timeType = index
+
+				_this.curPage = 1
+
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'typeDateIndex': index,
+						'timeType': index
+					})
+				})
+			},
+			determine() {
+				this.getOrderList()
+				this.show = false
+			},
+			orderSearch() {
+				var _this = this
+				_this.$router.push({
+					path: '/multi_user_mall/search'
+				})
 			},
 			lookAllp(length, index) {
-				this.sList[index].showAll = !this.sList[index].showAll
-				this.sList[index].showNum = this.sList[index].showAll ? length : 10
+				this.orderList[index].showAll = !this.orderList[index].showAll
+				this.orderList[index].showNum = this.orderList[index].showAll ? length : 10
+				this.$forceUpdate()
 			},
 			//付款
 			pay() {
@@ -581,31 +412,142 @@
 				})
 			},
 			InitScroll() {
-				this.$nextTick(() => {
-					if(!this.scroll) {
-						this.scroll = new BScroll(this.$refs.wrapper, {
+				var _this = this
+				_this.$nextTick(() => {
+					if(!_this.scroll) {
+						_this.scroll = new BScroll(_this.$refs.wrapper, {
 							click: true,
 							scrollY: true,
+							useTransform: true,
 							pullUpLoad: {
 								threshold: -50
+							},
+							pullDownRefresh: {
+								threshold: 30, // 下拉距离超过30px触发pullingDown事件
+								stop: 20 // 回弹停留在距离顶部20px的位置
 							}
 						})
-						this.scroll.on('pullingUp', (pos) => {
-							this.LoadData()
 
-							this.$nextTick(function() {
-								this.scroll.finishPullUp();
-								this.scroll.refresh();
-							});
+						//上拉加载
+						_this.scroll.on('pullingUp', () => {
+							_this.LoadData()
+
+							_this.$nextTick(function() {
+								_this.scroll.finishPullUp()
+								_this.scroll.refresh()
+							})
 						})
+						//下拉刷新
+						_this.scroll.on('pullingDown', () => {
+							_this.$nextTick(function() {
+								_this.scroll.finishPullDown()
+								_this.scroll.refresh()
+							})
+						})
+
+						//滚动开始
+						_this.scroll.on('scrollStart', () => {
+							
+							_this.huan = false
+							
+							if(_this.timeOut) {
+								clearTimeout(_this.timeOut)
+							}
+
+							if(_this.orderList.length > 0) {
+								_this.changeTip = '下拉刷新'
+								_this.showLoading2 = true
+								_this.move = true
+							}
+
+						})
+
+						//滚动开始
+						_this.scroll.on('scroll', (pos) => {
+							
+							if(_this.move) {
+								if(pos.y < 0) {
+									_this.changeTip = '下拉刷新'
+									_this.huan = false
+								} else if(pos.y > 20) {
+									_this.changeTip = '释放更新'
+									_this.huan = true
+
+								}
+							}
+						})
+
+						//滚动结束
+						_this.scroll.on('scrollEnd', (pos) => {
+							if(pos.y < 0 && pos.y > -80) {
+								_this.$refs.content.style.transform = 'translate(0px, 0px) scale(1) translateZ(0px)'
+							}
+						})
+
+						//手指离开
+						_this.scroll.on('touchEnd', (pos) => {
+							_this.move = false
+							if(pos.y > 20) {
+								_this.changeTip = '加载中...'
+								if(_this.orderList.length > 0) {
+									_this.getOrderList(_this.orderList[0].createTime)
+								}
+							} else {
+								_this.showLoading2 = false
+							}
+						})
+
 					} else {
-						this.scroll.refresh()
+						_this.scroll.refresh()
 					}
 				})
 
 			},
 			LoadData() {
+				var _this = this
 
+				_this.curPage++
+
+					_this.$http.get(_this.url.order.getOrderList, {
+						params: {
+							//						userId: _this.$store.state.user.userId,
+							userId: 'userDev01',
+							type: _this.type,
+							status: _this.status,
+							timeType: _this.timeType,
+							pageSize: _this.pageSize,
+							curPage: _this.curPage,
+							keyword: _this.keyword,
+							islist: true
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+
+							if(res.data.data.list.length > 0) {
+
+								_this.showLoading = true
+								_this.showNo = false
+
+								_this.orderList = _this.orderList.concat(res.data.data.list)
+
+								for(var i = 0; i < _this.orderList.length; i++) {
+									_this.orderList[i].showAll = false
+									_this.orderList[i].showNum = 10
+								}
+							} else {
+
+								_this.showLoading = false
+								_this.showNo = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+
+							}
+						}
+					})
 			}
 		}
 	}
@@ -614,6 +556,7 @@
 <style lang="less" scoped>
 	.screen_box {
 		padding: 0.26rem;
+		padding-top: 0;
 		box-sizing: border-box;
 		background-color: white;
 		.screen_btn {
@@ -635,7 +578,7 @@
 			font-family: PingFangSC-Regular;
 			color: rgba(144, 162, 199, 1);
 			text-align: center;
-			margin-bottom: 0.2rem;
+			padding: 0.2rem 0;
 		}
 		.type_box {
 			display: flex;
@@ -737,7 +680,7 @@
 					position: absolute;
 					left: 0.4rem;
 					top: 50%;
-					transform: translate(-50%,-50%);
+					transform: translate(-50%, -50%);
 				}
 			}
 		}
@@ -775,6 +718,9 @@
 			height: 0.82rem;
 		}
 		.order_list_box {
+			.bw {
+				background-color: white!important;
+			}
 			.wrapper {
 				position: absolute;
 				top: 2.02rem;
@@ -782,13 +728,48 @@
 				width: 100%;
 				background: rgba(245, 246, 250, 1);
 				z-index: 11;
+				.content {
+					position: relative;
+					.jz-loading {
+						position: absolute;
+						top: -0.05%;
+						width: 100%;
+						height: 1rem;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						flex-direction: column;
+						img {
+							width: 0.5rem;
+							height: auto;
+						}
+						p {
+							font-size: 0.24rem;
+							color: #7c7c7c;
+							margin-top: 0.08rem;
+						}
+						.jiantou{
+							transition: all 0.3s linear;
+						}
+						.r180 {
+							transform: rotate(-180deg);
+						}
+					}
+				}
+				.top50 {
+					padding-top: 1rem;
+				}
+			}
+			.top02 {
+				top: 0.2rem!important;
 			}
 			.top0 {
-				top: 0.2rem!important;
+				top: 0rem!important;
 			}
 			.order_item {
 				background: white;
 				margin-bottom: 0.2rem;
+				box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
 				.order_top {
 					height: 0.8rem;
 					display: flex;

@@ -43,6 +43,7 @@
 		}
 		.vux-header .vux-header-title {
 			color: #333;
+			font-size: 0.32rem;
 		}
 		.header {
 			position: fixed!important;

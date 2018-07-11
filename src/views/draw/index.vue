@@ -2,14 +2,51 @@
 	<section style="height: 100%;">
 		<div class="draw_index">
 			<settingHeader :title="title"></settingHeader>
+
 			<div class="wrapper" ref="wrapper">
 				<div class="content">
-					<swiper :options="swiperOption" class="swiper">
+					<!--轮播图-->
+					<!--<swiper :options="swiperOption" class="swiper">
 				        <swiper-slide v-for="(item,index) in demoList" :key="index">
 				        	<img :src="item">
 				        </swiper-slide>
 				        <div class="swiper-pagination" slot="pagination"></div>
-			        </swiper>
+			        </swiper>-->
+
+					<div class="new">
+						<img class="banner-img" :src="'./static/draw/banner4.png'" />
+
+						<div class="pd-box">
+							<div class="bw-box">
+								<div class="top">
+									<img class="left-img" :src="'./static/draw/left.png'" />
+									<p>截止2018年3月，在e消费平台</p>
+									<img class="left-img" :src="'./static/draw/left.png'" />
+								</div>
+								<div class="middle">
+									<div class="left">
+										<p>累计中奖人数（人）</p>
+										<p>764,924</p>
+									</div>
+									<div>
+										<p>累计奖金金额（元）</p>
+										<p>70,054,320</p>
+									</div>
+								</div>
+								<div class="bottom">
+									<div class="swiper-inner">
+										<swiper :options="swiperOption" class="swiper">
+											<swiper-slide v-for="(item,index) in demoList" :key="index">
+												<img :src="item">
+											</swiper-slide>
+											<div class="swiper-pagination" slot="pagination"></div>
+										</swiper>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="head">
 						<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
 						<div class="list">
@@ -30,7 +67,7 @@
 
 							<div class="navList">
 								<ul>
-									<li class="li-nav" @click="$router.push({path: '/draw/luckyrank'})">	
+									<li class="li-nav" @click="$router.push({path: '/draw/luckyrank'})">
 										<span>幸运排行</span>
 									</li>
 									<li class="li-nav" @click="$router.push({path: '/draw/record'})">
@@ -44,37 +81,37 @@
 								<div class="round2"></div>
 							</div>
 						</div>
-			        </div>
-					
-	                <div class="drawList">
-	                	<p class="wonderful">精彩推荐</p>
-	                    <ul class="commodity">
-	                    	<group  v-for="(item,index) in reviewData.lists" :key="index">
-	                    		<cell>
-			                    	<li @click="$router.push({path: '/draw/pastevents'})">
-			                    		<div class="img">
-			                    			<img :src="item.thumb" alt="">
-			                    			<div class="arrow">
-			                    				<img src="../../assets/images/draw/lottery_index8.png" alt="" >
-			                    			</div>
-			                    		</div>
-			                    		<div class="container flex">
-			                    			<p class="lucky">{{ item.title}}</p>
-			                    			<p class="num">参加人数:{{ item.user}}</p>
-			                    			<p class="bonusPool">奖金池:<span>￥{{ item.bonusPool}}</span></p>
-			                    		</div>
-			                    	</li>
-	                    		</cell>
-	                    	</group>
-	                    </ul>
-	                    <loading v-if="show"></loading>
-	                    <noMore v-if="showNomore"></noMore>
-	                </div>
-	                <div class="clear"></div>
+					</div>
+
+					<div class="drawList">
+						<p class="wonderful">精彩推荐</p>
+						<ul class="commodity">
+							<group v-for="(item,index) in reviewData.lists" :key="index">
+								<cell>
+									<li @click="$router.push({path: '/draw/pastevents'})">
+										<div class="img">
+											<img :src="item.thumb" alt="">
+											<div class="arrow">
+												<img src="../../assets/images/draw/lottery_index8.png" alt="">
+											</div>
+										</div>
+										<div class="container flex">
+											<p class="lucky">{{ item.title}}</p>
+											<p class="num">参加人数:{{ item.user}}</p>
+											<p class="bonusPool">奖金池:<span>￥{{ item.bonusPool}}</span></p>
+										</div>
+									</li>
+								</cell>
+							</group>
+						</ul>
+						<loading v-if="show"></loading>
+						<noMore v-if="showNomore"></noMore>
+					</div>
+					<div class="clear"></div>
 				</div>
 			</div>
 		</div>
-		
+
 	</section>
 </template>
 
@@ -87,28 +124,27 @@
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	export default {
 		components: {
-			Loading,noMore,settingHeader,swiper,
+			Loading,
+			noMore,
+			settingHeader,
+			swiper,
 			swiperSlide
 		},
-		data(){
+		data() {
 			return {
-				show:false,
+				show: false,
 				showNomore: false,
 				reviewData: {},
 				title: '幸运大抽奖',
 				page: 1,
-				demoList:[
+				demoList: [
 					'./static/draw/lottery_index1.png',
 					'./static/draw/banner2.png',
 					'./static/draw/banner3.png'
 				],
-				swiperOption :{
-					pagination:{
-						el:'.swiper-pagination'
-					},
-					autoplay: {
-						disableOnInteraction: false,
-					}
+				swiperOption: {
+					slidesPerView: 'auto',
+					autoplay: false
 				}
 			}
 		},
@@ -117,7 +153,7 @@
 			this.InitScroll()
 		},
 		methods: {
-	        InitScroll() {
+			InitScroll() {
 				this.$nextTick(() => {
 					if(!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
@@ -140,52 +176,54 @@
 				})
 
 			},
-			goPastevents(){
-				this.$router.push({ path: '/draw/pastevents'})
+			goPastevents() {
+				this.$router.push({
+					path: '/draw/pastevents'
+				})
 			},
 			LoadData() {
-				this.page ++;
+				this.page++;
 				var _this = this
 				_this.show = true
-				if(_this.showNomore){
-					_this.show = false; 
-				}else{
-					setTimeout(function(){
+				if(_this.showNomore) {
+					_this.show = false;
+				} else {
+					setTimeout(function() {
 						_this.show = false;
 						let len = _this.reviewData.lists.length;
 						let par = new URLSearchParams()
-						par.append('page',_this.page)
-						_this.$http.post(url.draw.getReviewLists,par).then(function (response) {
-							if( response.status == 200 && response.data != null&&response.data.result.page == _this.page){
+						par.append('page', _this.page)
+						_this.$http.post(url.draw.getReviewLists, par).then(function(response) {
+							if(response.status == 200 && response.data != null && response.data.result.page == _this.page) {
 								_this.reviewData.lists = _this.reviewData.lists.concat(response.data.result.lists)
 							}
 							console.log(_this.reviewData);
-							if(len == _this.reviewData.lists.length){
+							if(len == _this.reviewData.lists.length) {
 								_this.showNomore = true;
 							}
-						}).catch(function (error) {
+						}).catch(function(error) {
 							console.log(error);
 						});
-					},3000)
+					}, 3000)
 				}
 			},
-			getData(){
+			getData() {
 				let _this = this;
-				this.$http.post(url.draw.getReviewLists,{}).then(function (response) {
-					if( response.status == 200 && response.data != null){
+				this.$http.post(url.draw.getReviewLists, {}).then(function(response) {
+					if(response.status == 200 && response.data != null) {
 						_this.reviewData = response.data.result
 					}
 					console.log(_this.reviewData);
-				}).catch(function (error) {
+				}).catch(function(error) {
 					console.log(error);
 				});
 			},
-			toLuckyrank(index){
+			toLuckyrank(index) {
 				var _this = this
 				_this.$router.push({
-					path:'/draw/luckyrank',
-					query:{
-						index:index
+					path: '/draw/luckyrank',
+					query: {
+						index: index
 					}
 				})
 			}
@@ -194,256 +232,317 @@
 </script>
 
 <style lang="less" scoped>
-.draw_index{
-	height: 100%;
-	background: #E32921;
-}
-.settingHeader ~ .wrapper{
-	position: absolute;
-	top:.9rem;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: hidden;
-	background: #E32921;
-}
-.wrapper {
-	// height: 100%;
-	position: absolute;
-	top:0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: hidden;
-	background: #E32921;
-}
-.head {
-  	width: 100%;
-  	padding-top: 0.2rem;
-  	img{
-  		width: 100%;
-  		display: block;
-  		margin: 0;
-  		padding: 0;
-  	}
-  	.list {
-		width: 94.7%;
-		margin: 0 auto;
-		background: #fff;
-		padding-bottom: 0.48rem;
-		border-radius: 0.08rem;
-		.ul-list {
-		    display: flex;
-		    margin: 0 0.1rem;
-		    border-bottom: 1px solid #E6E6E6;
-		    padding-top: 0.28rem ;
-		    padding-bottom: 0.15rem;
-		    li {
-		      flex: 1;
-		      text-align: center;
-		      padding-bottom: 0.2rem;
-		      border-right: 1px solid #eee;
-		      .money {
-		        font-size: .6rem;
-		        font-weight: 500;
-		        color: #1A2642;
-		        margin-top: 0.12rem;
-		      }
-		      .status {
-		        font-size: 0.24rem;
-		        color: #666666;
-		      }
-		    }
-		    li:nth-child(3) {
-		      border: none;
-		    }
-		}
-		.navList {
-		  width: 100%;
-		  margin-top: 0.39rem;
-		  background-color: #FFF;
-		  position: relative;
-		  	ul {
-		  		display: flex;
-		  		width: 81.5%;
-		  		margin: 0 auto;
-				.li-nav {
-				    text-align: center;
-				    flex: 1;
-				    border-radius: 0.48rem ; 
-				    border: 1px solid #FF2D4F;
-				    margin-right: 0.64rem;
-				    color: #FF3B5A;
-				    font-size: 0.32rem;
-				    /*padding: 0.25rem 0; */
-				    width: 44.5%;
-				    height: 0.96rem;
-				    line-height: 0.96rem;
-				}
-				li:nth-child(2) {
-			      	margin-right: 0;
-			    }
-			}
-			.btn{
-                width:81.5%; 
-				background:linear-gradient(-90deg,rgba(255,92,52,1),rgba(255,42,75,1));
-				box-shadow:0px 0px 30px 0px rgba(255,81,58,0.5);
-				border-radius:0.48rem;
-				color: #fff;
-				text-align: center;
-				font-size: 0.32rem;
-				/*padding: 0.25rem 0;*/
-				margin: 0 auto;
-				margin-top: 0.32rem;
-				height: 0.96rem;
-				line-height: 0.96rem;
-			}
-			.round1{
-				position: absolute;
-				background-color: #E32921;
-				border-radius: 50%;
-				width: 0.24rem;
-				height: 0.24rem;
-				top: 0;
-				left: -0.12rem;
-			}
-			.round2{
-				position: absolute;
-				background-color: #E32921;
-				border-radius: 50%;
-				width: 0.24rem;
-				height: 0.24rem;
-				top: 0;
-				right: -0.12rem;
-			}
-		}
-	}
-}
-
-.drawList{
-	width: 94.7%;
-	margin: 0.2rem auto 0.24rem auto;
-	background: #fff;
-	border-radius: 0.08rem;
-	padding-top: 0.36rem;
-	.wonderful {
-	  text-align: center;
-	  width: 100%;
-	  font-size: 0.36rem;
-	  color: #333;
-	}
-	li {
-	  padding-top: 0.29rem;
-	  position: relative;
-	  padding-bottom: 0.3rem;
-	  margin-right: 0.24rem;
-	  border-bottom: 1px solid #E6E6E6;
-	  display: flex;
-	  .flex{
-	  	flex: 1;
-	  }
-	  .img{
-	  	position: relative;
-	    width: 2.42rem;
-	    height: auto;
-	    img{
-	    	width: 100%;
-	    	height: 100%;
-	    }
-	  }
-	  .left{
-	  	float: left;
-	  }
-	  .arrow {
-	    width: 0.33rem;
-	    position: absolute;
-	    bottom:0;
-	    right: 0.15rem;
-	    img{
-	    	width: 100%;
-	    	height: 100%;
-	    }
-	  }
-	  .container {
-	    margin-left: 0.3rem;
-	    line-height: .36rem;
-	    .lucky {
-	      font-size: .3rem;
-	      color: #1A2642;
-	      margin-bottom: 0.4rem;
-	      margin-top: 0.05rem;
-	      word-wrap: break-word;
-	      display: -webkit-box;
-	      -webkit-line-clamp: 2;
-	      -webkit-box-orient: vertical;
-	      word-break: break-all;
-	      height: 0.7rem;
-	      overflow: hidden;
-	    }
-	    .num {
-	      font-size: .26rem;
-	      color: #666666;
-	    }
-	    .bonusPool {
-	      font-size: .26rem;
-	      color: #666666;
-	      span {
-	        color: #E32921;
-	        font-size: 0.3rem;
-	      }
-	    }
-	  }
-	}
-}
-</style>
-
-<style lang='less' scoped>
-	@img:3.56rem;
 	.draw_index {
-		.swiper{
-			height: @img;
+		height: 100%;
+		background: #E32921;
+	}
+	
+	.new {
+		.banner-img {
+			width: 100%;
+			height: auto;
+			display: block;
 		}
-		img{
-			width: 7.5rem;
-			height: @img;
+		.pd-box {
+			padding: 0 0.2rem;
+			box-sizing: border-box;
+			.bw-box {
+				background: rgba(255, 255, 255, 1);
+				box-shadow: 0px 2px 10px 0px rgba(146, 9, 0, 0.4);
+				border-radius: 8px;
+				padding: 0.42rem 0 0.2rem 0;
+				box-sizing: border-box;
+				.top {
+					display: flex;
+					justify-content: center;
+					p {
+						font-size: 0.36rem;
+						font-family: PingFangSC-Medium;
+						color: rgba(51, 51, 51, 1);
+						margin: 0 0.11rem;
+					}
+				}
+				.middle {
+					display: flex;
+					border-bottom: 1px solid rgba(230, 230, 230, 1);
+					padding: 0.24rem 0;
+					.left {
+						border-right: 1px solid #eee;
+						box-sizing: border-box;
+					}
+					div {
+						flex: 1;
+						text-align: center;
+						p:nth-child(1) {
+							font-size: 0.28rem;
+							font-family: PingFangSC-Regular;
+							color: rgba(103, 103, 103, 1);
+							margin-bottom: 0.07rem;
+						}
+						p:nth-child(2) {
+							font-size: 0.48rem;
+							font-family: Arial-BoldMT;
+							color: rgba(227, 41, 34, 1);
+						}
+					}
+				}
+				.bottom {
+					padding: 0.2rem 0.2rem 0 0.2rem;
+					.swiper-inner {
+						width: 100%;
+						height: 3.5rem;
+					}
+					.swiper-slide {
+						width: 2.53rem;
+						height: 3.5rem;
+						margin-right: 0.2rem;
+						img {
+							width: 100%;
+							height: 100%;
+							display: block;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	.settingHeader~.wrapper {
+		position: absolute;
+		top: .9rem;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+		background: #E32921;
+	}
+	
+	.wrapper {
+		// height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+		background: #E32921;
+	}
+	
+	.head {
+		width: 100%;
+		padding-top: 0.2rem;
+		img {
+			width: 100%;
+			display: block;
+			margin: 0;
+			padding: 0;
+		}
+		.list {
+			width: 94.7%;
+			margin: 0 auto;
+			background: #fff;
+			padding-bottom: 0.48rem;
+			border-radius: 0.08rem;
+			.ul-list {
+				display: flex;
+				margin: 0 0.1rem;
+				border-bottom: 1px solid #E6E6E6;
+				padding-top: 0.28rem;
+				padding-bottom: 0.15rem;
+				li {
+					flex: 1;
+					text-align: center;
+					padding-bottom: 0.2rem;
+					border-right: 1px solid #eee;
+					.money {
+						font-size: .6rem;
+						font-weight: 500;
+						color: #1A2642;
+						margin-top: 0.12rem;
+					}
+					.status {
+						font-size: 0.24rem;
+						color: #666666;
+					}
+				}
+				li:nth-child(3) {
+					border: none;
+				}
+			}
+			.navList {
+				width: 100%;
+				margin-top: 0.39rem;
+				background-color: #FFF;
+				position: relative;
+				ul {
+					display: flex;
+					width: 81.5%;
+					margin: 0 auto;
+					.li-nav {
+						text-align: center;
+						flex: 1;
+						border-radius: 0.48rem;
+						border: 1px solid #FF2D4F;
+						margin-right: 0.64rem;
+						color: #FF3B5A;
+						font-size: 0.32rem;
+						/*padding: 0.25rem 0; */
+						width: 44.5%;
+						height: 0.96rem;
+						line-height: 0.96rem;
+					}
+					li:nth-child(2) {
+						margin-right: 0;
+					}
+				}
+				.btn {
+					width: 81.5%;
+					background: linear-gradient(-90deg, rgba(255, 92, 52, 1), rgba(255, 42, 75, 1));
+					box-shadow: 0px 0px 30px 0px rgba(255, 81, 58, 0.5);
+					border-radius: 0.48rem;
+					color: #fff;
+					text-align: center;
+					font-size: 0.32rem;
+					/*padding: 0.25rem 0;*/
+					margin: 0 auto;
+					margin-top: 0.32rem;
+					height: 0.96rem;
+					line-height: 0.96rem;
+				}
+				.round1 {
+					position: absolute;
+					background-color: #E32921;
+					border-radius: 50%;
+					width: 0.24rem;
+					height: 0.24rem;
+					top: 0;
+					left: -0.12rem;
+				}
+				.round2 {
+					position: absolute;
+					background-color: #E32921;
+					border-radius: 50%;
+					width: 0.24rem;
+					height: 0.24rem;
+					top: 0;
+					right: -0.12rem;
+				}
+			}
+		}
+	}
+	
+	.drawList {
+		width: 94.7%;
+		margin: 0.2rem auto 0.24rem auto;
+		background: #fff;
+		border-radius: 0.08rem;
+		padding-top: 0.36rem;
+		.wonderful {
+			text-align: center;
+			width: 100%;
+			font-size: 0.36rem;
+			color: #333;
+		}
+		li {
+			padding-top: 0.29rem;
+			position: relative;
+			padding-bottom: 0.3rem;
+			margin-right: 0.24rem;
+			border-bottom: 1px solid #E6E6E6;
+			display: flex;
+			.flex {
+				flex: 1;
+			}
+			.img {
+				position: relative;
+				width: 2.42rem;
+				height: auto;
+				img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+			.left {
+				float: left;
+			}
+			.arrow {
+				width: 0.33rem;
+				position: absolute;
+				bottom: 0;
+				right: 0.15rem;
+				img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+			.container {
+				margin-left: 0.3rem;
+				line-height: .36rem;
+				.lucky {
+					font-size: .3rem;
+					color: #1A2642;
+					margin-bottom: 0.4rem;
+					margin-top: 0.05rem;
+					word-wrap: break-word;
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					word-break: break-all;
+					height: 0.7rem;
+					overflow: hidden;
+				}
+				.num {
+					font-size: .26rem;
+					color: #666666;
+				}
+				.bonusPool {
+					font-size: .26rem;
+					color: #666666;
+					span {
+						color: #E32921;
+						font-size: 0.3rem;
+					}
+				}
+			}
 		}
 	}
 </style>
 
 <style lang="less">
-.draw_index .swiper-pagination-bullet-active{
-	background: #fff;
-}
-.commodity{
-	padding: 0 0.2rem 0 0.3rem;
-	.weui-cells{
-		margin-top: 0;
+	.draw_index .swiper-pagination-bullet-active {
+		background: #fff;
 	}
-	.vux-no-group-title{
-		margin-top: 0;
+	
+	.commodity {
+		padding: 0 0.2rem 0 0.3rem;
+		.weui-cells {
+			margin-top: 0;
+		}
+		.vux-no-group-title {
+			margin-top: 0;
+		}
+		.weui-cells:before {
+			border-top: none;
+		}
+		.weui-cell {
+			padding: 0;
+		}
+		.weui-cell__ft {
+			text-align: left;
+			width: 100%;
+		}
+		.weui-cell_access .weui-cell__ft {
+			width: 100%;
+		}
+		.weui-cell_access .weui-cell__ft:after {
+			width: 0.2rem;
+			height: 0.2rem;
+			right: 0.2rem;
+			border-width: 0.04rem 0.04rem 0 0;
+			border-color: #D8DFF0;
+		}
+		.weui-cells:after {
+			border-bottom: solid 1px #D8DFF0;
+		}
 	}
-	.weui-cells:before{
-		border-top: none;
-	}
-	.weui-cell{
-		padding: 0;
-	}
-	.weui-cell__ft{
-		text-align: left;
-		width: 100%;
-	}
-	.weui-cell_access .weui-cell__ft{
-		width: 100%;
-	}
-	.weui-cell_access .weui-cell__ft:after{
-		width: 0.2rem;
-		height: 0.2rem;
-		right: 0.2rem;
-		border-width: 0.04rem 0.04rem 0 0;
-		border-color: #D8DFF0;
-	}
-	.weui-cells:after{
-		border-bottom: solid 1px #D8DFF0;
-	}
-}	
 </style>

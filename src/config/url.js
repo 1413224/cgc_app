@@ -1,5 +1,6 @@
 var uri1 = '/user',
-	uri2 = '/datacenter'
+	uri2 = '/datacenter',
+	uri3 = '/order'
 
 var url = {
 	platformId: 2018050800000002, //平台ID
@@ -73,6 +74,10 @@ var url = {
 	},
 	zf: {
 		wxScan: '/pay/v1/wechat/wxScan',
+	},
+	order: {
+		getOrderList: uri3 + '/v1/order/getOrderList', //获取订单列表
+		getNewOrderList: uri3 + '/v1/order/getNewOrderList', //获取最新订单
 	}
 
 }

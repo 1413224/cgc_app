@@ -14,7 +14,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="btn" @click="changeAlliance(info.allianceId)" :class="{'btnActive': isAlliance}" v-if='info.isAlliance == 1'>{{isAlliance?'已关注':'关注'}}</div>
+					<div class="btn" style="margin-right: 0.1rem;" @click="changeAlliance(info.allianceId)" :class="{'btnActive': isAlliance}" v-if='info.isAlliance == 1'>{{isAlliance?'已关注':'关注'}}</div>
 					<div class="btn" @click="changeChains(info.chainsId)" :class="{'btnActive': isChains}" v-if='info.isChains == 1'>{{isChains?'已关注':'关注'}}</div>
 				</div>
 			</div>
@@ -144,7 +144,8 @@
 
 						if(_this.info.isAlliance == 1) {
 							_this.getAllianceConcern(_this.info.allianceId)
-						} else if(_this.info.isChains == 1) {
+						}
+						if(_this.info.isChains == 1) {
 							_this.getChainsConcern(res.data.data.chainsId)
 						}
 					} else if(res.data.status == 'plat-0003') {

@@ -228,10 +228,33 @@
 			},
 			deleteConcern() {
 				var _this = this
+
+				var concernIds = ''
+
 				if(_this.type == 2) {
-					var concernIds = _this.lmidList.join(',')
+					if(_this.lmidList != '') {
+						concernIds = _this.lmidList.join(',')
+					} else {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '未勾选任何联盟企业'
+						})
+						return false
+					}
 				} else if(_this.type == 3) {
-					var concernIds = _this.lyidList.join(',')
+					if(_this.lyidList != '') {
+						concernIds = _this.lyidList.join(',')
+					} else {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '未勾选任何联营企业'
+						})
+						return false
+					}
 				}
 				_this.$http.post(_this.url.user.deleteConcern, {
 					userId: _this.$store.state.user.userId,
