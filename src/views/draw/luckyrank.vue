@@ -138,7 +138,7 @@
 		},
 		created: function() {
 			this.getLuckRankData()
-			this.tabIndex = this.$route.query.index
+			this.tabIndex = this.$route.query.index || 0
 		},
 		mounted() {
 			this.InitScroll()

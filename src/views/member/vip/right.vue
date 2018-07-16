@@ -17,21 +17,23 @@
 				<transition enter-active-class="fadeInRight animated">
 					<img v-if="showText" class="neng" :src="'./static/company/neng.png'" />
 				</transition>
-
-				<div class="bottom">
-					<div>
-						<img :src="'./static/company/kh.png'" />
-						<p>消费数据价值化</p>
+				
+				<transition enter-active-class="zoomIn animated">
+					<div class="bottom" v-if="showText">
+						<div>
+							<img :src="'./static/company/kh.png'" />
+							<p>消费数据价值化</p>
+						</div>
+						<div>
+							<img :src="'./static/company/gyl.png'" />
+							<p>产业数据价值化</p>
+						</div>
+						<div>
+							<img :src="'./static/company/zh.png'" />
+							<p>城市数据价值化</p>
+						</div>
 					</div>
-					<div>
-						<img :src="'./static/company/gyl.png'" />
-						<p>产业数据价值化</p>
-					</div>
-					<div>
-						<img :src="'./static/company/zh.png'" />
-						<p>城市数据价值化</p>
-					</div>
-				</div>
+				</transition>
 			</div>
 			<img class="jiantou" :src="'./static/company/jiantou.png'" />
 		</div>

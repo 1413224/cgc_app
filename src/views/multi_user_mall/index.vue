@@ -74,8 +74,10 @@
 				<noMore v-if="tabIndex==1 && showNomore"></noMore>
 			</div>
 		</div>
-		<div style="height: 100%;background-color: white;" v-else>
-			<noData :status="2" stateText="找不到该企业"></noData>
+		<div class="no_data1" v-else>
+			<div class="pr">
+				<noData :status="2" stateText="找不到该企业"></noData>
+			</div>
 		</div>
 	</section>
 </template>
@@ -311,6 +313,27 @@
 		overflow: hidden;
 		.content {
 			background: #F5F6FA;
+		}
+	}
+	
+	.multi_user_mall .no_data1 {
+		height: 100%;
+		width: 100%;
+		background-color: white;
+		overflow: hidden;
+		position: fixed;
+		top: 0;
+		left: 0;
+		.pr {
+			height: 100%;
+			width: 100%;
+			position: relative;
+			.no_data {
+				position: absolute;
+				top: 30%;
+				left: 50%;
+				transform: translate(-50%, -30%);
+			}
 		}
 	}
 	

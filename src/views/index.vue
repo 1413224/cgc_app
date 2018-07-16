@@ -60,7 +60,7 @@
 						<img :src="item.img" />
 					</div>
 					<div class="pro-box">
-						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro">
+						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro" @click="toUrl(i.url)">
 							<p>{{i.name}}</p>
 							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
 							<span class="img-box">
@@ -239,12 +239,12 @@
 						url: '/member/vip/right'
 					},
 					{
-						img: './static/index/index_banner1.png',
-						url: '/member/vip/right'
+						img: './static/index/index_banner2.png',
+						url: '/member/vip/index'
 					},
 					{
-						img: './static/index/index_banner1.png',
-						url: '/member/vip/right'
+						img: './static/index/index_banner3.png',
+						url: '/draw'
 					}
 				],
 				plateList: [{
@@ -291,12 +291,12 @@
 					{
 						title: '大牌好货',
 						img: './static/index/index_nav9.png',
-						url: '/member/coupon/index'
+						url: '/brand/index'
 					},
 					{
 						title: '海外购',
 						img: './static/index/index_nav10.png',
-						url: '/member/vip/index'
+						url: '/brand/global'
 					},
 					{
 						title: '优质企业',
@@ -333,19 +333,22 @@
 							name: '中国臻品',
 							tip: '华为P20新品发售',
 							img: './static/index/shouji.png',
-							color: 'red'
+							color: 'red',
+							url: ''
 						},
 						{
 							name: '全球热门',
 							tip: '美国蔻驰贝壳包',
 							img: './static/index/baobao.png',
-							color: 'blue'
+							color: 'blue',
+							url: '/brand/global'
 						},
 						{
 							name: '国际品牌',
 							tip: 'JAYJUN补水面膜',
 							img: './static/index/mianmo.png',
-							color: 'red'
+							color: 'red',
+							url: '/brand/index'
 						}
 					]
 				}, {
@@ -416,6 +419,11 @@
 			},
 			goArticleDetail(uri) {
 				window.location.href = uri;
+			},
+			toUrl(url) {
+				this.$router.push({
+					path: url
+				})
 			}
 		},
 		components: {

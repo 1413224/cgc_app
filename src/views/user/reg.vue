@@ -9,21 +9,24 @@
 				<group gutter="0" class="input-div">
 					<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
 					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="请输入手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
-					<x-input class="input-item" ref="password" v-model="password" :placeholder="isReg?'请输入登录密码':'请输入6~25位数的登录密码'" type="password" @on-change="passwordChange"></x-input>
-					<x-input v-if="!isReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
+					<x-input class="input-item" ref="password" v-model="password" :placeholder="isReg == 0 || isReg == 3?'请输入6~25位数的登录密码':'请输入登录密码'" type="password" @on-change="passwordChange"></x-input>
+					<x-input v-if="isReg == 0 || posReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
 						<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
 					</x-input>
 				</group>
 				<div class="tip">
-					<div class="agreement" v-if="!isReg">
+					<div class="agreement" v-if="isReg == 0 || posReg">
 						<!--<check-icon :value.sync="isAgree"></check-icon>-->
 						<span>点击下方按钮即同意</span>
-						<router-link to="/member/setting/agreement"><p class="sg">《CGC平台注册协议》</p></router-link>
+						<router-link to="/member/setting/agreement">
+							<p class="sg">《CGC平台注册协议》</p>
+						</router-link>
 					</div>
-					<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg">{{isCp?'立即登录':'登录 / 注册'}}</x-button>
-					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-else>立即注册</x-button>
+					<x-button class="add-btn" @click.native="submit" :show-loading="showLoading" v-if="isReg == 1">{{isCp?'立即登录':'登录 / 注册'}}</x-button>
+					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-if="isReg == 0">立即注册</x-button>
+					<x-button class="add-btn" @click.native="toPosReg" :show-loading="showLoading" v-if="posReg">立即激活</x-button>
 				</div>
-				<div class="login-re" v-if="isReg">
+				<div class="login-re" v-if="isReg == 1 || posReg">
 					<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
 					<!--<router-link to=""><span>短信验证登录</span></router-link>-->
 				</div>
@@ -59,7 +62,7 @@
 				show: false,
 				regText: '提示',
 				btnText: '立即登录',
-				isReg: true, //判断是否注册
+				isReg: 1, //判断是否注册
 				codeText: '发送验证码',
 				num: 60,
 				sendFlag: false,
@@ -69,7 +72,8 @@
 				parentId: '',
 				frompath: '',
 				isCp: false,
-				pid: ''
+				pid: '',
+				posReg: false
 			}
 		},
 		created() {
@@ -154,7 +158,7 @@
 					})
 					return false
 				}
-				
+
 				if(_this.code.length != 4) {
 					_this.$vux.toast.show({
 						width: '60%',
@@ -209,23 +213,48 @@
 								//										_this.isReg = false
 								//									}
 								//								})
-								_this.isReg = false
+								_this.isReg = 0
 								_this.isCp = false
+								_this.posReg = false
 								_this.$vux.toast.show({
 									width: '50%',
 									type: 'text',
 									position: 'middle',
 									text: '该账户未注册'
 								})
-							} else {
+
+							} else if(res.data.data == '1') {
 								//已注册
+								_this.isReg = 1
+								_this.posReg = false
 								_this.isCp = true
 								_this.login()
+							} else if(res.data.data == '2') {
+								//pos用户
+								_this.isReg = 3
+								_this.posReg = true
+								console.log(_this.posReg)
 							}
 						}
 					})
 				})
 
+			},
+			toPosReg() {
+				var _this = this
+
+				let params = {
+					mobile: _this.mobile,
+					platformId: _this.url.platformId,
+					newPassword: _this.MD5(_this.password),
+					smsVerificationCode: _this.code
+				}
+
+				_this.$http.post(_this.url.user.forgetPassword, params).then(function(res) {
+					if(res.data.status == "00000000") {
+						_this.login()
+					}
+				})
 			},
 			//登录
 			login() {
@@ -313,7 +342,16 @@
 			//用户名输入改变时
 			nameChange(val) {
 				var _this = this
-				_this.isReg = true
+				
+				_this.isReg = 1
+				
+				_this.posReg = false
+				
+				_this.codeText = "发送验证码"
+				_this.num = 60
+				_this.sendFlag = false
+				clearTimeout(_this.Timeout)
+				
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
 					//					_this.$refs.password.focus()
@@ -358,16 +396,25 @@
 									//											_this.isReg = false
 									//										}
 									//									})
-									_this.isReg = false
-									_this.isCp = false
+									_this.isReg = 0
+									_this.isCp = true
+									_this.posReg = false
 									_this.$vux.toast.show({
 										width: '50%',
 										type: 'text',
 										position: 'middle',
 										text: '该账户未注册'
 									})
-								} else {
+								} else if(res.data.data == '1') {
+									//已注册
+									_this.isReg = 1
+									_this.posReg = false
 									_this.isCp = true
+								} else if(res.data.data == '2') {
+									//pos用户
+									_this.isReg = 3
+									_this.posReg = true
+									console.log(_this.posReg)
 								}
 							}
 						})
@@ -382,7 +429,7 @@
 					_this.$refs.code.focus()
 					_this.$http.post(this.url.user.getVerificationCode, {
 						mobile: _this.mobile,
-						type: 1
+						type: _this.posReg ? 2 : 1
 					}).then(function(res) {
 						if(res.data.status == "00000000") {
 							_this.$vux.toast.show({
@@ -409,7 +456,7 @@
 			reduce() {
 				var _this = this
 				if(_this.num == 0) {
-					_this.codeText = "重新发送验证码";
+					_this.codeText = "重新发送验证码"
 					_this.num = 60;
 					_this.sendFlag = false
 					return;
@@ -419,13 +466,13 @@
 					_this.sendFlag = true
 				}
 
-				setTimeout(function() {
+				_this.Timeout = setTimeout(function() {
 					_this.reduce()
 				}, 1000)
 			},
 			backLogin() {
 				this.isCp = false
-				this.isReg = !this.isReg
+				this.isReg = 0
 			}
 		},
 		components: {
@@ -501,7 +548,7 @@
 				align-items: center;
 				justify-content: center;
 				height: 0.4rem;
-				span{
+				span {
 					color: #A0A0A0;
 				}
 				.sg {

@@ -1,21 +1,30 @@
 <template>
-	<section style="background-color: #F3F3F3;height: 100%;">
+	<section class="draw_detail_box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="content">
-			<p class="title left">番禺国美店周末幸运大抽奖</p>
-			<p class="times left">12356期</p>
-			<!-- <p class="text">只要在e消费平台上消费任意一笔订单，就能参与周末幸运大抽奖</p> -->
+		<div class="top">
+			<p>番禺国美店周末幸运大抽奖</p>
+			<div>356期</div>
 		</div>
-		<!-- <div class="status">
-			<div>状态</div>
-			<div class="text">已中奖</div>
-			<div class="clear"></div>
-		</div> -->
-
-		<div class="ways">	
-			<group>
-			    <cell-form-preview :list="list"></cell-form-preview>
-		    </group>
+		<div class="bottom">
+			<div>
+				<p>开奖时间 </p>
+				<p>2018-03-20 20</p>
+			</div>
+			<div>
+				<p>参与时间 </p>
+				<p>2018-01-20 20</p>
+			</div>
+			<div>
+				<p>参与方式 </p>
+				<p>2018国美电器旗舰店购买了一套家具</p>
+			</div>
+			<div>
+				<p>状态 </p>
+				<p :class="{'zj':isZj}">已中奖</p>
+			</div>
+		</div>
+		<div class="btn" @click="$router.push({path:'/draw/awards'})">
+			发表感言
 		</div>
 	</section>
 </template>
@@ -23,89 +32,91 @@
 <script>
 	import settingHeader from '../../components/setting_header'
 	export default {
-		components:{
+		components: {
 			settingHeader
 		},
-		data(){
+		data() {
 			return {
 				title: '抽奖详情',
-				list: [
-					{ label: '开奖时间', value:'2018.04.29'},
-					{ label: '参与时间', value:'2018.02.12'},
-					{ label: '参与方式', value:'2018.02.12购买耐克店铺商品赠送'},
-					{ label: '状态', value:'已中奖'}
-				],
+				isZj: true
 			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-.left{
-	float: left;
-}
-.content{
-	background-color: #fff;
-	color: #333333;
-	padding: 0.29rem 0 0.36rem 0.29rem;
-	overflow: hidden;
-	.title{
-		font-size: 0.36rem;
+	.draw_detail_box {
+		.top {
+			height: 1rem;
+			display: flex;
+			align-items: center;
+			height: 1rem;
+			background: rgba(255, 255, 255, 1);
+			padding: 0 0.3rem;
+			box-sizing: border-box;
+			p {
+				font-size: 0.36rem;
+				font-family: PingFang-SC-Medium;
+				color: rgba(51, 51, 51, 1);
+			}
+			div {
+				width: 0.97rem;
+				height: 0.38rem;
+				line-height: 0.38rem;
+				background: linear-gradient(-121.4deg, #AF51FF, #9013FE);
+				border-radius: 3px;
+				font-size: 0.26rem;
+				font-family: PingFang-SC-Medium;
+				color: rgba(255, 255, 255, 1);
+				text-align: center;
+				margin-left: 0.1rem;
+			}
+		}
+		.bottom {
+			margin-top: 0.4rem;
+			height: 2.97rem;
+			background: rgba(255, 255, 255, 1);
+			padding: 0.47rem 0.3rem;
+			box-sizing: border-box;
+			display: flex;
+			justify-content: space-between;
+			flex-direction: column;
+			div {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				p:nth-child(1) {
+					font-size: 0.28rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(102, 102, 102, 1);
+					width: 1.5rem;
+				}
+				p:nth-child(2) {
+					flex: 1;
+					font-size: 0.28rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(160, 160, 160, 1);
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					-webkit-line-clamp: 1;
+					-webkit-box-orient: vertical;
+					text-align: right;
+				}
+				.zj {
+					color: #E32921!important;
+				}
+			}
+		}
+		.btn {
+			margin-top: 0.27rem;
+			height: 0.96rem;
+			line-height: 0.96rem;
+			text-align: center;
+			background: rgba(255, 255, 255, 1);
+			font-size: 0.36rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(227, 41, 33, 1);
+		}
 	}
-	.times{
-		font-size: 0.24rem;
-		color: #fff;
-		background:linear-gradient(-121.4deg,#AF51FF,#9013FE);
-		border-radius: 0.04rem;
-		text-align: center;
-		padding:0.05rem 0.07rem; 
-		margin-left: 0.12rem;
-	}
-}
-.status{
-	background-color: #fff;
-	height: 1.02rem;
-	line-height: 1.02rem;
-	color: #90A2C7;
-	font-size: 0.28rem;
-	padding-left: 0.15rem;
-	div{
-		width: 48%;
-		float: left;
-	}
-	.text{
-		text-align: right;
-		color: #FF5365;
-		font-size: 0.32rem;
-	}
-}
-</style>
-
-<style lang="less">
-.ways{
-	margin-top: 0.4rem;
-	.weui-cells{
-		margin-top: 0.14rem;
-	}
-	.weui-cells:before{
-		border-top: none;
-	}
-	.weui-cell{
-		padding: 0.33rem 0.4rem 0.22rem 0.28rem;
-	}
-	.weui-cells:after{
-		border-bottom: none;
-	}
-	.weui-form-preview__label{
-		color: #666666;
-		font-size: 0.28rem;
-	}
-	.weui-form-preview__value{
-		color: #A0A0A0;
-		font-size: 0.28rem;
-	}
-	.weui-form-preview__item:last-child .weui-form-preview__value{
-		color: #E32921;
-	}
-}
 </style>

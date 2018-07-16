@@ -6,7 +6,7 @@
 				<div class="left">
 					<img class="tx" slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
 					<div class="one" @click="$router.push({path:'/member/earnings/profit'})">
-						<p>{{fundInfo.nickname}}</p>
+						<p>{{fundInfo.nickname?fundInfo.nickname:'未设置'}}</p>
 						<div class="shouyi_box">
 							<img :src="'./static/member/shouyi.png'" />
 							<p>累计收益 {{fundInfo.income}}</p>

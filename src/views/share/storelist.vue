@@ -44,32 +44,37 @@
 			</transition>
 		</div>
 
+		<swiper :options="swiperOption" class="swiper">
+			<swiper-slide v-for="(item, index) in demoList" :key="index">
+				<a v-if="item.wbu">
+					<img :src="item.img">
+				</a>
+				<router-link v-else :to="item.url">
+					<img :src="item.img">
+				</router-link>
+			</swiper-slide>
+			<div class="swiper-pagination" slot="pagination"></div>
+		</swiper>
+
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
 			<div class="content">
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
-				<div class="list" v-if="list.length > 0">
-					<ul>
-						<li class="clearfix" @click="goStoreDetail(item.enterpriseId)" v-for="(item,index) in list" :key="item.enterpriseId">
-							<div class="left">
-								<img v-if="item.logo" :src="item.logo.original" alt="">
+				<div v-if="list.length > 0">
+					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
+						<div class="item">
+							<img :src="'./static/share/shop1.png'" alt="" />
+							<div>
+								<p class="name">蛙来哒（番禺天安科技园店）</p>
+								<p class="type">快速简餐 l 特色美食</p>
+								<p class="address"><span>番禺大道北55号天安节能科技园</span><span>5km</span></p>
+								<p class="sf"><span class="lm">联盟企业</span><span class="ly">联营企业</span></p>
 							</div>
-							<div class="right">
-								<p class="title">{{item.name}}</p>
-								<!--<p class="content1 ellipise">
-									<span class="free" v-if="item.isAlliance == 1">商品</span>
-									<span class="free" v-if="item.isChains == 1">服务</span>
-									<span class="return">返积分</span>
-								</p>-->
-								<p class="nr"><span class="ms_price">电话:{{item.tel}}</span></p>
-								<p class="nr">
-									<span class="num"><span v-if="item.area">{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>{{item.distance}}km</span>
-								</p>
-							</div>
-						</li>
-					</ul>
-					<Loading v-if="showLoading"></Loading>
-					<noMore v-if="showNoMore"></noMore>
+						</div>
+						<Loading v-if="showLoading"></Loading>
+						<noMore v-if="showNoMore"></noMore>
+					</div>
 				</div>
+
 				<div style="margin-top: 3px;">
 					<noData v-if="list.length == 0" :status="2" stateText="暂无门店"></noData>
 				</div>
@@ -98,14 +103,6 @@
 										</div>
 									</group>
 								</div>
-
-								<!--<div class="screenlist" v-for="(screen) in screeningContent">
-									<div class="category">{{ screen.title}}</div>
-
-									<li class="item" v-for="(item, index) in screen.options" @click="selectCss($event)">
-										{{ item.name}}
-									</li>
-								</div>-->
 							</div>
 						</div>
 						<div class="bottom">
@@ -126,6 +123,7 @@
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
 	import noData from '../../components/noData'
+	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 	import { Group, XInput } from 'vux'
 	export default {
@@ -148,24 +146,6 @@
 				priceShang: false, //价格箭头
 				active: 1, //列表选中样式（地址）
 				items: null, //三级联动地址
-				// options:['美容院','老人院','月子中心'],//类型筛选
-				// value3:true,
-				options: [{
-						// icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
-						key: '001', //input的value值
-						value: '美容院'
-					},
-					{
-						// icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
-						key: '002',
-						value: '老人院'
-					},
-					{
-						// icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
-						key: '003',
-						value: '月子中心'
-					}
-				],
 				opPrice: [
 					/*'离我最近',
 					'价格最低'*/
@@ -181,51 +161,6 @@
 				show1: false,
 				logoTitle: '距离',
 				logolist: [5, 10, 20, 50, 100],
-				screeningContent: [{
-						title: '美食',
-						options: [{
-							name: '全部'
-						}, {
-							name: '甜点饮品'
-						}, {
-							name: '自助餐'
-						}]
-					},
-					{
-						title: '电影',
-						options: [{
-							name: '全部'
-						}, {
-							name: '热映电影'
-						}, {
-							name: '电影周边'
-						}]
-					},
-					{
-						title: '酒店住宿',
-						options: [{
-							name: '全部'
-						}, {
-							name: '主题公园'
-						}, {
-							name: '温泉'
-						}, {
-							name: '情侣酒店'
-						}]
-					},
-					{
-						title: '生活服务',
-						options: [{
-							name: '全部'
-						}, {
-							name: '家政服务'
-						}, {
-							name: '鲜花'
-						}, {
-							name: '酒水'
-						}]
-					}
-				],
 				showContent: true,
 				showLoading: false,
 				showNoMore: false,
@@ -247,7 +182,28 @@
 
 				list: [],
 				isload: false,
-				islist: false
+				islist: false,
+
+				swiperOption: {
+					pagination: {
+						el: '.swiper-pagination'
+					},
+					autoplay: true,
+					loop: true
+				},
+				demoList: [{
+						img: './static/share/banner1.png',
+						url: '/member/vip/right'
+					},
+					{
+						img: './static/share/banner1.png',
+						url: '/member/vip/right'
+					},
+					{
+						img: './static/share/banner1.png',
+						url: '/member/vip/right'
+					}
+				],
 			}
 		},
 		components: {
@@ -257,7 +213,9 @@
 			noMore,
 			noData,
 			Group,
-			XInput
+			XInput,
+			swiper,
+			swiperSlide
 		},
 		created() {
 			this.InitScroll()
@@ -265,6 +223,14 @@
 			this.getLg()
 		},
 		methods: {
+			toDetail(id){
+				this.$router.push({
+					path:'/multi_user_mall',
+					query:{
+						id:id
+					}
+				})
+			},
 			checkQuery(obj) {
 				var _this = this
 				var k = []
@@ -670,7 +636,7 @@
 			},
 			city() {
 				var _this = this
-				
+
 				if(_this.cityItem) {
 					_this.items = _this.cityItem
 					_this.addressKey = 2
@@ -741,19 +707,42 @@
 	}
 </style>
 <style lang="less" scoped>
+	/*banner轮播*/
+	
+	.swiper {
+		img {
+			width: 100%;
+			height: 2.3rem;
+			display: block;
+		}
+		.swiper-pagination-bullet {
+			background: #fff!important;
+			width: 8px;
+			height: 2px!important;
+		}
+		.swiper-pagination-bullet-active {
+			margin: -2px 4px!important;
+			height: 4px!important;
+			width: 4px!important;
+			background-color: transparent!important;
+			border: 2px solid #fff;
+			border-radius: 50%;
+		}
+	}
+	
 	.storelistMask {
 		top: 3rem!important;
 	}
 	
 	.h {
-		top: 2.75rem!important;
+		top: 5.05rem!important;
 	}
 	
 	.wrapper {
 		position: absolute;
 		width: 100%;
 		bottom: 0.5rem;
-		top: 1.75rem;
+		top: 4.09rem;
 		overflow: hidden;
 	}
 	
@@ -852,8 +841,8 @@
 	}
 	
 	.wrapper .content {
-		width: 95%;
-		margin: 0 auto;
+		padding: 0 0.19rem;
+		box-sizing: border-box;
 		h2 {
 			padding-left: 3%;
 			font-size: .36rem;
@@ -870,93 +859,70 @@
 			}
 		}
 		.list {
-			padding-bottom: 0.1rem;
-			.more {
-				font-weight: normal;
-				color: #60719D;
-				font-size: .32rem;
-				display: block;
-				vertical-align: bottom;
-				text-align: center;
-				margin: 0.1rem 0;
-			}
-			li {
-				padding: .3rem .05rem .3rem 0;
-				border-bottom: 1px solid #D8DFF0;
-				.left {
-					float: left;
-					width: 2.04rem;
-					height: 1.6rem;
-					margin-right: .2rem;
-					position: relative;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					overflow: hidden;
-					img {
-						width: 90%;
-						height: auto;
-					}
+			padding: 0.30rem 0;
+			box-sizing: border-box;
+			border-bottom: 1px solid rgba(216, 223, 240, 1);
+			.item {
+				display: flex;
+				img {
+					width: 2.06rem;
+					height: 1.62rem;
+					margin-right: 0.18rem;
 				}
-				.right {
-					float: left;
-					width: 4.75rem;
-					height: 1.6rem;
+				div {
+					flex: 1;
 					display: flex;
-					justify-content: space-between;
 					flex-direction: column;
-					.title {
-						font-size: .32rem;
-						color: #1A2642;
-						.juli {
-							font-size: .24rem;
-							float: right;
-						}
+					justify-content: space-between;
+					.name {
+						font-size: 0.32rem;
+						font-family: PingFangSC-Medium;
+						color: rgba(26, 38, 66, 1);
 					}
-					.content1 {
-						.free {
-							display: inline-block;
-							background: linear-gradient(121.4deg, rgba(94, 195, 255, 1), rgba(16, 111, 227, 1));
-							border-radius: 2px;
-							text-align: center;
-							color: #fff;
+					.type {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(115, 134, 173, 1);
+					}
+					.address {
+						display: flex;
+						justify-content: space-between;
+						span:nth-child(1) {
+							width: 3.41rem;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+							-webkit-line-clamp: 1;
+							-webkit-box-orient: vertical;
+						}
+						span {
 							font-size: 0.24rem;
-							padding: 2px 5px;
+							font-family: PingFangSC-Regular;
+							color: rgba(115, 134, 173, 1);
 						}
-						.return {
+					}
+					.sf {
+						span {
 							display: inline-block;
-							background: linear-gradient(90deg, rgba(255, 122, 128, 1), rgba(255, 83, 101, 1));
-							border-radius: 2px;
+							width: 1.02rem;
+							height: 0.34rem;
+							line-height: 0.34rem;
 							text-align: center;
-							color: #fff;
-							font-size: 0.24rem;
-							padding: 2px 5px;
+							border-radius: 3px;
+							font-size: 0.22rem;
+							font-family: PingFangSC-Regular;
+							margin-right: 0.20rem;
 						}
-					}
-					.nr {
-						.momey {
-							font-size: .32rem;
-							color: #F23030;
-							font-weight: bold;
+						.lm {
+							color: #336FFF;
+							background: rgba(51, 111, 255, 0.1);
+							border: 1px solid rgba(51, 111, 255, 1);
 						}
-						.ms_price {
-							font-size: .24rem;
+						.ly {
+							color: #FF5365;
+							background: rgba(255, 83, 101, 0.1);
+							border: 1px solid rgba(255, 83, 101, 1);
 						}
-						.num {
-							font-size: .24rem;
-							color: #7386AD;
-						}
-					}
-					.zhekou {
-						width: .8rem;
-						height: .4rem;
-						line-height: .4rem;
-						text-align: center;
-						border-radius: 5px;
-						background: #e0e9fd;
-						color: #336FFF;
-						font-size: .22rem;
-						margin-top: .1rem;
 					}
 				}
 			}
@@ -1038,26 +1004,28 @@
 	
 	.searchBox {
 		width: 100%;
+		height: 0.89rem;
 		background: #fff;
-		padding-bottom: 0.14rem;
+		padding: 0.16rem 0.30rem;
 		border-top: 0.01rem solid #D8DFF0;
 		position: relative;
 		z-index: 15;
+		box-sizing: border-box;
 		.search {
 			position: relative;
-			width: 92%;
-			margin: 0 auto;
-			padding-top: 0.14rem;
+			width: 100%;
+			border-radius: 15px;
+			overflow: hidden;
 			img {
 				position: absolute;
-				width: 5%;
-				top: 0.25rem;
+				width: 0.32rem;
+				height: 0.32rem;
+				top: 0.13rem;
 				left: 0.26rem;
 			}
 			input {
 				width: 100%;
 				background: #F5F6FA;
-				border-radius: 2px;
 				color: #1A2642;
 				font-size: 0.24rem;
 				height: 0.59rem;

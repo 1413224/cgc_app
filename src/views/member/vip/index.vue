@@ -21,7 +21,7 @@
 		</div>
 		<div class="swiper-inner">
 			<swiper :options="swiperOption" ref="mySwiper">
-				<swiper-slide v-for="(item,index) in swiperList">
+				<swiper-slide v-for="(item,index) in swiperList" :key="index">
 					<img :src="item" alt="" />
 				</swiper-slide>
 			</swiper>
@@ -225,7 +225,7 @@
 		}
 		.swiper-slide {
 			width: 5.62rem;
-			height:4.18rem;
+			height: 4.18rem;
 			img {
 				width: 100%;
 				height: 100%;
@@ -263,10 +263,11 @@
 		.pad-box {
 			padding: 0 0.29rem;
 			box-sizing: border-box;
-			.join-box{
+			.join-box {
 				height: 4rem;
 			}
-			.join-box,.join-box3 {
+			.join-box,
+			.join-box3 {
 				padding-top: 0.70rem;
 				box-sizing: border-box;
 				border-bottom: 1px dashed rgba(228, 71, 44, 1);

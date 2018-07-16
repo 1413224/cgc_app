@@ -8,7 +8,7 @@
 					<div class="periodVideo">{{ periodVideo}}</div>
 					<div class="player">
 						<d-player ref="player" @fullscreen="fs" @pause="stop" @play="playerStop = false" :options="options"></d-player>
-						<img  @click="bf" v-if="playerStop" :src="'./static/draw/kongzhi.png'" alt="" />
+						<img @click="bf" v-if="playerStop" :src="'./static/draw/kongzhi.png'" alt="" />
 					</div>
 				</div>
 
@@ -19,10 +19,10 @@
 								<cell>
 									<div class="title">
 										<div class="wz1">
-											<div class="left">国美白云店第1期(已揭晓)</div>
-											<div class="period left">1564期</div>
+											<div>国美白云店第1期(已揭晓)</div>
+											<div class="period">1564期</div>
 										</div>
-										<div class="money">奖金池共￥800,000</div>
+										<div class="money">奖金池共 : <span>￥800,000</span></div>
 									</div>
 								</cell>
 							</group>
@@ -45,8 +45,8 @@
 
 							<div class="period">
 								<swiper :options="swiperOption1">
-									<swiper-slide v-for="(item,index) in data3" :key="index">
-										<div class="btn0" :class="{'btn-active':act3==index}" @click="periodActive(index)">
+									<swiper-slide v-for="(item,index) in data3" :key="index" :class="{'btn-active':act3==index}">
+										<div class="btn0" @click="periodActive(index)">
 											{{item}}
 										</div>
 									</swiper-slide>
@@ -61,37 +61,31 @@
 					<!-- 中奖人员 -->
 					<div class="win-person">
 						<div class="wz-period">中奖名单</div>
-						<swiper :options="swiperOption2">
-							<swiper-slide v-for="(item,index) in data1" :key="index">
-								<div class="wz-award" :class="{'wz-award-active':act1==index}" @click="actice(index)">{{item}}</div>
-							</swiper-slide>
-						</swiper>
+						<div style="padding: 0 0.4rem;box-sizing: border-box;">
+							<swiper :options="swiperOption2">
+								<swiper-slide v-for="(item,index) in data1" :key="index">
+									<div class="wz-award" :class="{'wz-award-active':act1==index}" @click="actice(index)">{{item}}</div>
+								</swiper-slide>
+							</swiper>
+						</div>
 					</div>
 
 					<!-- 一等奖数据列表 -->
 					<div class="web">
 						<!--数据列表-->
-						<ul>
-							<group v-for="(item,index) in personList" :key="index">
-								<cell>
-									<li>
-										<div class="personlist">
-											<div class="img-left">
-												<img src="../../assets/images/draw/photo0.png" alt="">
-											</div>
-
-											<div class="user-right">
-												<div class="wz-red2 fr">{{item.bonus}}<span class="yuan">元</span></div>
-												<div>手机用户</div>
-												<span class="wz-red">{{item.phoneNum}}</span>
-												<div class="wz-gray2">{{item.speech}}</div>
-											</div>
-										</div>
-										<div class="clear"></div>
-									</li>
-								</cell>
-							</group>
-						</ul>
+						<div class="item" v-for="(item,index) in personList">
+							<div class="left">
+								<img src="../../assets/images/draw/photo0.png" alt="">
+							</div>
+							<div class="right">
+								<div>
+									<p>手机用户</p>
+									<p><span>{{item.bonus}}</span>元</p>
+								</div>
+								<p class="num">{{item.phoneNum}}</p>
+								<p class="tip">{{item.speech}}</p>
+							</div>
+						</div>
 						<loading v-if="show"></loading>
 						<noMore v-if="showNomore"></noMore>
 					</div>
@@ -308,19 +302,23 @@
 	}
 	
 	.container {
-		padding: 0.18rem 0.18rem 0 0.18rem;
+		padding: 0.2rem 0.2rem 0 0.2rem;
 		box-sizing: border-box;
 		.bs {
 			border-radius: 0.08rem;
 			width: 100%;
 			background-color: #fff;
+			padding: 0 0.1rem;
+			box-sizing: border-box;
 		}
 		.title {
-			padding: 0.4rem 0 0.2rem 0.3rem;
+			padding: 0.4rem 0.2rem 0.2rem 0.2rem;
 			.wz1 {
 				width: 100%;
-				color: #333333;
 				font-size: 0.36rem;
+				font-family: PingFang-SC-Medium;
+				color: rgba(51, 51, 51, 1);
+				display: flex;
 				.period {
 					color: #fff;
 					font-size: 0.26rem;
@@ -329,6 +327,9 @@
 					text-align: center;
 					padding: 0.05rem 0.07rem;
 					margin-left: 0.12rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 				}
 			}
 			.money {
@@ -337,41 +338,48 @@
 				color: #666666;
 				font-size: 0.26rem;
 				margin-top: 0.22rem;
+				span {
+					font-size: 0.26rem;
+					font-family: PingFang-SC-Medium;
+					color: #E32921;
+				}
 			}
 		}
 		.award-set {
-			padding-top: 0.39rem;
-			margin: 0 0.1rem;
+			padding: 0.4rem 0.2rem;
 			border-bottom: 1px solid #E6E6E6;
 			overflow: hidden;
 			padding-bottom: 0.3rem;
 			border-top: 1px solid #E6E6E6;
+			box-sizing: border-box;
 			.set-title {
 				color: #333333;
 				font-size: 0.36rem;
-				padding-left: 0.19rem;
 			}
 			.ul-set {
 				margin-top: 0.3rem;
-				margin-left: 0.19rem;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
 				li {
 					list-style: none;
 					background: linear-gradient(-121.4deg, #FF5C34, #FF2A4B);
-					padding: 0.1rem 0.05rem;
-					margin-right: 0.2rem;
-					margin-bottom: 0.1rem;
-					float: left;
 					color: #fff;
 					font-size: 0.26rem;
 					border-radius: 0.04rem;
 					text-align: center;
+					width: 3.20rem;
+					height: 0.78rem;
 					display: flex;
+					margin-bottom: 0.1rem;
+					align-items: center;
+					padding: 0 0.18rem;
+					box-sizing: border-box;
 					.flex {
 						display: flex;
 						flex: 1;
 						div:nth-child(1) {
 							line-height: 0.64rem;
-							margin-right: 0.1rem;
 						}
 						div:nth-child(2) {
 							color: #FFEEB3;
@@ -394,32 +402,29 @@
 			}
 		}
 		.wz-periods {
-			padding-top: 0.4rem;
+			padding: 0.4rem 0.2rem;
+			box-sizing: border-box;
 			.period {
 				color: #fff;
 				padding-bottom: 0.19rem;
 				.swiper-slide {
-					width: 1.1rem;
-					padding-right: 0.3rem;
-				}
-				.swiper-slide:nth-child(1) {
-					margin-left: 0.33rem;
+					width: 1.128rem;
+					height: 0.66rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 0.3rem;
+					background-color: #E1E1E1;
+					border-radius: 3px;
 				}
 				/* 抽奖期数*/
-				.btn0 {
-					text-align: center;
-					font-size: 0.3rem;
-					padding: 0.2rem 0.18rem;
-					background-color: #E1E1E1;
-					border-radius: 6px;
-				}
 				.btn-active {
 					background-color: #E32921;
 				}
 			}
 			.wz-period {
-				padding: 0 0 0.4rem 0.2rem;
 				font-size: 0.32rem;
+				margin-bottom: 0.4rem;
 			}
 		}
 	}
@@ -441,10 +446,6 @@
 			.swiper-slide {
 				width: 1.3rem;
 				height: auto;
-				padding-right: 0.2rem;
-			}
-			.swiper-slide:nth-child(1) {
-				margin-left: 0.4rem;
 			}
 			.wz-award {
 				width: 1.1rem;
@@ -566,33 +567,54 @@
 	}
 	
 	.web {
-		.weui-cells {
-			margin-top: 0;
-		}
-		.vux-no-group-title {
-			margin-top: 0;
-		}
-		.weui-cells:before {
-			border-top: none;
-		}
-		.weui-cell {
-			padding: 0;
-		}
-		.weui-cell__ft {
-			text-align: left;
-			width: 96%;
-			margin-left: 0.3rem;
-			border-bottom: solid 1px #E6E6E6;
-		}
-		.weui-cells:after {
-			border-bottom: none;
-		}
-		.weui-cell_access .weui-cell__ft:after {
-			width: 0.2rem;
-			height: 0.2rem;
-			right: 0.2rem;
-			border-width: 0.04rem 0.04rem 0 0;
-			border-color: #E6E6E6;
+		padding: 0 0.30rem;
+		box-sizing: border-box;
+		.item {
+			display: flex;
+			align-items: center;
+			padding: 0.37rem 0;
+			box-sizing: border-box;
+			border-bottom:1px solid #E6E6E6;
+			.left {
+				margin-right: 0.2rem;
+				img {
+					width: 0.96rem;
+					height: 0.96rem;
+					border-radius: 50%;
+				}
+			}
+			.right {
+				flex: 1;
+				div {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					p:nth-child(1) {
+						font-size: 0.24rem;
+						font-family: PingFang-SC-Regular;
+						color: rgba(51, 51, 51, 1);
+					}
+					p:nth-child(2) {
+						font-size: 0.18rem;
+						font-family: PingFang-SC-Bold;
+						color: rgba(227, 41, 33, 1);
+						span {
+							font-size: 0.36rem;
+						}
+					}
+				}
+				.num {
+					font-size: 0.32rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(227, 41, 33, 1);
+					margin: 0.05rem 0;
+				}
+				.tip {
+					font-size: 0.24rem;
+					font-family: PingFang-SC-Regular;
+					color: rgba(160, 160, 160, 1);
+				}
+			}
 		}
 	}
 </style>

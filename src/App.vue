@@ -87,7 +87,6 @@
 		},
 		watch: {
 			'$route' (to, from, next) {
-
 				var _this = this
 
 				//判断是否微信端   奖励弹窗  

@@ -1,308 +1,326 @@
 <template>
 	<section class="awards">
+		<settingHeader :title="title"></settingHeader>
+		<div class="head">
+			<span class="receiveText">中奖信息</span>
+			<span class="receiveMoney">张三先生恭喜您获得一等奖五千元</span>
+		</div>
 
-		<div class="wrapper" ref="wrapper">
-			<div class="content">
-				<settingHeader :title="title"></settingHeader>
-				<div class="head">
-					<span class="receiveText">中奖信息</span>
-					<span class="receiveMoney">张三先生恭喜您获得一等奖五千元</span>
+		<div class="awards-main">
+			<div class="photos" style="margin-bottom: 0.3rem;">
+				<div class="awards-title clear">
+					<div class="border left"></div>
+					<h4 class="left">上传生活照</h4>
 				</div>
 
-				<div class="awards-main">
-					<div class="photos">
-						<div class="awards-title clear">
-							<div class="border left"></div>
-							<h4 class="left">上传生活照</h4>
-						</div>
-									    
-				    	<div class="life"  v-for="(item,index) in imgList" :key="index" @click="cindex(index)">
-				    		<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png"/>
-				    		
-				    		<div class="bigPic" v-show="[imgList.length ? imgList.length >0 : imgList.length =0]">
+				<div class="life-box">
+					<div class="tc" v-for="(item,index) in imgList" :key="index">
+						<div class="life" @click="cindex(index)">
+							<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png" />
+
+							<div class="bigPic" v-show="[imgList.length ? imgList.length >0 : imgList.length =0]">
 								<img :src="item">
 							</div>
 							<input type="file" accept="image/*" multiple="multiple" @change="cone">
-				    	</div>
-
-				    	<div class="life" v-if="imgList.length!=5">
-				    		<img src="../../assets/images/draw/addIcon.png" class="add">
-				    		<p class="length">生活照</p>
-				    		<input type="file" accept="image/*" multiple="multiple" @change="test($event)">
-				    	</div>
-				    	<div class="clear"></div>
-					</div>
-					<div class="photos" style="text-align:center">
-						<div class="awards-title clear">
-							<div class="border left"></div>
-							<h4 class="left">中奖感言</h4>
 						</div>
-						<group style="margin-top: 0.3rem;">
-					      	<x-textarea :max="200" :min="20" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
-					    </group>
+					</div>
+
+					<div class="life" v-if="imgList.length!=5">
+						<img src="../../assets/images/draw/addIcon.png" class="add">
+						<p class="length">生活照</p>
+						<input type="file" accept="image/*" multiple="multiple" @change="test($event)">
 					</div>
 				</div>
-				<div class="radio">
-			    	<check-icon :value.sync="demo1" >
-			    		<span class="read">阅读<span class="preposition">《易消费中奖协议》</span>
-			    		</span>
-			    	</check-icon>
-			    	
-			    </div>
 			</div>
-			<div class="foot" @click="showToast">立即提交</div>
+			<div class="photos" style="text-align:center">
+				<div class="awards-title clear">
+					<div class="border left"></div>
+					<h4 class="left">中奖感言</h4>
+				</div>
+				<group style="margin-top: 0.3rem;">
+					<x-textarea :max="200" :min="20" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
+				</group>
+			</div>
 		</div>
-		
-        <!-- 弹出框 -->
-        <div v-transfer-dom class="speechDialog">
-          	<x-dialog v-model="showDialog" :hide-on-blur="true">
-          		<!-- 等待审核 -->
-        		<div class="dia">
-        			<img class="img" :src="imgSrc">
-        			<div class="dia_top">
-        				<div class="dia_content">
-        					<p class="title">{{headMessage}}</p>
-        				</div>
-        			</div>
-        			<div class="close" @click="showToast"><img src="../../assets/images/draw/open.png"></div>
-        		</div>
-          	</x-dialog>
-        </div>
+		<!--<div class="radio">
+			<check-icon :value.sync="demo1">
+				<span class="read">阅读<span class="preposition">《易消费中奖协议》</span>
+			</check-icon>
+
+		</div>-->
+		<div class="foot" @click="showToast">
+			<p>点击下方按钮即同意 <span>《易消费中奖协议》</span></p>
+			<div class="btn">立即提交</div>
+		</div>
+
+		<!-- 弹出框 -->
+		<div v-transfer-dom class="speechDialog">
+			<x-dialog v-model="showDialog" :hide-on-blur="true">
+				<!-- 等待审核 -->
+				<div class="dia">
+					<img class="img" :src="imgSrc">
+					<div class="dia_top">
+						<div class="dia_content">
+							<p class="title">{{headMessage}}</p>
+						</div>
+					</div>
+					<div class="close" @click="showToast"><img src="../../assets/images/draw/open.png"></div>
+				</div>
+			</x-dialog>
+		</div>
 	</section>
 </template>
 
 <script>
-	import { XInput, XDialog,CheckIcon} from 'vux'
+	import { XInput, XDialog, CheckIcon } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import BScroll from 'better-scroll'
 	export default {
-	  components: {
-	    XInput,settingHeader,XDialog,CheckIcon
-	  },
-	  data(){
-	  	return {
-	  		title: '获奖感言',
-	  		demo2: true,
-	  		imgList: [],
-	  		showDialog: false,
-	  		pindex:0,
-	  		headMessage: '请您耐心等待审核',
-	  		imgSrc: './static/draw/wait.png',
-	  		demo1: false
-	  	}
-	  },
-	  mounted:function(){
-	    this.InitScroll()
-	  },
-	  methods:{
-		test:function (e) {
-  			var _this = this
-  			var file = e.target.files;
-  			for(var i = 0; i < file.length; i++) {
-				var reader = new FileReader();
-				reader.readAsDataURL(file[i]); // 读出 base64
-				reader.onloadend = function(e) {
-					// 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-					var dataURL = reader.result;
-					if(_this.imgList.length<5){
-						_this.imgList.push(e.target.result)
-					}
-				};
-  			}
-       	},
-	  	imgDelete(index){
-	  		this.imgList.splice(index, 1);
-	  	},
-	  	showToast(){
-			var that = this;
-			if(this.showDialog){
-				that.showDialog = false
-				that.$router.push({path:'/draw/record'})
+		components: {
+			XInput,
+			settingHeader,
+			XDialog,
+			CheckIcon
+		},
+		data() {
+			return {
+				title: '获奖感言',
+				demo2: true,
+				imgList: [],
+				showDialog: false,
+				pindex: 0,
+				headMessage: '请您耐心等待审核',
+				imgSrc: './static/draw/wait.png',
+				demo1: false
 			}
-			this.showDialog = true;
-			setTimeout(function(){
-				that.showDialog = false
-				that.$router.push({path:'/draw/record'})
-			},3000)
 		},
-		cone(e,i) {
-			var _this = this
-			var reader = new FileReader();
-			var file = e.target.files[0];
-			reader.readAsDataURL(file);
-			reader.onloadend = function(e) {
-				var dataURL = reader.result;
-				_this.imgList.splice(_this.pindex, 1, e.target.result)
-			};
-		},
-       	cindex(index) {
-			this.pindex = index
-			console.log(this.pindex)
-	   	},
-        InitScroll() {
-			this.$nextTick(() => {
-				this.scroll = new BScroll(this.$refs.wrapper, {
-					click: true,
-					scrollY: true,
-					pullUpLoad: {
-						threshold: -30, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
-					}
-				})
-			})
-		},
-	  }
+		mounted: function() {},
+		methods: {
+			test: function(e) {
+				var _this = this
+				var file = e.target.files;
+				for(var i = 0; i < file.length; i++) {
+					var reader = new FileReader();
+					reader.readAsDataURL(file[i]); // 读出 base64
+					reader.onloadend = function(e) {
+						// 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
+						var dataURL = reader.result;
+						if(_this.imgList.length < 5) {
+							_this.imgList.push(e.target.result)
+						}
+					};
+				}
+			},
+			imgDelete(index) {
+				this.imgList.splice(index, 1);
+			},
+			showToast() {
+				var that = this;
+				if(this.showDialog) {
+					that.showDialog = false
+					that.$router.push({
+						path: '/draw/record'
+					})
+				}
+				this.showDialog = true
+			},
+			cone(e, i) {
+				var _this = this
+				var reader = new FileReader();
+				var file = e.target.files[0];
+				reader.readAsDataURL(file);
+				reader.onloadend = function(e) {
+					var dataURL = reader.result;
+					_this.imgList.splice(_this.pindex, 1, e.target.result)
+				};
+			},
+			cindex(index) {
+				this.pindex = index
+			}
+		}
 	}
 </script>
 
 <style lang="less" scoped>
-.awards{
-	height: 100%;
-}
-	.wrapper{
+	.wrapper {
 		height: 100%;
 		overflow: hidden;
-		.content{
+		.content {
 			padding-bottom: 0.78rem;
 		}
 	}
-	.left{
+	
+	.left {
 		float: left;
 	}
+	
 	.head {
-	  	padding: 0.36rem 0.3rem;
-	  	background-color: #fff;
-	  	display: flex;
-	    .receiveText {
-		  font-size: 0.3rem;
-		  color: #333333;
+		height: 1rem;
+		padding: 0 0.3rem;
+		background-color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		.receiveText {
+			font-size: 0.3rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(51, 51, 51, 1);
 		}
 		.receiveMoney {
 			flex: 1;
-		 	font-size: 0.3rem;
-		  	color: #A0A0A0;
-		  	text-align: right;
+			font-size: 0.3rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(160, 160, 160, 1);
+			text-align: right;
 		}
 	}
-
-	.awards-main{
+	
+	.awards-main {
 		margin-top: 0.3rem;
-		background-color: #fff;
-		margin-bottom: 0.5rem;
+		padding-bottom: 2rem;
 		.photos {
-		   /*border-top: 0.01rem solid #D8DFF0;*/
-		   padding: 0.2rem 0 0.2rem 0.3rem;
-		   color: #1A2642;
-		   .awards-title{
-		   		padding-bottom: 0.23rem;
-		   		border-bottom: 1px solid #F3F3F3;
-		   		.border{
-		   				width: 0.06rem;
-		   				height: 0.3rem;
-		   				background-color: #E32921;
-		   				border-radius: 0.03rem;
-		   				margin-right: 0.16rem;
-		   		}
-		   		h4 {
-		   		  	font-size: 0.3rem;
-		   		  	line-height: 0.3rem;
-		   		}
-		   }
-		   
-	   		.life{
-	   			margin-top: 0.3rem;
-	   			background: #fff;
-	   			width: 46%;
-	   			height: 2.1rem;
-	   			text-align: center;
-	   			position: relative;
-	   			float: left;
-	   			margin-right: 0.16rem;
-	   			margin-bottom: 0.15rem;
-	   			border-radius: 0.06rem;
-	   			border: 1px solid #E1E1E1;
-	   			.add{
-	   				width: 20%;
-	   				margin: 0.4rem auto;
-	   			}
-	   			.gbx{
-	   				position: absolute;
-	   				right: -0.1rem;
-	   				top: -0.12rem;
-	   				width: 0.38rem;
-	   				height: 0.38rem;
-	   				z-index: 222;
-	   			}
-	   			.length{
-	   				font-size: .3rem;
-	   				color: #bcbbc0;
-	   				margin-top: -0.22rem;
-	   			}
-	           	.bigPic{
-	           		position: absolute;
-        			width: 100%;
-        			height: 100%;
-        			left: 50%;
-        			top: 50%;
-        			transform: translate(-50%,-50%);
-        			overflow: hidden;
-        			border-radius: 0.06rem;
-	   	     		img{
-	   	     			width: 100%;
-	   	     			height: auto;
-	   	     			position: absolute;
-	   	     			left: 50%;
-	   	     			top: 50%;
-	   	     			transform: translate(-50%,-50%);
-	   	     		}
-	   	     	}
-	   			.icon{
-	   				font-size: 0.73rem;
-	   				color: #90A2C7;
-	   				line-height: 1.3rem;
-	   			}
-	   			input{
-	   			    position: absolute;
-	   			    top:0;
-	   			    left:0;
-	   			    width:100%;
-	   			    height: 100%;
-	   			    opacity: 0;
-	   			    z-index: 111;
-	   			}
-	   		}
-	   		.clear{
-	   		    clear:both;
-	   		}
-		   
+			color: #1A2642;
+			background-color: #fff;
+			padding: 0.40rem 0.24rem;
+			box-sizing: border-box;
+			.awards-title {
+				padding-bottom: 0.23rem;
+				border-bottom: 1px solid #F3F3F3;
+				.border {
+					width: 0.06rem;
+					height: 0.3rem;
+					background-color: #E32921;
+					border-radius: 0.03rem;
+					margin-right: 0.16rem;
+				}
+				h4 {
+					font-size: 0.3rem;
+					line-height: 0.3rem;
+				}
+			}
+			.life-box {
+				display: flex;
+				flex-wrap: wrap;
+				padding-top: 0.3rem;
+				box-sizing: border-box;
+				.tc {
+					width: 33.333333333333336%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+			}
+			.life {
+				background: #fff;
+				width: 2.1rem;
+				height: 2.1rem;
+				text-align: center;
+				position: relative;
+				border-radius: 0.06rem;
+				border: 1px solid #E1E1E1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				margin-bottom: 0.22rem;
+				.add {
+					width: 20%;
+					margin: 0.4rem auto;
+				}
+				.gbx {
+					position: absolute;
+					right: -0.1rem;
+					top: -0.12rem;
+					width: 0.38rem;
+					height: 0.38rem;
+					z-index: 222;
+				}
+				.length {
+					font-size: .24rem;
+					color: #bcbbc0;
+					margin-top: -0.22rem;
+				}
+				.bigPic {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					left: 50%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+					overflow: hidden;
+					border-radius: 0.06rem;
+					img {
+						width: 100%;
+						height: auto;
+						position: absolute;
+						left: 50%;
+						top: 50%;
+						transform: translate(-50%, -50%);
+					}
+				}
+				.icon {
+					font-size: 0.73rem;
+					color: #90A2C7;
+					line-height: 1.3rem;
+				}
+				input {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					opacity: 0;
+					z-index: 111;
+				}
+			}
+			.clear {
+				clear: both;
+			}
 		}
 	}
-
-	.radio{
+	
+	.radio {
 		text-align: center;
 		margin-top: 0.5rem;
 		padding-bottom: 0.35rem;
 		font-size: 0.26rem;
-		input{
+		input {
 			vertical-align: middle;
 		}
 		.preposition {
-	     	color: #004FE1;
-	    }
+			color: #004FE1;
+		}
 	}
-
+	
 	.foot {
+		padding-top: 0.2rem;
+		background-color: white;
 		position: fixed;
-		width: 100%;
-		height: 0.78rem;
-		background-color: #E32921;
-		color: #fff;
-		font-size: 0.3rem;
-		text-align: center;
-		line-height: 0.78rem;
 		bottom: 0;
+		width: 100%;
+		.btn {
+			width: 100%;
+			height: 0.9rem;
+			background-color: #E32921;
+			font-size: 0.36rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(244, 244, 244, 1);
+			text-align: center;
+			line-height: 0.9rem;
+		}
+		p {
+			font-size: 0.26rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(51, 51, 51, 1);
+			text-align: center;
+			margin-bottom: 0.35rem;
+			span {
+				color: #004FE1;
+			}
+		}
 	}
-
-	.speechDialog{
+	
+	.speechDialog {
 		.dia {
 			width: 100%;
 			color: #1A2642;
@@ -325,7 +343,7 @@
 				padding-top: 1.09rem;
 				margin-top: 1.09rem;
 				border-radius: 0.16rem;
-				.dia_content{
+				.dia_content {
 					background: #fff;
 					height: auto;
 					min-height: 2rem;
@@ -353,98 +371,97 @@
 					font-size: 0.36rem;
 					border-radius: 0.5rem;
 					text-align: center;
-					box-shadow:0.04rem 0px 0.08rem rgba(136,46,219,0.3);
-					padding: 0.32rem 0; 
+					box-shadow: 0.04rem 0px 0.08rem rgba(136, 46, 219, 0.3);
+					padding: 0.32rem 0;
 					margin-top: 0.8rem;
 				}
-				
 			}
-			.close{
+			.close {
 				width: 100%;
-				background: rgba(255,255,255,0);
+				background: rgba(255, 255, 255, 0);
 				height: 1.25rem;
-				img{
+				img {
 					height: 100%;
 					margin: 0 auto;
 				}
 			}
 		}
 	}
-	
 </style>
 
 <style lang="less">
-	.awards-input{
-		.vux-no-group-title{
+	.awards-input {
+		.vux-no-group-title {
 			margin-top: 0;
 		}
-		.weui-cells{
+		.weui-cells {
 			margin-top: 0;
 		}
-		.weui-cell:before{
+		.weui-cell:before {
 			border-top: none;
 		}
-		.weui-cell{
+		.weui-cell {
 			/*border-bottom: 0.01rem solid #F5F5F5;*/
 		}
-		.weui-label{
+		.weui-label {
 			width: 1.4rem;
 			font-size: 0.3rem;
 		}
 		.weui-input::-webkit-input-placeholder {
-		    color: #d9d9d9; // WebKit browsers 
-		    font-size: 0.32rem;
+			color: #d9d9d9; // WebKit browsers 
+			font-size: 0.32rem;
 		}
 		.weui-input:-moz-placeholder {
-		    color: #d9d9d9; // Mozilla Firefox 4 to 18 
-		    font-size: 0.32rem;
+			color: #d9d9d9; // Mozilla Firefox 4 to 18 
+			font-size: 0.32rem;
 		}
 		.weui-input::-moz-placeholder {
-		    color: #d9d9d9; //Mozilla Firefox 19+ /
-		    font-size: 0.32rem;
+			color: #d9d9d9; //Mozilla Firefox 19+ /
+			font-size: 0.32rem;
 		}
 		.weui-input:-ms-input-placeholder {
-		    color: #d9d9d9; //Internet Explorer 10+ */
-		    font-size: 0.32rem;
+			color: #d9d9d9; //Internet Explorer 10+ */
+			font-size: 0.32rem;
 		}
 	}
-	.photos{
-		.weui-cells{
+	
+	.photos {
+		.weui-cells {
 			margin-top: 0;
-			margin-right: 0.24rem;
 		}
-		.weui-textarea{
+		.weui-textarea {
 			color: #1A2642;
 			font-size: 0.28rem;
+			background: rgba(245, 245, 245, 1);
 		}
 		.vux-x-textarea.weui-cell {
 			border-radius: 0.06rem;
-			border: 1px solid #F5F5F5;
+			background: rgba(245, 245, 245, 1);
 		}
-	} 
-	.speechDialog{
+	}
+	
+	.speechDialog {
 		.weui-dialog {
 			width: 78.67%;
 			max-width: 78.67%;
 			z-index: 9999;
-			border-radius: 0.16rem; 
-			top: 46%;
+			border-radius: 0.16rem;
 		}
 	}
-	.radio{
-		.weui-icon-circle{
+	
+	.radio {
+		.weui-icon-circle {
 			font-size: 0.4rem;
 		}
-		.vux-check-icon > span{
+		.vux-check-icon>span {
 			font-size: 0.32rem;
 			line-height: 0.4rem;
 		}
-		.weui-icon-success{
+		.weui-icon-success {
 			font-size: 0.4rem;
 		}
-		.weui-icon-success-circle{
+		.weui-icon-success-circle {
 			font-size: 0.4rem;
 		}
 	}
-	 
 </style>

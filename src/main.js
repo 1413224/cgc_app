@@ -157,7 +157,7 @@ const history = window.sessionStorage
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' && key != 'isPay' && key != '_openid_') {
+	if(key != 'isPopup' && key != 'isPay' && key != 'isZc' && key != '_openid_') {
 		history.removeItem(key)
 	}
 }
@@ -191,18 +191,18 @@ router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
 	
-//	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg') && (to.path != '/multi_user_mall')) {
-//
-//		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
-//
-//		let ua = window.navigator.userAgent.toLowerCase()
-//		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-//			next({
-//				path: '/member/oriza'
-//			})
-//			return false
-//		}
-//	}
+	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg') && (to.path != '/multi_user_mall')) {
+
+		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
+
+		let ua = window.navigator.userAgent.toLowerCase()
+		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+			next({
+				path: '/member/oriza'
+			})
+			return false
+		}
+	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []

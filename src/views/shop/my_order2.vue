@@ -22,7 +22,6 @@
 				<div class="content" ref="content" :class="{'top50':showLoading2}">
 					<transition enter-active-class="zoomIn animated" leave-active-class="slideOutUp animated" :duration="{ enter: 500, leave: 1000 }">
 						<div class="jz-loading" v-if="showLoading2">
-							
 							<img v-if="move" class="jiantou" :class="{'r180':huan}" :src="'./static/images/jiantou.png'" alt="" />
 							<img v-else :src="'./static/images/loading.gif'" alt="" />
 							<p>{{changeTip}}</p>
@@ -76,9 +75,52 @@
 							<span v-if="item.points > 0"> + <i>{{item.points}}</i>信用积分</span>
 						</div>
 						<div class="order_bth_box">
-							<div>
-								<div class="btn">
-									<div v-if="item.canEvaluate == 1">评价</div>
+							<!--线下门店-->
+							<div v-if="item.type == 1">
+								<div class="btn" v-if="item.status == 70">
+									<div @click="deleteOrder">删除订单</div>
+									<!--<div>评价订单</div>-->
+								</div>
+							</div>
+							<!--共享服务-->
+							<div v-if="item.type == 3">
+								<!--待付款-->
+								<div class="btn" v-if="item.status == 0">
+									<div>取消订单</div>
+									<div>立即付款</div>
+								</div>
+								<!--待使用-->
+								<div class="btn" v-if="item.status == 40">
+									<div>联系商家</div>
+									<div>立即使用</div>
+								</div>
+								<!--设备挂单-->
+								<div class="btn" v-if="item.status == 50">
+									<div>联系商家</div>
+									<div>继续使用</div>
+								</div>
+								<!--使用中-->
+								<div class="btn" v-if="item.status == 60">
+									<div @click="deleteOrder">删除订单</div>
+									<div>设备管理</div>
+								</div>
+								<!--已完成-->
+								<div class="btn" v-if="item.status == 70">
+									<div>查看发票</div>
+									<!--<div>评价晒单</div>-->
+								</div>
+								<!--使用失败-->
+								<div class="btn" v-if="item.status == 100 || item.status == 102">
+									<div>联系商家</div>
+									<div>继续使用</div>
+								</div>
+								<!--订单超时-->
+								<div class="btn" v-if="item.status == 130">
+									<div @click="deleteOrder">删除订单</div>
+								</div>
+								<!--已取消-->
+								<div class="btn" v-if="item.status == 140">
+									<div @click="deleteOrder">删除订单</div>
 								</div>
 							</div>
 						</div>
@@ -144,7 +186,7 @@
 				showNum: 10,
 				showLoading: false,
 				showLoading2: false,
-				changeTip: '松手开始刷新',
+				changeTip: '下拉刷新',
 				showNo: false,
 				typeOrderList: ['全部分类', '线下门店', '实物商品', '共享服务', '点餐', '酒店', '门票', '游戏', '手机充值', '电影票', '演出票', '加油卡'],
 				typeDateList: ['全部', '近三个月', '近半年', '今年内'],
@@ -447,34 +489,32 @@
 
 						//滚动开始
 						_this.scroll.on('scrollStart', () => {
-							
+							_this.move = true
 							_this.huan = false
+							_this.changeTip = '下拉刷新'
 							
-							if(_this.timeOut) {
+							if(_this.timeOut){
 								clearTimeout(_this.timeOut)
 							}
-
-							if(_this.orderList.length > 0) {
-								_this.changeTip = '下拉刷新'
-								_this.showLoading2 = true
-								_this.move = true
-							}
-
 						})
 
 						//滚动开始
 						_this.scroll.on('scroll', (pos) => {
-							
-							if(_this.move) {
-								if(pos.y < 0) {
-									_this.changeTip = '下拉刷新'
-									_this.huan = false
-								} else if(pos.y > 20) {
-									_this.changeTip = '释放更新'
-									_this.huan = true
-
+							if(_this.orderList.length > 0) {
+								if(pos.y > -30 && pos.y <= 80) {
+									if(_this.move) {
+										_this.showLoading2 = true
+										if(pos.y < 0) {
+											_this.changeTip = '下拉刷新'
+											_this.huan = false
+										} else if(pos.y >= 20) {
+											_this.changeTip = '释放更新'
+											_this.huan = true
+										}
+									}
 								}
 							}
+
 						})
 
 						//滚动结束
@@ -482,12 +522,13 @@
 							if(pos.y < 0 && pos.y > -80) {
 								_this.$refs.content.style.transform = 'translate(0px, 0px) scale(1) translateZ(0px)'
 							}
+							_this.showLoading2 = false
 						})
 
 						//手指离开
 						_this.scroll.on('touchEnd', (pos) => {
 							_this.move = false
-							if(pos.y > 20) {
+							if(pos.y >= 20) {
 								_this.changeTip = '加载中...'
 								if(_this.orderList.length > 0) {
 									_this.getOrderList(_this.orderList[0].createTime)
@@ -748,7 +789,7 @@
 							color: #7c7c7c;
 							margin-top: 0.08rem;
 						}
-						.jiantou{
+						.jiantou {
 							transition: all 0.3s linear;
 						}
 						.r180 {
