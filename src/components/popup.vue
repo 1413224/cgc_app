@@ -273,8 +273,8 @@
 				display: flex;
 				flex-direction: column;
 				.top {
-					height: 0.88rem;
-					line-height: 0.88rem;
+					height: 0.78rem;
+					line-height: 0.78rem;
 					text-align: center;
 					font-size: 0.28rem;
 					font-family: PingFangSC-Semibold;

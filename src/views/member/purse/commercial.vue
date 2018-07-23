@@ -25,54 +25,54 @@
 				title: '支持商户',
 				typeList: [{
 						name: '专营特卖',
-						logo: ['./static/qrcode/shopLogo/shopLogo (28).png',
-							'./static/qrcode/shopLogo/shopLogo (32).png',
-							'./static/qrcode/shopLogo/shopLogo (31).png',
-							'./static/qrcode/shopLogo/shopLogo (30).png',
-							'./static/qrcode/shopLogo/shopLogo (22).png',
-							'./static/qrcode/shopLogo/shopLogo (5).png',
-							'./static/qrcode/shopLogo/shopLogo (1).png',
-							'./static/qrcode/shopLogo/shopLogo (13).png',
+						logo: ['./static/qrcode/shopLogo/shopLogo (28).jpg',
+							'./static/qrcode/shopLogo/shopLogo (32).jpg',
+							'./static/qrcode/shopLogo/shopLogo (31).jpg',
+							'./static/qrcode/shopLogo/shopLogo (30).jpg',
+							'./static/qrcode/shopLogo/shopLogo (22).jpg',
+							'./static/qrcode/shopLogo/shopLogo (5).jpg',
+							'./static/qrcode/shopLogo/shopLogo (1).jpg',
+							'./static/qrcode/shopLogo/shopLogo (13).jpg',
 						]
 					}, {
 						name: '医疗健康',
-						logo: ['./static/qrcode/shopLogo/shopLogo (6).png',
-							'./static/qrcode/shopLogo/shopLogo (29).png',
-							'./static/qrcode/shopLogo/shopLogo (3).png',
-							'./static/qrcode/shopLogo/shopLogo (7).png',
+						logo: ['./static/qrcode/shopLogo/shopLogo (6).jpg',
+							'./static/qrcode/shopLogo/shopLogo (29).jpg',
+							'./static/qrcode/shopLogo/shopLogo (3).jpg',
+							'./static/qrcode/shopLogo/shopLogo (7).jpg',
 						]
 					}, {
 						name: '餐饮娱乐',
-						logo: ['./static/qrcode/shopLogo/shopLogo (10).png',
-							'./static/qrcode/shopLogo/shopLogo (14).png',
-							'./static/qrcode/shopLogo/shopLogo (4).png',
-							'./static/qrcode/shopLogo/shopLogo (33).png',
-							'./static/qrcode/shopLogo/shopLogo (9).png',
-							'./static/qrcode/shopLogo/shopLogo (21).png',
+						logo: ['./static/qrcode/shopLogo/shopLogo (10).jpg',
+							'./static/qrcode/shopLogo/shopLogo (14).jpg',
+							'./static/qrcode/shopLogo/shopLogo (4).jpg',
+							'./static/qrcode/shopLogo/shopLogo (33).jpg',
+							'./static/qrcode/shopLogo/shopLogo (9).jpg',
+							'./static/qrcode/shopLogo/shopLogo (21).jpg',
 						]
 					}, {
 						name: '商超便利',
-						logo: ['./static/qrcode/shopLogo/shopLogo (24).png',
-							'./static/qrcode/shopLogo/shopLogo (15).png',
-							'./static/qrcode/shopLogo/shopLogo (12).png',
-							'./static/qrcode/shopLogo/shopLogo (8).png',
-							'./static/qrcode/shopLogo/shopLogo (17).png',
-							'./static/qrcode/shopLogo/shopLogo (26).png',
-							'./static/qrcode/shopLogo/shopLogo (11).png',
+						logo: ['./static/qrcode/shopLogo/shopLogo (24).jpg',
+							'./static/qrcode/shopLogo/shopLogo (15).jpg',
+							'./static/qrcode/shopLogo/shopLogo (12).jpg',
+							'./static/qrcode/shopLogo/shopLogo (8).jpg',
+							'./static/qrcode/shopLogo/shopLogo (17).jpg',
+							'./static/qrcode/shopLogo/shopLogo (26).jpg',
+							'./static/qrcode/shopLogo/shopLogo (11).jpg',
 						]
 					}, {
 						name: '购物中心',
-						logo: ['./static/qrcode/shopLogo/shopLogo (16).png',
-							'./static/qrcode/shopLogo/shopLogo (27).png',
-							'./static/qrcode/shopLogo/shopLogo (25).png',
-							'./static/qrcode/shopLogo/shopLogo (23).png',
+						logo: ['./static/qrcode/shopLogo/shopLogo (16).jpg',
+							'./static/qrcode/shopLogo/shopLogo (27).jpg',
+							'./static/qrcode/shopLogo/shopLogo (25).jpg',
+							'./static/qrcode/shopLogo/shopLogo (23).jpg',
 						]
 					}, {
 						name: '旅游户外',
-						logo: ['./static/qrcode/shopLogo/shopLogo (2).png',
-							'./static/qrcode/shopLogo/shopLogo (18).png',
-							'./static/qrcode/shopLogo/shopLogo (19).png',
-							'./static/qrcode/shopLogo/shopLogo (20).png',
+						logo: ['./static/qrcode/shopLogo/shopLogo (2).jpg',
+							'./static/qrcode/shopLogo/shopLogo (18).jpg',
+							'./static/qrcode/shopLogo/shopLogo (19).jpg',
+							'./static/qrcode/shopLogo/shopLogo (20).jpg',
 						]
 					}
 
@@ -145,7 +145,7 @@
 					overflow: hidden;
 					margin-bottom: 0.1rem;
 					img {
-						width: 50%;
+						width: 90%;
 						height: auto;
 					}
 				}
