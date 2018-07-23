@@ -47,7 +47,7 @@
 		},
 		created() {
 			var _this = this
-
+			
 			window.onorientationchange = function() {
 				if(window.orientation == 90 || window.orientation == -90) {
 					_this.orientation = true;

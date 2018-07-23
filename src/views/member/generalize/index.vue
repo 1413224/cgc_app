@@ -280,7 +280,7 @@
 
 				.tab-item-active{
 				    color: #336fff;
-				    border-bottom: 1px solid #336fff;
+				    border-bottom: 2px solid #336fff;
 				   box-sizing: border-box;
 				   height: 100%;
 				}

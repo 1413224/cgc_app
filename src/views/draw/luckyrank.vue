@@ -8,7 +8,7 @@
 					<tab-item :selected="tabIndex == 1" @on-item-click="showMoney">中奖累计金额</tab-item>
 				</tab>
 			</div>
-			<div class="wrapper" ref="wrapper">
+			<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
 				<div class="content">
 					<!-- 排行前3名 -->
 					<div class="former-three">
@@ -264,13 +264,8 @@
 </script>
 
 <style lang="less" scoped>
-	.settingHeader+.vux-tab-wrap~.wrapper {
-		position: absolute;
-		top: 100px;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		overflow: hidden;
+	.wrapper-top {
+		top: 1.85rem!important;
 	}
 	
 	.wrapper {
@@ -309,29 +304,31 @@
 		padding-bottom: 0.4rem;
 		.rank-top {
 			display: flex;
+			justify-content: space-between;
 			width: 100%;
 		}
-		li {
+		li:nth-child(1),
+		li:nth-child(3) {
 			list-style: none;
-			margin-right: 0.53rem;
-			width: 25.4%;
-			padding-top: 0.45rem;
-		}
-		li:last-child {
-			margin-right: 0;
+			width: 1.60rem;
+			height: 1.60rem;
 		}
 		li:nth-child(2) {
-			flex: 1;
-			padding-top: 0;
+			list-style: none;
+			width: 2.05rem;
+			height: 2.05rem;
 		}
 		li:nth-child(2) .pic-move {
 			position: absolute;
-			top: 4.2%;
-			left: 4.5%;
+			top: 0.67rem;
+			left: 50%;
+			transform: translate(-50%, -0.6rem);
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			img {
-				width: 1.88rem;
-				height: 1.88rem;
-				vertical-align: middle;
+				width: 1.93rem;
+				height: 1.93rem;
 			}
 		}
 		.rank-pic {

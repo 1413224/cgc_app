@@ -85,6 +85,9 @@
 				}, {
 					title: '任务奖励',
 					type: 7
+				}, {
+					title: '消费',
+					type: 2
 				}],
 				list: [],
 				curPage: 1,
@@ -113,7 +116,11 @@
 				this.twoIndex = 5
 				this.typeTitle = '任务奖励'
 			} else if(this.$route.query.type == 1) {
+				this.twoIndex = 0
 				this.typeTitle = '全部列表'
+			}else if(this.$route.query.type == 2) {
+				this.twoIndex = 6
+				this.typeTitle = '消费'
 			}
 
 			this.getMyPointsList()
@@ -136,7 +143,7 @@
 				}).then((res) => {
 					if(res.data.status == '00000000') {
 						_this.balanceInfo = res.data.data
-						_this.list = res.data.data.pageBean.list
+						_this.list = res.data.data.list
 					}
 				})
 			},

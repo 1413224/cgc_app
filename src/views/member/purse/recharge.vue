@@ -281,7 +281,7 @@
 						border-radius: 3px;
 						color: #C6CCDA;
 						p:nth-child(1) {
-							font-size: 0.30rem;
+							font-size: 0.42rem;
 						}
 						p:nth-child(2) {
 							font-size: 0.20rem;

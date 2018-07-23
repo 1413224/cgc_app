@@ -208,6 +208,7 @@
 						font-size: 0.42rem;
 						font-family: PingFang-SC-Bold;
 						color: rgba(255, 255, 255, 1);
+						font-weight: bold;
 					}
 				}
 				.bottom {
@@ -232,6 +233,7 @@
 						color: rgba(227, 41, 33, 1);
 						span {
 							font-size: 1.1rem;
+							font-family: PingFang SC;
 						}
 					}
 					div {
@@ -283,7 +285,7 @@
 					overflow: hidden;
 					.zj-img {
 						position: absolute;
-						top: -9%;
+						top: -13%;
 						right: -0.05%;
 						width: 1.53rem;
 						height: 1.53rem;

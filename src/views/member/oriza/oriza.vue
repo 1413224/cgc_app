@@ -70,18 +70,29 @@
 
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
 
-								_this.$router.push({
-									// path: localStorage['beforeLoginUrl']
-									path: '/index'
-								})
+								if(localStorage['beforeLoginUrl'] == '/share/instrumentCode') {
+									_this.$router.push({
+										path: localStorage['beforeLoginUrl']
+									})
+								} else {
+									_this.$router.push({
+										path: '/index'
+									})
+								}
+
 							}
 						})
 
 					} else {
-						_this.$router.push({
-							// path: localStorage['beforeLoginUrl']
-							path: '/index'
-						})
+						if(localStorage['beforeLoginUrl'] == '/share/instrumentCode') {
+							_this.$router.push({
+								path: localStorage['beforeLoginUrl']
+							})
+						} else {
+							_this.$router.push({
+								path: '/index'
+							})
+						}
 					}
 
 				} else {

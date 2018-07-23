@@ -5,7 +5,7 @@
 			<div class="middle-box">
 				<div class="bw-box" v-if="noOpen">
 					<div class="box">
-						<img :src="'./static/qrcode/cgc-code.png'" alt="" />
+						<img :src="'./static/qrcode/code.png'" alt="" />
 						<p class="tip">扫码付全面升级，欢迎体验</p>
 						<p class="xy">点击下方按钮即同意 <span>《CGC全球智慧产业联盟扫码付款用户协议》</span></p>
 						<div class="btn" @click="open">立即开启</div>
@@ -101,7 +101,7 @@
 				},
 				barcodes: '',
 
-				noOpen: false,
+				noOpen: true,
 			}
 		},
 		created() {
@@ -366,6 +366,11 @@
 						svg {
 							width: 100%;
 							height: 1.6rem;
+						}
+						text {
+							font-size: 0.32rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(26, 38, 66, 1);
 						}
 					}
 				}

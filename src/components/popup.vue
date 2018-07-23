@@ -5,9 +5,12 @@
 			<div class="p_box">
 				<img @click="showNew = false" class="xr_img" :src="'./static/images/xr_bg.png'" alt="" />
 				<div class="p_content">
-					<p>本次消费奖励</p>
-					<p>7.20 <span>通用积分</span></p>
-					<p>通用积分将自动存入您的资产余额</p>
+					<div class="top">您又到账了 <i>5</i> 笔收益</div>
+					<div class="bottom">
+						<p><i>+ </i>7.20 <span>通用积分</span></p>
+						<p>通用积分将自动存入您的资产余额</p>
+						<p>查看明细<i class="iconfont icon-arrow-right"></i></p>
+					</div>
 				</div>
 				<img @click="showSr = false" class="gb_img" :src="'./static/images/xr_gb.png'" alt="" />
 			</div>
@@ -261,30 +264,57 @@
 				height: auto;
 			}
 			.p_content {
+				height: 2.54rem;
 				width: 100%;
 				position: absolute;
-				top: 49%;
+				top: 46%;
 				left: 50%;
-				transform: translate(-50%, -50%);
-				p:nth-child(1) {
+				transform: translate(-50%, -46%);
+				display: flex;
+				flex-direction: column;
+				.top {
+					height: 0.88rem;
+					line-height: 0.88rem;
+					text-align: center;
 					font-size: 0.28rem;
-					font-family: PingFangSC-Regular;
-					color: rgba(164, 113, 57, 1);
-				}
-				p:nth-child(2) {
-					font-size: 0.68rem;
 					font-family: PingFangSC-Semibold;
-					color: rgba(242, 48, 48, 1);
-					span {
-						font-size: 0.24rem;
-						font-family: PingFangSC-Regular;
-						color: rgba(242, 48, 48, 1);
+					color: rgba(164, 113, 57, 1);
+					i {
+						color: #F23030;
+						font-family: PingFangSC;
 					}
 				}
-				p:nth-child(3) {
-					font-size: 0.22rem;
-					font-family: PingFangSC-Regular;
-					color: rgba(164, 113, 57, 1);
+				.bottom {
+					flex: 1;
+					p:nth-child(1) {
+						font-size: 0.68rem;
+						font-family: PingFangSC-Semibold;
+						color: rgba(242, 48, 48, 1);
+						span {
+							font-size: 0.24rem;
+							font-family: PingFangSC-Regular;
+							color: rgba(242, 48, 48, 1);
+						}
+						i {
+							font-size: 0.48rem;
+							font-family: PingFangSC-Semibold;
+							color: rgba(242, 48, 48, 1);
+						}
+					}
+					p:nth-child(2) {
+						font-size: 0.22rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(164, 113, 57, 1);
+					}
+					p:nth-child(3) {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Medium;
+						color: rgba(164, 113, 57, 1);
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						margin-top: 0.2rem;
+					}
 				}
 			}
 			.gb_img {

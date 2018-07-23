@@ -79,7 +79,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="btn">
+		<div class="btn" @click="$router.push({path:'/member/join/index'})">
 			申请加盟
 		</div>
 	</div>

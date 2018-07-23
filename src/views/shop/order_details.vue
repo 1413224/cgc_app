@@ -1,453 +1,496 @@
 <template>
-	<div class="order-details">
+	<div class="order-details-box">
 		<settingHeader :title="title"></settingHeader>
-
-		<div class="top">
-			<div class="top-left" @click="goMultiUserMall">
-				<img src="../../assets/images/shop/UNIQLO.png">
-				<div class="left-text">优衣库旗舰店</div>
-				<img src="../../assets/images/shop/right.png" class="icon">
+		<div class="order_item">
+			<div class="order_top">
+				<div class="left">
+					<img :src="'./static/images/shopLogo.png'" alt="" />
+					<p>{{orderDetail.shopName}}</p>
+					<i class="icon iconfont icon-arrow-right"></i>
+				</div>
 			</div>
-			
-			<div class="top-right" @click="showToast">
-				<img src="../../assets/images/shop/customer.png">
-				<span class="right-text">联系客服</span>
+
+			<div>
+				<div class="order_middle" v-for="(item,index) in orderDetail.items" :key="index" :class="{'m':(index != orderDetail.items.length - 1)}">
+					<div class="left">
+						<img v-if="item.thumb" :src="item.thumb.original" />
+						<img v-else :src="'./static/images/cai2.png'" />
+					</div>
+					<div class="middle">
+						<p class="name">{{item.goodsName}}</p>
+						<p class="pinfo">{{item.skuName}}</p>
+					</div>
+					<div class="right">
+						<p class="price">¥ {{item.pieceTruePrice}}</p>
+						<p class="oldprice">¥{{item.originPrice}}</p>
+						<p class="num">x {{item.number}}</p>
+					</div>
+				</div>
+				<div class="order_bottom">
+					<div class="top">
+						<div>
+							<span>商品原价</span><span>¥ {{orderDetail.originPrice}}</span>
+						</div>
+						<div>
+							<span>优惠金额</span><span>¥ {{orderDetail.discountPrice}}</span>
+						</div>
+					</div>
+					<div class="bottom">
+						<span>需付款</span><span class="red">¥ {{orderDetail.actualPrice}}</span>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<div class="order">
-			<li>
-				<div class="order-content">
-					<div class="order-img">
-						<img src="../../assets/images/shop/order_detail1.png">
-					</div>
-					<div class="text-right">
-						<span>女装U宽腿牛仔裤(水洗产品)</span>
-						<p class="text-gray">颜色:蓝色；尺码:L/170修身 <span class="fr">X4</span></p>
-					</div>
+		<div class="pay-box">
+			<div>
+				<span>支付方式</span>
+				<span v-if="orderDetail.payType == 0">余额支付</span>
+				<span v-if="orderDetail.payType == 1">微信支付</span>
+				<span v-if="orderDetail.payType == 2">支付宝支付</span>
+				<span v-if="orderDetail.payType == 3">网银支付</span>
+				<span v-if="orderDetail.payType == 4">快捷支付</span>
+				<span v-if="orderDetail.payType == 5">其他</span>
+			</div>
+			<div>
+				<span>实际付款</span><span>¥ {{orderDetail.payPrice}}</span>
+			</div>
+			<div v-if="orderDetail.balance > 0">
+				<span>使用通用积分</span><span>{{orderDetail.balance}}</span>
+			</div>
+			<div v-if="orderDetail.points > 0">
+				<span>使用信用积分</span><span>{{orderDetail.points}}</span>
+			</div>
+			<div class="last" v-if="orderDetail.enterprisePrice > 0">
+				<span>
+					<p class="one">使用企业余额</p>
+					<p class="two">({{orderDetail.subOrder.shopName}})</p>
+				</span>
+				<span>¥ {{orderDetail.enterprisePrice}}</span>
+			</div>
+		</div>
+		<div class="time-box">
+			<div>订单编号：{{orderDetail.orderSn}}</div>
+			<div>创建时间：{{orderDetail.createTime | getDate}}</div>
+			<div>付款时间：{{orderDetail.payTime | getDate}}</div>
+			<slot v-if="orderDetail.type == 3">
+				<div>开启时间：{{good.startTime | getDate}}</div>
+				<div>累计计时：{{good.useTime}}</div>
+				<div>结束时间：{{good.finishTime | getDate}}</div>
+			</slot>
+		</div>
+		<div class="zf-box">
+			<div class="btn">信用积分</div>
+			<div>奖励<span>{{orderDetail.rewardPoints}}</span>信用积分</div>
+		</div>
+		<div class="order_bth_box">
+			<!--线下门店-->
+			<div class="b-top" v-if="orderDetail.type == 1">
+				<div class="btn" v-if="orderDetail.status == 70">
+					<div @click="deleteOrder">删除订单</div>
+					<!--<div>评价订单</div>-->
 				</div>
-				<div class="order-btn">
-					<div class="comments commen" @click="goWritecomments">评价</div>
-					<div class="giveup commen" @click="goRefund">退货</div>
+			</div>
+			<!--共享服务-->
+			<div class="b-top" v-if="orderDetail.type == 3">
+				<!--待付款-->
+				<div class="btn" v-if="orderDetail.status == 0">
+					<div>取消订单</div>
+					<div>立即付款</div>
 				</div>
-			</li>
-
-			<li>
-				<div class="order-content">
-					<div class="order-img">
-						<img src="../../assets/images/shop/order_detail1.png">
-					</div>
-					<div class="text-right">
-						<span>女装U宽腿牛仔裤(水洗产品)</span><br>
-						<p class="text-gray">颜色:蓝色；尺码:L/170修身 <span class="fr">X4</span></p>
-					</div>
+				<!--待使用-->
+				<div class="btn" v-if="orderDetail.status == 40">
+					<div>联系商家</div>
+					<div>立即使用</div>
 				</div>
-				<div class="order-btn">
-					<div class="comments commen" @click="goWritecomments">评价</div>
-					<div class="giveup commen" @click="goRefund">退货</div>
+				<!--设备挂单-->
+				<div class="btn" v-if="orderDetail.status == 50">
+					<div>联系商家</div>
+					<div>继续使用</div>
 				</div>
-			</li>
+				<!--使用中-->
+				<div class="btn" v-if="orderDetail.status == 60">
+					<div @click="deleteOrder">删除订单</div>
+					<div>设备管理</div>
+				</div>
+				<!--已完成-->
+				<div class="btn" v-if="orderDetail.status == 70">
+					<div>查看发票</div>
+					<!--<div>评价晒单</div>-->
+				</div>
+				<!--使用失败-->
+				<div class="btn" v-if="orderDetail.status == 100 || orderDetail.status == 102">
+					<div>联系商家</div>
+					<div>继续使用</div>
+				</div>
+				<!--订单超时-->
+				<div class="btn" v-if="orderDetail.status == 130">
+					<div @click="deleteOrder">删除订单</div>
+				</div>
+				<!--已取消-->
+				<div class="btn" v-if="orderDetail.status == 140">
+					<div @click="deleteOrder">删除订单</div>
+				</div>
+			</div>
 		</div>
-
-		<div class="content">
-			<ul class="ul-content">
-				<group gutter="0">
-				    <cell-form-preview :list="list"></cell-form-preview>
-				    <cell-form-preview :list="list2"></cell-form-preview>
-			    </group>
-
-			    <div class="return" v-if="value != 0 && value != 4">
-			    	<div class="return-red">返积分</div>
-			    	<span>返积分<span class="score-blue">200</span>点</span>
-			    </div>
-			</ul>
-		
-			<recommended></recommended>
-		</div>
-
-
-		<!-- 买家已收货 无返积分-->
-		<div class="footer" v-if="value == 0">  
-			<div class="comments commen" @click="goWritecomments">评价</div>
-			<div class="canel view commen" @click="goLogistics">查看物流</div>
-			<router-link to="/shop/refund"><div class="view commen">申请售后</div></router-link>
-		</div>
-
-		<!-- 卖家已发货 有返积分-->
-		<div class="footer" v-else-if="value == 1">
-			<div class="comments commen" @click="onConfirm">确认收货</div>
-			<div class="canel commen" @click="goLogistics">查看物流</div>
-			<router-link to="/shop/refund"><div class="view commen">退货</div></router-link>
-		</div>
-
-		<!-- 买家已付款 有返积分-->
-		<div class="footer" v-else-if="value == 3">
-			<div class="view commen" @click="shipmentCancel">取消发货</div>
-		</div>
-
-		<!-- 等待买家付款 有返积分-->
-		<div class="footer" v-else-if="value == 2">
-			<router-link to="/shop/confirm"><div class="canel commen">付款</div></router-link>
-			<div class="view commen" @click="orderCancel">取消订单</div>
-		</div>
-
-		<!-- 交易关闭 未付款 无返积分 -->
-		<div class="footer" v-else-if="value == 4">
-			<div class="view commen" @click="orderDelete">删除订单</div>
-		</div>
-		
 	</div>
 </template>
 
 <script>
-import settingHeader from '../../components/setting_header'
-import recommended from './components/recommended'
+	import settingHeader from '../../components/setting_header'
 
 	export default {
-		data(){
+		data() {
 			return {
 				title: '订单详情',
-				cancelShipment:false,
-				list: [
-					{ label: '积分类型', value:'信用积分'},
-					{ label: '运费', value:'10.00'},
-					{ label: '实运费', value:'100积分+30.00元'}
-				],
-				list2: [
-					{ label: '订单编号', value:'信用积分'},
-					{ label: '创建时间', value:'10.00'},
-					{ label: '订单状态', value:'买家已收货'},
-					{ label: '完成时间', value:'2018-03-17 11:44:21'}
-				],
-				value: 1
+				orderSn: '',
+				orderDetail: {},
+				good: {}
 			}
 		},
 		components: {
-			settingHeader,recommended
+			settingHeader
+		},
+		created() {
+			this.orderSn = this.$route.query.orderSn
+			this.getOrderDetail()
 		},
 		methods: {
-			onClick:function(){
-				console.log('-=-')
-			},
-			goWritecomments: function(){
-				this.$router.push({ path: '/shop/write_comments'})
-			},
-			goRefund(){
-				this.$router.push({ path: '/shop/refund'})
-			},
-			goLogistics(){
-		    	this.$router.push({ path: '/shop/logistics'})
-		    },
-		    goTsuccess(){
-		    	this.$router.push({ path: '/shop/t_success'})
-		    },
-		    // 确认收货
-		    onConfirm(){
-		    	let _this = this;
-		    	_this.$dialog.show({
-		    		type: 'warning',
-		    		headMessage: '确认收货',
-		    		message: '亲,您的快件状态是已到达,是否确定收到货?',
-		    		buttons: ['确定', '取消'],
-		    		canel() {
-		    			_this.$dialog.hide()
-		    		},
-		    		confirm() {
-		    			_this.goTsuccess()
-		    			_this.$dialog.hide()
-		    		}
-		    	})
-		    	console.log(_this.$dialog)
-		    },
-		    shipmentCancel(){
-		    	let _this = this;
-		    	_this.$dialog.show({
-		    		type: 'warning',
-		    		headMessage: '取消发货',
-		    		message: '亲,您是否确定取消发货？',
-		    		buttons: ['确定', '取消'],
-		    		canel() {
-		    			_this.$dialog.hide()
-		    		},
-		    		confirm() {
-		    			// _this.goTsuccess()
-		    			_this.$dialog.hide()
-		    		}
-		    	})
-		    	console.log(_this.$dialog)
-		    },
-		    showToast(){
-				this.$vux.toast.show({
-					text: '暂无客服功能',
-					type: 'text',
-					width: '10em',
-					position: 'middle'
+			getOrderDetail() {
+				var _this = this
+
+				_this.$http.get(_this.url.order.getOrderDetail, {
+					params: {
+						//userId: _this.$store.state.user.userId,
+						userId: 'userDev01',
+						orderSn: _this.orderSn
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.orderDetail = res.data.data.data
+
+						_this.good = res.data.data.data.items[0] //设备商品
+					}
 				})
 			},
-			orderCancel(){
-				let _this = this;
-		    	_this.$dialog.show({
-		    		type: 'warning',
-		    		headMessage: '取消订单',
-		    		message: '亲,您是否确定取消订单？',
-		    		buttons: ['确定', '取消'],
-		    		canel() {
-		    			_this.$dialog.hide()
-		    		},
-		    		confirm() {
-		    			// _this.goTsuccess()
-		    			_this.$dialog.hide()
-		    		}
-		    	})
-		    	console.log(_this.$dialog)
+			//删除订单
+			deleteOrder() {
+				var _this = this
+				_this.$dialog.show({
+					type: 'warning',
+					headMessage: '提示',
+					message: '亲,您确定要删除该订单？',
+					buttons: ['确定', '取消'],
+					canel() {
+
+					},
+					confirm() {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '删除成功'
+						})
+					}
+				})
 			},
-			orderDelete(){
-				let _this = this;
-		    	_this.$dialog.show({
-		    		type: 'warning',
-		    		headMessage: '删除订单',
-		    		message: '亲,您是否确定删除订单？',
-		    		buttons: ['确定', '取消'],
-		    		canel() {
-		    			_this.$dialog.hide()
-		    		},
-		    		confirm() {
-		    			// _this.goTsuccess()
-		    			_this.$dialog.hide()
-		    		}
-		    	})
-		    	console.log(_this.$dialog)
-			},
-			goMultiUserMall(){
-				this.$router.push({path: '/multi_user_mall'})
-			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-li{
-	list-style: none;
-	background: #F5F6FA;
-	margin-bottom: 0.04rem;
-	overflow: hidden;
-} 
-.order-details{
-	background: #F5F6FA;
-	.top{
-		background: #fff;
-		border-top: 0.01rem solid #E1E1E1;
-		font-size: 0.3rem;
-		color: #222222;
-		display: flex;
-		.top-left{
-			flex: 1;
-			margin: 0.33rem 0 0.33rem 0.32rem;
-			img{
-				width: 8%;
-				margin-right: 0.07rem;
-				float: left;
-			}
-			.left-text{
-				margin-top: -0.02rem;
-				float: left;
-			}
-			.icon{
-				margin-left: 0.12rem;
-				width:6%;
-				margin-top: 0.03rem
-			}
-		}
-		.top-right{
-			width: 1.8rem;
-			margin: 0.16rem 0.2rem 0.16rem 0;
-			border: 0.02rem solid #90A2C7;
-			border-radius: 0.1rem;
-			padding: 0.15rem 0.18rem 0.19rem 0.27rem;
-			img{
-				width: 20%;
-				vertical-align:middle; 
-				margin-right: 0.2rem;
-			}
-			.right-text{
-				font-size: 0.28rem;
-				color: #7386AD;
-			}
-		}
-	}
-	.order{
-		width: 100%;
-		background: #fff;
-		.order-content{
-			width: 100%;
-			overflow: hidden;
-			.order-img{
-				float: left;
-				width: 22%;
-				margin-right: 0.19rem;
-				img{
-					width: 99%;
-					margin: 0.05rem 0 0.05rem 0.06rem;
-				}
-			}
-			.text-right{
-				float: left;
-				font-size: 0.3rem;
-				color: #1A2642;
-				margin-top: 0.18rem;
-				width: 70%;
-				.text-gray{
-					font-size: 0.24rem;
-					color: #90A2C7;
-					margin-top: 0.05rem;
-				}
-				.fr{
-					float: right;
-				}
-			}
-		}
-		.order-btn{
-			clear: both;
-			width: 100%;
-			padding: 0.12rem 0;
-			.commen{
-				float: right;
-				margin-right: 0.2rem;
-				margin-bottom: 0.12rem;
-				text-align: center;
-				height: 0.5rem;
-				line-height: 0.54rem;
-				width: 1.5rem;
-			}
-			.comments{
-				border: 0.01rem solid #336FFF;
-				border-radius: 0.04rem;
-				color: #336FFF;
-			}
-			.giveup{
-				border: 0.01rem solid #90A2C7;
-				border-radius: 0.04rem;
-				color: #90A2C7;
-			}
-		}
-		
-	}
-	.content{
-		clear: both;
-		width: 100%;
-		/*margin-bottom: 0.2rem;*/
-		overflow: auto;
-		padding-bottom: 1.22rem;
-		ul{
-			background: #fff;
-			.ul-top{
-				margin-top: 0.2rem;
-				margin-left: 0.24rem;
-				font-size: 0.28rem;
-				color: #1A2642;
+	.order-details-box {
+		background-color: #F5F6FA;
+		padding-bottom: 1.2rem;
+		.order_item {
+			background-color: white;
+			.order_top {
+				height: 0.8rem;
 				display: flex;
-				border-bottom: 0.01rem solid #E1E1E1;
-				.ul-left{
-					width: 1.52rem;
-					margin: 0.12rem 0.28rem 0.12rem 0;
-					img{
-						width: 100%;
-						vertical-align:middle; 
+				justify-content: space-between;
+				box-sizing: border-box;
+				padding: 0.17rem 0.30rem;
+				.left {
+					width: 65%;
+					display: flex;
+					align-items: center;
+					img {
+						width: 0.36rem;
+						height: 0.36rem;
+						margin-right: 0.23rem;
+					}
+					p {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
+					}
+					i {
+						font-size: 0.5rem;
 					}
 				}
-				.ul-right{
+				.right {
+					width: 35%;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					font-size: 0.26rem;
+					font-family: PingFangSC-Medium;
+					color: rgba(51, 111, 255, 1);
+				}
+			}
+			.order_middle {
+				height: 1.70rem;
+				display: flex;
+				background: rgba(245, 246, 250, 1);
+				position: relative;
+				.left {
+					width: 1.70rem;
+					height: 1.70rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					img {
+						width: 80%;
+						height: auto;
+					}
+				}
+				.middle {
+					width: 3.8rem;
+					padding: 0.18rem;
+					box-sizing: border-box;
+					.name {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
+					}
+					.pinfo {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(144, 162, 199, 1);
+						margin-top: 0.05rem;
+					}
+				}
+				.right {
 					flex: 1;
-					margin-right: 0.28rem;
-					margin-top: 0.17rem;
-					p{
-						font-size: 0.36rem;
-						color: #90A2C7;
-						margin-top: 0.21rem;
+					text-align: right;
+					padding: 0.18rem 0.30rem 0rem 0rem;
+					box-sizing: border-box;
+					.price {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+					}
+					.oldprice {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(142, 160, 204, 1);
+						text-decoration: line-through
+					}
+					.num {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(144, 162, 199, 1);
+						margin-top: 0.05rem;
 					}
 				}
 			}
-			.return{
-				padding: 0.35rem 0;
-				padding-left: 0.21rem;
-				font-size: 0.28rem;
-				color: #90A2C7;
-				.return-red{
-					background-image: linear-gradient(269deg, #FF7A80 0%, #FF5365 100%);
-					width: 0.88rem;
-					border-radius: 0.02rem;
-					font-size: 0.24rem;
-					color: #FFFFFF;
-					text-align: center;
-					float: left;
-					margin-right: 0.1rem;
+			.m:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #D8DFF0;
+				color: #D8DFF0;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
+			}
+			.order_bottom {
+				height: 2.77rem;
+				background: rgba(255, 255, 255, 1);
+				padding: 0 0.20rem;
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: column;
+				.top {
+					height: 1.74rem;
+					padding: 0.33rem 0;
+					box-sizing: border-box;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					border-bottom: 1px solid rgba(225, 225, 225, 1);
+					div {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						span {
+							font-size: 0.28rem;
+							font-family: PingFangSC-Regular;
+							color: rgba(26, 38, 66, 1);
+						}
+					}
 				}
-				.score-blue{
+				.bottom {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					span {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+					}
+					.red {
+						color: #F23030;
+					}
+				}
+			}
+		}
+		.pay-box {
+			background: rgba(255, 255, 255, 1);
+			margin-top: 0.20rem;
+			padding: 0.40rem 0.20rem;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			div {
+				margin-bottom: 0.33rem;
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+				span,
+				.one {
+					font-size: 0.28rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(26, 38, 66, 1);
+				}
+			}
+			div:last-child {
+				margin-bottom: 0;
+			}
+			.last {
+				.two {
+					font-size: 0.24rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(144, 162, 199, 1);
+				}
+			}
+		}
+		.time-box {
+			margin-top: 0.20rem;
+			background: rgba(255, 255, 255, 1);
+			padding: 0.40rem 0.20rem;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			div {
+				margin-bottom: 0.33rem;
+				display: flex;
+				align-items: center;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+			}
+			div:last-child {
+				margin-bottom: 0;
+			}
+		}
+		.zf-box {
+			margin-top: 0.20rem;
+			height: 1rem;
+			background: rgba(255, 255, 255, 1);
+			padding: 0.40rem 0.20rem;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			.btn {
+				width: 1.1rem;
+				height: 0.40rem;
+				line-height: 0.40rem;
+				text-align: center;
+				background: linear-gradient(-90deg, rgba(255, 122, 128, 1), rgba(255, 83, 101, 1));
+				border-radius: 2px;
+				margin-right: 0.15rem;
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(255, 255, 255, 1);
+			}
+			div:nth-child(2) {
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(144, 162, 199, 1);
+				span {
 					color: #336FFF;
 				}
 			}
 		}
-
+		.order_bth_box {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 1rem;
+			.b-top {
+				position: relative;
+				padding: 0.18rem;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				background-color: white;
+				height: 100%;
+			}
+			.b-top:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #d5d5d6;
+				color: #D9D9D9;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
+			}
+			.btn {
+				display: flex;
+				justify-content: flex-end;
+				div {
+					display: flex;
+					align-items: center;
+					text-align: center;
+					height: 0.56rem;
+					padding: 0.18rem;
+					box-sizing: border-box;
+					border: 1px solid rgba(144, 162, 199, 1);
+					border-radius: 2px;
+					margin-left: 0.53rem;
+					font-size: 0.26rem;
+					font-family: PingFangSC-Medium;
+					color: rgba(144, 162, 199, 1);
+				}
+				div:last-child {
+					border: 1px solid rgba(51, 111, 255, 1);
+					color: rgba(51, 111, 255, 1);
+				}
+			}
+		}
 	}
-	.footer{
-		position: fixed;
-		width: 100%;
-		bottom: 0;
-		background: #fff;
-		font-size: 0.28rem;
-		color: #90A2C7;
-		padding: 0.22rem 0;
-		border-top: 1px solid #E1E1E1;
-		.commen{
-			float: right;
-			margin-right: 0.2rem;
-			text-align: center;
-			width: 1.5rem;
-			height: 0.56rem;
-			line-height: 0.6rem;
-		}
-		.view{
-			border: 0.01rem solid #90A2C7;
-			border-radius: 0.04rem;
-			color: #90A2C7;
-		}
-		.comments{
-			border: 0.01rem solid #F23030;
-			border-radius: 0.04rem;
-			color: #F23030;
-		}
-		.canel{
-			border: 0.01rem solid #336FFF;
-			border-radius: 0.04rem;
-			color: #336FFF;
-		}
-	}
-
-}
-</style>
-
-<style lang="less">
-.ul-content{
-	margin-bottom: 0.2rem;
-}
-.ul-content .weui-cells{
-	margin-top: 0;
-}
-.ul-content .weui-form-preview__bd{
-	color: #1A2642;
-}
-.ul-content .weui-form-preview__bd div:nth-child(3){
-	color: #336FFF;
-}
-.ul-content .weui-cells:before{
-	border-top: none;
-}
-.ul-content .weui-form-preview__label{
-	color: #90A2C7;
-	margin-left: 0.15rem;
-	text-align: left;
-	text-align-last: left;
-}
-.ul-content .weui-form-preview__value{
-	margin-right: 0.44rem;
-}
 </style>

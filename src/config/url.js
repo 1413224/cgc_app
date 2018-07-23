@@ -1,6 +1,7 @@
 var uri1 = '/user',
 	uri2 = '/datacenter',
-	uri3 = '/order'
+	uri3 = '/order',
+	uri4 = '/goods'
 
 var url = {
 	platformId: 2018050800000002, //平台ID
@@ -24,6 +25,7 @@ var url = {
 		getVerificationCode1: uri1 + '/v1/sms/getVerificationCode', //登录后获取验证码
 		authVerification: uri1 + '/public/v1/sms/authVerificationCode', //检测验证码是否正确
 		setPayPassword: uri1 + '/v1/user/setPayPassword', //设置支付密码
+		setPayPasswordByMobile: uri1 + '/v1/user/setPayPasswordByMobile', //根据短信验证码设置支付密码
 		changeNickname: uri1 + '/v1/user/changeNickname', //修改用户名
 		changeAvatar: uri1 + '/v1/user/changeAvatar', //修改用户头像
 		addShippingAddress: uri1 + '/v1/user/addShippingAddress', //添加收货地址
@@ -78,6 +80,12 @@ var url = {
 	order: {
 		getOrderList: uri3 + '/v1/order/getOrderList', //获取订单列表
 		getNewOrderList: uri3 + '/v1/order/getNewOrderList', //获取最新订单
+		getOrderDetail: uri3 + '/v1/order/getOrderDetail', //获取订单详情
+		deleteOrderByOrderSn: uri3 + '/v1/order/deleteOrderByOrderSn', //删除订单
+		cancelOrderByOrderSn: uri3 + '/v1/order/cancelOrderByOrderSn', //取消订单
+	},
+	share: {
+		getEquipmentInfo: uri4 + '/public/v1/goods/getEquipmentInfo', //获取设备详细信息接口
 	}
 
 }

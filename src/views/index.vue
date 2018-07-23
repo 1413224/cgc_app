@@ -56,7 +56,7 @@
 
 				<div class="store-allbox" v-for="item in proList">
 					<div class="titlebox" v-if="item.title">{{item.title}}</div>
-					<div class="auto-img">
+					<div class="auto-img" @click="$router.push({path:'/brand/global'})">
 						<img :src="item.img" />
 					</div>
 					<div class="pro-box">
@@ -291,12 +291,12 @@
 					{
 						title: '大牌好货',
 						img: './static/index/index_nav9.png',
-						url: '/brand/index'
+						url: '/brand/famous'
 					},
 					{
 						title: '海外购',
 						img: './static/index/index_nav10.png',
-						url: '/brand/global'
+						url: '/brand/shop'
 					},
 					{
 						title: '优质企业',
@@ -341,14 +341,14 @@
 							tip: '美国蔻驰贝壳包',
 							img: './static/index/baobao.png',
 							color: 'blue',
-							url: '/brand/global'
+							url: '/brand/shop'
 						},
 						{
 							name: '国际品牌',
 							tip: 'JAYJUN补水面膜',
 							img: './static/index/mianmo.png',
 							color: 'red',
-							url: '/brand/index'
+							url: '/brand/famous'
 						}
 					]
 				}, {

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div v-if="type == 'code'">
-			<popup class="code-popup" height="100%" v-model="showCode" @on-hide="hide">
+			<popup class="code-popup" height="100%" v-model="showCode" @on-hide="hide" @on-show="show">
 				<x-header class="code-header" :left-options="{showBack: false}">
 					请输入验证码
 					<a slot="right" @click="showCode = false">关闭</a>
@@ -25,7 +25,7 @@
 		</div>
 
 		<div v-if="type == 'pay'">
-			<popup class="pay-popup" v-model="showCode" @on-hide="hide">
+			<popup class="pay-popup" v-model="showCode" @on-hide="hide" @on-show="show">
 				<div>
 					<x-header class="code-header" :left-options="{showBack: false}">
 						请输入支付密码
@@ -62,7 +62,8 @@
 	export default {
 		props: {
 			type: String,
-			change: Function
+			change: Function,
+			codeChange: Function
 		},
 		data() {
 			return {
@@ -72,7 +73,8 @@
 				iserror: false,
 				code: '',
 				payNum: [],
-				keyboard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 'C', 0, '']
+				keyboard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 'C', 0, ''],
+				payPassword: []
 			}
 		},
 		created() {
@@ -90,10 +92,13 @@
 
 				if(_this.payNum.length < 6 && index != 9 && index != 11) {
 					_this.payNum.push('●')
+					_this.payPassword.push(num)
 				} else if(index == 9) {
 					_this.payNum = []
+					_this.payPassword = []
 				} else if(index == 11) {
 					_this.payNum.pop()
+					_this.payPassword.pop()
 				}
 			},
 			one(val) {
@@ -123,7 +128,31 @@
 			hide() {
 				if(this.type == 'pay') {
 					this.payNum = []
-					this.ishide()
+					if(this.ishide) {
+						this.ishide()
+					}
+				}
+
+				if(this.type == 'code') {
+					this.code = ""
+					if(this.ishide) {
+						this.ishide()
+					}
+				}
+			},
+			show() {
+				if(this.type == 'pay') {
+					this.payNum = []
+					if(this.isshow) {
+						this.isshow()
+					}
+				}
+
+				if(this.type == 'code') {
+					this.code = ""
+					if(this.isshow) {
+						this.isshow()
+					}
 				}
 			}
 		},
@@ -131,14 +160,34 @@
 			payNum() {
 				var _this = this
 				if(_this.payNum.length == 6) {
-					setTimeout(function(){
-						_this.change()
-					},100)
+					var n = _this.payPassword.toString()
+					var p = n.replace(/,/g, "")
+					setTimeout(function() {
+						_this.vm.$http.post(_this.vm.url.user.authPayPassword, {
+							userId: _this.vm.$store.state.user.userId,
+							payPassword: _this.vm.MD5(p)
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								if(res.data.data == 1) {
+									_this.change()
+								} else if(res.data.data == 2) {
+									this.vm.$vux.toast.show({
+										width: '50%',
+										type: 'text',
+										text: '支付密码错误'
+									})
+								}
+							} else {
+								_this.showCode = false
+							}
+						})
+					}, 100)
 				}
 			},
 			showCode() {
 				if(this.showCode == false) {
 					this.payNum = []
+					this.code = ""
 				}
 			}
 		},

@@ -238,7 +238,7 @@
 					position: relative;
 					box-sizing: border-box;
 					p:nth-child(1) {
-						font-size: 0.30rem;
+						font-size: 0.32rem;
 						color: rgba(26, 38, 66, 1);
 					}
 					p:nth-child(2) {
@@ -294,6 +294,7 @@
 					}
 					p {
 						color: rgba(26, 38, 66, 1);
+						font-size: 0.48rem;
 					}
 				}
 				.one-item:nth-child(2) {
@@ -303,7 +304,7 @@
 						color: rgba(115, 134, 173, 1);
 					}
 					p:nth-child(2) {
-						font-size: 0.28rem;
+						font-size: 0.48rem;
 						color: rgba(115, 134, 173, 1);
 					}
 				}

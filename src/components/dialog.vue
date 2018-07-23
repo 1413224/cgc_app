@@ -2,7 +2,7 @@
 	<section>
 		<!-- 弹出框 -->
 		<div v-transfer-dom class="vue-dialog">
-			<x-dialog v-model="showDialog" :hide-on-blur="false" @on-hide="ishide">
+			<x-dialog v-model="showDialog" :hide-on-blur="closing" @on-hide="hide" @on-show="show">
 				<div class="dia">
 					<div class="img"><img :src="'./static/images/'+type+'.png'"></div>
 					<div class="dia_top">
@@ -32,9 +32,9 @@
 			message: String,
 			closing: Boolean, //按钮点击是否自动关闭
 			clickDelay: Number, //按钮点击延迟多少时间关闭  
-			delay: Number, //多少时间后自动关闭   clickDelay为false时有效
 			buttons: Array,
 			type: String, //type: failure/success/warning  //buttons: 确定、取消、我知道了
+			isClick: false
 		},
 		components: {
 			XDialog
@@ -47,7 +47,10 @@
 		methods: {
 			handleFun() {
 				var _this = this
-				_this.canel()
+				if(!_this.isClick) {
+					_this.canel()
+					_this.isClick = true
+				}
 				if(!_this.closing) {
 					if(_this.clickDelay) {
 						setTimeout(function() {
@@ -62,7 +65,10 @@
 			},
 			confirm2() {
 				var _this = this
-				_this.confirm()
+				if(!_this.isClick) {
+					_this.confirm()
+					_this.isClick = true
+				}
 				if(!_this.closing) {
 					if(_this.clickDelay) {
 						setTimeout(function() {
@@ -75,7 +81,17 @@
 					_this.showDialog = true
 				}
 			},
-			ishide() {}
+			hide() {
+				if(this.ishide) {
+					this.ishide()
+				}
+				this.isClick = false
+			},
+			show() {
+				if(this.isshow) {
+					this.isshow()
+				}
+			}
 		}
 	}
 </script>

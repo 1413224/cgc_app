@@ -57,7 +57,7 @@
 				</div>
 				<div class="clear"></div>
 
-				<div class="winList">
+				<div class="winList" v-if="1>2">
 					<!-- 中奖人员 -->
 					<div class="win-person">
 						<div class="wz-period">中奖名单</div>
@@ -574,7 +574,7 @@
 			align-items: center;
 			padding: 0.37rem 0;
 			box-sizing: border-box;
-			border-bottom:1px solid #E6E6E6;
+			border-bottom: 1px solid #E6E6E6;
 			.left {
 				margin-right: 0.2rem;
 				img {

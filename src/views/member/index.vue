@@ -6,10 +6,8 @@
 				<div class="info-bg" v-if="isLogin">
 					<router-link to="/member/setting/index"><img class="setting-img" :src="'./static/member/shezi.png'" /></router-link>
 					<div class="avatar">
-						<router-link to="/member/info/index">
-							<img v-if="userInfo.avatar" :src="userInfo.avatar.original?userInfo.avatar.original:'./static/images/mrtx.png'" alt="" />
-							<img v-else :src="'./static/images/mrtx.png'" alt="">
-						</router-link>
+						<img v-if="userInfo.avatar" :src="userInfo.avatar.original" @click="$router.push({path:'/member/info/index'})" alt="" />
+						<img v-else :src="'./static/images/mrtx.png'" alt="">
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:userInfo.mobile}}</p>
 						<!--<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>-->
 						<p class="bj" @click="$router.push({path:'/member/info/data'})">编辑个人资料 <i class="icon iconfont icon-arrow-right"></i></p>
@@ -39,12 +37,12 @@
 					</div>
 				</div>
 				<div class="info-bg" v-else>
-					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
+					<router-link to="/member/setting/index">
+						<img class="setting-img" src="../../assets/images/member/shezi.png" />
+					</router-link>
 					<div class="avatar noLogin">
-						<router-link to="/member/info/index">
-							<img :src="'./static/images/mrtx.png'" alt="">
-						</router-link>
 						<router-link to="/user/reg">
+							<img :src="'./static/images/mrtx.png'" alt="">
 							<p>登录 / 注册</p>
 						</router-link>
 					</div>
@@ -110,19 +108,9 @@
 						<li @click="toOrder(1)">
 							<a href="javascript:void(0)">
 								<div class="li-box2">
-									<img :src="'./static/member/order-2.png'">
+									<img :src="'./static/member/order-6.png'">
 								</div>
-								<p>待发货</p>
-							</a>
-						</li>
-						<li @click="toOrder(2)">
-							<a href="javascript:void(0)">
-								<div class="li-box2">
-									<img :src="'./static/member/order-3.png'">
-									<badge class="new-account" text="23"></badge>
-								</div>
-
-								<p>待收货</p>
+								<p>进行中</p>
 							</a>
 						</li>
 						<li @click="toOrder(3)">
@@ -333,8 +321,8 @@
 			position: relative;
 		}
 		.setting-img {
-			width: 0.44rem;
-			height: 0.44rem;
+			width: 0.36rem;
+			height: 0.38rem;
 			position: absolute;
 			right: 0.33rem;
 			top: 0.28rem;

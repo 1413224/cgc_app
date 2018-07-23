@@ -6,10 +6,10 @@
 			<input type="text" readonly="readonly" placeholder="搜索" />
 		</div>
 		<div class="banner-box">
-			<img :src="'./static/brand/riben.png'" />
+			<img :src="bannerImg" />
 		</div>
 		<div class="title-box">优质品牌</div>
-		<div v-for="(item,index) in sList">
+		<div v-for="(item,index) in list">
 			<div class="content-box" :style="{backgroundImage: 'url('+ item.bgImg +')',backgroundSize: 'cover',backgroundrRepeat: 'no-repeat'}">
 				<div class="middle">
 					<div class="left">
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div class="swiper-inner">
-				<swiper :options="swiperOption" class="swiper">
+				<swiper :options="swiperOption" :id="index" class="swiper">
 					<swiper-slide v-for="(i,index) in item.zstList" :key="index">
 						<img :src="i.img" />
 						<div class="tip">
@@ -33,11 +33,15 @@
 							<p class="money">¥ {{i.money}}</p>
 						</div>
 					</swiper-slide>
+					<!--<swiper-slide>
+						查看更多
+						<img :src="'./static/brand/JT.png'" alt="" />
+					</swiper-slide>-->
 				</swiper>
 			</div>
 		</div>
 		<div class="pro-allbox">
-			<div class="title-box">优质品牌</div>
+			<div class="title-box">优质好货</div>
 			<div class="item-box">
 				<div class="item" v-for="(item,index) in pList" :key="index">
 					<div class="da-box">
@@ -63,11 +67,11 @@
 		data() {
 			return {
 				title: '品牌馆',
-				swiperOption: {
-					slidesPerView: 'auto',
-					autoplay: false
-				},
-				sList: [{
+				swiperOption: {},
+				swiperIndex: 0,
+				list: [],
+				bannerImg: '',
+				rbList: [{
 					id: 1,
 					bgImg: './static/brand/zst-bg.png',
 					logo: './static/brand/zst.png',
@@ -149,6 +153,662 @@
 						}
 					]
 				}],
+				hgList: [{
+					id: 1,
+					bgImg: './static/brand/hg-bg.png',
+					logo: './static/brand/hg.png',
+					text1: 'WHOO 后',
+					text2: '“皇后”的秘诀',
+					zstList: [{
+							name: 'WHOO后天气丹花献光彩紧颜系列礼盒7件套(333ml)',
+							money: '1,540.00',
+							img: './static/brand/hg-pr1.png'
+						},
+						{
+							name: 'WHOO后拱辰享 气韵生润颜洁面膏',
+							money: '285.00',
+							img: './static/brand/hg-pr2.png'
+						},
+						{
+							name: 'WHOO后拱辰享水水沄水乳礼盒6件套(308ml)',
+							money: '820.00',
+							img: './static/brand/hg-pr3.png'
+						},
+						{
+							name: 'WHOO后拱辰享气韵生润颜系列礼盒7件套（334ml+2g）',
+							money: '1,220.00',
+							img: './static/brand/hg-pr4.png'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/lz-bg.jpg',
+					logo: './static/brand/lz.png',
+					text1: 'LANEIGE兰芝',
+					text2: '唤醒肌肤闪耀之美',
+					zstList: [{
+							name: 'Laneige兰芝雪纱防晒隔离霜妆前乳 美白裸妆提亮肤色30ml',
+							money: '245.00 ',
+							img: './static/brand/lz-pr1.jpg'
+						},
+						{
+							name: 'Laneige兰芝补水保湿面膜夜间修护睡眠面膜70ml',
+							money: '139.00',
+							img: './static/brand/lz-pr2.jpg'
+						},
+						{
+							name: 'Laneige兰芝夜间保湿修护唇膜 保湿滋润 淡化唇纹 唇部护理',
+							money: '125.00',
+							img: './static/brand/lz-pr3.jpg'
+						},
+						{
+							name: '兰芝小白光气垫BB美白防晒遮瑕持久不易脱妆自然',
+							money: '325.00',
+							img: './static/brand/lz-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/ys-bg.jpg',
+					logo: './static/brand/ys.jpg',
+					text1: 'its skin伊思',
+					text2: '蜗牛霜创始者',
+					zstList: [{
+							name: '韩国正品its skin伊思红参蜗牛BB霜50ml 保湿隔离提亮美白遮瑕',
+							money: '118.00',
+							img: './static/brand/ys-pr1.jpg'
+						},
+						{
+							name: 'Its skin伊思晶钻蜗牛霜修护补水紧致保湿滋润面霜',
+							money: '245.00',
+							img: './static/brand/ys-pr2.jpg'
+						},
+						{
+							name: 'Its skin伊思晶钻蜗牛面膜 营养滋润修护焕白保湿补水锁水紧致嫩肤',
+							money: '118.00',
+							img: './static/brand/ys-pr3.jpg'
+						},
+						{
+							name: 'Its skin伊思晶钻蜗牛再生乳液1号清爽型140ml',
+							money: '159.00',
+							img: './static/brand/ys-pr4.jpg'
+						}
+					]
+				}],
+				oxList: [{
+					id: 1,
+					bgImg: './static/brand/ojb-bg.jpg',
+					logo: './static/brand/ojb.jpg',
+					text1: 'BLACKMORES澳佳宝',
+					text2: '澳洲天然健康品牌',
+					zstList: [{
+							name: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米伽3中老年澳洲保健品',
+							money: '196.00',
+							img: './static/brand/ojb-pr1.jpg'
+						},
+						{
+							name: 'Blackmores澳佳宝葡萄糖胺软骨素120片呵护关节健康',
+							money: '179.00',
+							img: './static/brand/ojb-pr2.jpg'
+						},
+						{
+							name: 'Blackmores/澳佳宝孕妇黄金营养素180粒含叶酸DHA',
+							money: '179.00',
+							img: './static/brand/ojb-pr3.jpg'
+						},
+						{
+							name: 'Blackmores澳佳宝小白菊偏头痛缓释胶囊60粒CW澳洲大药房',
+							money: '169.00',
+							img: './static/brand/ojb-pr4.jpg'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/ego-bg.jpg',
+					logo: './static/brand/ego.jpg',
+					text1: 'Ego',
+					text2: '专注敏感肌肤护理',
+					zstList: [{
+							name: 'Ego QV新生婴幼儿润肤保湿霜 宝宝补水儿童润肤霜250g小老虎面霜',
+							money: '86.00',
+							img: './static/brand/ego-pr1.jpg'
+						},
+						{
+							name: 'ego澳洲进口 婴幼儿童宝宝防晒乳霜sunsense物理防紫外线霜SPF50',
+							money: '65.00',
+							img: './static/brand/ego-pr2.jpg'
+						},
+						{
+							name: 'ego QV 止汗露腋下去味走珠 爽身除汗滚珠男女士抑汗80g澳洲进口',
+							money: '72.00',
+							img: './static/brand/ego-pr3.jpg'
+						},
+						{
+							name: 'Ego QV宝宝 沐浴露新生婴儿洗发沐浴二合一儿童250g澳洲进口',
+							money: '75.00',
+							img: './static/brand/ego-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/eco-bg.jpg',
+					logo: './static/brand/eco.jpg',
+					text1: 'eco',
+					text2: ' +safer for you',
+					zstList: [{
+							name: 'ecostore真丝羊毛洗衣液500ml 进口内裤内衣珍贵高档衣物洗涤剂',
+							money: '78.00',
+							img: './static/brand/eco-pr1.jpg'
+						},
+						{
+							name: 'ecostore天然进口肥皂洗澡香皂沐浴洗脸皂正品羊奶皂80g*6',
+							money: '139.00 ',
+							img: './static/brand/eco-pr2.jpg'
+						},
+						{
+							name: 'ecostore孕妇洗发水220ml 天然无香洗发露无硅油新西兰进口正品',
+							money: '88.00',
+							img: './static/brand/eco-pr3.jpg'
+						},
+						{
+							name: 'ecostore玫瑰豆蔻洗手液250ml 天然杀菌抑菌清洁剂新西兰进口',
+							money: '62.00 ',
+							img: './static/brand/eco-pr4.jpg'
+						}
+					]
+				}],
+				mgList: [{
+					id: 1,
+					bgImg: './static/brand/cc-bg.jpg',
+					logo: './static/brand/cc.png',
+					text1: 'COACH 蔻驰',
+					text2: '蔻驰美式轻奢时尚',
+					zstList: [{
+							name: '粒面皮革COACH SWAGGER CARRYALL 27手提包',
+							money: '5450.00',
+							img: './static/brand/cc-pr1.jpg'
+						},
+						{
+							name: 'COACH抛光粒面皮革旋锁链带大手袋',
+							money: '3500.00',
+							img: './static/brand/cc-pr2.jpg'
+						},
+						{
+							name: 'COACH铬鞣皮革茶玫瑰印花DINKY手袋',
+							money: '6500.00',
+							img: './static/brand/cc-pr3.jpg'
+						},
+						{
+							name: 'COACH抛光粒面皮革PRAIRIE手提包',
+							money: '3500.00',
+							img: './static/brand/cc-pr4.jpg'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/bs-bg.jpg',
+					logo: './static/brand/bs.png',
+					text1: 'BOSE',
+					text2: '激情动听，从此不受线制',
+					zstList: [{
+							name: 'BOSE QuietControl 30 无线耳机 蓝牙降噪耳机 进口',
+							money: '1939.00',
+							img: './static/brand/bs-pr1.jpg'
+						},
+						{
+							name: 'BOSE soundsport wireless无线 蓝牙入耳式 运动耳机',
+							money: ' 1059.00',
+							img: './static/brand/bs-pr2.jpg'
+						},
+						{
+							name: 'BOSE QUIETCOMFORT35 Ⅱ QC35II 无线降噪蓝牙耳罩式耳机主动降噪',
+							money: '2887.00',
+							img: './static/brand/bs-pr3.jpg'
+						},
+						{
+							name: 'BOSE SOUNDSPORT PULSE无线运动耳机 测心率蓝牙运动耳机',
+							money: '1787.00',
+							img: './static/brand/bs-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/jbl-bg.jpg',
+					logo: './static/brand/jbl.png',
+					text1: 'JBL',
+					text2: '荣获“技术格莱美奖”',
+					zstList: [{
+							name: 'JBL PULSE3无线蓝牙音响音乐脉动',
+							money: '1299.00',
+							img: './static/brand/jbl-pr1 (2).jpg'
+						},
+						{
+							name: ' JBL GO音乐金砖无线蓝牙音响音箱音响 家用 进口',
+							money: '169.00',
+							img: './static/brand/jbl-pr2 (2).jpg'
+						},
+						{
+							name: 'JBL CLIP2 防水蓝牙音响 便携 蓝牙音箱',
+							money: '349.00',
+							img: './static/brand/jbl-pr3 (2).jpg'
+						},
+						{
+							name: 'JBL CHARGE3无线蓝牙音箱音响户外',
+							money: '839.00',
+							img: './static/brand/jbl-pr4 (2).jpg'
+						}
+					]
+				}],
+				jndList: [{
+					id: 1,
+					bgImg: './static/brand/goo-bg.jpg',
+					logo: './static/brand/goo.png',
+					text1: 'Canada Goose',
+					text2: '给予温暖 无限可能',
+					zstList: [{
+							name: 'Canada Goose羽绒服女中长款毛领连帽Expedition',
+							money: '12649.00',
+							img: './static/brand/goo-pr1.jpg'
+						},
+						{
+							name: 'Canada goose女羽绒服625蓬白鸭绒Shelburne黑标防风毛领',
+							money: '12319.00',
+							img: './static/brand/goo-pr2.jpg'
+						},
+						{
+							name: 'CanadaGoose加拿大鹅羽绒服男款Selkirk派克大衣3801MA',
+							money: '9899.00',
+							img: './static/brand/goo-pr3.jpg'
+						},
+						{
+							name: 'CanadaGoose加拿大鹅羽绒服女款Kensington派克大衣2506L',
+							money: '11998.00',
+							img: './static/brand/goo-pr4.jpg'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/ll-bg.jpg',
+					logo: './static/brand/ll.png',
+					text1: 'Lululemon',
+					text2: '加拿大专业运动品牌',
+					zstList: [{
+							name: 'lululemon丨Energy 女士运动内衣 LW2326C',
+							money: '420.00',
+							img: './static/brand/ll-pr1.jpg'
+						},
+						{
+							name: 'lululemon丨Align 女士运动长裤 II LW5LJFS',
+							money: '850.00',
+							img: './static/brand/ll-pr2.jpg'
+						},
+						{
+							name: 'lululemon丨Fast Paced Run 女士运动帽LW9I16C',
+							money: '220.00',
+							img: './static/brand/ll-pr3.jpg'
+						},
+						{
+							name: 'lululemon丨Swiftly Tech 女士长袖圆领运动 T 恤 LW3MEDC',
+							money: '650.00',
+							img: './static/brand/ll-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/sr-bg.jpg',
+					logo: './static/brand/sr.png',
+					text1: 'SunRype',
+					text2: '纯水果制成无添加',
+					zstList: [{
+							name: 'SunRype儿童宝宝零食加拿大水果条72条婴儿果丹皮无添加一岁以上',
+							money: '168.00',
+							img: './static/brand/sr-pr1.png'
+						},
+						{
+							name: '2.SunRype水果条儿童宝宝零食果丹皮24条婴儿一岁以上',
+							money: '85.00',
+							img: './static/brand/sr-pr2.jpg'
+						},
+						{
+							name: 'SunRype桑莱普野莓味水果粒14g*8袋 儿童宝宝零食 天然辅食',
+							money: '49.00',
+							img: './static/brand/sr-pr3.png'
+						},
+						{
+							name: 'SunRype桑莱普香蕉草莓味水果粒14g*8袋 儿童宝宝零食',
+							money: '49.00',
+							img: './static/brand/sr-pr4.jpg'
+						}
+					]
+				}],
+				dgList: [{
+					id: 1,
+					bgImg: './static/brand/bm-bg.jpg',
+					logo: './static/brand/bm.png',
+					text1: 'PUMA 彪马',
+					text2: 'Forever Faste',
+					zstList: [{
+							name: 'Puma彪马 休闲运动小白鞋',
+							money: '1.549.00',
+							img: './static/brand/bm-pr1.jpg'
+						},
+						{
+							name: 'PUMA小花情侣男女休闲短袖T恤',
+							money: '299.00',
+							img: './static/brand/bm-pr2.jpg'
+						},
+						{
+							name: 'PUMA彪马Contrast JKT 立领休闲运动防水外套',
+							money: '599.00',
+							img: './static/brand/bm-pr3.png'
+						},
+						{
+							name: 'PUMA 彪马18春男女运动条纹拼接袜子',
+							money: '160.00',
+							img: './static/brand/bm-pr4.png'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/boss-bg.jpg',
+					logo: './static/brand/boss.jpg',
+					text1: 'BOSS',
+					text2: '成功自信，出众超群',
+					zstList: [{
+							name: 'BOSS修身版新羊毛珠边缝线外套Hayes_cyl',
+							money: '6,000.00',
+							img: './static/brand/boss-pr1.jpg'
+						},
+						{
+							name: 'BOSS常规版常规版棉质商务衬衫',
+							money: '1,300.00',
+							img: './static/brand/boss-pr2.jpg'
+						},
+						{
+							name: 'BOSS常规版弹力棉logo T恤',
+							money: '1,000.00',
+							img: './static/brand/boss-pr3.jpg'
+						},
+						{
+							name: 'BOSS修身版条纹丝光棉polo衫',
+							money: '1,200.00',
+							img: './static/brand/boss-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/ne-bg.jpg',
+					logo: './static/brand/ne.png',
+					text1: 'NIVEA妮维雅',
+					text2: '欧洲家庭信赖选择',
+					zstList: [{
+							name: '妮维雅大蓝罐面霜润肤霜身体乳女250mlCosme全家修复补水保湿滋润',
+							money: '69.00',
+							img: './static/brand/ne-pr1.png'
+						},
+						{
+							name: 'Nivea 妮维雅美白润肤乳液身体乳春夏补水保湿嫩滑400ml',
+							money: ' 69.00',
+							img: './static/brand/ne-pr2.jpg'
+						},
+						{
+							name: '妮维雅防晒乳液透亮水感防晒啫喱spf50清爽凝露女40ml',
+							money: '53.00',
+							img: './static/brand/ne-pr3.jpg'
+						},
+						{
+							name: '妮维雅男士洗面奶控油祛痘祛黑头深层清洁保湿洁面泥150ml*2',
+							money: '76.00',
+							img: './static/brand/ne-pr4.jpg'
+						}
+					]
+				}],
+				ydlList: [{
+					id: 1,
+					bgImg: './static/brand/gc-bg.jpg',
+					logo: './static/brand/gc.png',
+					text1: 'GUCCI',
+					text2: 'My Good Life',
+					zstList: [{
+							name: 'GUCCI Sylvie系列皮革迷你链条手袋',
+							money: '17,900',
+							img: './static/brand/gc-pr1.jpg'
+						},
+						{
+							name: 'GUCCI水晶G皮革中跟浅口鞋',
+							money: '9,600',
+							img: './static/brand/gc-pr2.jpg'
+						},
+						{
+							name: 'Animalier长款钱包',
+							money: '5,700',
+							img: './static/brand/gc-pr3.jpg'
+						},
+						{
+							name: '老虎切丝保龄球衫',
+							money: '7,350',
+							img: './static/brand/gc-pr4.jpg'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/fl-bg.jpg',
+					logo: './static/brand/fl.png',
+					text1: 'FILA',
+					text2: '传承百年运动基因',
+					zstList: [{
+							name: 'FILA斐乐破坏者2代女鞋街头潮流新品复古拼接时尚皮面潮鞋运动鞋',
+							money: '1152.00',
+							img: './static/brand/fl-pr1.jpg'
+						},
+						{
+							name: 'FILA斐乐男帽2018新款棒球帽透气时尚潮流运动帽男',
+							money: '252.00',
+							img: './static/brand/fl-pr2.jpg'
+						},
+						{
+							name: 'FILA斐乐手表男女情侣表时尚潮流运动大表盘腕表石英表162',
+							money: ' 669.00',
+							img: './static/brand/fl-pr3.jpg'
+						},
+						{
+							name: 'FILA斐乐男T恤2018夏季新品短袖T男时尚简约LOGO运动T恤男',
+							money: '289.00',
+							img: './static/brand/fl-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/kk-bg.jpg',
+					logo: './static/brand/kk.png',
+					text1: 'KIKO',
+					text2: '品质不再是高价的同义词',
+					zstList: [{
+							name: '意大利KIKO新款小黑管口红 豆沙色4系 持久保湿不脱色唇膏',
+							money: '49.00',
+							img: './static/brand/kk-pr1.jpg'
+						},
+						{
+							name: 'KIKO镜面3D唇釉当季热门唇彩 滋润保湿不黏腻',
+							money: '95.00',
+							img: './static/brand/kk-pr2.jpg'
+						},
+						{
+							name: 'KIKO水波纹单色眼影干湿两用 显色持久不晕染大地色人鱼姬',
+							money: '99.00',
+							img: './static/brand/kk-pr3.jpg'
+						},
+						{
+							name: '4.KIKO四色烘焙眼影干湿两用 哑光珠光色彩丰富易上色',
+							money: '169.00',
+							img: './static/brand/kk-pr4.jpg'
+						}
+					]
+				}],
+				fgList: [{
+					id: 1,
+					bgImg: './static/brand/lf-bg.jpg',
+					logo: './static/brand/lf.png',
+					text1: 'ASC 拉菲',
+					text2: '创造安全 感受安心',
+					zstList: [{
+							name: '拉菲ASC法国进口红酒徽纹干红葡萄酒整箱6支装AOC',
+							money: '699.00',
+							img: './static/brand/lf-pr1.jpg'
+						},
+						{
+							name: '拉菲ASC智利进口小瓶红酒巴斯克干红葡萄酒整箱装187ml',
+							money: '199.00',
+							img: './static/brand/lf-pr2.jpg'
+						},
+						{
+							name: '拉菲ASC法国进口红酒传奇波尔多AOC干红葡萄酒6支整箱',
+							money: '528.00',
+							img: './static/brand/lf-pr3.jpg'
+						},
+						{
+							name: '拉菲ASC进口红酒珍藏波尔多AOC干红葡萄酒6支整箱原瓶正品',
+							money: '699.00',
+							img: './static/brand/lf-pr4.jpg'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/kdy-bg.jpg',
+					logo: './static/brand/kdy.png',
+					text1: 'Cartier 卡地亚',
+					text2: '清醒气息迷人芬芳',
+					zstList: [{
+							name: 'LOVE手镯，镶嵌4颗钻石18K',
+							money: '76,000',
+							img: './static/brand/kdy-pr1.png'
+						},
+						{
+							name: 'LOVE项链18K玫瑰金',
+							money: '16,200',
+							img: './static/brand/kdy-pr2.png'
+						},
+						{
+							name: 'TANK SOLO腕表',
+							money: '18,000',
+							img: './static/brand/kdy-pr3.png'
+						},
+						{
+							name: 'TRINITY手镯',
+							money: '4,300',
+							img: './static/brand/kdy-pr4.png'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/xne-bg.jpg',
+					logo: './static/brand/xne.png',
+					text1: 'CHANEL 香奈儿',
+					text2: '独一无二精致工艺',
+					zstList: [{
+							name: '香奈儿 Chanel Gabrielle嘉柏丽尔女士淡香精',
+							money: ' 889.00 ',
+							img: './static/brand/xne-pr1.jpg'
+						},
+						{
+							name: 'Chanel香奈儿Bleu蔚蓝男士淡香水50 100ml持久木质香',
+							money: ' 555.00 ',
+							img: './static/brand/xne-pr2.jpg'
+						},
+						{
+							name: 'Chanel 香奈儿粉色邂逅淡香水EDT 柔情浪漫 女士香雾 50/100ml',
+							money: ' 699.00',
+							img: './static/brand/xne-pr3.jpg'
+						},
+						{
+							name: 'Chanel 香奈儿COCO NOIR可可小姐黑色女士香水50ml',
+							money: '4.868.00',
+							img: './static/brand/xne-pr4.jpg'
+						}
+					]
+				}],
+				ygList: [{
+					id: 1,
+					bgImg: './static/brand/bbl-bg.jpg',
+					logo: './static/brand/bbl.jpg',
+					text1: 'BURBERRY 博柏利',
+					text2: '可清新可优雅的风格',
+					zstList: [{
+							name: 'BURBERRY 博柏利男士巴宝莉春夏时尚商务休闲长袖衬衫CAMBRIDGE',
+							money: ' 1607.00',
+							img: './static/brand/bbl-pr1.jpg'
+						},
+						{
+							name: 'BURBERRY 博柏利男士2018新款商务短袖衬衫',
+							money: '2288.00',
+							img: './static/brand/bbl-pr2.jpg'
+						},
+						{
+							name: 'BURBERRY巴宝莉英国皇室品牌情侣款羊绒围巾 MU HALF MEGA CHECK',
+							money: '4189.00',
+							img: './static/brand/bbl-pr3.jpg'
+						},
+						{
+							name: 'BURBERRY 博柏利 男士海军蓝/黑色 皮革装饰烟熏格纹公文包',
+							money: '6999.00',
+							img: './static/brand/bbl-pr4.jpg'
+						}
+					]
+				}, {
+					id: 2,
+					bgImg: './static/brand/lhlh-bg.jpg',
+					logo: './static/brand/lhlh.jpg',
+					text1: 'Unilever 联合利华',
+					text2: '让生活更美好',
+					zstList: [{
+							name: '凡士林美白身体乳保湿滋润香体持久全身补水润肤乳400ml女烟酰胺',
+							money: '55.00',
+							img: './static/brand/lhlh-pr1.jpg'
+						},
+						{
+							name: 'Dove 多芬氨基酸洁面泡泡慕斯泡沫洗面奶洁面乳160ml*2',
+							money: '79.00',
+							img: './static/brand/lhlh-pr2.jpg'
+						},
+						{
+							name: 'Ponds 旁氏魔力定妆控油BB粉-粉嫩闪亮50g 遮瑕提亮 控油吸汗',
+							money: '19.00 ',
+							img: './static/brand/lhlh-pr3.jpg'
+						},
+						{
+							name: '力士植萃纯净无硅油洗发水护发素套装450g*2 受损修复',
+							money: '129.00 ',
+							img: './static/brand/lhlh-pr4.jpg'
+						}
+					]
+				}, {
+					id: 3,
+					bgImg: './static/brand/choo-bg.jpg',
+					logo: './static/brand/choo.png',
+					text1: 'JIMMY CHOO',
+					text2: '自信尊贵时尚生活品牌',
+					zstList: [{
+							name: 'Jimmy Choo Romy 85系列女士高跟鞋',
+							money: '5,150',
+							img: './static/brand/choo-pr1.jpg'
+						},
+						{
+							name: 'Jimmy Choo Kelly 100系列女士高跟鞋',
+							money: '6,890',
+							img: './static/brand/choo-pr2.jpg'
+						},
+						{
+							name: 'Jimmy Choo MISCHA 85系列女士高跟鞋',
+							money: '8,090',
+							img: './static/brand/choo-pr3.jpg'
+						},
+						{
+							name: 'Jimmy Choo MISTY 120系列女士高跟鞋',
+							money: '5,750',
+							img: './static/brand/choo-pr4.jpg'
+						}
+					]
+				}],
 				pList: [{
 						img: './static/brand/pr1.png',
 						title: '三倍透气纸尿裤NB90【4包套装】',
@@ -190,10 +850,73 @@
 				],
 			}
 		},
-		mounted: function() {
+		mounted() {
 
+			var _this = this
+
+			this.swiperOption = {
+				slidesPerView: 'auto',
+				autoplay: false,
+				freeModeMomentum: true,
+				on: {
+					touchEnd: function(event) {
+						if(this.istr) {
+							_this.change(this.el.id) //获取ID  ID代表滑动了那个swiper
+						}
+					},
+					setTranslate: function(translate) { //偏移量
+						if(translate < -180) {
+							this.istr = true
+						} else {
+							this.istr = false
+						}
+					}
+				},
+			}
+
+			if(this.$route.query.index == 0) {
+				this.list = this.hgList
+				document.title = '韩国馆'
+				this.bannerImg = './static/brand/hg-banner.png'
+			} else if(this.$route.query.index == 1) {
+				this.list = this.rbList
+				document.title = '日本馆'
+				this.bannerImg = './static/brand/riben-banner.png'
+			} else if(this.$route.query.index == 2) {
+				this.list = this.oxList
+				document.title = '澳新馆'
+				this.bannerImg = './static/brand/ox-banner.png'
+			} else if(this.$route.query.index == 3) {
+				this.list = this.mgList
+				document.title = '美国馆'
+				this.bannerImg = './static/brand/meiguo-banner.png'
+			} else if(this.$route.query.index == 4) {
+				this.list = this.jndList
+				document.title = '加拿大馆'
+				this.bannerImg = './static/brand/jnd-banner.png'
+			} else if(this.$route.query.index == 5) {
+				this.list = this.dgList
+				document.title = '德国馆'
+				this.bannerImg = './static/brand/deguo-banner.png'
+			} else if(this.$route.query.index == 6) {
+				this.list = this.ydlList
+				document.title = '意大利馆'
+				this.bannerImg = './static/brand/yidali-banner.png'
+			} else if(this.$route.query.index == 7) {
+				this.list = this.fgList
+				document.title = '法国馆'
+				this.bannerImg = './static/brand/faguo-banner.png'
+			} else if(this.$route.query.index == 8) {
+				this.list = this.ygList
+				document.title = '英国馆'
+				this.bannerImg = './static/brand/yingguo-banner.png'
+			}
 		},
-		methods: {}
+		methods: {
+			change(index) {
+				console.log(index)
+			}
+		}
 	}
 </script>
 
@@ -323,7 +1046,7 @@
 			z-index: 11;
 		}
 		.swiper-inner {
-			padding: 0.10rem 0.20rem 0 0.20rem;
+			padding: 0.10rem 0rem 0 0.20rem;
 			box-sizing: border-box;
 			.swiper-slide {
 				width: 2.20rem;
@@ -336,6 +1059,7 @@
 				img {
 					width: 2.20rem;
 					height: 2.20rem;
+					margin-right: 0.05rem;
 				}
 				.tip {
 					flex: 1;
@@ -361,6 +1085,24 @@
 					}
 				}
 			}
+			/*.swiper-slide:last-child {
+				width: 0.90rem;
+				height: 3.48rem;
+				writing-mode: tb-rl;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: transparent;
+				margin-right: 0;
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(115, 134, 173, 1);
+				letter-spacing: 2px;
+				img {
+					width: 0.20rem;
+					height: 0.20rem;
+				}
+			}*/
 		}
 		.pro-allbox {
 			padding: 0.20rem 0;

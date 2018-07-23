@@ -12,7 +12,7 @@
 				</div>
 			</div>
 			<div class="tab_box">
-				<tab :line-width="1" :scroll-threshold="5" custom-bar-width="30px">
+				<tab :line-width="2" :scroll-threshold="5" custom-bar-width="30px">
 					<tab-item @on-item-click="onItemClick" v-for="(item,index) in tabList" :badge-label="item.bg > 0 && (index == 1 || index ==2)?item.bg : ''" :selected="tabIndex == index" :key="index">{{item.name}}</tab-item>
 				</tab>
 			</div>
@@ -50,7 +50,7 @@
 								<p>{{item.statusName}}</p>
 							</div>
 						</div>
-						<div class="order_middle" @click="toDetail" v-for="(i,index2) in item.items" :key="index2" v-if="index2+1 <= item.showNum" :class="[{'m':(index2 != item.items.length - 1) && item.items.length <= 10},{'m':(index2 != item.showNum - 1 && index2 != item.items.length - 1) && item.items.length > 10}]">
+						<div class="order_middle" v-for="(i,index2) in item.items" :key="index2" @click="toDetail(item.orderSn)" v-if="index2+1 <= item.showNum" :class="[{'m':(index2 != item.items.length - 1) && item.items.length <= 10},{'m':(index2 != item.showNum - 1 && index2 != item.items.length - 1) && item.items.length > 10}]">
 							<div class="left">
 								<img v-if="i.thumb" :src="i.thumb.original" />
 								<img v-else :src="'./static/images/cai2.png'" />
@@ -78,7 +78,7 @@
 							<!--线下门店-->
 							<div v-if="item.type == 1">
 								<div class="btn" v-if="item.status == 70">
-									<div @click="deleteOrder">删除订单</div>
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
 									<!--<div>评价订单</div>-->
 								</div>
 							</div>
@@ -86,7 +86,7 @@
 							<div v-if="item.type == 3">
 								<!--待付款-->
 								<div class="btn" v-if="item.status == 0">
-									<div>取消订单</div>
+									<div @click="cancelOrder(item.orderSn)">取消订单</div>
 									<div>立即付款</div>
 								</div>
 								<!--待使用-->
@@ -101,11 +101,11 @@
 								</div>
 								<!--使用中-->
 								<div class="btn" v-if="item.status == 60">
-									<div @click="deleteOrder">删除订单</div>
 									<div>设备管理</div>
 								</div>
 								<!--已完成-->
 								<div class="btn" v-if="item.status == 70">
+									<div @click="cancelOrder(item.orderSn)">取消订单</div>
 									<div>查看发票</div>
 									<!--<div>评价晒单</div>-->
 								</div>
@@ -244,8 +244,7 @@
 
 				if(time) {
 					var obj = {
-						//userId: _this.$store.state.user.userId,
-						userId: 'userDev01',
+						userId: _this.$store.state.user.userId,
 						type: _this.type,
 						status: _this.status,
 						timeType: _this.timeType,
@@ -258,8 +257,7 @@
 					var orderUrl = _this.url.order.getNewOrderList
 				} else {
 					var obj = {
-						//userId: _this.$store.state.user.userId,
-						userId: 'userDev01',
+						userId: _this.$store.state.user.userId,
 						type: _this.type,
 						status: _this.status,
 						timeType: _this.timeType,
@@ -421,7 +419,7 @@
 				})
 			},
 			//删除订单
-			deleteOrder() {
+			deleteOrder(orderSn) {
 				var _this = this
 				_this.$dialog.show({
 					type: 'warning',
@@ -432,12 +430,54 @@
 
 					},
 					confirm() {
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '删除成功'
+						_this.$http.post(_this.url.order.deleteOrderByOrderSn, {
+							//userId: _this.$store.state.user.userId,
+							userId: 'userDev01',
+							orderSn: orderSn,
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '删除成功'
+								})
+								_this.getOrderList()
+							}
 						})
+
+					}
+				})
+			},
+			//取消订单
+			cancelOrder(orderSn) {
+				console.log(orderSn)
+				var _this = this
+				_this.$dialog.show({
+					type: 'warning',
+					headMessage: '提示',
+					message: '亲,您确定要取消该订单？',
+					buttons: ['确定', '取消'],
+					canel() {
+
+					},
+					confirm() {
+						_this.$http.post(_this.url.order.cancelOrderByOrderSn, {
+							//userId: _this.$store.state.user.userId,
+							userId: 'userDev01',
+							orderSn: orderSn,
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '取消成功'
+								})
+								_this.getOrderList()
+							}
+						})
+
 					}
 				})
 			},
@@ -448,9 +488,12 @@
 				})
 			},
 			//跳转详情
-			toDetail() {
+			toDetail(orderSn) {
 				this.$router.push({
-					path: '/shop/order_details'
+					path: '/shop/order_details',
+					query: {
+						orderSn: orderSn
+					}
 				})
 			},
 			InitScroll() {
@@ -492,8 +535,8 @@
 							_this.move = true
 							_this.huan = false
 							_this.changeTip = '下拉刷新'
-							
-							if(_this.timeOut){
+
+							if(_this.timeOut) {
 								clearTimeout(_this.timeOut)
 							}
 						})

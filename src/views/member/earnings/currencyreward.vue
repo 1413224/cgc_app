@@ -95,6 +95,7 @@
 				}],
 				list: [],
 				curPage: 1,
+				lastCreateTime: 0,
 				pageSize: 20,
 				balanceInfo: {},
 				type: 1
@@ -120,8 +121,10 @@
 				this.twoIndex = 6
 				this.typeTitle = '任务奖励'
 			} else if(this.$route.query.type == 1) {
+				this.twoIndex = 0
 				this.typeTitle = '全部列表'
 			} else if(this.$route.query.type == 2) {
+				this.twoIndex = 1
 				this.typeTitle = '消费'
 			}
 			this.getMyBalanceList()
@@ -143,7 +146,11 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.balanceInfo = res.data.data
-						_this.list = res.data.data.pageBean.list
+						if(res.data.data.list.length > 0) {
+							_this.list = res.data.data.list
+							var length = res.data.data.list.length - 1
+							_this.lastCreateTime = res.data.data.list[length].createTime
+						}
 					}
 				})
 			},
@@ -217,15 +224,17 @@
 						params: {
 							userId: _this.$store.state.user.userId,
 							type: _this.type,
-							curPage: _this.curPage,
+							lastCreateTime: _this.lastCreateTime,
 							pageSize: _this.pageSize,
 							islist: true
 						}
 					}).then((res) => {
 						if(res.data.status == "00000000") {
 							_this.balanceInfo = res.data.data
-							if(res.data.data.pageBean.list.length > 0) {
-								_this.list = _this.list.concat(res.data.data.pageBean.list)
+							if(res.data.data.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.list)
+								var length = res.data.data.list.length - 1
+								_this.lastCreateTime = res.data.data.list[length].createTime
 								_this.show = true
 								_this.showNo = false
 							} else {

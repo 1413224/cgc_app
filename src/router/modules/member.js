@@ -1,4 +1,5 @@
 import index from '@/views/index'
+import test from '@/views/member/test'
 import reg from '@/views/user/reg'
 import changelist from '@/views/user/changelist'
 import changeLoginPassword from '@/views/user/changeLoginPassword'
@@ -73,6 +74,13 @@ const memberModule = [{
 			navShow: true,
 			navIndex: 0,
 			title: '首页'
+		}
+	}, {
+		path: '/member/test',
+		name: 'test',
+		component: test,
+		meta: {
+			title: '所有弹框'
 		}
 	},
 	{
@@ -274,7 +282,7 @@ const memberModule = [{
 		meta: {
 			title: '会员码'
 		}
-	},{
+	}, {
 		path: '/member/purse/commercial',
 		name: 'commercial',
 		component: resolve => require(['@/views/member/purse/commercial'], resolve),
@@ -447,7 +455,7 @@ const memberModule = [{
 		meta: {
 			title: '会员权益'
 		}
-	},{
+	}, {
 		path: '/member/vip/right',
 		name: 'vipright',
 		component: resolve => require(['@/views/member/vip/right'], resolve),
@@ -511,19 +519,19 @@ const memberModule = [{
 		}
 	},
 	{
-		path:'/member/pay/wxgzhpay',
-		name:'wxpay',
+		path: '/member/pay/wxgzhpay',
+		name: 'wxpay',
 		component: resolve => require(['@/views/member/pay/wxgzhpay'], resolve),
 		meta: {
 			title: '微信支付'
 		}
 	},
 	{
-		path:'/member/oriza',
-		name:'wxoriza',
+		path: '/member/oriza',
+		name: 'wxoriza',
 		component: resolve => require(['@/views/member/oriza/oriza'], resolve),
 		meta: {
-			title: ''
+			title: '大健康App'
 		}
 	}
 ]

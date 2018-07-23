@@ -76,7 +76,7 @@
 				</div>
 
 				<div style="margin-top: 3px;">
-					<noData v-if="list.length == 0" :status="2" stateText="暂无门店"></noData>
+					<noData v-if="list.length == 0" :status="2" :stateText="hasDw?'暂无门店':'请允许获取您的当前位置'"></noData>
 				</div>
 			</div>
 		</div>
@@ -131,6 +131,7 @@
 			return {
 				title: '门店列表',
 				data: [],
+				hasDw:false,
 				addressDetail: null, //选中的市
 				addressKey: 1, //省 市 区的状态切换
 				isActive: false, //地址框的显隐
@@ -193,15 +194,15 @@
 				},
 				demoList: [{
 						img: './static/share/banner1.png',
-						url: '/member/vip/right'
+						url: '/member/join/index'
 					},
 					{
 						img: './static/share/banner1.png',
-						url: '/member/vip/right'
+						url: '/member/join/index'
 					},
 					{
 						img: './static/share/banner1.png',
-						url: '/member/vip/right'
+						url: '/member/join/index'
 					}
 				],
 			}
@@ -262,6 +263,7 @@
 					_this.lat = position.lat
 					_this.lng = position.lng
 					_this.checkQuery(_this.$route.query)
+					_this.hasDw = true
 					_this.getEnterpriseListInfo()
 				}
 
