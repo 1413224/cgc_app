@@ -63,7 +63,7 @@
 						<li>
 							<router-link to="/member/team/index">
 								<div class="li-box">
-									<img src="../../assets/images/member/member_cardpackage.png">
+									<img src="../../assets/images/member/member-team.png">
 									<!--<badge class="new"></badge>-->
 								</div>
 								<p>我的团队</p>
@@ -192,8 +192,8 @@
 					},
 					{
 						img: './static/member/m-index5.png',
-						text: '多商户商城',
-						url: '/multi_user_mall/summary'
+						text: '产业联盟',
+						url: '/share/storelist'
 					},
 					/*{
 						img: './static/member/member_2.png',

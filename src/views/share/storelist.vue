@@ -98,7 +98,7 @@
 										<div>
 											<div class="logolist">
 												<li class="item" :class="{'li-selected':distanceIndex == index}" v-for="(item, index) in logolist" :key="index" @click="changeCss(index,item)">{{item}}公里</li>
-												<x-input class="distance" placeholder="请输入距离" v-model="distance" type="number" @on-change="distanceChange"></x-input>
+												<x-input class="distance" placeholder="请输入距离" v-model="jl" type="text" @on-change="distanceChange"></x-input>
 											</div>
 										</div>
 									</group>
@@ -166,6 +166,7 @@
 				showLoading: false,
 				showNoMore: false,
 				distanceIndex: 0,
+				jl:'',
 
 				listType: '1',
 				countryId: 1,
@@ -457,15 +458,10 @@
 				var _this = this
 
 				_this.distance = kilometre
+				
+				_this.jl = kilometre
 
 				_this.distanceIndex = index
-
-				_this.$router.replace({
-					query: _this.merge(_this.$route.query, {
-						'distance': kilometre,
-						'distanceIndex': index
-					})
-				})
 			},
 			// 重置
 			reset() {
@@ -495,18 +491,22 @@
 				this.getEnterpriseListInfo()
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
-						'distance': _this.distance
+						'distance': _this.distance,
+						'distanceIndex':_this.distanceIndex
 					})
 				})
 			},
-			distanceChange(val) {
+			distanceChange() {
 				var _this = this
+	
+				_this.distance = _this.jl
+				
 				for(var i = 0; i < _this.logolist.length; i++) {
-					if(_this.logolist[i] == val) {
+					if(_this.logolist[i] == _this.jl) {
 						_this.distanceIndex = i
 						return false
 					} else {
-						_this.distanceIndex = 50
+						_this.distanceIndex = ''
 					}
 				}
 			},

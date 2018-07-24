@@ -20,7 +20,7 @@
 			<div class="change-row">
 				<div v-for="(item,index) in moneyList" :key="index" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.rechargeId)" v-if="moneyList.length>0">
 					<div class="box" :class="{'nohas':item.null}">
-						<p>{{item.money}}元</p>
+						<p>{{item.money}} <i>元</i></p>
 						<p>赠送{{item.integral}}积分</p>
 					</div>
 				</div>
@@ -261,7 +261,7 @@
 				}
 				span:nth-child(2) {
 					font-size: 0.24rem;
-					color: #90A2C7;
+					/*color: #90A2C7;*/
 				}
 			}
 			.change-row {
@@ -303,6 +303,11 @@
 						color: #336FFF;
 						padding: 0 0.1rem;
 						box-sizing: border-box;
+						p:nth-child(1){
+							i{
+								font-size: 0.20rem;
+							}
+						}
 						p:nth-child(2) {
 							font-size: 0.20rem;
 							color: #90A2C7;

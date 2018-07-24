@@ -97,7 +97,7 @@
 					},
 					{
 						bg: './static/brand/gjdqg.png',
-						jxList: ['./static/brand/jbl.png'],
+						jxList: ['./static/brand/faguof.png'],
 						pList: [{
 							name: '韩国馆',
 							text: ['韩流风暴', '席卷全球'],

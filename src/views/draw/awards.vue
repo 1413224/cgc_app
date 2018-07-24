@@ -119,7 +119,7 @@
 				if(this.showDialog) {
 					that.showDialog = false
 					that.$router.push({
-						path: '/draw/record'
+						path: '/draw/winning'
 					})
 				}
 				this.showDialog = true

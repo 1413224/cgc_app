@@ -19,7 +19,7 @@
 		</div>
 		<div class="order_list_box">
 			<div class="wrapper" ref="wrapper" :class="[{'top02':tabNo},{'bw':orderList.length  == 0},{'top0':tabNo2}]">
-				<div class="content" ref="content" :class="{'top50':showLoading2}">
+				<div class="content" ref="content" :class="[{'top50':showLoading2},{'h100':isLess}]">
 					<transition enter-active-class="zoomIn animated" leave-active-class="slideOutUp animated" :duration="{ enter: 500, leave: 1000 }">
 						<div class="jz-loading" v-if="showLoading2">
 							<img v-if="move" class="jiantou" :class="{'r180':huan}" :src="'./static/images/jiantou.png'" alt="" />
@@ -61,6 +61,7 @@
 							</div>
 							<div class="right">
 								<p class="price">¥ {{i.pieceTruePrice}}</p>
+								<p class="oldprice">¥ {{i.originPrice}}</p>
 								<p class="num">x {{i.number}}</p>
 							</div>
 						</div>
@@ -186,6 +187,7 @@
 				showNum: 10,
 				showLoading: false,
 				showLoading2: false,
+				isLess: false,
 				changeTip: '下拉刷新',
 				showNo: false,
 				typeOrderList: ['全部分类', '线下门店', '实物商品', '共享服务', '点餐', '酒店', '门票', '游戏', '手机充值', '电影票', '演出票', '加油卡'],
@@ -424,7 +426,7 @@
 				_this.$dialog.show({
 					type: 'warning',
 					headMessage: '提示',
-					message: '亲,您确定要删除该订单？',
+					message: '亲,您确定要删除该订单吗？',
 					buttons: ['确定', '取消'],
 					canel() {
 
@@ -584,6 +586,8 @@
 					} else {
 						_this.scroll.refresh()
 					}
+
+					_this.isLess = _this.scroll.scroller.clientHeight <= _this.scroll.scrollerHeight ? true : false
 				})
 
 			},
@@ -812,6 +816,9 @@
 				width: 100%;
 				background: rgba(245, 246, 250, 1);
 				z-index: 11;
+				.h100 {
+					height: 100%;
+				}
 				.content {
 					position: relative;
 					.jz-loading {
@@ -939,6 +946,13 @@
 							font-size: 0.24rem;
 							font-family: PingFangSC-Regular;
 							color: rgba(26, 38, 66, 1);
+						}
+						.oldprice {
+							text-decoration: line-through;
+							font-size: 0.24rem;
+							font-family: PingFangSC-Regular;
+							color: rgba(144, 162, 199, 1);
+							margin-top: 0.05rem;
 						}
 						.num {
 							font-size: 0.24rem;

@@ -41,12 +41,15 @@
 						<img :src="item.logo" />
 						<div>
 							<p>{{item.text1}}</p>
-							<p>{{item.text2}}</p>
+							<p>
+								<img :src="item.jgImg" alt="" /> {{item.text2}}
+							</p>
 						</div>
 					</div>
 					<div class="right">
 						进入
 					</div>
+					<div class="sjx"></div>
 				</div>
 			</div>
 			<div class="swiper-inner">
@@ -102,6 +105,7 @@
 					logo: './static/brand/hl.png',
 					text1: 'SWAROVSKI 施华洛世奇',
 					text2: '列支敦士登｜探索当季闪耀新品',
+					jgImg: './static/brand/dg.png',
 					zstList: [{
 							name: 'DUO恶魔之眼项链时尚气质女短...',
 							money: '990',
@@ -129,6 +133,7 @@
 					logo: './static/brand/xne.png',
 					text1: 'CHANEL 香奈儿',
 					text2: '法国｜独一无二精致工艺',
+					jgImg: './static/brand/fg.png',
 					zstList: [{
 							name: '蔚蓝男士淡香水50ml清新古龙香...',
 							money: '558',
@@ -156,6 +161,7 @@
 					logo: './static/brand/ysld.png',
 					text1: 'Estee Lauder 雅诗兰黛',
 					text2: '美国｜雅诗兰黛让每位女性皆...',
+					jgImg: './static/brand/mg.png',
 					zstList: [{
 							name: '小棕瓶眼霜 肌透修护眼部精华...',
 							money: '435',
@@ -183,6 +189,7 @@
 					logo: './static/brand/sw.png',
 					text1: 'Swisse',
 					text2: '澳大利亚｜宗旨是帮助人们生...',
+					jgImg: './static/brand/odly.png',
 					zstList: [{
 							name: '钙片+维生素D柠檬酸150片成人...',
 							money: '128',
@@ -204,15 +211,15 @@
 							img: './static/brand/sw_pr4.png'
 						}
 					]
-				}],
+				}]
 			}
 		},
 		methods: {
-			toIndex(index){
+			toIndex(index) {
 				this.$router.push({
-					path:'/brand/index',
-					query:{
-						'index':index
+					path: '/brand/index',
+					query: {
+						'index': index
 					}
 				})
 			}
@@ -404,9 +411,15 @@
 							margin-bottom: 0.08rem;
 						}
 						p:nth-child(2) {
-							font-size: 0.28rem;
+							font-size: 0.24rem;
 							font-family: PingFangSC-Regular;
 							color: rgba(255, 255, 255, 1);
+							display: flex;
+							align-items: center;
+							img {
+								width: 0.24rem;
+								height: 0.24rem;
+							}
 						}
 					}
 				}

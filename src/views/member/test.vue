@@ -33,6 +33,9 @@
 				sftc:false,
 				payOptions:{
 					showPayMode:false,
+					data:{
+						money:1000,
+					},
 					changePay(index){
 						console.log(index)
 					},

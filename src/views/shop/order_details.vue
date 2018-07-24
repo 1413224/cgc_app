@@ -169,6 +169,8 @@
 						_this.orderDetail = res.data.data.data
 
 						_this.good = res.data.data.data.items[0] //设备商品
+					}else{
+						_this.$router.back(-1)
 					}
 				})
 			},

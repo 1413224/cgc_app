@@ -91,6 +91,7 @@
 				}],
 				list: [],
 				curPage: 1,
+				lastCreateTime: 0,
 				pageSize: 20,
 				balanceInfo: {},
 				type: 1,
@@ -143,7 +144,11 @@
 				}).then((res) => {
 					if(res.data.status == '00000000') {
 						_this.balanceInfo = res.data.data
-						_this.list = res.data.data.list
+						if(res.data.data.list.length > 0) {
+							_this.list = res.data.data.list
+							var length = res.data.data.list.length - 1
+							_this.lastCreateTime = res.data.data.list[length].createTime
+						}
 					}
 				})
 			},
@@ -216,15 +221,17 @@
 						params: {
 							userId: _this.$store.state.user.userId,
 							type: _this.type,
-							curPage: _this.curPage,
+							lastCreateTime: _this.lastCreateTime,
 							pageSize: _this.pageSize,
 							islist: true
 						}
 					}).then((res) => {
 						if(res.data.status == '00000000') {
 							_this.balanceInfo = res.data.data
-							if(res.data.data.pageBean.list.length > 0) {
-								_this.list = _this.list.concat(res.data.data.pageBean.list)
+							if(res.data.data.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.list)
+								var length = res.data.data.list.length - 1
+								_this.lastCreateTime = res.data.data.list[length].createTime
 								_this.show = true
 								_this.showNo = false
 

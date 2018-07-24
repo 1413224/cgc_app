@@ -98,7 +98,7 @@
 					<div class="drawList">
 						<p class="wonderful">
 							精彩推荐
-							<span @click="$router.push({path:'/draw/pastevents'})">更多历史纪录<i class="icon iconfont icon-arrow-right "></i></span>
+							<span @click="$router.push({path:'/draw/review'})">更多历史纪录<i class="icon iconfont icon-arrow-right "></i></span>
 						</p>
 						<ul class="commodity">
 							<group v-for="(item,index) in reviewData.lists" :key="index">

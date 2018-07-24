@@ -25,6 +25,10 @@
 				</div>
 			</div>
 			<div class="two">
+				<div class="bottom" style="border-top: none;">
+					<p>店铺编号</p>
+					<p>252423ffd3235325afasdfz42fa2324</p>
+				</div>
 				<div class="top">
 					<div class="left">
 						<img :src="'./static/images/dibiao.png'" alt="" />
@@ -34,54 +38,56 @@
 						<img :src="'./static/images/dianhua.png'" alt="" />
 					</div>
 				</div>
-				<div class="middle">
+				<!--<div class="middle">
 					<div class="title">
 						<p>店铺二维码(<span>扫码进入店铺</span>)</p>
-						<!--<p><i class="iconfont icon-arrow-right"></i></p>-->
+						<p><i class="iconfont icon-arrow-right"></i></p>
 					</div>
 					<div class="qrcode-box">
 						<qrcode :value="storeUrl" :size="qrcodeWidth" type="img"></qrcode>
 					</div>
-				</div>
+				</div>-->
 				<div class="bottom">
 					<p>开店时间</p>
 					<p>2018-04-14 </p>
 				</div>
+				<div class="bottom" @click="$router.push({path:'/multi_user_mall/store_qrcode'})">
+					<p>店铺二维码</p>
+					<p class="code"><img src="../../assets/images/multi_user_mall/qrcode.png" alt=""><i class="iconfont icon-arrow-right"></i></p>
+				</div>
 			</div>
 		</div>
-		<div class="fixed-obx">
-			<div class="wfg-box">
-				<img :src="'./static/images/wfgImg.png'" alt="" />
-				<p>2台</p>
-			</div>
-			<div class="back-index" @click="$router.push({path:'/share/storelist'})">
-				<p>返回</p>
-				<p>首页</p>
-			</div>
-			<div class="foot-box">
-				<ul>
-					<!--<li v-for="(item,index) in navList" :key="index" @click="navActive(index)">
+		<div class="wfg-box">
+			<img :src="'./static/images/wfgImg.png'" alt="" />
+			<p>2台</p>
+		</div>
+		<div class="back-index" @click="$router.push({path:'/share/storelist'})">
+			<p>返回</p>
+			<p>首页</p>
+		</div>
+		<div class="foot-box">
+			<ul>
+				<!--<li v-for="(item,index) in navList" :key="index" @click="navActive(index)">
 						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
 						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
 					</li>-->
-					<li @click="navActive(0)">
-						<img :src="navIndex == 0?'./static/images/shop-bottom1-in.png':'./static/images/shop-bottom1.png'" alt="" />
-						<p :class="{'blue':navIndex == 0}">首页</p>
-					</li>
-					<li @click="navActive(1)">
-						<img :src="navIndex == 1?'./static/images/shop-bottom2-in.png':'./static/images/shop-bottom2.png'" alt="" />
-						<p :class="{'blue':navIndex == 1}">商品</p>
-					</li>
-					<li @click="navActive(2)">
-						<img :src="navIndex == 2?'./static/images/shop-bottom3-in.png':'./static/images/shop-bottom3.png'" alt="" />
-						<p :class="{'blue':navIndex == 2}">服务</p>
-					</li>
-					<li @click="navActive(3)">
-						<img :src="navIndex == 3?'./static/images/shop-bottom4-in.png':'./static/images/shop-bottom4.png'" alt="" />
-						<p :class="{'blue':navIndex == 3}">简介</p>
-					</li>
-				</ul>
-			</div>
+				<li @click="navActive(0)">
+					<img :src="navIndex == 0?'./static/images/shop-bottom1-in.png':'./static/images/shop-bottom1.png'" alt="" />
+					<p :class="{'blue':navIndex == 0}">首页</p>
+				</li>
+				<li @click="navActive(1)">
+					<img :src="navIndex == 1?'./static/images/shop-bottom2-in.png':'./static/images/shop-bottom2.png'" alt="" />
+					<p :class="{'blue':navIndex == 1}">商品</p>
+				</li>
+				<li @click="navActive(2)">
+					<img :src="navIndex == 2?'./static/images/shop-bottom3-in.png':'./static/images/shop-bottom3.png'" alt="" />
+					<p :class="{'blue':navIndex == 2}">服务</p>
+				</li>
+				<li @click="navActive(3)">
+					<img :src="navIndex == 3?'./static/images/shop-bottom4-in.png':'./static/images/shop-bottom4.png'" alt="" />
+					<p :class="{'blue':navIndex == 3}">简介</p>
+				</li>
+			</ul>
 		</div>
 	</section>
 </template>
@@ -277,7 +283,7 @@
 			}
 			.two {
 				width: 7.14rem;
-				height: 5.60rem;
+				/*height: 4.34rem;*/
 				background: rgba(255, 255, 255, 1);
 				border-radius: 2px;
 				margin-top: 0.15rem;
@@ -286,7 +292,7 @@
 				justify-content: space-between;
 				.top {
 					height: 1.27rem;
-					border-bottom: 1px solid #D8DFF0;
+					border-top: 1px solid #D8DFF0;
 					padding: 0.40rem 0rem 0.27rem 0.18rem;
 					box-sizing: border-box;
 					display: flex;
@@ -368,83 +374,95 @@
 						font-family: PingFangSC-Regular;
 						color: rgba(26, 38, 66, 1);
 					}
+					.code {
+						display: flex;
+						align-items: center;
+						img {
+							width: 0.36rem;
+							height: 0.36rem;
+							margin-right: 0.40rem;
+						}
+						i {
+							font-size: 0.50rem;
+						}
+					}
 				}
 			}
 		}
-		.fixed-obx {
+		.wfg-box {
 			position: fixed;
-			bottom: 0;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: flex-end;
+			bottom: 2.26rem;
+			right: 0.20rem;
 			z-index: 16;
-			.wfg-box {
-				width: 100%;
-				width: 1.26rem;
-				height: 1.26rem;
-				background: rgba(18, 183, 245, 1);
-				box-shadow: 0px 4px 12px 0px rgba(18, 183, 245, 0.5);
-				border-radius: 50%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-direction: column;
-				margin-bottom: 0.39rem;
-				margin-right: 0.20rem;
-				img {
-					width: 0.66rem;
-					height: 0.33rem;
-				}
-				p {
-					font-size: 0.24rem;
-					font-family: PingFangSC-Regular;
-					color: rgba(255, 255, 255, 1);
-				}
+			width: 1.26rem;
+			height: 1.26rem;
+			background: rgba(18, 183, 245, 1);
+			box-shadow: 0px 4px 12px 0px rgba(18, 183, 245, 0.5);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			margin-bottom: 0.39rem;
+			margin-right: 0.20rem;
+			img {
+				width: 0.66rem;
+				height: 0.33rem;
 			}
-			.back-index {
-				width: 100%;
-				width: 0.86rem;
-				height: 0.86rem;
-				background: rgba(26, 38, 66, 0.35);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-direction: column;
+			p {
 				font-size: 0.24rem;
 				font-family: PingFangSC-Regular;
 				color: rgba(255, 255, 255, 1);
-				border-radius: 50%;
-				margin-bottom: 0.11rem;
-				margin-right: 0.20rem;
 			}
-			.foot-box {
+		}
+		.back-index {
+			position: fixed;
+			bottom: 1.26rem;
+			right: 0.20rem;
+			z-index: 16;
+			width: 0.86rem;
+			height: 0.86rem;
+			background: rgba(26, 38, 66, 0.35);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			font-size: 0.24rem;
+			font-family: PingFangSC-Regular;
+			color: rgba(255, 255, 255, 1);
+			border-radius: 50%;
+			margin-bottom: 0.11rem;
+			margin-right: 0.20rem;
+		}
+		.foot-box {
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			width: 100%;
+			height: 1.20rem;
+			background: rgba(255, 255, 255, 1);
+			ul {
 				width: 100%;
-				height: 1.20rem;
-				background: rgba(255, 255, 255, 1);
-				ul {
-					width: 100%;
-					height: 100%;
+				height: 100%;
+				display: flex;
+				li {
+					flex: 1;
 					display: flex;
-					li {
-						flex: 1;
-						display: flex;
-						align-items: center;
-						flex-direction: column;
-						justify-content: center;
-						img {
-							width: 0.46rem;
-							height: 0.46rem;
-							margin-bottom: 0.06rem;
-						}
-						p {
-							font-size: 0.24rem;
-							font-family: PingFangSC-Regular;
-							color: rgba(26, 38, 66, 1);
-						}
-						.blue {
-							color: #336FFF;
-						}
+					align-items: center;
+					flex-direction: column;
+					justify-content: center;
+					img {
+						width: 0.46rem;
+						height: 0.46rem;
+						margin-bottom: 0.06rem;
+					}
+					p {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+					}
+					.blue {
+						color: #336FFF;
 					}
 				}
 			}
