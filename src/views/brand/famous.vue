@@ -260,9 +260,12 @@
 		}
 		.top-swiper {
 			.swiper-inner1 {
-				padding-top: 0.27rem;
-				padding-left: 0.20rem;
 				box-sizing: border-box;
+				.swiper-container {
+					padding-top: 0.27rem;
+					padding-left: 0.20rem;
+					padding-bottom: 0.20rem;
+				}
 				.swiper-slide {
 					width: 1.84rem;
 					height: 1.84rem;
@@ -293,7 +296,6 @@
 			font-family: PingFangSC-Regular;
 			color: rgba(34, 34, 34, 1);
 			background: rgba(255, 255, 255, 1);
-			margin-top: 0.20rem;
 		}
 		.content-box {
 			height: 2.7rem;

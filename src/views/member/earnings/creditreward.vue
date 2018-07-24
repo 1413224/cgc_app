@@ -271,7 +271,7 @@
 			padding: 0.2rem 0;
 			.type-item {
 				width: 25%;
-				padding: 0.08rem 0.25rem;
+				padding: 0.08rem 0.18rem;
 				text-align: center;
 				box-sizing: border-box;
 				span {

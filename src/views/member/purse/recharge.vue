@@ -38,24 +38,14 @@
 			<p class="gy">1.CGC通用积分充值后会即时到达会员账户钱包，不会过期，但无法提现或转赠他人；</p>
 			<p class="gy">2.CGC通用积分可以在全球联盟企业和e消费任何APP商城1:1抵现金通用，没有额度限制；</p>
 		</div>
-
-		<div v-transfer-dom>
-			<popup v-model="show1">
-				<popup-header right-text="取消" title="请选择支付方式" :show-bottom-border="false" @on-click-left="show1 = false" @on-click-right="show1 = false"></popup-header>
-				<group gutter="0">
-					<radio :options="list" value="1" @on-change="change"></radio>
-					<div class="pay-box">
-						<div class="add-btn" @click="pay">立即支付</div>
-					</div>
-				</group>
-			</popup>
-		</div>
+		<payMode :options="payOptions"></payMode>
 	</div>
 </template>
 
 <script>
 	import { Group, CellBox, XButton, PopupHeader, Radio, Checklist } from 'vux'
 	import settingHeader from '../../../components/setting_header'
+	import payMode from '@/components/payMode'
 	export default {
 		data() {
 			return {
@@ -78,15 +68,39 @@
 				show1: false,
 				moneyList: [],
 				info: {},
-				userInfo: {}
+				userInfo: {},
+				payOptions: {}
 			}
 		},
 		created() {
-
+			var _this = this
 			if(localStorage['userInfo']) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
 			}
 			this.getRechargeList()
+
+			this.payOptions = {
+				showPayMode: false,
+				data: {
+					money: 0,
+				},
+				changePay(index) {
+					console.log(index)
+				},
+				toPay(index) {
+					if(index == 1) {
+						_this.$router.push({
+							path:'/member/pay/wxgzhpay'
+						})
+					}
+				},
+				hide() {
+					console.log('hide')
+				},
+				show() {
+					console.log('show')
+				}
+			}
 		},
 		mounted() {},
 		methods: {
@@ -107,19 +121,13 @@
 			},
 			changeMoney(index, id) {
 				this.moneyIndex = index
-
-				// this.$vux.toast.show({
-				// 	width: '50%',
-				// 	type: 'text',
-				// 	position: 'top',
-				// 	text: id
-				// })
 			},
 			changePt(index) {
 				this.ptIndex = index
 			},
 			submit() {
-				this.show1 = true
+				this.payOptions.showPayMode = true
+				this.payOptions.data.money = 18888.00
 			},
 			change(value, label) {
 				console.log('change:', value, label)
@@ -168,7 +176,8 @@
 			XButton,
 			PopupHeader,
 			Radio,
-			Checklist
+			Checklist,
+			payMode
 		}
 	}
 </script>
@@ -303,8 +312,8 @@
 						color: #336FFF;
 						padding: 0 0.1rem;
 						box-sizing: border-box;
-						p:nth-child(1){
-							i{
+						p:nth-child(1) {
+							i {
 								font-size: 0.20rem;
 							}
 						}
@@ -353,20 +362,6 @@
 				color: rgba(255, 255, 255, 1);
 				border-radius: 2px;
 			}
-		}
-	}
-	
-	.pay-box {
-		padding: 10px 15px;
-		.add-btn {
-			height: 0.88rem;
-			line-height: 0.88rem;
-			background: rgba(51, 111, 255, 1);
-			font-size: 0.28rem;
-			text-align: center;
-			font-family: MicrosoftYaHei;
-			color: rgba(255, 255, 255, 1);
-			border-radius: 2px;
 		}
 	}
 </style>

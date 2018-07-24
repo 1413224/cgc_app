@@ -1,5 +1,5 @@
 <template>
-	<div>微信支付</div>
+	<div></div>
 </template>
 
 <script>

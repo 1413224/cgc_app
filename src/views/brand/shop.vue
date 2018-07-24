@@ -437,7 +437,7 @@
 			}
 		}
 		.swiper-inner {
-			padding: 0.10rem 0.20rem 0.20rem 0.20rem;
+			padding: 0.10rem 0rem 0.20rem 0.20rem;
 			box-sizing: border-box;
 			.swiper-slide {
 				width: 2.20rem;

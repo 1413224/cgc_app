@@ -156,7 +156,14 @@
 				isfix: false,
 				isActive: false,
 				startY: 0,
-				swiperList: ['./static/vip/swiper1.png', './static/vip/swiper2.png', './static/vip/swiper3.png', './static/vip/swiper4.png', './static/vip/swiper5.png', './static/vip/swiper6.png']
+				swiperList: [
+				'./static/vip/swiper1.png',
+				'./static/vip/swiper2.png',
+				'./static/vip/swiper3.png',
+				'./static/vip/swiper4.png',
+				'./static/vip/swiper5.png', 
+				'./static/vip/swiper6.png'
+				]
 			}
 		},
 		mounted() {

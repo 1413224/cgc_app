@@ -19,7 +19,7 @@
 		</div>
 		<div class="order_list_box">
 			<div class="wrapper" ref="wrapper" :class="[{'top02':tabNo},{'bw':orderList.length  == 0},{'top0':tabNo2}]">
-				<div class="content" ref="content" :class="[{'top50':showLoading2},{'h100':isLess}]">
+				<div class="content" ref="content" :class="{'top50':showLoading2}">
 					<transition enter-active-class="zoomIn animated" leave-active-class="slideOutUp animated" :duration="{ enter: 500, leave: 1000 }">
 						<div class="jz-loading" v-if="showLoading2">
 							<img v-if="move" class="jiantou" :class="{'r180':huan}" :src="'./static/images/jiantou.png'" alt="" />
@@ -53,7 +53,7 @@
 						<div class="order_middle" v-for="(i,index2) in item.items" :key="index2" @click="toDetail(item.orderSn)" v-if="index2+1 <= item.showNum" :class="[{'m':(index2 != item.items.length - 1) && item.items.length <= 10},{'m':(index2 != item.showNum - 1 && index2 != item.items.length - 1) && item.items.length > 10}]">
 							<div class="left">
 								<img v-if="i.thumb" :src="i.thumb.original" />
-								<img v-else :src="'./static/images/cai2.png'" />
+								<img v-else :src="'./static/images/pr.png'" />
 							</div>
 							<div class="middle">
 								<p class="name">{{i.goodsName}}</p>
@@ -72,7 +72,7 @@
 						<div class="order_bottom">
 							<span class="num">共 {{item.totalItems}} 件 </span>
 							<span>合计：<i>{{item.actualPrice}}</i>元</span>
-							<span class="yf">(含运费{{item.freight}}) </span>
+							<span class="yf" v-if="item.freight">(含运费{{item.freight}}) </span>
 							<span v-if="item.points > 0"> + <i>{{item.points}}</i>信用积分</span>
 						</div>
 						<div class="order_bth_box">
@@ -241,7 +241,7 @@
 			this.getOrderList()
 		},
 		methods: {
-			getOrderList(time) {
+			getOrderList(time, isLess) {
 				var _this = this
 
 				if(time) {
@@ -277,6 +277,7 @@
 
 						if(time) {
 							_this.orderList = res.data.data.list.concat(_this.orderList)
+							console.log(_this.orderList)
 						} else {
 							_this.orderList = res.data.data.list
 						}
@@ -298,6 +299,15 @@
 								_this.move = true
 							}, 800)
 
+						}
+
+						if(isLess) {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'top',
+								text: '刷新成功'
+							})
 						}
 					} else {
 						if(time) {
@@ -545,14 +555,26 @@
 
 						//滚动开始
 						_this.scroll.on('scroll', (pos) => {
-							if(_this.orderList.length > 0) {
-								if(pos.y > -30 && pos.y <= 80) {
-									if(_this.move) {
-										_this.showLoading2 = true
-										if(pos.y < 0) {
-											_this.changeTip = '下拉刷新'
-											_this.huan = false
-										} else if(pos.y >= 20) {
+							if(_this.scroll.scroller.clientHeight >= _this.scroll.wrapperHeight) {
+								if(_this.orderList.length > 0) {
+									if(pos.y > -30 && pos.y <= 80) {
+										if(_this.move) {
+											_this.showLoading2 = true
+											if(pos.y < 0) {
+												_this.changeTip = '下拉刷新'
+												_this.huan = false
+											} else if(pos.y >= 20) {
+												_this.changeTip = '释放更新'
+												_this.huan = true
+											}
+										}
+									}
+								}
+							} else if(_this.scroll.scroller.clientHeight < _this.scroll.wrapperHeight) {
+								if(_this.orderList.length > 0) {
+									if(pos.y > -30 && pos.y <= 80) {
+										if(_this.move) {
+											_this.showLoading2 = true
 											_this.changeTip = '释放更新'
 											_this.huan = true
 										}
@@ -573,21 +595,29 @@
 						//手指离开
 						_this.scroll.on('touchEnd', (pos) => {
 							_this.move = false
-							if(pos.y >= 20) {
-								_this.changeTip = '加载中...'
-								if(_this.orderList.length > 0) {
-									_this.getOrderList(_this.orderList[0].createTime)
+							if(_this.scroll.scroller.clientHeight >= _this.scroll.wrapperHeight) {
+								if(pos.y >= 20) {
+									_this.changeTip = '加载中...'
+									if(_this.orderList.length > 0) {
+										_this.getOrderList(_this.orderList[0].createTime)
+									}
+								} else {
+									_this.showLoading2 = false
 								}
 							} else {
-								_this.showLoading2 = false
+								_this.changeTip = '加载中...'
+								if(_this.orderList.length > 0) {
+									_this.getOrderList(_this.orderList[0].createTime, 'isLess')
+								}
 							}
+
 						})
 
 					} else {
 						_this.scroll.refresh()
 					}
 
-					_this.isLess = _this.scroll.scroller.clientHeight <= _this.scroll.scrollerHeight ? true : false
+					console.log()
 				})
 
 			},
@@ -816,9 +846,6 @@
 				width: 100%;
 				background: rgba(245, 246, 250, 1);
 				z-index: 11;
-				.h100 {
-					height: 100%;
-				}
 				.content {
 					position: relative;
 					.jz-loading {

@@ -506,7 +506,7 @@
 						_this.distanceIndex = i
 						return false
 					} else {
-						_this.distanceIndex = ''
+						_this.distanceIndex = 50
 					}
 				}
 			},

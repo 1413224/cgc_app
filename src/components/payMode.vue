@@ -126,7 +126,9 @@
 					toPay() {},
 					hide() {},
 					show() {},
-					data:{}
+					data: {
+						money: 0
+					}
 				}
 			}
 		},
