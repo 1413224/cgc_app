@@ -2,16 +2,29 @@
 	<div class="wallet-box">
 		<settingHeader :title="title"></settingHeader>
 		<group :gutter='0'>
-			<cell class="top-item" :title="fundInfo.nickname" value="使用积分" is-link link='/shop'>
-				<img slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
+			<cell class="top-item" primary="content" is-link>
+				<div class="left">
+					<img class="tx" slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
+					<div class="one" @click="$router.push({path:'/member/earnings/profit'})">
+						<p>{{fundInfo.nickname}}</p>
+						<div class="shouyi_box">
+							<img :src="'./static/member/shouyi.png'" />
+							<p>累计收益 {{fundInfo.income}}</p>
+							<i class="icon iconfont icon-arrow-right "></i>
+						</div>
+					</div>
+					<div class="use" @click="$router.push({path:'/shop'})">
+						使用积分
+					</div>
+				</div>
 			</cell>
 		</group>
-		<group :gutter='0' class="top-tip-box">
+		<!--<group :gutter='0' class="top-tip-box">
 			<cell class="top-tip" primary="content" is-link link="/member/earnings/profit">
 				<p>累计收益</p>
 				<p>{{fundInfo.income}}</p>
 			</cell>
-		</group>
+		</group>-->
 		<div class="tip-box">
 			<div class="top">
 				<div class="one-item">
@@ -23,36 +36,36 @@
 					</div>
 					<p>{{fundInfo.isshowFund?fundInfo.balance:'****'}}</p>
 				</div>
-				<!--<div class="one-item">
-					<p>今日收益</p>
-					<p>100000</p>
-				</div>-->
-			</div>
-			<div class="bottom">
-				<div class="one-item" @click="toCurrencyReward('通用积分',3)">
+				<div class="one-item">
 					<p>累计充值</p>
 					<p>{{fundInfo.isshowFund?fundInfo.recharge:'****'}}</p>
 				</div>
+			</div>
+			<div class="bottom">
+				<!--<div class="one-item" @click="toCurrencyReward('通用积分',6)">
+					<p>中奖奖励</p>
+					<p>{{fundInfo.isshowFund?fundInfo.lottery:'****'}}</p>
+				</div>-->
 				<div class="one-item" @click="toCurrencyReward('通用积分',4)">
 					<p>购物奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.cashback:'****'}}</p>
-				</div>
-				<div class="one-item" @click="toCurrencyReward('通用积分',6)">
-					<p>中奖奖励</p>
-					<p>{{fundInfo.isshowFund?fundInfo.lottery:'****'}}</p>
 				</div>
 				<div class="one-item" @click="toCurrencyReward('通用积分',5)">
 					<p>分红奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.commission:'****'}}</p>
 				</div>
+				<div class="one-item" @click="toCurrencyReward('通用积分',6)">
+					<p>累计抽奖</p>
+					<p>{{fundInfo.isshowFund?fundInfo.lottery:'****'}}</p>
+				</div>
 				<div class="one-item" @click="toCurrencyReward('通用积分',7)">
 					<p>任务奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.taskBalance:'****'}}</p>
 				</div>
-				<div class="one-item" @click="$router.push({path:'/member/purse/recharge'})">
+				<!--<div class="one-item" @click="$router.push({path:'/member/purse/recharge'})">
 					<p style="color:#336FFF">积分充值</p>
 					<p>充值1000赠送1000</p>
-				</div>
+				</div>-->
 			</div>
 		</div>
 
@@ -67,24 +80,20 @@
 					</div>
 					<p>{{fundInfo.isshowFund?fundInfo.availablePoints:'****'}}</p>
 				</div>
-				<!--<div class="one-item">
-					<p>今日收益</p>
-					<p>0.00</p>
-				</div>-->
 			</div>
 			<div class="bottom">
 				<div class="one-item" @click="toCreditReward('信用积分',3)">
 					<p>充值奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.rechargePoints:'****'}}</p>
 				</div>
-				<div class="one-item" @click="toCreditReward('信用积分',2)">
-					<p>消费</p>
+				<div class="one-item" @click="toCreditReward('信用积分',4)">
+					<p>购物奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.cashbackPoints:'****'}}</p>
 				</div>
-				<div class="one-item" @click="toCreditReward('信用积分',6)">
+				<!--<div class="one-item" @click="toCreditReward('信用积分',6)">
 					<p>中奖奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.lotteryPoints:'****'}}</p>
-				</div>
+				</div>-->
 				<div class="one-item" @click="toCreditReward('信用积分',5)">
 					<p>推荐用户</p>
 					<p>{{fundInfo.isshowFund?fundInfo.recommendPoints:'****'}}</p>
@@ -93,14 +102,11 @@
 					<p>任务奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.taskPoints:'****'}}</p>
 				</div>
-				<div class="one-item">
-
-				</div>
 			</div>
 		</div>
-		<router-link to='/draw'>
+		<!--<router-link to='/draw'>
 			<img style="display: block;width: 100%;height: auto;" :src="'./static/images/integral-bg.png'" alt="" />
-		</router-link>
+		</router-link>-->
 
 	</div>
 </template>
@@ -293,14 +299,56 @@
 			height: 1.6rem;
 			font-size: 0.34rem;
 			color: rgba(26, 38, 66, 1);
-			img {
-				width: 0.9rem;
-				height: 0.9rem;
-				margin-right: 0.35rem;
-				border-radius: 50%;
+			box-sizing: border-box;
+			.shouyi_box {
+				display: flex;
+				align-items: center;
+				img {
+					width: 0.2rem;
+					height: 0.2rem;
+					margin-right: 0.09rem;
+				}
+				p {
+					font-size: 0.22rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(115, 134, 173, 1);
+					margin-right: 0.12rem;
+				}
 			}
 			.weui-cell__ft {
 				color: rgba(51, 111, 255, 1);
+			}
+			.left {
+				display: flex;
+				.tx {
+					width: 1rem;
+					height: 1rem;
+					margin-right: 0.3rem;
+				}
+				.one {
+					text-align: left;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					padding: 0.05rem 0;
+					p:nth-child(1) {
+						font-size: 0.28rem;
+						color: rgba(26, 38, 66, 1);
+					}
+					P:nth-child(2) {
+						font-size: 0.26rem;
+						color: rgba(115, 134, 173, 1);
+					}
+				}
+				.use {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					font-size: 0.32rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(51, 111, 255, 1);
+				}
 			}
 		}
 	}

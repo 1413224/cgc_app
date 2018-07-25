@@ -40,14 +40,12 @@
 				let uid = this.$route.query.userId
 				let acscode = this.$route.query.randomAccessCode
 				let token = this.$route.query.token
-				
+
 				if(openid) {
 					this.$store.commit('getOpenId', openid)
 					// localStorage.setItem('_openid_',openid)
 					sessionStorage.setItem('_openid_', openid)
-					// alert(1)
 					if(uid && acscode && token) {
-						// alert(2)
 						let hash = {
 							id: uid,
 							randomAccessCode: acscode,
@@ -74,7 +72,7 @@
 
 								_this.$router.push({
 									// path: localStorage['beforeLoginUrl']
-									path:'/index'
+									path: '/index'
 								})
 							}
 						})
@@ -82,24 +80,8 @@
 					} else {
 						_this.$router.push({
 							// path: localStorage['beforeLoginUrl']
-							path:'/index'
+							path: '/index'
 						})
-
-						//						//奖励弹窗
-						//						alert(sessionStorage.getItem('isPopup'))
-						//						alert(_this.$route.path)
-						//						if(sessionStorage.getItem('isPopup')) {
-						//							_this.$popup.hide()
-						//						} else {
-						//							if(_this.$store.state.page.isLogin != 'true' && _this.$route.path != '/user/reg') {
-						//								sessionStorage.setItem('isPopup', 1)
-						//								_this.$popup.show({
-						//									showZc: true
-						//								})
-						//							} else {
-						//								_this.$popup.hide()
-						//							}
-						//						}
 					}
 
 				} else {

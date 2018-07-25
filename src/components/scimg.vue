@@ -121,7 +121,7 @@
 				//上传图片
 				var data = {
 					type: 'user',
-					name: '1',
+					name: 'user',
 					file: b
 				}
 				_this.$http.post(_this.url2.user.fileuploadImage, data).then((res) => {

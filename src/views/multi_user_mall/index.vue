@@ -20,7 +20,7 @@
 			</div>
 			<div class="searchBox">
 				<div class="search">
-					<img src="../../assets/images/shop/search.png">
+					<img :src="'./static/images/ss.png'" />
 					<input style="border-radius: 0;" type="text" placeholder="搜索商品" @click="goSearch">
 				</div>
 			</div>
@@ -137,12 +137,11 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.info = res.data.data
-						localStorage.setItem('storeInfo',JSON.stringify(res.data.data))
+						localStorage.setItem('storeInfo', JSON.stringify(res.data.data))
 						if(_this.info.logo) {
 							_this.logo = _this.info.logo.original
 						}
-						
-							
+
 						if(_this.info.isAlliance == 1) {
 							_this.getAllianceConcern(_this.info.allianceId)
 						} else if(_this.info.isChains == 1) {
@@ -162,7 +161,7 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						
+
 					}
 				})
 			},
@@ -410,23 +409,29 @@
 	.searchBox {
 		width: 100%;
 		background: #fff;
-		padding-bottom: 0.14rem;
+		padding: 0.14rem 0;
 		.search {
 			position: relative;
 			width: 92%;
 			margin: 0 auto;
-			padding-top: 0.14rem;
 			img {
+				width: 0.32rem;
+				height: 0.32rem;
 				position: absolute;
-				width: 5%;
-				top: 0.26rem;
-				left: 0.26rem;
+				left: 0.4rem;
+				top: 50%;
+				transform: translate(-50%, -50%);
 			}
 			input {
+				vertical-align: middle;
 				width: 100%;
 				background: #F5F6FA;
+				border-radius: 2px;
 				color: #1A2642;
-				padding: 0.14rem 0.1rem 0.12rem 0.78rem;
+				height: 0.59rem;
+				line-height: 0.59rem;
+				vertical-align: middle;
+				padding: 0rem 0.1rem 0rem 0.78rem;
 				box-sizing: border-box;
 			}
 			input::-webkit-input-placeholder {

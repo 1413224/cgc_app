@@ -1,5 +1,5 @@
 <template>
-	<div class="zf-box">
+	<div class="zf-box1">
 		<settingHeader :title="title"></settingHeader>
 		<div v-if="isRemember == 3">
 			<div class="tips">
@@ -240,7 +240,7 @@
 </script>
 
 <style lang="less" scoped>
-	.zf-box {
+	.zf-box1 {
 		.tips {
 			height: 2.22rem;
 			display: flex;

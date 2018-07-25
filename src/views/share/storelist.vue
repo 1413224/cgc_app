@@ -20,18 +20,20 @@
 				<div class="type" @click="onScreening()">
 					<p>{{screening}}<img src="../../assets/images/shop/screen.png" alt=""></p>
 				</div>
-				<ul class="address animated" :class="isActive? 'maskTive' : ''">
-					<li class="category">
-						<i class="iconfont">&#xe60b;</i>
-						<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
-						<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
-						<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
-					</li>
-					<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
-						<span>{{item.name}}</span>
-						<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
-					</li>
-				</ul>
+				<div ref="address" class="address animated" :class="isActive? 'maskTive' : ''">
+					<ul ref="viewBox">
+						<li class="category">
+							<i class="iconfont">&#xe60b;</i>
+							<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
+							<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
+							<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
+						</li>
+						<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
+							<span>{{item.name}}</span>
+							<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
+						</li>
+					</ul>
+				</div>
 			</div>
 			<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
 				<div id="distanceType" v-if="priceShang" style="animation-duration:0.3s">
@@ -68,7 +70,7 @@
 					<Loading v-if="showLoading"></Loading>
 					<noMore v-if="showNoMore"></noMore>
 				</div>
-				<div style="margin-top: 1px;">
+				<div style="margin-top: 3px;">
 					<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
 				</div>
 			</div>
@@ -177,7 +179,7 @@
 					}
 				],
 				show1: false,
-				logoTitle: '门店',
+				logoTitle: '距离',
 				logolist: [5, 10, 20, 50, 100],
 				screeningContent: [{
 						title: '美食',
@@ -397,6 +399,8 @@
 				})
 			},
 			onArea() {
+				this.curPage = 1
+
 				//点击区域
 				if(this.areaShang) {
 					this.hide();
@@ -411,7 +415,7 @@
 				//点击筛选
 				this.show1 = !this.show1
 
-				console.log(this.show1)
+				this.curPage = 1
 
 				if(this.show1) {
 					this.$nextTick(() => {
@@ -429,6 +433,9 @@
 				this.hide();
 			},
 			onPrice() {
+
+				this.curPage = 1
+
 				//点击价格
 				if(this.priceShang) {
 					this.hide();
@@ -635,24 +642,34 @@
 						_this.addressDetail = name;
 					}
 				})
+				this.$refs.address.scrollTop = 0
 			},
 			provice() {
 				this.items = this.proviceItem
 				this.addressKey = 1
 				this.cityItem = null
+				this.cityId = ''
+				this.areaId = ''
 				this.districtItem = null
+				
+				this.$refs.address.scrollTop = 0
 			},
 			city() {
+				this.areaId = ''
 				if(this.cityItem) {
 					this.items = this.cityItem
 					this.addressKey = 2
 				}
+				
+				this.$refs.address.scrollTop = 0
 			},
 			district() {
 				if(this.districtItem) {
 					this.items = this.districtItem
 					this.addressKey = 3
 				}
+				
+				this.$refs.address.scrollTop = 0
 			},
 			hide() {
 				this.areaShang = false;
@@ -664,7 +681,6 @@
 	}
 </script>
 <style>
-	
 	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
 	}
@@ -762,7 +778,7 @@
 			background: #fff;
 			z-index: 501;
 			overflow: auto;
-			li {
+			ul>li {
 				position: relative;
 				overflow: hidden;
 				text-align: left;

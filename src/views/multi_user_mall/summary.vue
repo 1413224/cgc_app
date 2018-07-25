@@ -2,16 +2,24 @@
 	<div class="info-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="content-head">
-			<div class="address"><i class="iconfont icon-dizhi1"></i>广州
-				<div class="search fr">
-					<router-link to="/multi_user_mall/search"><input type="text" placeholder='搜索你想要的' /></router-link>
-					<img src="../../assets/images/index/search.png" alt="">
+			<div class="address">
+				<div class="wz">
+					<img :src="'./static/images/address.png'" alt="" />广州
+				</div>
+				<div class="search" @click="$router.push({path:'/multi_user_mall/search'})">
+					<img :src="'./static/images/ss.png'" />
+					<input type="text" readonly="readonly" placeholder="搜索你想要的">
 				</div>
 			</div>
 
-			<swiper :options="swiperOption">
+			<swiper :options="swiperOption" class="swiper">
 				<swiper-slide v-for="(item, index) in demo04_list" :key="index">
-					<img v-lazy="item">
+					<a v-if="item.wbu">
+						<img :src="item.img">
+					</a>
+					<router-link v-else :to="item.url">
+						<img :src="item.img">
+					</router-link>
 				</swiper-slide>
 				<div class="swiper-pagination" slot="pagination"></div>
 			</swiper>
@@ -120,13 +128,18 @@
 		data() {
 			return {
 				title: '多用户商城首页',
-				demo04_list: [
-					// 'https://img1.360buyimg.com/pop/jfs/t16792/328/1497480399/93929/c0d0fbb1/5ac9f290N29a3ad9d.jpg'
-					// '@/assets/images/share/banner1.png'
-					'./static/images/banner1.png',
-					'./static/images/banner1.png',
-					'./static/images/banner1.png'
-
+				demo04_list: [{
+						img: './static/images/banner1.png',
+						url: '',
+					},
+					{
+						img: './static/images/banner1.png',
+						url: '/member/join/index'
+					},
+					{
+						img: './static/images/banner1.png',
+						url: ''
+					}
 				],
 				swiperOption: {
 					pagination: {
@@ -215,60 +228,66 @@
 				width: 100%;
 			}
 			.address {
-				/*border: 1px solid #333;*/
-				/*width: 2rem;*/
-				padding-left: .2rem;
-				font-size: .3rem;
-				color: #fff;
+				height: 1rem;
+				padding: 0 0.42rem;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
 				position: absolute;
 				top: 0;
-				z-index: 2;
-				i {
-					font-size: .45rem;
-					position: relative;
-					top: .05rem;
+				left: 0;
+				width: 100%;
+				z-index: 11;
+				.wz {
+					margin-right: 0.43rem;
+					font-size: 0.28rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(255, 255, 255, 1);
+					display: flex;
+					align-items: center;
+					img {
+						width: 0.22rem;
+						height: auto;
+						vertical-align: middle;
+						margin-right: 0.08rem;
+					}
 				}
 				.search {
 					position: relative;
-					margin-top: 0.1rem;
-					margin-left: 0.34rem;
-					input {
-						width: 4.14rem;
-						height: 0.54rem;
-						line-height: 0.54rem;
-						vertical-align: middle;
-						border-radius: 0.27rem;
-						background: rgba(255, 255, 255, 0.5);
-						/*color: #fff;*/
-						padding-left: 0.64rem;
-						font-size: 0.24rem;
-						letter-spacing: 1px;
-					}
-					input::-webkit-input-placeholder {
-						color: #fff;
-						/*opacity: 1;*/
-					}
-					input::-moz-placeholder {
-						/* Mozilla Firefox 19+ */
-						color: #fff;
-						/*opacity: 1;*/
-					}
-					input:-moz-placeholder {
-						/* Mozilla Firefox 4 to 18 */
-						color: #fff;
-						/*opacity: 1;*/
-					}
-					input:-ms-input-placeholder {
-						/* Internet Explorer 10-11 */
-						color: #fff;
-						/*opacity: 1;*/
-					}
+					flex: 1;
 					img {
 						width: 0.32rem;
 						height: 0.32rem;
 						position: absolute;
-						top: 0.12rem;
-						left: 0.24rem;
+						left: 0.4rem;
+						top: 50%;
+						transform: translate(-50%, -50%);
+					}
+					input {
+						width: 100%;
+						background: rgba(255, 255, 255, 0.55);
+						border-radius: 50px;
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: white;
+						height: 0.54rem;
+						line-height: 0.54rem;
+						vertical-align: middle;
+						padding: 0rem 0.1rem 0rem 0.78rem;
+						box-sizing: border-box;
+					}
+					input::-webkit-input-placeholder {
+						color: #90A2C7 !important; // WebKit browsers 
+					}
+					input:-moz-placeholder {
+						color: #90A2C7 !important; // Mozilla Firefox 4 to 18 
+					}
+					input::-moz-placeholder {
+						color: #90A2C7 !important; //Mozilla Firefox 19+ /
+					}
+					input:-ms-input-placeholder {
+						color: #90A2C7 !important; //Internet Explorer 10+ */
 					}
 				}
 			}
@@ -386,8 +405,7 @@
 			.fujin {
 				width: 95%;
 				margin: .4rem auto 0;
-				border-top: 1px solid #D8DFF0;
-				/*padding-bottom: .4rem;*/
+				/*border-top: 1px solid #D8DFF0;*/
 				h2 {
 					font-size: .36rem;
 					color: #141C33;
@@ -411,7 +429,7 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						i{
+						i {
 							font-size: 0.5rem;
 						}
 					}

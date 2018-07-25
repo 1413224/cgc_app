@@ -19,10 +19,14 @@ export default {
 				if(obj.showZc) {
 					$popup.showZc = obj.showZc
 				}
+				if(obj.showPay) {
+					$popup.showPay = obj.showPay
+				}
 			},
 			hide() {
 				$popup.showSr = false
 				$popup.showZc = false
+				$popup.showPay = false
 			}
 		}
 

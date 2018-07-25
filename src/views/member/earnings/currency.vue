@@ -181,6 +181,7 @@
 		.g-list {
 			.item {
 				.left {
+					display: flex;
 					text-align: left;
 					p:nth-child(1) {
 						font-size: 0.28rem;

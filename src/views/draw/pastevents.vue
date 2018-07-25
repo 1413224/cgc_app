@@ -8,9 +8,7 @@
 					<div class="periodVideo">{{ periodVideo}}</div>
 					<div class="player">
 						<d-player ref="player" @fullscreen="fs" @pause="stop" @play="playerStop = false" :options="options"></d-player>
-						<div @click="bf" v-if="playerStop" class="btn-box">
-							<img :src="'./static/draw/lottery_index8.png'" alt="" />
-						</div>
+						<img  @click="bf" v-if="playerStop" :src="'./static/draw/kongzhi.png'" alt="" />
 					</div>
 				</div>
 
@@ -555,21 +553,13 @@
 				width: 100%;
 				height: 4.2rem;
 				position: relative;
-				.btn-box {
+				img {
 					position: absolute;
 					top: 50%;
 					left: 50%;
 					transform: translate(-50%, -50%);
-					width: 0.8rem;
-					height: 0.8rem;
-					border-radius: 50%;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					background-color: rgba(119, 120, 124, 0.8);
-					img {
-						width: 60%;
-					}
+					width: 1rem;
+					height: 1rem;
 				}
 			}
 		}

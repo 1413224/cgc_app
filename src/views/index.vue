@@ -1,43 +1,86 @@
 <template>
 	<section id="appIndex">
 		<div class="wrapper" ref="wrapper">
-			<div class="content" style="padding-bottom: 0.2rem">
-				<swiper :options="swiperOption" class="swiper">
-					<swiper-slide v-for="(item, index) in demoList" :key="index">
-						<a v-if="item.wbu" @click="goUrl(item.url)">
-							<img :src="item.img">
-						</a>
-						<router-link v-else :to="item.url">
-							<img :src="item.img">
-						</router-link>
-					</swiper-slide>
-					<div class="swiper-pagination" slot="pagination"></div>
-				</swiper>
-				<!--<div class="swiperTop">
-					<span class="position fl">
-						<img src="../assets/images/index/position.png" alt="">
-						<span class="city">{{address}}</span>
-					</span>
-					<div class="search fr" @click="$router.push({path:'/multi_user_mall/search'})">
-						<input type="text" placeholder='搜索你想要的' />
-						<img src="../assets/images/index/search.png" alt="">
+			<div class="content">
+				<div class="index-top">
+					<swiper :options="swiperOption" class="swiper">
+						<swiper-slide v-for="(item, index) in demoList" :key="index">
+							<a v-if="item.wbu" @click="goUrl(item.url)">
+								<img :src="item.img">
+							</a>
+							<router-link v-else :to="item.url">
+								<img :src="item.img">
+							</router-link>
+						</swiper-slide>
+						<div class="swiper-pagination" slot="pagination"></div>
+					</swiper>
+					<div class="swiperTop" @click="$router.push({path:'/multi_user_mall/search'})">
+						<div>
+							<img :src="'./static/images/ss.png'" />
+							<input type="text" readonly="readonly" placeholder="搜索你想要的" />
+						</div>
 					</div>
-				</div>-->
+				</div>
+
 				<div class="notice">
-					<img src="../assets/images/index/notice.png" alt="">
-					<div style="padding-left: 0.15rem">
+					<img :src="'./static/index/index_notice.png'" alt="">
+					<div style="padding-left: 0.16rem">
 						<marquee>
 							<marquee-item v-for="(item,index) in articleList" :key="index" @click.native="goArticleDetail(item.url)" :duration='3000' class="align-middle">{{item.name}}</marquee-item>
 						</marquee>
 					</div>
-					<router-link to="/member/article/index" class=",ore">
-						<i style="margin-left:0.3rem;font-size: 0.5rem;" class="icon iconfont icon-arrow-right"></i>
+					<router-link to="/member/article/index">
+						<i class="icon iconfont icon-arrow-right "></i>
 					</router-link>
-					<!--<router-link to="/member/article/index">
-						<div class="notMore">
-							<img src="../assets/images/shop/turn_right.png">
+				</div>
+
+				<div class="auto-img">
+					<img :src="'./static/index/index_lm.png'" alt="">
+				</div>
+
+				<section>
+					<div class="navigation">
+						<ul>
+							<li v-for="(item, index) in navList" :key="index">
+								<router-link :to="item.url">
+									<div class="li-box">
+										<img :src="item.img">
+									</div>
+									<p>{{item.title}}</p>
+								</router-link>
+								<div class="nav_tip" v-if="item.tip">{{item.tip}}</div>
+							</li>
+						</ul>
+					</div>
+				</section>
+
+				<div class="store-allbox" v-for="item in proList">
+					<div class="titlebox" v-if="item.title">{{item.title}}</div>
+					<div class="auto-img">
+						<img v-lazy="item.img" />
+					</div>
+					<div class="pro-box">
+						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro">
+							<p>{{i.name}}</p>
+							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
+							<span class="img-box">
+								<img v-lazy="i.img" alt="" />
+							</span>
 						</div>
-					</router-link>-->
+					</div>
+				</div>
+				<div class="pro-allbox">
+					<div class="titlebox">优质好货</div>
+					<div class="item-box">
+						<div class="item" v-for="(item,index) in caiList" :key="index">
+							<div>
+								<img :src="item.img" alt="" />
+							</div>
+							<p class="title">{{item.title}}</p>
+							<p class="price"><span class="jg" v-if="item.money">¥ {{item.money}}</span><span class="zf" v-if="item.zf"><span v-if="item.money"> + </span>{{item.zf}} 积分</span></p>
+						</div>
+					</div>
+					<div class="shuaxin">下拉刷新</div>
 				</div>
 				<!--<div class="lottery">
 					<img class="auto-img" src="../assets/images/index/group.png" alt="">
@@ -90,106 +133,32 @@
 						</div>
 					</card>
 				</div>-->
-				<section>
-					<div class="navigation">
-						<ul>
-							<li v-for="(item, index) in navList" :key="index">
-								<router-link :to="item.url">
-									<div class="li-box">
-										<img :src="item.img">
-									</div>
-									<p>{{item.title}}</p>
-								</router-link>
-							</li>
-						</ul>
-					</div>
-				</section>
-
-				<div>
+				<!--<div>
 					<router-link to="/share">
 						<img class="auto-img mt20" v-lazy="'./static/index/share.png'" alt="" />
 					</router-link>
 					<router-link to="/share">
 						<img class="auto-img mt20" v-lazy="'./static/index/wfg.png'" alt="" />
 					</router-link>
-					<!-- <img class="auto-img mt20" v-lazy="'./static/images/mxqy2.png'" alt="" />
+					<img class="auto-img mt20" v-lazy="'./static/images/mxqy2.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/gmdq.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/hxmkl2.png'" alt="" />
 					<img class="auto-img mt20" v-lazy="'./static/images/hdjt.png'" alt="" />
-					<img class="auto-img mt20" v-lazy="'./static/images/mz2.png'" alt="" /> -->
-					<!--<img class="auto-img mt20" src="../../static/images/mxqy2.png" alt="" />
+					<img class="auto-img mt20" v-lazy="'./static/images/mz2.png'" alt="" />
+					<img class="auto-img mt20" src="../../static/images/mxqy2.png" alt="" />
 					<img class="auto-img mt20" src="../../static/index/gmdq.png" alt="" />
 					<img class="auto-img mt20" src="../../static/index/hxmkl.png" alt="" />
 					<img class="auto-img mt20" src="../../static/index/hdjt.png" alt="" />
-					<img class="auto-img mt20" src="../../static/index/mz.png" alt="" />-->
+					<img class="auto-img mt20" src="../../static/index/mz.png" alt="" />
 					<img class="auto-img mt20" src="../../static/images/index1.png" alt="" />
 					<img class="auto-img mt20" src="../../static/images/index2.png" alt="" />
 					<img class="auto-img mt20" src="../../static/images/index3.png" alt="" />
 					<img class="auto-img mt20" src="../../static/images/index4.png" alt="" />
 					<img class="auto-img mt20" src="../../static/images/index5.png" alt="" />
-				</div>
-
-				<!--<div class="pro-allbox" v-for="item in proList">
-					<div class="titlebox">{{item.title}}</div>
-					<img class="auto-img" v-lazy="item.img" />
-					<div class="pro-box">
-						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro">
-							<p>{{i.name}}</p>
-							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
-							<img v-lazy="i.img" alt="" />
-						</div>
-					</div>
-					<img class="auto-img" v-if="item.twoimg" v-lazy="item.twoimg" alt="" />
-				</div>-->
-				<!-- <div class="pro-allbox">
-					<div class="titlebox">明星商家</div>
-					<img style="margin-top: 0.2rem;" class="auto-img" v-lazy="'./static/images/mxqy.png'" alt="" />
-					<div class="store-box">
-						<div class="item-box">
-							<div>
-								<p>国美</p>
-								<p>满100减30</p>
-							</div>
-							<img v-lazy="'./static/images/gm.png'" alt="" />
-						</div>
-						<div class="item-box">
-							<div>
-								<p>红豆</p>
-								<p>满20减10</p>
-							</div>
-							<img v-lazy="'./static/images/hd.png'" alt="" />
-						</div>
-						<div class="item-box">
-							<div>
-								<p>红星美凯龙</p>
-								<p>双日立减5元</p>
-							</div>
-							<img v-lazy="'./static/images/hxmkl.png'" alt="" /></div>
-						<div class="item-box">
-							<div>
-								<p>魅族手机</p>
-								<p>双日立减5元</p>
-							</div>
-							<img v-lazy="'./static/images/mz.png'" alt="" />
-						</div>
-					</div>
-					<div class="titlebox">
-						<span>查看附件商家</span>
-					</div>
-				</div> -->
-				<!--<div class="pro-allbox">
-					<div class="titlebox">猜你喜欢</div>
-					<div class="cai-box">
-						<div v-for="item in caiList">
-							<div class="img-box"><img :src="item.img" alt="" /></div>
-							<p class="one">{{item.title}}</p>
-							<p class="two">{{item.tip}}</p>
-						</div>
-					</div>
 				</div>-->
 			</div>
 		</div>
-		<button @click="goPay()">支付页</button>
+		<!--<button @click="goPay()">支付页</button>-->
 	</section>
 </template>
 
@@ -218,43 +187,58 @@
 					loop: true
 				},
 				caiList: [{
-						img: './static/images/cai1.png',
-						title: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5',
-						tip: '100积分+199.67元'
+						img: './static/index/index_pro1.png',
+						title: '桂林漓江三日五星三人奢华之旅',
+						money: '',
+						zf: '588.00'
+					}, {
+						img: './static/index/index_pro2.png',
+						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
+						money: '52.00',
+						zf: '1888.00'
 					},
 					{
-						img: './static/images/cai2.png',
-						title: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5',
-						tip: '100积分+199.67元'
+						img: './static/index/index_pro3.png',
+						title: 'Swarovski 施华洛世奇 女士Iconic Swan黑天鹅',
+						money: '880.00',
+						zf: ''
+					}, {
+						img: './static/index/index_pro4.png',
+						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
+						money: '1520.00',
+						zf: ''
 					},
 					{
-						img: './static/images/cai2.png',
-						title: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5',
-						tip: '100积分+199.67元'
+						img: './static/index/index_pro5.png',
+						title: 'ESTĒE LAUDER 雅诗兰黛 小棕瓶面部精华',
+						money: '688.00',
+						zf: ''
 					},
 					{
-						img: './static/images/cai1.png',
-						title: 'VANS Old Skool lite黑白超轻鞋款 黑色38.5',
-						tip: '100积分+199.67元'
-					},
+						img: './static/index/index_pro6.png',
+						title: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米',
+						money: '196.00',
+						zf: ''
+					}
 				],
-				demoList: [{
-						img: './static/index/lt.png',
-						url: 'http://www.cgc999.com/app/index.php?i=7&c=entry&m=mx_shop&do=mobile&r=page_detail&pid=8',
-						wbu: true
+				demoList: [
+					//				    {
+					//						img: './static/index/lt.png',
+					//						url: 'http://www.cgc999.com/app/index.php?i=7&c=entry&m=mx_shop&do=mobile&r=page_detail&pid=8',
+					//						wbu: true
+					//					},
+					{
+						img: './static/index/index_banner1.png',
+						url: ''
 					},
 					{
-						img: './static/index/syjm.png',
-						url: '/member/join/index'
+						img: './static/index/index_banner1.png',
+						url: ''
 					},
 					{
-						img: './static/index/lt.png',
+						img: './static/index/index_banner1.png',
 						url: ''
 					}
-					// './static/index/gmdq.png',
-					// './static/index/hxmkl.png',
-					// './static/index/hdjt.png',
-					// './static/index/mz.png'
 				],
 				plateList: [{
 						title: '扫一扫',
@@ -272,44 +256,54 @@
 
 				navList: [{
 						title: '抽奖中心',
-						img: './static/images/cj.png',
-						url: '/draw'
+						img: './static/index/index_nav1.png',
+						url: '/draw',
+						tip: '5000大奖'
 					},
 					{
 						title: '邀请有奖',
-						img: './static/images/yq.png',
+						img: './static/index/index_nav2.png',
 						url: "/member/purse/qrcode?index=1"
 					},
 					{
 						title: '推广助手',
-						img: './static/images/tg.png',
+						img: './static/index/index_nav3.png',
 						url: '/member/generalize/index'
-					},
-					// {title:'赚钱攻略',img:'./static/images/gl.png',url:'/member/strategy/index'},
-					{
-						title: '会员权益',
-						img: './static/images/gl.png',
-						url: '/member/benefits/index'
-					},
-					{
-						title: '充值有奖',
-						img: './static/images/cz.png',
-						url: '/member/purse/recharge'
 					},
 					{
 						title: '我的优惠券',
-						img: './static/images/yh.png',
+						img: './static/index/index_nav6.png',
 						url: '/member/coupon/index'
 					},
-					// {title:'会员权益',img:'./static/images/hy.png',url:'/member/benefits/index'},
 					{
-						title: '我的会员',
-						img: './static/images/hy.png',
+						title: '积分充值',
+						img: './static/index/index_nav5.png',
+						url: '/member/purse/recharge',
+						tip:'充值有礼'
+					},
+					{
+						title: '大牌好货',
+						img: './static/index/index_nav9.png',
+						url: '/member/coupon/index'
+					},
+					{
+						title: '海外购',
+						img: './static/index/index_nav10.png',
+						url: '/member/vip/index'
+					},
+					{
+						title: '优质企业',
+						img: './static/index/index_nav7.png',
+						url: '/share/storelist'
+					},
+					{
+						title: '会员权益',
+						img: './static/index/index_nav4.png',
 						url: '/member/vip/index'
 					},
 					{
 						title: '我的资产',
-						img: './static/images/zc.png',
+						img: './static/index/index_nav8.png',
 						url: '/member/purse/wallet'
 					},
 				],
@@ -327,106 +321,66 @@
 					},
 				],
 				proList: [{
-						title: '积分热兑',
-						img: './static/images/rdui.png',
-						pro: [{
-								name: '红五千',
-								tip: '送给生命中的爱人',
-								img: './static/images/pro1.png'
-							},
-							{
-								name: '长城葡萄酒',
-								tip: '送给生命中的爱人',
-								img: './static/images/pro2.png'
-							},
-							{
-								name: '五粮液',
-								tip: '送给生命中的爱人',
-								img: './static/images/pro3.png'
-							}
-						]
-					},
-					{
-						title: '海外购',
-						img: './static/images/fq.png',
-						pro: [{
-								name: 'JAYJUN面膜',
-								tip: '樱花三部曲',
-								img: './static/images/pro4.png'
-							},
-							{
-								name: '德运脱脂奶粉',
-								tip: '到港澳洲进口',
-								img: './static/images/pro5.png'
-							},
-							{
-								name: 'JBL 无线音箱',
-								tip: '送给生命中的爱人',
-								img: './static/images/pro6.png'
-							}
-						]
-					},
-					//										{
-					//						title: '千万家庭健康计划',
-					//						img: './static/images/jk.png',
-					//						twoimg: './static/images/wfg.png',
-					//						pro: [{
-					//								name: '立即体验',
-					//								tip: '高品质 良心价',
-					//								img: './static/images/pro7.png',
-					//								color: 'yollow'
-					//							},
-					//							{
-					//								name: '领取优惠券',
-					//								tip: '商家体验卷',
-					//								img: './static/images/pro8.png',
-					//								color: 'red'
-					//							},
-					//							{
-					//								name: '招商加盟',
-					//								tip: '千万家庭健康',
-					//								img: './static/images/pro9.png',
-					//								color: 'blue'
-					//							}
-					//						]
-					//					}, 
-					//					{
-					//						title: '积分购买',
-					//						img: './static/images/jf1.png',
-					//						pro: [{
-					//								name: 'RK 机械键盘',
-					//								tip: '竞技游戏有线键盘',
-					//								img: './static/images/jf2.png'
-					//							},
-					//							{
-					//								name: '斗牛犬音箱',
-					//								tip: '重低音立体声',
-					//								img: './static/images/jf3.png'
-					//							},
-					//							{
-					//								name: 'Polo男士包',
-					//								tip: '轻盈包身大容量',
-					//								img: './static/images/jf4.png'
-					//							}
-					//						]
-					//					}
-				],
+					img: './static/index/index_shop.png',
+					pro: [{
+							name: '中国臻品',
+							tip: '华为P20新品发售',
+							img: './static/index/shouji.png',
+							color: 'red'
+						},
+						{
+							name: '全球热门',
+							tip: '美国蔻驰贝壳包',
+							img: './static/index/baobao.png',
+							color: 'blue'
+						},
+						{
+							name: '国际品牌',
+							tip: 'JAYJUN补水面膜',
+							img: './static/index/mianmo.png',
+							color: 'red'
+						}
+					]
+				}, {
+					title: '优质企业',
+					img: './static/index/index_store.png',
+					pro: [{
+							name: '国美',
+							tip: '享生活 尚国美',
+							img: './static/index/guomei.png'
+						},
+						{
+							name: '红星美凯龙',
+							tip: '全球家居生活广场',
+							img: './static/index/hxmkl2.png'
+						},
+						{
+							name: '魅族',
+							tip: '百台手机疯狂送',
+							img: './static/index/meizu.png'
+						}
+					]
+				}],
 				articleList: [],
 			}
 		},
 		created() {
-			
+
 		},
 		mounted() {
-			this.onLoadArticle();
+
+			this.onLoadArticle()
+
 		},
 
 		methods: {
 			goUrl(url) {
 				window.location.href = url
 			},
-			goPay(){
-				this.$router.push({path:'/member/pay/wxgzhpay'})
+			goPay() {
+				this.$router.push({
+					path: '/member/pay/wxgzhpay'
+				})
 			},
 			onLoadArticle() {
 				let _this = this
@@ -469,93 +423,42 @@
 <style lang="less" scoped>
 	@import '~vux/src/styles/1px.less';
 	#appIndex {
-		background-color: #F5F6FA;
+		background-color: #F5F8F9;
 		overflow-x: hidden;
 		padding-bottom: 1rem;
 		.auto-img {
-			width: 100%;
-			height: auto;
-			display: block
+			/*padding: 0 0.08rem;*/
+			img {
+				width: 100%;
+				height: auto;
+				display: block
+			}
 		}
 		.mt20 {
 			margin-top: 0.22rem;
 		}
 		/*banner顶部*/
-		.swiperTop {
-			z-index: 1000;
-			width: 100%;
-			height: 0.88rem;
-			line-height: 0.88rem;
-			position: absolute;
-			top: 0;
-			.position {
-				margin-left: 0.42rem;
-				margin-right: 0.42rem;
-				img {
-					width: 0.22rem;
-					height: 0.28rem;
-					vertical-align: middle;
-				}
-				.city {
-					font-size: 0.24rem;
-					color: #FFFFFF;
-				}
-			}
-			.search {
-				position: relative;
-				text-align: right;
-				padding-right: 0.5rem;
-				input {
-					width: 4.44rem;
-					height: 0.54rem;
-					border-radius: 0.27rem;
-					background-color: #808080;
-					color: #fff;
-					padding-left: 0.64rem;
-					font-size: 0.24rem;
-					opacity: 0.5;
-					letter-spacing: 1px;
-				}
-				input::-webkit-input-placeholder {
-					color: #fff;
-				}
-				input::-moz-placeholder {
-					/* Mozilla Firefox 19+ */
-					color: #fff;
-				}
-				input:-moz-placeholder {
-					/* Mozilla Firefox 4 to 18 */
-					color: #fff;
-				}
-				input:-ms-input-placeholder {
-					/* Internet Explorer 10-11 */
-					color: #fff;
-				}
-				img {
-					width: 0.32rem;
-					height: 0.32rem;
-					position: absolute;
-					top: 0.3rem;
-					left: 0.24rem;
-				}
-			}
-		}
+		.swiperTop {}
 		/*通告模块*/
 		.notice {
 			width: 100%;
-			height: 0.7rem;
-			padding: 0.2rem 0.45rem;
+			height: 0.8rem;
+			padding: 0rem 0.30rem;
 			background-color: #fff;
 			display: flex;
 			align-items: center;
+			justify-content: space-between;
 			margin-bottom: 0.2rem;
 			font-family: PingFangSC-Light;
-			color: rgba(66, 88, 132, 1);
+			color: #425884;
 			font-size: 0.24rem;
+			box-sizing: border-box;
 			.vux-marquee {
 				width: 5rem !important;
 				line-height: 32px;
-				font-size: 14px;
+				font-size: 0.26rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
 				.align-middle {
 					// display: inline-block;
 					overflow: hidden;
@@ -564,23 +467,15 @@
 				}
 			}
 			img {
-				float: left;
-				width: 0.6rem;
-				height: 0.6rem;
+				width: 0.76rem;
+				height: 0.38rem;
 				border-right: 1px solid #E1E1E1;
-				padding-right: 0.2rem;
+				padding-right: 0.21rem;
 			}
-			.notMore {
-				img {
-					width: 0.25rem;
-					height: 0.25rem;
-					border: none;
-					border-left: 1px solid #D8DFF0;
-					display: inline-block;
-					padding: 0.15rem 0;
-					padding-left: 0.3rem;
-					margin-left: 0.85rem;
-				}
+			i {
+				margin-left: 0.3rem;
+				font-size: 0.5rem;
+				color: #90A2C7;
 			}
 		}
 		/*抽奖模块*/
@@ -720,13 +615,16 @@
 			margin: 0.2rem 0;
 			background: white;
 			ul {
-				padding: 0.26rem 0.3rem;
+				padding: 0.42rem 0.26rem;
 				display: flex;
 				flex-wrap: wrap;
 				box-sizing: border-box;
+				li:nth-child(-n+5) {
+					margin-bottom: 0.27rem;
+				}
 				li {
-					width: 25%;
-					margin: 0.25rem 0;
+					width: 20%;
+					position: relative;
 					a {
 						position: relative;
 						display: flex;
@@ -735,8 +633,8 @@
 						flex-direction: column;
 						.li-box {
 							position: relative;
-							width: 0.52rem;
-							height: 0.52rem;
+							width: 0.88rem;
+							height: 0.88rem;
 							img {
 								width: 100%;
 								height: auto;
@@ -753,12 +651,30 @@
 							}
 						}
 						p {
-							font-family: PingFangSC-Regular;
 							font-size: 0.24rem;
-							color: #7D7D7D;
-							letter-spacing: 0;
-							margin-top: 0.18rem;
+							font-family: PingFangSC-Light;
+							color: rgba(26, 38, 66, 1);
+							margin-top: 0.15rem;
 						}
+					}
+					.nav_tip {
+						position: absolute;
+						top: 0%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						width: 0.75rem;
+						height: 0.28rem;
+						text-align: center;
+						padding: 0 0.03rem;
+						background: linear-gradient(-90deg, rgba(249, 95, 97, 1), rgba(253, 106, 72, 1));
+						border-radius: 12px;
+						border: 1px solid rgba(255, 255, 255, 1);
+						font-size: 0.16rem;
+						font-family: PingFangSC-Semibold;
+						color: rgba(255, 255, 255, 1);
+						display: flex;
+						align-items: center;
+						justify-content: center;
 					}
 				}
 			}
@@ -787,40 +703,82 @@
 			}
 		}
 		.pro-allbox {
-			.cai-box {
+			/*标题*/
+			.titlebox {
+				height: 1.02rem;
+				line-height: 1.02rem;
+				text-align: center;
+				background-color: white;
+				font-size: 0.38rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+				margin-top: 0.2rem;
+				span {
+					font-size: 0.28rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(119, 119, 119, 1);
+				}
+			}
+			.item-box {
 				display: flex;
+				justify-content: space-between;
 				flex-wrap: wrap;
-				div {
-					width: 50%;
+				padding: 0 0.1rem;
+				.item {
+					width: 3.62rem;
+					margin-bottom: 0.06rem;
 					background-color: white;
-					padding: 0.31rem 0.23rem;
-					box-sizing: border-box;
-					.img-box {
-						width: 2.4rem;
-						height: 2.75rem;
-						margin: 0 auto;
-						display: flex;
-						align-items: center;
-						justify-content: center;
+					div {
+						height: 3.62rem;
+						overflow: hidden;
 						img {
 							width: 100%;
 							height: auto;
 						}
 					}
-					.one {
-						font-size: 0.24rem;
+					.title {
+						width: 100%;
+						box-sizing: border-box;
+						padding: 0 0.17rem;
+						font-size: 0.26rem;
 						font-family: PingFangSC-Regular;
-						color: rgba(26, 38, 66, 1);
-						margin-top: 0.18rem;
+						color: rgba(34, 34, 34, 1);
+						height: 0.76rem;
+						line-height: 0.38rem;
+						margin-top: 0.1rem;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
 					}
-					.two {
-						font-size: 0.32rem;
-						font-family: PingFangSC-Semibold;
-						color: rgba(242, 48, 48, 1);
-						margin-top: 0.26rem;
+					.price {
+						padding: 0.13rem 0.17rem 0.28rem 0.17rem;
+						.jg {
+							font-size: 0.28rem;
+							font-family: PingFangSC-Semibold;
+							color: rgba(242, 48, 48, 1);
+						}
+						.zf {
+							font-size: 0.28rem;
+							font-family: PingFangSC-Medium;
+							color: rgba(51, 111, 255, 1);
+						}
 					}
 				}
 			}
+			.shuaxin {
+				width: 100%;
+				height: 0.88rem;
+				line-height: 0.88rem;
+				font-size: 0.28rem;
+				text-align: center;
+				font-family: PingFangSC-Regular;
+				color: rgba(119, 119, 119, 1);
+				background: rgba(255, 255, 255, 1);
+			}
+		}
+		.store-allbox {
 			/*标题*/
 			.titlebox {
 				height: 1.02rem;
@@ -849,110 +807,57 @@
 					text-align: center;
 					font-family: PingFangSC-Regular;
 					box-sizing: border-box;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					height: 3rem;
 					p:nth-child(1) {
 						font-size: 0.32rem;
 						color: rgba(26, 38, 66, 1);
-						margin-bottom: 0.09rem;
-						margin-top: 0.3rem;
 					}
 					p:nth-child(2) {
 						font-size: 0.24rem;
 						color: rgba(144, 162, 199, 1);
-						margin-bottom: 0.14rem;
+						margin: 0.1rem 0;
 					}
 					.yollow {
-						width: 1.67rem;
-						height: 0.39rem;
-						line-height: 0.39rem;
-						background: rgba(245, 166, 35, 1);
-						border-radius: 2px;
-						margin: 0 auto;
-						color: white!important;
+						width: 2.1rem;
+						height: 0.38rem;
+						line-height: 0.38rem;
+						border-radius: 0px 10px 0px 10px;
+						color: #F88274!important;
+						border: 1px solid #FEE6E4;
 					}
 					.red {
-						width: 1.67rem;
-						height: 0.39rem;
-						line-height: 0.39rem;
-						background: rgba(242, 48, 48, 1);
-						border-radius: 2px;
-						margin: 0 auto;
-						color: white!important;
+						width: 2.1rem;
+						height: 0.38rem;
+						line-height: 0.38rem;
+						border-radius: 0px 10px 0px 10px;
+						color: #F37F9A!important;
+						border: 1px solid #FFE0EB;
 					}
 					.blue {
-						width: 1.67rem;
-						height: 0.39rem;
-						line-height: 0.39rem;
-						background: rgba(39, 135, 253, 1);
-						border-radius: 2px;
-						margin: 0 auto;
-						color: white!important;
+						width: 2.1rem;
+						height: 0.38rem;
+						line-height: 0.38rem;
+						border-radius: 0px 10px 0px 10px;
+						color: #5FA9E2!important;
+						border: 1px solid #CFEAFF;
 					}
-					img {
-						width: 1.5rem;
-						height: auto;
-					}
-				}
-			}
-			.store-box {
-				display: flex;
-				flex-wrap: wrap;
-				.item-box {
-					width: 50%;
-					height: 1.49rem;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					padding: 0 0.2rem;
-					box-sizing: border-box;
-					background: white;
-					position: relative;
-					div {
-						p:nth-child(1) {
-							font-size: 0.28rem;
-							color: rgba(26, 38, 66, 1);
-							font-family: PingFangSC-Medium;
-						}
-						p:nth-child(2) {
-							font-size: 0.24rem;
-							font-family: PingFangSC-Regular;
-							color: rgba(144, 162, 199, 1);
-							margin-top: 0.08rem;
+					.img-box {
+						width: 2.48rem;
+						height: 1.68rem;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						overflow: hidden;
+						img {
+							width: 80%;
+							height: auto;
+							display: block
 						}
 					}
-					img {
-						width: 1.50rem;
-						height: 1.50rem;
-						display: block;
-					}
-				}
-				.item-box:before {
-					content: " ";
-					position: absolute;
-					right: 0;
-					top: 0;
-					width: 1px;
-					bottom: 0;
-					border-right: 1px solid #C7C7C7;
-					color: #C7C7C7;
-					-webkit-transform-origin: 100% 0;
-					transform-origin: 100% 0;
-					-webkit-transform: scaleX(0.5);
-					transform: scaleX(0.5);
-				}
-				.item-box:after {
-					content: " ";
-					position: absolute;
-					left: 0;
-					top: 0;
-					right: 0;
-					height: 1px;
-					border-top: 1px solid #C7C7C7;
-					color: #D9D9D9;
-					-webkit-transform-origin: 0 0;
-					transform-origin: 0 0;
-					-webkit-transform: scaleY(0.5);
-					transform: scaleY(0.5);
-					left: 0px;
 				}
 			}
 		}
@@ -961,11 +866,51 @@
 
 <style lang='less'>
 	#appIndex {
+		.index-top {
+			position: relative;
+			.swiperTop {
+				position: absolute;
+				top: 13%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 6.5rem;
+				height: 0.6rem;
+				background: rgba(255, 255, 255, 1);
+				border-radius: 5px;
+				opacity: 0.5035000000000001;
+				z-index: 15;
+				display: flex;
+				align-items: center;
+				overflow: hidden;
+				div {
+					width: 100%;
+					height: 100%;
+					position: relative;
+					img {
+						width: 0.32rem;
+						height: 0.32rem;
+						position: absolute;
+						top: 50%;
+						left: 34%;
+						transform: translate(-50%, -50%);
+					}
+					input {
+						width: 100%;
+						height: 100%;
+						text-align: center;
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(255, 255, 255, 1);
+					}
+				}
+			}
+		}
 		/*banner轮播*/
 		.swiper {
 			/*height: 3rem;*/
 			img {
 				width: 100%;
+				display: block;
 				/*height: 3rem;*/
 			}
 			.swiper-pagination-bullet {
