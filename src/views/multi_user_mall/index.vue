@@ -21,7 +21,7 @@
 						<p class="title">蛙来哒娃娃要来啦（番禺天安科技园店）蛙来哒娃娃要来</p>
 						<p class="sf"><span class="lm">联盟企业</span><span class="ly">联营企业</span></p>
 					</div>
-					<p class="num">NO：2523515</p>
+					<p class="num">健康美容/娱乐会所</p>
 				</div>
 			</div>
 			<div class="two">
@@ -67,25 +67,9 @@
 		</div>
 		<div class="foot-box">
 			<ul>
-				<!--<li v-for="(item,index) in navList" :key="index" @click="navActive(index)">
-						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
-						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
-					</li>-->
-				<li @click="navActive(0)">
-					<img :src="navIndex == 0?'./static/images/shop-bottom1-in.png':'./static/images/shop-bottom1.png'" alt="" />
-					<p :class="{'blue':navIndex == 0}">首页</p>
-				</li>
-				<li @click="navActive(1)">
-					<img :src="navIndex == 1?'./static/images/shop-bottom2-in.png':'./static/images/shop-bottom2.png'" alt="" />
-					<p :class="{'blue':navIndex == 1}">商品</p>
-				</li>
-				<li @click="navActive(2)">
-					<img :src="navIndex == 2?'./static/images/shop-bottom3-in.png':'./static/images/shop-bottom3.png'" alt="" />
-					<p :class="{'blue':navIndex == 2}">服务</p>
-				</li>
-				<li @click="navActive(3)">
-					<img :src="navIndex == 3?'./static/images/shop-bottom4-in.png':'./static/images/shop-bottom4.png'" alt="" />
-					<p :class="{'blue':navIndex == 3}">简介</p>
+				<li v-for="(item,index) in navList" :key="index" @click="navActive(index)">
+					<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
+					<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
 				</li>
 			</ul>
 		</div>
@@ -274,8 +258,7 @@
 						}
 					}
 					.num {
-						text-align: right;
-						font-size: 0.28rem;
+						font-size: 0.24rem;
 						font-family: PingFangSC-Regular;
 						color: rgba(144, 162, 199, 1);
 					}
@@ -374,6 +357,9 @@
 						font-family: PingFangSC-Regular;
 						color: rgba(26, 38, 66, 1);
 					}
+					p:nth-child(2) {
+						color: #90A2C7;
+					}
 					.code {
 						display: flex;
 						align-items: center;
@@ -441,6 +427,7 @@
 			width: 100%;
 			height: 1.20rem;
 			background: rgba(255, 255, 255, 1);
+			z-index: 16;
 			ul {
 				width: 100%;
 				height: 100%;

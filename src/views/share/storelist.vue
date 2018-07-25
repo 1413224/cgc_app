@@ -62,19 +62,21 @@
 				<div v-if="list.length > 0">
 					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
 						<div class="item">
-							<img :src="'./static/share/shop1.png'" alt="" />
+							<div class="logo">
+								<img v-if="item.logo" :src="item.logo.original" alt="" />
+							</div>
 							<div>
-								<p class="name">蛙来哒（番禺天安科技园店）</p>
+								<p class="name">{{item.name}}</p>
 								<p class="type">快速简餐 l 特色美食</p>
-								<p class="address"><span>番禺大道北55号天安节能科技园</span><span>5km</span></p>
+								<p class="address"><span>番禺大道北55号天安节能科技园</span><span>{{item.distance}}km</span></p>
 								<p class="sf"><span class="lm">联盟企业</span><span class="ly">联营企业</span></p>
 							</div>
 						</div>
-						<Loading v-if="showLoading"></Loading>
-						<noMore v-if="showNoMore"></noMore>
 					</div>
 				</div>
 
+				<Loading v-if="showLoading"></Loading>
+				<noMore v-if="showNoMore"></noMore>
 				<div style="margin-top: 3px;">
 					<noData v-if="list.length == 0" :status="2" :stateText="hasDw?'暂无门店':'请允许获取您的当前位置'"></noData>
 				</div>
@@ -98,7 +100,7 @@
 										<div>
 											<div class="logolist">
 												<li class="item" :class="{'li-selected':distanceIndex == index}" v-for="(item, index) in logolist" :key="index" @click="changeCss(index,item)">{{item}}公里</li>
-												<x-input class="distance" placeholder="请输入距离" v-model="jl" type="text" @on-change="distanceChange"></x-input>
+												<x-input class="distance" placeholder="请输入距离" v-model="jl" type="number" @on-change="distanceChange"></x-input>
 											</div>
 										</div>
 									</group>
@@ -131,7 +133,7 @@
 			return {
 				title: '门店列表',
 				data: [],
-				hasDw:false,
+				hasDw: false,
 				addressDetail: null, //选中的市
 				addressKey: 1, //省 市 区的状态切换
 				isActive: false, //地址框的显隐
@@ -166,7 +168,7 @@
 				showLoading: false,
 				showNoMore: false,
 				distanceIndex: 0,
-				jl:'',
+				jl: '',
 
 				listType: '1',
 				countryId: 1,
@@ -225,11 +227,11 @@
 			this.getLg()
 		},
 		methods: {
-			toDetail(id){
+			toDetail(id) {
 				this.$router.push({
-					path:'/multi_user_mall',
-					query:{
-						id:id
+					path: '/multi_user_mall',
+					query: {
+						id: id
 					}
 				})
 			},
@@ -352,8 +354,8 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						if(res.data.data) {
-							if(res.data.data.length > 0) {
-								_this.list = _this.list.concat(res.data.data)
+							if(res.data.data.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.list)
 								_this.showLoading = true
 								_this.showNoMore = false
 							}
@@ -458,7 +460,7 @@
 				var _this = this
 
 				_this.distance = kilometre
-				
+
 				_this.jl = kilometre
 
 				_this.distanceIndex = index
@@ -492,15 +494,15 @@
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'distance': _this.distance,
-						'distanceIndex':_this.distanceIndex
+						'distanceIndex': _this.distanceIndex
 					})
 				})
 			},
 			distanceChange() {
 				var _this = this
-	
+
 				_this.distance = _this.jl
-				
+
 				for(var i = 0; i < _this.logolist.length; i++) {
 					if(_this.logolist[i] == _this.jl) {
 						_this.distanceIndex = i
@@ -866,10 +868,17 @@
 			border-bottom: 1px solid rgba(216, 223, 240, 1);
 			.item {
 				display: flex;
-				img {
+				.logo {
 					width: 2.06rem;
 					height: 1.62rem;
 					margin-right: 0.18rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					img {
+						width: 70%;
+						height: auto;
+					}
 				}
 				div {
 					flex: 1;
@@ -890,7 +899,7 @@
 						display: flex;
 						justify-content: space-between;
 						span:nth-child(1) {
-							width: 3.41rem;
+							width: 3rem;
 							overflow: hidden;
 							text-overflow: ellipsis;
 							white-space: nowrap;

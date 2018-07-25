@@ -95,7 +95,6 @@
 
 					},
 					width: '3',
-					height: '55',
 					fontSize: '26px', //字体大小,
 					text: ''
 				},
@@ -365,7 +364,7 @@
 						}
 						svg {
 							width: 100%;
-							height: 1.6rem;
+							height: 2rem;
 						}
 						text {
 							font-size: 0.32rem;
