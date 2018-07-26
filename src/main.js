@@ -74,8 +74,21 @@ Vue.use(VueLazyLoad, {
 // --------------------------------
 
 Vue.filter('getDate', function(value) {
+	if(value != 0 && value) {
+		var v = value.toString()
+		if(v.length == 10){
+			return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
+		}else if(v.length == 13){
+			return mainApp.frDateTimehp.getFormatTimesTamp(value)
+		}
+	} else {
+		return value
+	}
+})
+
+Vue.filter('getDate2', function(value) {
 	if(value != 0) {
-		return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
+		return mainApp.frDateTimehp.getFormatDateTamp(value * 1000)
 	} else {
 		return value
 	}
@@ -149,7 +162,7 @@ const history = window.sessionStorage
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' && key != 'isPay' && key != '_openid_') {
+	if(key != 'isPopup' && key != 'isPay' && key != 'isZc' && key != '_openid_') {
 		history.removeItem(key)
 	}
 }
@@ -183,7 +196,7 @@ router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
 	
-	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg') && (to.path != '/multi_user_mall')) {
+	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
 
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 

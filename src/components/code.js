@@ -20,6 +20,9 @@ export default {
 				if(obj.ishide){
 					$code.ishide = obj.ishide
 				}
+				if(obj.isshow){
+					$code.isshow = obj.isshow
+				}
 			},
 			hide(){
 				$code.showCode = false

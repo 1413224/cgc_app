@@ -1,16 +1,16 @@
 <template>
 	<div class="wallet-box">
-		<settingHeader :title="title"></settingHeader>
-		<group :gutter='0'>
+		<settingHeader class="wallet-header" :title="title"></settingHeader>
+		<group :gutter='0' class="bno">
 			<cell class="top-item" primary="content" is-link>
 				<div class="left">
 					<img class="tx" slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
 					<div class="one" @click="$router.push({path:'/member/earnings/profit'})">
-						<p>{{fundInfo.nickname}}</p>
+						<p>{{fundInfo.nickname?fundInfo.nickname:'未设置'}}</p>
 						<div class="shouyi_box">
 							<img :src="'./static/member/shouyi.png'" />
 							<p>累计收益 {{fundInfo.income}}</p>
-							<i class="icon iconfont icon-arrow-right "></i>
+							<!--<i class="icon iconfont icon-arrow-right "></i>-->
 						</div>
 					</div>
 					<div class="use" @click="$router.push({path:'/shop'})">
@@ -30,13 +30,13 @@
 				<div class="one-item">
 					<div style="display: flex;align-items: center;">
 						<span>通用积分</span>
-						<div style="height: 100%;padding: 0 0.3rem;">
+						<div style="height: 100%;padding: 0 0.05rem;">
 							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
 						</div>
 					</div>
 					<p>{{fundInfo.isshowFund?fundInfo.balance:'****'}}</p>
 				</div>
-				<div class="one-item">
+				<div class="one-item" @click="toCurrencyReward('通用积分',3)">
 					<p>累计充值</p>
 					<p>{{fundInfo.isshowFund?fundInfo.recharge:'****'}}</p>
 				</div>
@@ -62,10 +62,6 @@
 					<p>任务奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.taskBalance:'****'}}</p>
 				</div>
-				<!--<div class="one-item" @click="$router.push({path:'/member/purse/recharge'})">
-					<p style="color:#336FFF">积分充值</p>
-					<p>充值1000赠送1000</p>
-				</div>-->
 			</div>
 		</div>
 
@@ -74,7 +70,7 @@
 				<div class="one-item">
 					<div style="display: flex;align-items: center;">
 						<span>信用积分</span>
-						<div style="height: 100%;padding: 0 0.3rem;">
+						<div style="height: 100%;padding: 0 0.05rem;">
 							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
 						</div>
 					</div>
@@ -90,10 +86,6 @@
 					<p>购物奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.cashbackPoints:'****'}}</p>
 				</div>
-				<!--<div class="one-item" @click="toCreditReward('信用积分',6)">
-					<p>中奖奖励</p>
-					<p>{{fundInfo.isshowFund?fundInfo.lotteryPoints:'****'}}</p>
-				</div>-->
 				<div class="one-item" @click="toCreditReward('信用积分',5)">
 					<p>推荐用户</p>
 					<p>{{fundInfo.isshowFund?fundInfo.recommendPoints:'****'}}</p>
@@ -102,7 +94,18 @@
 					<p>任务奖励</p>
 					<p>{{fundInfo.isshowFund?fundInfo.taskPoints:'****'}}</p>
 				</div>
+				<div class="one-item" @click="toCreditReward('信用积分',6)">
+					<p>中奖奖励</p>
+					<p>{{fundInfo.isshowFund?fundInfo.lotteryPoints:'****'}}</p>
+				</div>
+				<div class="one-item" @click="$router.push({path:'/member/purse/recharge'})">
+					<p style="color:#336FFF">充值送积分</p>
+					<p>充值1000赠送1000</p>
+				</div>
 			</div>
+		</div>
+		<div class="nomore1">
+			<load-more :show-loading="false" tip="到底了" background-color="#F5F8F9"></load-more>
 		</div>
 		<!--<router-link to='/draw'>
 			<img style="display: block;width: 100%;height: auto;" :src="'./static/images/integral-bg.png'" alt="" />
@@ -192,6 +195,36 @@
 <style lang="less">
 	.wallet-box {
 		font-family: PingFangSC-Medium;
+		.nomore1 {
+			display: flex;
+			background: rgba(245, 248, 249, 1);
+			.weui-loadmore {
+				margin-bottom: 0;
+			}
+			.weui-loadmore_line {
+				margin-top: 0.5rem !important;
+			}
+		}
+		.wallet-header .header {
+			position: relative;
+		}
+		.wallet-header .header:after {
+			content: " ";
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 1px;
+			border-bottom: 1px solid #D9D9D9;
+			color: #D9D9D9;
+			-webkit-transform-origin: 0 100%;
+			transform-origin: 0 100%;
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+		}
+		.bno .vux-no-group-title:before {
+			border-top: none!important;
+		}
 		.tip-box {
 			margin-top: 0.2rem;
 			background-color: white;
@@ -205,7 +238,7 @@
 					position: relative;
 					box-sizing: border-box;
 					p:nth-child(1) {
-						font-size: 0.30rem;
+						font-size: 0.32rem;
 						color: rgba(26, 38, 66, 1);
 					}
 					p:nth-child(2) {
@@ -246,12 +279,12 @@
 				.one-item {
 					flex: 1;
 					display: flex;
-					justify-content: center;
+					justify-content: space-between;
 					flex-direction: column;
 				}
 				.one-item:nth-child(1) {
 					div>span {
-						font-size: 0.30rem;
+						font-size: 0.28rem;
 						color: rgba(115, 134, 173, 1);
 						margin-right: 0.14rem;
 					}
@@ -260,14 +293,14 @@
 						height: auto;
 					}
 					p {
-						margin-top: 0.1rem;
 						color: rgba(26, 38, 66, 1);
+						font-size: 0.48rem;
 					}
 				}
 				.one-item:nth-child(2) {
 					text-align: right;
 					p:nth-child(1) {
-						font-size: 0.30rem;
+						font-size: 0.28rem;
 						color: rgba(115, 134, 173, 1);
 					}
 					p:nth-child(2) {
@@ -321,8 +354,8 @@
 			.left {
 				display: flex;
 				.tx {
-					width: 1rem;
-					height: 1rem;
+					width: 0.75rem;
+					height: 0.75rem;
 					margin-right: 0.3rem;
 				}
 				.one {
@@ -332,11 +365,11 @@
 					justify-content: space-between;
 					padding: 0.05rem 0;
 					p:nth-child(1) {
-						font-size: 0.28rem;
+						font-size: 0.34rem;
 						color: rgba(26, 38, 66, 1);
 					}
 					P:nth-child(2) {
-						font-size: 0.26rem;
+						font-size: 0.22rem;
 						color: rgba(115, 134, 173, 1);
 					}
 				}

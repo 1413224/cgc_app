@@ -27,6 +27,9 @@ export default {
 				if(obj.ishide) {
 					$dialog.ishide = obj.ishide
 				}
+				if(obj.isshow) {
+					$dialog.isshow = obj.isshow
+				}
 				if(obj.delay && !obj.clickDelay) {
 					setTimeout(function() {
 						$dialog.showDialog = false

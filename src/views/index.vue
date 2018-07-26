@@ -16,7 +16,7 @@
 					</swiper>
 					<div class="swiperTop" @click="$router.push({path:'/multi_user_mall/search'})">
 						<div>
-							<img :src="'./static/images/ss.png'" />
+							<img :src="'./static/images/ss2.png'" />
 							<input type="text" readonly="readonly" placeholder="搜索你想要的" />
 						</div>
 					</div>
@@ -56,15 +56,15 @@
 
 				<div class="store-allbox" v-for="item in proList">
 					<div class="titlebox" v-if="item.title">{{item.title}}</div>
-					<div class="auto-img">
-						<img v-lazy="item.img" />
+					<div class="auto-img" @click="$router.push({path:'/brand/global'})">
+						<img :src="item.img" />
 					</div>
 					<div class="pro-box">
-						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro">
+						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro" @click="toUrl(i.url)">
 							<p>{{i.name}}</p>
 							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
 							<span class="img-box">
-								<img v-lazy="i.img" alt="" />
+								<img :src="i.img" alt="" />
 							</span>
 						</div>
 					</div>
@@ -73,11 +73,16 @@
 					<div class="titlebox">优质好货</div>
 					<div class="item-box">
 						<div class="item" v-for="(item,index) in caiList" :key="index">
-							<div>
+							<div class="po-img">
+								<img v-if="item.dh" :src="'./static/index/xydh.png'" alt="">
+								<img v-if="item.gm" :src="'./static/index/xygm.png'" alt="">
+							</div>
+							<div class="da-box">
 								<img :src="item.img" alt="" />
 							</div>
 							<p class="title">{{item.title}}</p>
-							<p class="price"><span class="jg" v-if="item.money">¥ {{item.money}}</span><span class="zf" v-if="item.zf"><span v-if="item.money"> + </span>{{item.zf}} 积分</span></p>
+							<p class="price"><span class="jg" v-if="item.money">¥ {{item.money}}</span><span class="zf" v-if="item.zf"><span v-if="item.money"> + </span>{{item.zf}} <span class="f20">积分</span></span>
+							</p>
 						</div>
 					</div>
 					<div class="shuaxin">下拉刷新</div>
@@ -190,12 +195,14 @@
 						img: './static/index/index_pro1.png',
 						title: '桂林漓江三日五星三人奢华之旅',
 						money: '',
-						zf: '588.00'
+						zf: '588.00',
+						dh: true
 					}, {
 						img: './static/index/index_pro2.png',
 						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
 						money: '52.00',
-						zf: '1888.00'
+						zf: '1888.00',
+						gm: true
 					},
 					{
 						img: './static/index/index_pro3.png',
@@ -229,15 +236,15 @@
 					//					},
 					{
 						img: './static/index/index_banner1.png',
-						url: ''
+						url: '/member/vip/right'
 					},
 					{
-						img: './static/index/index_banner1.png',
-						url: ''
+						img: './static/index/index_banner2.png',
+						url: '/member/vip/index'
 					},
 					{
-						img: './static/index/index_banner1.png',
-						url: ''
+						img: './static/index/index_banner3.png',
+						url: '/draw'
 					}
 				],
 				plateList: [{
@@ -279,17 +286,17 @@
 						title: '积分充值',
 						img: './static/index/index_nav5.png',
 						url: '/member/purse/recharge',
-						tip:'充值有礼'
+						tip: '充值有礼'
 					},
 					{
 						title: '大牌好货',
 						img: './static/index/index_nav9.png',
-						url: '/member/coupon/index'
+						url: '/brand/famous'
 					},
 					{
 						title: '海外购',
 						img: './static/index/index_nav10.png',
-						url: '/member/vip/index'
+						url: '/brand/shop'
 					},
 					{
 						title: '优质企业',
@@ -326,19 +333,22 @@
 							name: '中国臻品',
 							tip: '华为P20新品发售',
 							img: './static/index/shouji.png',
-							color: 'red'
+							color: 'red',
+							url: ''
 						},
 						{
 							name: '全球热门',
 							tip: '美国蔻驰贝壳包',
 							img: './static/index/baobao.png',
-							color: 'blue'
+							color: 'blue',
+							url: '/brand/shop'
 						},
 						{
 							name: '国际品牌',
 							tip: 'JAYJUN补水面膜',
 							img: './static/index/mianmo.png',
-							color: 'red'
+							color: 'red',
+							url: '/brand/famous'
 						}
 					]
 				}, {
@@ -409,6 +419,11 @@
 			},
 			goArticleDetail(uri) {
 				window.location.href = uri;
+			},
+			toUrl(url) {
+				this.$router.push({
+					path: url
+				})
 			}
 		},
 		components: {
@@ -728,7 +743,17 @@
 					width: 3.62rem;
 					margin-bottom: 0.06rem;
 					background-color: white;
-					div {
+					position: relative;
+					.po-img {
+						position: absolute;
+						top: 0;
+						left: 0;
+						img {
+							width: 1.28rem;
+							height: 0.4rem;
+						}
+					}
+					.da-box {
 						height: 3.62rem;
 						overflow: hidden;
 						img {
@@ -763,6 +788,11 @@
 							font-size: 0.28rem;
 							font-family: PingFangSC-Medium;
 							color: rgba(51, 111, 255, 1);
+							.f20 {
+								font-size: 0.20rem;
+								font-family: PingFangSC;
+								color: rgba(51, 111, 255, 1);
+							}
 						}
 					}
 				}
@@ -853,7 +883,7 @@
 						justify-content: center;
 						overflow: hidden;
 						img {
-							width: 80%;
+							width: 60%;
 							height: auto;
 							display: block
 						}
@@ -875,9 +905,7 @@
 				transform: translate(-50%, -50%);
 				width: 6.5rem;
 				height: 0.6rem;
-				background: rgba(255, 255, 255, 1);
 				border-radius: 5px;
-				opacity: 0.5035000000000001;
 				z-index: 15;
 				display: flex;
 				align-items: center;
@@ -900,6 +928,13 @@
 						text-align: center;
 						font-size: 0.24rem;
 						font-family: PingFangSC-Regular;
+						color: rgba(255, 255, 255, 1);
+						background: rgba(255, 255, 255, 0.5);
+					}
+					input::-webkit-input-placeholder {
+						color: rgba(255, 255, 255, 1);
+					}
+					input:-moz-placeholder {
 						color: rgba(255, 255, 255, 1);
 					}
 				}

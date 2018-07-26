@@ -1,5 +1,5 @@
 <template>
-	<div class="currency-box">
+	<div class="credit-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="top" @click="toCreditReward('通用积分',1)">
 			<p>{{fundInfo.availablePoints}}</p>
@@ -120,7 +120,7 @@
 	}
 </script>
 <style lang="less">
-	.currency-box {
+	.credit-box {
 		font-family: PingFangSC-Medium;
 		.top {
 			height: 3.2rem;

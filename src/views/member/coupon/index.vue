@@ -3,13 +3,13 @@
 		<settingHeader style="z-index: 750;position: relative;" :title="title"></settingHeader>
 		<div class="nav">
 			<div class="pr">
-				<div class="area" @click="onType">
+				<div class="area" @click="onType(0)" :class="{'blue':navIndex == 0}">
 					<p>{{defaultType}}<i class="iconfont" :class="typeShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 				</div>
-				<div class="price" @click="onStatus">
+				<div class="price" @click="onStatus(1)" :class="{'blue':navIndex == 1}">
 					<p>{{defaultStatus}}<i class="iconfont" :class="statusShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 				</div>
-				<div class="type" @click="onDate">
+				<div class="type" @click="onDate(2)" :class="{'blue':navIndex == 2}">
 					<p>{{defaultTime}}<i class="iconfont" :class="dateShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
 				</div>
 			</div>
@@ -18,19 +18,19 @@
 				<div class="po popupTop" v-if="typeShang" style="animation-duration:0.3s">
 					<!-- 类型 -->
 					<group>
-						<radio title="title" v-model="par.type" :options="opType" value="0" @on-change="changeType" :selected-label-style="{color: '#336FFF'}"></radio>
+						<radio title="title" v-model="par.type" :options="opType" @on-change="changeType" :selected-label-style="{color: '#336FFF'}"></radio>
 					</group>
 				</div>
 				<div class="po popupTop" v-if="statusShang" style="animation-duration:0.3s">
 					<!-- 状态 -->
 					<group>
-						<radio title="title" v-model="par.status" :options="opStatus" value="1" @on-change="changeStatus" :selected-label-style="{color: '#336FFF'}"></radio>
+						<radio title="title" v-model="par.status" :options="opStatus" @on-change="changeStatus" :selected-label-style="{color: '#336FFF'}"></radio>
 					</group>
 				</div>
 				<div class="po popupTop" v-if="dateShang" style="animation-duration:0.3s">
 					<!-- 领取时间 -->
 					<group>
-						<radio title="title" v-model="par.timeType" :options="opDate" value="0" @on-change="changeDate" :selected-label-style="{color: '#336FFF'}"></radio>
+						<radio title="title" v-model="par.timeType" :options="opDate" @on-change="changeDate" :selected-label-style="{color: '#336FFF'}"></radio>
 					</group>
 				</div>
 			</transition>
@@ -40,9 +40,42 @@
 		<div class="couponList">
 			<div class="wrapper" :class="{'top46':$store.state.page.isWx}" ref="wrapper">
 				<div class="content">
-					<div v-if="couponList.length>0">
+
+					<div class="couponlist-box" v-if="couponList.length>0">
+						<div v-for="(item,index) in couponList" :key="index" class="bs" :class="{'no':item.status == 2 || item.status == 3}">
+							<div class="bg">
+								<div class="top">
+									<div>
+										<div class="one">
+											<div class="type-btn" v-if="item.type == 0">满减券</div>
+											<div class="type-btn" v-if="item.type == 10">体验券</div>
+											<div class="type-btn" v-if="item.type == 20">满减券</div>
+											<div class="type-btn" v-if="item.type == 30">折扣券</div>
+											<div class="type-btn" v-if="item.type == 40">运费券</div>
+											<div class="type-btn" v-if="item.type == 50">现金券</div>
+											<span>{{item.name}}</span>
+										</div>
+										<p>使用期限：{{item.startTime | getDate2}} 至  {{item.endTime | getDate2}}</p>
+									</div>
+									<div class="money">
+										<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
+										<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
+									</div>
+								</div>
+								<img :src="'./static/member/used.png'" v-if="item.status == 2">
+								<img :src="'./static/member/expired.png'" v-if="item.status == 3">
+							</div>
+							<div class="bottom" :class="{'show':item.showAll}" @click="view(index)">
+								<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
+								<img :class="{'r180':item.showAll}" :src="'./static/images/xia.png'" alt="" />
+							</div>
+						</div>
+						<Loading v-if="show"> </Loading>
+						<Nomore v-if="showNo"></Nomore>
+					</div>
+
+					<!--<div v-if="couponList.length>0">
 						<div v-for="(item,index) in couponList" :key="index" :style="[!item.show?mb:'']" class="roll">
-							<!-- -->
 							<div class="rollOne">
 								<div class="right">
 									<div class="top" :class="{'textColor': item.status != 1}">
@@ -52,7 +85,7 @@
 									<div class="middle">
 										<div>
 											<span>满{{item.condition}}元减{{item.denomination}}元</span><br>
-											<span>{{item.startTime | getDate}} - {{item.endTime | getDate}}</span>
+											<span>{{item.startTime | getDate2}} - {{item.endTime | getDate2}}</span>
 										</div>
 										<div class="bottom" @click="view(index)">查看详情 <img :class="{'noshow':!item.show}" :src="iconImg"></div>
 									</div>
@@ -82,9 +115,8 @@
 								{{item.content}}详情
 							</div>
 						</div>
-						<Loading v-if="show"> </Loading>
-						<Nomore v-if="showNo"></Nomore>
-					</div>
+						
+					</div>-->
 				</div>
 			</div>
 		</div>
@@ -92,7 +124,7 @@
 		<section class="no_data" v-if="couponList.length == 0">
 			<div class="none-data">
 				<img :src="imgSrc" alt="">
-				<p>暂无数据</p>
+				<p>暂无优惠券</p>
 			</div>
 		</section>
 	</div>
@@ -112,9 +144,9 @@
 				twoIndex: 0,
 				drawerShow: false,
 				show: false,
-				defaultType:"类型",
-				defaultStatus:"状态",
-				defaultTime:"领取时间",
+				defaultType: "类型",
+				defaultStatus: "状态",
+				defaultTime: "领取时间",
 				couponType: ['全部', '未使用', '已使用', '已过期'],
 				twoClass: ['所有优惠券', '体验券', '满减券', '折扣券'],
 				title: '我的优惠券',
@@ -122,6 +154,7 @@
 				show9: false,
 				showNo: false,
 				showIndex: '',
+				navIndex: 0,
 				mb: {
 					marginBottom: '0.2rem'
 				},
@@ -129,7 +162,7 @@
 				iconImg: './static/member/yhq-down.png',
 				par: {
 					type: 0,
-					status: 0,
+					status: 1,
 					timeType: 0
 				},
 				opType: [{
@@ -162,7 +195,7 @@
 				opStatus: [{
 						key: '0',
 						value: '全部'
-					},{
+					}, {
 						key: '1',
 						value: '未使用'
 					},
@@ -188,6 +221,8 @@
 				imgSrc: './static/shop/network.png',
 				curPage: 1,
 
+				showAll: false,
+
 			}
 		},
 		created() {
@@ -195,8 +230,13 @@
 				this.par = {
 					type: this.$route.query.type || 0,
 					status: this.$route.query.status || 0,
-					timeType: this.$route.query.timeType || 0
+					timeType: this.$route.query.timeType || 0,
+					navIndex: this.$route.query.navIndex || 0
 				}
+
+				this.defaultType = this.$route.query.defaultType || '类型'
+				this.defaultStatus = this.$route.query.defaultStatus || '状态'
+				this.defaultTime = this.$route.query.defaultTime || '领取时间'
 			}
 
 		},
@@ -205,56 +245,107 @@
 			this.getData()
 		},
 		methods: {
-			hide(){
+			hide() {
 				this.typeShang = false
 				this.statusShang = false
 				this.dateShang = false
 			},
-			onType() {
+			onType(index) {
 				//点击类型
 				this.typeShang = !this.typeShang
 				this.statusShang = false
 				this.dateShang = false
+				this.showNo = false
+
+				this.navIndex = index
+				this.changeRouter()
 			},
 			changeType(value, label) {
 				var _this = this
+
+				//0 全部10体验券 20满减券 30折扣券  40运费券 50现金券
+				if(label == 0) {
+					_this.defaultType = '全部'
+				} else if(label == 10) {
+					_this.defaultType = '体验券'
+				} else if(label == 20) {
+					_this.defaultType = '满减券'
+				} else if(label == 30) {
+					_this.defaultType = '折扣券'
+				} else if(label == 40) {
+					_this.defaultType = '运费券'
+				} else if(label == 50) {
+					_this.defaultType = '现金券'
+				} else {
+					_this.defaultType = label
+				}
+
 				setTimeout(function() {
 					_this.par.type = parseInt(value)
 					_this.changeRouter(_this.par)
 					_this.getCouponList(_this.par)
-					_this.defaultType = label
 					_this.typeShang = false
 				}, 50)
 			},
-			onStatus() {
+			onStatus(index) {
 				//点击状态
 				this.statusShang = !this.statusShang
 				this.typeShang = false
 				this.dateShang = false
+				this.showNo = false
+
+				this.navIndex = index
+				this.changeRouter()
 			},
 			changeStatus(value, label) {
 				var _this = this
+
+				//0 全部 1未使用 2已使用3已过期
+				if(label == 0) {
+					_this.defaultStatus = '全部'
+				} else if(label == 1) {
+					_this.defaultStatus = '未使用'
+				} else if(label == 2) {
+					_this.defaultStatus = '已使用'
+				} else if(label == 3) {
+					_this.defaultStatus = '已过期'
+				} else {
+					_this.defaultStatus = label
+				}
+
 				setTimeout(function() {
 					_this.par.status = parseInt(value)
 					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
-					_this.defaultStatus = label
 					_this.statusShang = false
 				}, 50)
 			},
-			onDate() {
+			onDate(index) {
 				//点击领取时间
 				this.dateShang = !this.dateShang
 				this.typeShang = false
 				this.statusShang = false
+				this.showNo = false
+
+				this.navIndex = index
+				this.changeRouter()
 			},
 			changeDate(value, label) {
-				var _this = this;
+				var _this = this
+
+				//0 领取时间，1为到期时间
+				if(label == 0) {
+					_this.defaultTime = '领取时间'
+				} else if(label == 1) {
+					_this.defaultTime = '到期时间'
+				} else {
+					_this.defaultTime = label
+				}
+
 				setTimeout(function() {
 					_this.par.timeType = parseInt(value);
 					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
-					_this.defaultTime = label
 					_this.dateShang = false;
 				}, 50);
 			},
@@ -271,9 +362,9 @@
 						this.scroll.on('pullingUp', (pos) => {
 							this.LoadData()
 							this.$nextTick(function() {
-								this.scroll.finishPullUp();
-								this.scroll.refresh();
-							});
+								this.scroll.finishPullUp()
+								this.scroll.refresh()
+							})
 						})
 					} else {
 						this.scroll.refresh()
@@ -291,7 +382,8 @@
 							status: _this.par.status,
 							timeType: _this.par.timeType,
 							curPage: _this.curPage,
-							pageSize: 20
+							pageSize: 20,
+							islist: true
 						}
 					}).then((res) => {
 						if(res.data.status == '00000000') {
@@ -326,21 +418,18 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.couponList = res.data.data.list
-						_this.addShow()
+						
+						for(var i = 0;i<_this.couponList.length;i++){
+							_this.couponList[i].showAll = false
+						}
 					}
 				})
 			},
-			// 数据加个属性 show
-			addShow() {
-				for(let i = 0; i < this.couponList.length; i++) {
-					this.couponList[i].show = false;
-				}
-			},
 			// 查看详情
 			view(i) {
-				let obj = this.couponList[i];
-				obj.show = !this.couponList[i].show;
-				this.$set(this.couponList, i, obj);
+				let obj = this.couponList[i]
+				obj.showAll = !this.couponList[i].showAll
+				this.$set(this.couponList, i, obj)
 			},
 			//修改路由
 			changeRouter(par) {
@@ -349,7 +438,11 @@
 					query: _this.merge(_this.$route.query, {
 						'type': _this.par.type,
 						'status': _this.par.status,
-						'timeType': _this.par.timeType
+						'timeType': _this.par.timeType,
+						'navIndex': _this.navIndex,
+						'defaultType': _this.defaultType,
+						'defaultStatus': _this.defaultStatus,
+						'defaultTime': _this.defaultTime,
 					})
 				})
 			}
@@ -439,12 +532,130 @@
 		.couponList {
 			.wrapper {
 				position: absolute;
-				top: 94px;
-				bottom: 0px;
+				top: 0.9rem;
+				bottom: 0;
 				overflow: hidden;
 				width: 100%;
 				padding: 0rem 0.21rem;
 				box-sizing: border-box;
+				.couponlist-box {
+					padding: 0.35rem 0;
+					.bs{
+						box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
+						margin-bottom: 0.24rem;
+					}
+					.bg {
+						background: url(../../../assets/images/member/coupon-bg.png) no-repeat;
+						background-size: cover;
+						height: 2.04rem;
+						display: flex;
+						flex-direction: column;
+						position: relative;
+						overflow: hidden;
+						img {
+							position: absolute;
+							top: -0.15rem;
+							right: -0.07rem;
+							width: 1.2rem;
+							height: 1.2rem;
+						}
+						.top {
+							flex: 1;
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							padding: 0 0.40rem;
+							box-sizing: border-box;
+							.one {
+								display: flex;
+								.type-btn {
+									width: 0.88rem;
+									height: 0.32rem;
+									background: rgba(51, 111, 255, 1);
+									border-radius: 16px;
+									font-size: 0.22rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(255, 255, 255, 1);
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								span:nth-child(2) {
+									font-size: 0.28rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(26, 38, 66, 1);
+									margin-left: 0.1rem;
+								}
+							}
+							p {
+								margin-top: 0.23rem;
+								font-size: 0.24rem;
+								font-family: PingFang-SC-Medium;
+								color: rgba(26, 38, 66, 1);
+							}
+							.money {
+								font-size: 0.24rem;
+								font-family: PingFang-SC-Bold;
+								color: rgba(51, 111, 255, 1);
+								span {
+									font-size: 0.68rem;
+									color: rgba(51, 111, 255, 1);
+								}
+							}
+						}
+					}
+					.no {
+						.type-btn {
+							background: rgba(144, 162, 199, 1)!important;
+						}
+						.money {
+							color: rgba(144, 162, 199, 1)!important;
+							span {
+								color: rgba(144, 162, 199, 1)!important;
+							}
+						}
+						.top .one span:nth-child(2),
+						.top p {
+							color: rgba(144, 162, 199, 1)!important;
+						}
+					}
+					.bottom {
+						font-size: 0.22rem;
+						font-family: PingFang-SC-Medium;
+						color: rgba(144, 162, 199, 1);
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						padding: 0.25rem 0.40rem;
+						background: rgb(249, 250, 255);
+						box-sizing: border-box;
+						.shang {
+							display: inline-block;
+							width: 5.84rem;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+							-webkit-line-clamp: 3;
+							-webkit-box-orient: vertical;
+						}
+						.xia {
+							display: inline-block;
+							width: 5.84rem;
+						}
+						img {
+							width: 0.19rem;
+							height: auto;
+						}
+					}
+					.show {
+						span {
+							white-space: pre-wrap!important;
+						}
+					}
+					.r180 {
+						transform: rotate(-180deg);
+					}
+				}
 			}
 			.top46 {
 				top: 46px!important;
@@ -618,9 +829,9 @@
 				display: flex;
 				justify-content: center;
 				p {
-					font-size: .28rem;
-					color: #1A2642;
-					font-weight: bold;
+					font-size: 0.3rem;
+					font-family: PingFang-SC-Medium;
+					color: rgba(26, 38, 66, 1);
 					i {
 						color: #90A2C7;
 					}
@@ -629,6 +840,12 @@
 						margin-left: 0.05rem;
 						vertical-align: middle;
 					}
+				}
+			}
+			.blue {
+				p,
+				i {
+					color: #3670FF!important;
 				}
 			}
 		}

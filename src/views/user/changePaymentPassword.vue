@@ -49,6 +49,7 @@
 				showLoading: false,
 				isRemember: 3,
 				oldpassword: '',
+				hasP: false
 			}
 		},
 		created() {
@@ -83,6 +84,8 @@
 					if(res.data.status == "00000000") {
 						if(res.data.data == 2) {
 							_this.isRemember = 0
+						} else if(res.data.data == 1){
+							_this.hasP = true
 						}
 					}
 				})
@@ -108,7 +111,8 @@
 								_this.$router.push({
 									path: '/user/changePaymentPassword2',
 									query: {
-										code: _this.code
+										code: _this.code,
+										hasP:_this.hasP
 									}
 								})
 							} else {
@@ -186,7 +190,7 @@
 				if(_this.mainApp.isphone(_this.phone)) {
 					_this.$refs.code.focus()
 					_this.$http.post(this.url.user.getVerificationCode1, {
-						userId:_this.$store.state.user.userId,
+						userId: _this.$store.state.user.userId,
 						type: 102
 					}).then(function(res) {
 						if(res.data.status == "00000000") {

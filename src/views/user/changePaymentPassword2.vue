@@ -25,7 +25,9 @@
 				showLoading: false
 			}
 		},
-		created() {},
+		created() {
+
+		},
 		methods: {
 			submit() {
 				var _this = this
@@ -50,13 +52,24 @@
 				}
 
 				if(_this.$route.query.code) {
-					var uri = _this.url.user.setPayPassword //根据验证码修改
-					var data = {
-						userId: _this.$store.state.user.userId,
-						payPassword: _this.MD5(_this.password),
-						code: _this.$route.query.code,
-						platformId: _this.url.platformId
+					if(_this.$route.query.hasP) {
+						var uri = _this.url.user.setPayPasswordByMobile //根据验证码修改
+						var data = {
+							userId: _this.$store.state.user.userId,
+							payPassword: _this.MD5(_this.password),
+							smsVerificationCode: _this.$route.query.code,
+							platformId: _this.url.platformId
+						}
+					}else{
+						var uri = _this.url.user.setPayPassword //根据验证码修改
+						var data = {
+							userId: _this.$store.state.user.userId,
+							payPassword: _this.MD5(_this.password),
+							code: _this.$route.query.code,
+							platformId: _this.url.platformId
+						}
 					}
+
 				} else if(_this.$route.query.oldPayPassword) {
 					var uri = _this.url.user.setPayPasswordByOld //根据旧密码修改
 					var data = {

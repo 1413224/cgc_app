@@ -4,8 +4,10 @@ import review from '@/views/draw/review'
 import luckyrank from '@/views/draw/luckyrank'
 import awards from '@/views/draw/awards'
 import record from '@/views/draw/record'
+import winning from '@/views/draw/winning'
 import pastevents from '@/views/draw/pastevents'
-import draw_details from '@/views/draw/draw_details'
+import draw_details from '@/views/draw/draw_details' 
+import draw_rule from '@/views/draw/rule' 
 
 const drawModule = [
 	{
@@ -49,11 +51,18 @@ const drawModule = [
 		}
 	},
 	{
-		path: '/draw/record',//中奖记录
+		path: '/draw/record',//参与记录
 		name: 'record',
 		component: resolve => require(['@/views/draw/record'], resolve),
 		meta: {
 			title:'参与记录'
+		}
+	},{
+		path: '/draw/winning',//中奖记录
+		name: 'winning',
+		component: resolve => require(['@/views/draw/winning'], resolve),
+		meta: {
+			title:'中奖记录'
 		}
 	},
 	{
@@ -70,6 +79,14 @@ const drawModule = [
 		component: resolve => require(['@/views/draw/draw_details'], resolve),
 		meta: {
 			title:'抽奖详情'
+		}
+	},
+	{
+		path: '/draw/rule',//抽奖详情
+		name: 'draw_rule',
+		component: resolve => require(['@/views/draw/rule'], resolve),
+		meta: {
+			title:'抽奖规则'
 		}
 	}
 ]

@@ -20,7 +20,7 @@
 			<div class="change-row">
 				<div v-for="(item,index) in moneyList" :key="index" class="row-item" :class="{'moneyActive':index == moneyIndex}" @click="changeMoney(index,item.rechargeId)" v-if="moneyList.length>0">
 					<div class="box" :class="{'nohas':item.null}">
-						<p>{{item.money}}元</p>
+						<p>{{item.money}} <i>元</i></p>
 						<p>赠送{{item.integral}}积分</p>
 					</div>
 				</div>
@@ -28,34 +28,24 @@
 					<p class="gy">暂无充值套餐</p>
 				</div>
 			</div>
+
+			<div class="btn-box">
+				<x-button class="add-btn" @click.native="submit">确认充值</x-button>
+			</div>
 		</div>
 		<div class="recharge_tip">
 			<p class="gy-title">通用积分说明</p>
 			<p class="gy">1.CGC通用积分充值后会即时到达会员账户钱包，不会过期，但无法提现或转赠他人；</p>
 			<p class="gy">2.CGC通用积分可以在全球联盟企业和e消费任何APP商城1:1抵现金通用，没有额度限制；</p>
 		</div>
-
-		<div class="btn-box">
-			<x-button class="add-btn" @click.native="submit">确认充值</x-button>
-		</div>
-
-		<div v-transfer-dom>
-			<popup v-model="show1">
-				<popup-header right-text="取消" title="请选择支付方式" :show-bottom-border="false" @on-click-left="show1 = false" @on-click-right="show1 = false"></popup-header>
-				<group gutter="0">
-					<radio :options="list" value="1" @on-change="change"></radio>
-					<div class="pay-box">
-						<div class="add-btn" @click="pay">立即支付</div>
-					</div>
-				</group>
-			</popup>
-		</div>
+		<payMode :options="payOptions"></payMode>
 	</div>
 </template>
 
 <script>
 	import { Group, CellBox, XButton, PopupHeader, Radio, Checklist } from 'vux'
 	import settingHeader from '../../../components/setting_header'
+	import payMode from '@/components/payMode'
 	export default {
 		data() {
 			return {
@@ -78,15 +68,39 @@
 				show1: false,
 				moneyList: [],
 				info: {},
-				userInfo: {}
+				userInfo: {},
+				payOptions: {}
 			}
 		},
 		created() {
-
+			var _this = this
 			if(localStorage['userInfo']) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
 			}
 			this.getRechargeList()
+
+			this.payOptions = {
+				showPayMode: false,
+				data: {
+					money: 0,
+				},
+				changePay(index) {
+					console.log(index)
+				},
+				toPay(index) {
+					if(index == 1) {
+						_this.$router.push({
+							path:'/member/pay/wxgzhpay'
+						})
+					}
+				},
+				hide() {
+					console.log('hide')
+				},
+				show() {
+					console.log('show')
+				}
+			}
 		},
 		mounted() {},
 		methods: {
@@ -107,19 +121,13 @@
 			},
 			changeMoney(index, id) {
 				this.moneyIndex = index
-
-				// this.$vux.toast.show({
-				// 	width: '50%',
-				// 	type: 'text',
-				// 	position: 'top',
-				// 	text: id
-				// })
 			},
 			changePt(index) {
 				this.ptIndex = index
 			},
 			submit() {
-				this.show1 = true
+				this.payOptions.showPayMode = true
+				this.payOptions.data.money = 18888.00
 			},
 			change(value, label) {
 				console.log('change:', value, label)
@@ -168,7 +176,8 @@
 			XButton,
 			PopupHeader,
 			Radio,
-			Checklist
+			Checklist,
+			payMode
 		}
 	}
 </script>
@@ -180,7 +189,6 @@
 		font-family: PingFangSC-Medium;
 		// background-color: #F5F6FA;
 		background-color: #fff;
-		padding-bottom: 1.6rem;
 		.item {
 			padding: 0.31rem 0.22rem;
 			box-sizing: border-box;
@@ -205,14 +213,14 @@
 			.jifen {
 				text-align: center;
 				.price {
-					font-size: .5rem;
+					font-size: .82rem;
 					font-weight: bold;
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 					span {
 						font-weight: bold;
-						font-size: .32rem;
+						font-size: .38rem;
 						display: inline-block;
 						margin-left: .1rem;
 					}
@@ -246,11 +254,11 @@
 			}
 		}
 		.change-box {
-			padding: 0 0.22rem 0.58rem 0.22rem;
+			padding: 0 0.22rem 0.56rem 0.22rem;
 			background-color: white;
-			margin-bottom: 0.21rem;
 			border-top: 1px solid #EBEFF7;
 			border-bottom: 1px solid #EBEFF7;
+			box-sizing: border-box;
 			.change-tip {
 				height: 1.13rem;
 				display: flex;
@@ -262,7 +270,7 @@
 				}
 				span:nth-child(2) {
 					font-size: 0.24rem;
-					color: #90A2C7;
+					/*color: #90A2C7;*/
 				}
 			}
 			.change-row {
@@ -270,7 +278,7 @@
 				background: white;
 				flex-wrap: wrap;
 				.row-item {
-					flex: 1;
+					width: 33.333%;
 					max-width: 33.333%;
 					div {
 						margin: 0.1rem auto;
@@ -282,7 +290,7 @@
 						border-radius: 3px;
 						color: #C6CCDA;
 						p:nth-child(1) {
-							font-size: 0.30rem;
+							font-size: 0.42rem;
 						}
 						p:nth-child(2) {
 							font-size: 0.20rem;
@@ -295,14 +303,20 @@
 						}
 					}
 					.box {
-						width: 1.91rem;
+						width: 2.18rem;
+						height: 1.60rem;
 						background: white;
 						/*box-shadow: 0px 2px 10px 0px rgba(26, 38, 66, 0.4);*/
-						border: 1px solid rgba(26, 38, 66, 0.4);
+						border: 1px solid #336FFF;
 						border-radius: 3px;
 						color: #336FFF;
 						padding: 0 0.1rem;
 						box-sizing: border-box;
+						p:nth-child(1) {
+							i {
+								font-size: 0.20rem;
+							}
+						}
 						p:nth-child(2) {
 							font-size: 0.20rem;
 							color: #90A2C7;
@@ -334,13 +348,11 @@
 			}
 		}
 		.btn-box {
-			position: fixed;
-			bottom: 0;
-			width: 100%;
-			padding: 0.25rem;
+			margin-top: 0.68rem;
 			box-sizing: border-box;
 			background: #fff;
 			.add-btn {
+				width: 6.18rem;
 				height: 0.88rem;
 				line-height: 0.88rem;
 				background: rgba(51, 111, 255, 1);
@@ -350,20 +362,6 @@
 				color: rgba(255, 255, 255, 1);
 				border-radius: 2px;
 			}
-		}
-	}
-	
-	.pay-box {
-		padding: 10px 15px;
-		.add-btn {
-			height: 0.88rem;
-			line-height: 0.88rem;
-			background: rgba(51, 111, 255, 1);
-			font-size: 0.28rem;
-			text-align: center;
-			font-family: MicrosoftYaHei;
-			color: rgba(255, 255, 255, 1);
-			border-radius: 2px;
 		}
 	}
 </style>

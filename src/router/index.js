@@ -5,28 +5,15 @@ import memberModule from '@/router/modules/member'
 import share from '@/router/modules/share'
 import draw from '@/router/modules/draw'
 import lock from '@/router/modules/lock'
+import brand from '@/router/modules/brand'
 
 Vue.use(Router)
-var all=shopModule.concat(memberModule,share,draw,lock);
 
-
-
-/*router.beforeEach(function(to,from,next){
-	console.log(1);
-	next();
-})
-	
-router.beforeResolve(function(to,from,next){
-	console.log(2);
-	next();
-})
-router.afterEach(function(to,from){
-	console.log(3);
-})*/
+var all = shopModule.concat(memberModule, share, draw, lock, brand)
 
 export default new Router({
-  // base:'/new/',
-  routes: all,
-  // mode:'history',
- /* fallback:true*/
+	// base:'/new/',
+	routes: all,
+	// mode:'history',
+	/* fallback:true*/
 })

@@ -4,12 +4,10 @@
 		<div class="content">
 			<section>
 				<div class="info-bg" v-if="isLogin">
-					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
+					<router-link to="/member/setting/index"><img class="setting-img" :src="'./static/member/shezi.png'" /></router-link>
 					<div class="avatar">
-						<router-link to="/member/info/index">
-							<img v-if="userInfo.avatar" :src="userInfo.avatar.original?userInfo.avatar.original:'./static/images/mrtx.png'" alt="" />
-							<img v-else :src="'./static/images/mrtx.png'" alt="">
-						</router-link>
+						<img v-if="userInfo.avatar" :src="userInfo.avatar.original" @click="$router.push({path:'/member/info/index'})" alt="" />
+						<img v-else :src="'./static/images/mrtx.png'" alt="">
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:userInfo.mobile}}</p>
 						<!--<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>-->
 						<p class="bj" @click="$router.push({path:'/member/info/data'})">编辑个人资料 <i class="icon iconfont icon-arrow-right"></i></p>
@@ -39,12 +37,12 @@
 					</div>
 				</div>
 				<div class="info-bg" v-else>
-					<router-link to="/member/setting/index"><img class="setting-img" src="../../assets/images/member/shezi.png" /></router-link>
+					<router-link to="/member/setting/index">
+						<img class="setting-img" src="../../assets/images/member/shezi.png" />
+					</router-link>
 					<div class="avatar noLogin">
-						<router-link to="/member/info/index">
-							<img :src="'./static/images/mrtx.png'" alt="">
-						</router-link>
 						<router-link to="/user/reg">
+							<img :src="'./static/images/mrtx.png'" alt="">
 							<p>登录 / 注册</p>
 						</router-link>
 					</div>
@@ -65,20 +63,20 @@
 						<li>
 							<router-link to="/member/team/index">
 								<div class="li-box">
-									<img src="../../assets/images/member/member_cardpackage.png">
+									<img src="../../assets/images/member/member-team.png">
 									<!--<badge class="new"></badge>-->
 								</div>
 								<p>我的团队</p>
 							</router-link>
 						</li>
 						<li>
-							<router-link to="/shop/my_order2">
+							<router-link to="/member/coupon/index">
 								<div class="li-box">
-									<img src="../../assets/images/member/member_account.png">
+									<img src="../../assets/images/member/kbao.png">
 									<!--<badge class="new-account" text="2312"></badge>-->
 								</div>
 
-								<p>我的订单</p>
+								<p>我的优惠券</p>
 							</router-link>
 						</li>
 						<li>
@@ -103,7 +101,6 @@
 							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-1.png'">
-									<!--<badge class="new"></badge>-->
 								</div>
 								<p>待付款</p>
 							</a>
@@ -111,20 +108,9 @@
 						<li @click="toOrder(1)">
 							<a href="javascript:void(0)">
 								<div class="li-box2">
-									<img :src="'./static/member/order-2.png'">
-									<!--<badge class="new"></badge>-->
+									<img :src="'./static/member/order-6.png'">
 								</div>
-								<p>待发货</p>
-							</a>
-						</li>
-						<li @click="toOrder(2)">
-							<a href="javascript:void(0)">
-								<div class="li-box2">
-									<img :src="'./static/member/order-3.png'">
-									<!--<badge class="new-account" text="2312"></badge>-->
-								</div>
-
-								<p>待收货</p>
+								<p>进行中</p>
 							</a>
 						</li>
 						<li @click="toOrder(3)">
@@ -146,17 +132,23 @@
 					</ul>
 				</div>
 			</section>
-			<section>
+			<!--<section>
 				<router-link to="/draw">
 					<div class="banner">
 						<img v-lazy="'./static/images/member_banner.png'" alt="">
-						<!-- <img src="static/images/alliance1.png"/> -->
+						 <img src="static/images/alliance1.png"/> 
 					</div>
 				</router-link>
-			</section>
+			</section>-->
 			<section>
-				<group gutter="0" style="margin-bottom: 0.2rem;">
-					<cell v-for="(item,index) in infoList" :key="index" class="info-item" :title="item.text" is-link :link="item.url">
+				<group gutter="0" class="infoList1">
+					<cell v-for="(item,index) in infoList" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
+						<img slot="icon" :src="item.img">
+						<badge text="8" v-if="item.red"></badge>
+					</cell>
+				</group>
+				<group gutter="0" class="infoList2">
+					<cell v-for="(item,index) in infoList2" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
 						<img slot="icon" :src="item.img">
 					</cell>
 				</group>
@@ -177,28 +169,31 @@
 				images: '',
 				infoList: [{
 						img: './static/member/m-index1.png',
-						text: '我的优惠券',
-						url: '/member/coupon/index'
+						text: '我的卡包',
+						url: '/member/card/index',
+						tip: '5张快过期'
 					},
 					{
 						img: './static/member/m-index2.png',
 						text: '我的关注',
-						url: '/member/follow/index'
+						url: '/member/follow/index',
 					},
 					{
 						img: './static/member/m-index3.png',
 						text: '收货地址',
-						url: '/member/address/index'
-					},
-					{
+						url: '/member/address/index',
+						tip: ''
+					}
+				],
+				infoList2: [{
 						img: './static/member/m-index4.png',
 						text: '积分商城',
 						url: '/shop'
 					},
 					{
 						img: './static/member/m-index5.png',
-						text: '多商户商城',
-						url: '/multi_user_mall/summary'
+						text: '产业联盟',
+						url: '/share/storelist'
 					},
 					/*{
 						img: './static/member/member_2.png',
@@ -209,7 +204,8 @@
 					{
 						img: './static/member/m-index6.png',
 						text: '幸运抽奖',
-						url: '/draw'
+						url: '/draw',
+						tip: '您有一条中奖消息'
 					},
 					/*{
 						img: './static/member/m_index13.png',
@@ -278,8 +274,8 @@
 				var _this = this
 				_this.$router.push({
 					path: '/member/purse/qrcode',
-					query:{
-						index:1
+					query: {
+						index: 1
 					}
 				})
 			}
@@ -292,7 +288,27 @@
 		}
 	}
 </script>
-
+<style lang="less">
+	.info-box {
+		.infoList1 {
+			margin-bottom: 0.2rem;
+			.weui-cell__ft {
+				padding-right: 0.4rem;
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+			}
+		}
+		.infoList2 {
+			margin-bottom: 0.2rem;
+			.weui-cell__ft {
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+				padding-right: 0.4rem;
+				color: red;
+			}
+		}
+	}
+</style>
 <style lang="less" scoped>
 	.info-box {
 		background-color: #F5F6FA;
@@ -300,13 +316,13 @@
 		position: relative;
 		.info-bg {
 			height: 4.47rem;
-			background: url(../../assets/images/member/index-bg.png) no-repeat;
+			background: url(../../assets/images/member/index-bg2.png) no-repeat;
 			background-size: 100%;
 			position: relative;
 		}
 		.setting-img {
-			width: 0.44rem;
-			height: 0.44rem;
+			width: 0.36rem;
+			height: 0.38rem;
 			position: absolute;
 			right: 0.33rem;
 			top: 0.28rem;
@@ -317,14 +333,14 @@
 			text-align: center;
 			img {
 				border-radius: 50%;
-				width: 1.44rem;
-				height: 1.44rem;
+				width: 1.26rem;
+				height: 1.26rem;
 			}
 			.nickname {
 				font-family: PingFangSC-Regular;
-				font-size: 0.38rem;
+				font-size: 0.36rem;
 				color: #FFFFFF;
-				letter-spacing: 0;
+				margin: 0.14rem 0;
 			}
 			.bj {
 				display: flex;
@@ -365,7 +381,6 @@
 				width: 50%;
 				.universal {
 					.num {
-						font-size: 0.391rem;
 						color: #333333;
 						letter-spacing: 0;
 						position: relative;
@@ -413,7 +428,7 @@
 		}
 		.navigation {
 			width: 100%;
-			margin: 0.2rem 0;
+			margin-bottom: 0.2rem;
 			background: white;
 			ul {
 				padding: 0.26rem 0.2rem;
@@ -460,8 +475,8 @@
 							}
 							.new-account {
 								position: absolute;
-								right: -28px;
-								top: -2px;
+								right: -18px;
+								top: -8px;
 							}
 						}
 						p {

@@ -38,10 +38,6 @@ const share =[
 		meta: {
 			title:'门店详情'
 		}
-		/*beforeEnter(to,from,next){
-			console.log(9);
-			next()
-		}*/
 	},
 	{
 		path:'/share/storelist',//门店列表

@@ -1,422 +1,421 @@
 <template>
-	<div class="vip">
-		<settingHeader :title="title"></settingHeader>
-		<header>
-			<img src="../../../assets/images/member/vip-bg.png" alt="" class='vipBg'>
-			<section>
-				<img src="../../../assets/images/member/score_1.png" alt="">
-				<p class="vipInfo">
-					<span class="name">张媚儿</span><br>
-					<span class="level">会员级别</span>
-				</p>
-			</section>
-		</header>
-		<section class="condition">
-			<section class="level"><!-- @click="level = level-1;oldLevel=level"   @click="level = level+ 1;oldLevel=level" -->
-				<span class='fl' @click="back"><img src="../../../assets/images/shop/turn_right.png" alt="" class='left'> 上一级</span>
-				<span class="text">满足以下要求可升级VIP2</span>
-				<span class="fr" @click="forword">下一级 <img src="../../../assets/images/shop/turn_right.png" alt=""></span>
-			</section>
-
-			<div class="levContent" style="left: -375px;">
-				<section class="achieve left" v-for="(item, index) in 5">
-					<section class="achieveLeft">
-						<span class="brige">1,100.00</span>
-						<section class="achieveCondition">
-							<section class="recharge fl">
-								<img src="../../../assets/images/member/vip-account.png" alt="">
-								<p class="rechargeName">积分充值{{index}}</p>
-							</section>
-							<img src="../../../assets/images/member/vip-right.png" alt="" class='fl'>
-							<span class="rechargePrice fl">120000<span class="text">元</span></span>
-							<section class="clear"></section>
-						</section>
-						<p class="achieveText">再充值100元即可满足条件</p>
-					</section>
-					<section class="achieveRight">
-						<span class="brige">360</span>
-						<section class="achieveCondition">
-							<section class="recharge fl">
-								<img src="../../../assets/images/member/vip-buy.png" alt="">
-								<p class="rechargeName">消费购物</p>
-							</section>
-							<img src="../../../assets/images/member/vip-right.png" alt="" class='fl'>
-							<span class="rechargePrice fl">120000<span class="text">元</span></span>
-							<section class="clear"></section>
-						</section>
-						<p class="achieveText">再充值840元即可满足条件</p>
-					</section>
-				</section>
+	<div class="vip-box" ref="vipBox">
+		<!--<settingHeader :title="title"></settingHeader>-->
+		<div class="banner-img">
+			<img :src="'./static/vip/banner.png'" />
+		</div>
+		<sticky>
+			<div class="tab-box">
+				<tab v-model="tabIndex" lineWidth="2" active-color="#E4472C" custom-bar-width="1.1rem">
+					<tab-item selected @on-item-click="onItemClick">六大好处</tab-item>
+					<tab-item @on-item-click="onItemClick">加入会员</tab-item>
+					<tab-item @on-item-click="onItemClick">权益介绍</tab-item>
+				</tab>
 			</div>
-		</section>
-		<section class="levelRules">
-			<nav class='fr'>等级规则 <img src="../../../assets/images/shop/turn_right.png" alt=""></nav>
-			<section class="equity fl">
-				<p class="head">
-					<span class="xian"></span>
-					<span class="text">VIP2权益</span>
-				</p>
-				<section class="coupon">
-					<p>权益一 · 优惠券</p>
-					<article>
-						<span class="fl discount">8<span>折</span></span>
-						<span class="fl quan">打折卷</span>
-						<span class="fr">全国通用</span>
-					</article>
-					<article>
-						<span class="fl discount">120<span>元</span></span>
-						<span class="fl quan">满减卷</span>
-						<span class="fr">满10000可用</span>
-					</article>
-					<p>权益一 · 通用积分</p>
-					<span class="account">200<span>通用积分</span></span>
-				</section>
-			</section>
-			<section class="equity fl">
-				<p class="head">
-					<span class="xian"></span>
-					<span class="text">VIP2权益</span>
-				</p>
-				<section class="coupon">
-					<p>权益一 · 优惠券</p>
-					<article>
-						<span class="fl discount">8<span>折</span></span>
-						<span class="fl quan">打折卷</span>
-						<span class="fr">全国通用</span>
-					</article>
-					<article>
-						<span class="fl discount">120<span>元</span></span>
-						<span class="fl quan">满减卷</span>
-						<span class="fr">满10000可用</span>
-					</article>
-					<p>权益一 · 通用积分</p>
-					<span class="account">200<span>通用积分</span></span>
-				</section>
-			</section>
-			<section class="clear"></section>
-		</section>
+		</sticky>
+
+		<div class="title-box" ref="one">
+			<img :src="'./static/vip/title-img.png'" />
+			<p>会员六大增值好处</p>
+			<img :src="'./static/vip/title-img.png'" />
+		</div>
+		<div class="swiper-inner">
+			<swiper :options="swiperOption" ref="mySwiper">
+				<swiper-slide v-for="(item,index) in swiperList" :key="index">
+					<img :src="item" alt="" />
+				</swiper-slide>
+			</swiper>
+		</div>
+		<div class="pad-box" ref="two">
+			<div class="title-box">
+				<img :src="'./static/vip/title-img.png'" />
+				<p>如何成为会员?</p>
+				<img :src="'./static/vip/title-img.png'" />
+			</div>
+			<div class="join-box3">
+				<div class="dis-div">
+					<div>
+						<img :src="'./static/vip/join1.png'" />
+					</div>
+					<div>
+						<img :src="'./static/vip/join2.png'" />
+					</div>
+				</div>
+				<div class="join-p">
+					<p class="one">关注平台微信公众号</p>
+					<p class="one">在标记有e消费的线下商户买单报手机号码</p>
+				</div>
+			</div>
+			<div class="join-box">
+				<div class="dis-div">
+					<div>
+						<img :src="'./static/vip/android.png'" />
+					</div>
+					<div>
+						<img :src="'./static/vip/ios.png'" />
+					</div>
+				</div>
+				<div class="join-p">
+					<p class="two">在安卓各大应用市场及App store下载注册官方app</p>
+				</div>
+			</div>
+			<div class="btn-box">
+				<div class="left" @click="$router.push({path:'/user/reg'})">
+					<img :src="'./static/vip/reg-img.png'" /> 立即注册
+				</div>
+				<div class="right">
+					<img :src="'./static/vip/app-img.png'" /> APP下载
+				</div>
+			</div>
+			<div class="title-box" ref="three">
+				<img :src="'./static/vip/title-img.png'" />
+				<p>会员好处</p>
+				<img :src="'./static/vip/title-img.png'" />
+			</div>
+			<div class="join-box2">
+				<div class="benefit">
+					<p class="one-title">注册赠送200信用积分</p>
+					<img class="one-img" :src="'./static/vip/200.png'" />
+					<p class="zhu">注：信用积分可在商城部分商品抵现金用</p>
+				</div>
+			</div>
+			<div class="join-box2">
+				<div class="benefit">
+					<p class="one-title">购物省钱+奖励</p>
+					<img class="two-img" :src="'./static/vip/gouwu.png'" />
+					<div class="zhu">
+						<p>注：</p>
+						<p>根据大数据精准推算，平均可为每个消费者一年节省8000元 具体价格和奖励积分以实际商品详情页为准</p>
+					</div>
+				</div>
+			</div>
+			<div class="join-box2">
+				<div class="benefit">
+					<p class="one-title">分享赚钱</p>
+					<img class="three-img" :src="'./static/vip/fenx.png'" />
+					<div class="zhu">
+						<p>注：</p>
+						<p>推荐会员在联盟企业和APP商城消费即可获得分红奖励；上不封顶。</p>
+					</div>
+				</div>
+			</div>
+			<div class="join-box2">
+				<div class="benefit">
+					<p class="one-title">笔笔消费抽大奖</p>
+					<div class="bottom-img-box">
+						<img class="three-img" :src="'./static/vip/5000.png'" />
+						<img class="three-img" :src="'./static/vip/lw.png'" />
+					</div>
+					<div class="bottom-tip-box">
+						<p>累计已有 <span>76w+</span>人中奖</p>
+						<p>累计奖金达到 <span>7000w+</span>元</p>
+					</div>
+					<div class="zhu">
+						<p>注：</p>
+						<p>会员所有消费都可参与幸运大抽奖；每周周末开奖，请留意官方短信或微信公众号查询结果</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </template>
 
 <script>
 	import settingHeader from '../../../components/setting_header'
+	import { swiper, swiperSlide } from 'vue-awesome-swiper'
+	import { Sticky } from 'vux'
 	export default {
-		data(){
-			return{
-				title:"会员等级",
-				level: 1,
+		data() {
+			return {
+				title: "会员权益",
+				tabIndex: 0,
+				swiperOption: {
+					// 所有的参数同 swiper 官方 api 参数
+					autoplay: {
+						delay: 5000,
+					},
+					effect: 'coverflow', //3D翻转效果
+					centeredSlides: true, //active slide会居中，而不是默认状态下的居左。
+					slidesPerView: 'auto',
+					loop: true,
+					loopedSlides: 6,
+					coverflowEffect: {
+						rotate: 50,
+						stretch: 0,
+						depth: 100,
+						modifier: 1,
+						slideShadows: false //开启阴影效果
+					},
+					on: {
+						slideChange: function() {
+							//console.log(this.realIndex) //设置循环需要使用realIndex获取真实下标
+						}
+					}
+				},
+				isfix: false,
+				isActive: false,
+				startY: 0,
+				swiperList: [
+				'./static/vip/swiper1.png',
+				'./static/vip/swiper2.png',
+				'./static/vip/swiper3.png',
+				'./static/vip/swiper4.png',
+				'./static/vip/swiper5.png', 
+				'./static/vip/swiper6.png'
+				]
+			}
+		},
+		mounted() {
+			var _this = this
+			window.addEventListener('scroll', this.handleScroll)
+		},
+		computed: {
+			swiper() {
+				return this.$refs.mySwiper.swiper
 			}
 		},
 		components: {
 			settingHeader,
+			swiper,
+			swiperSlide,
+			Sticky
 		},
-		methods:{
-			back(){
-				this.level --;
-			  	// var newLeft = parseInt(wrap.style.left)+width;
-			  	if(this.level<0){
-  	                this.level = 0;
-  	            }
-  	            this.change()
-			},
-			forword(){
-				this.level ++;
-				// let wrap=document.getElementsByClassName('levContent')[0];
-				// var width = window.innerWidth;
-				// var newLeft = parseInt(wrap.style.left)-width;
-				if(this.level >= 4){
-				    this.level = 4
+		methods: {
+			onItemClick(index) {
+				var _this = this
+
+				_this.isfix = true
+				_this.isActive = true
+
+				if(index == 0) {
+					_this.$refs.one.scrollIntoView()
+				} else if(index == 1) {
+					_this.$refs.two.scrollIntoView()
+				} else if(index == 2) {
+					_this.$refs.three.scrollIntoView()
 				}
-				this.change()
+				document.body.scrollTop = document.body.scrollTop - 44
 			},
-			change(){
-				let wrap=document.getElementsByClassName('levContent')[0];
-				var width = window.innerWidth;
-				wrap.style.left = 0 +'px';
-				let dis = -(width * this.level)
-			    wrap.style.transform = 'translate3d(' + dis + 'px, 0, 0)'; 
-   				wrap.style.transition = 'transform .2s ease-out'; 
+			handleScroll() {
+				var _this = this
+				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+				var oneOffsetTop = this.$refs.one.offsetTop
+				var twoOffsetTop = this.$refs.two.offsetTop
+				var threeOffsetTop = this.$refs.three.offsetTop
+
+				if(scrollTop >= oneOffsetTop - 44 && scrollTop < twoOffsetTop - 44) {
+					_this.tabIndex = 0
+				} else if(scrollTop >= twoOffsetTop - 44 && scrollTop < threeOffsetTop - 44) {
+					_this.tabIndex = 1
+				} else if(scrollTop > threeOffsetTop - 44) {
+					_this.tabIndex = 2
+				}
 			}
 		}
 	}
 </script>
 
 <style lang='less' scoped>
-	.vip{
-		header{
-			position: relative;
-			.vipBg{
+	.vip-box {
+		background: rgba(255, 255, 255, 1);
+		.banner-img {
+			img {
 				width: 100%;
-				height: 3.3rem;
-			}
-			section{
-				position: absolute;
-				top: 0.96rem;
-				left: 0.56rem;
-				img{
-					width: 0.9rem;
-					height: 0.9rem;
-					border-radius: 50%;
-					float: left;
-				}
-				.vipInfo{
-					float: left;
-					margin-left: 0.16rem;
-					.name{
-						font-size:0.3rem;
-						line-height: 0.45rem;
-						color: #FFFFFF;
-					}
-					.level{
-						font-size:0.3rem;
-						line-height: 0.5rem;
-						color: #FFE19F;
-					}
-				}
+				height: auto;
+				display: block;
 			}
 		}
-		.condition{
-			z-index: 2;
-			margin-top: -0.7rem;
-			background-color: #fff;
-			padding: 0.28rem 0.24rem;
-			position: relative;
-			box-shadow: 0px 2px 30px 0px rgba(26,38,66,0.1);
-			overflow: hidden;
-			height: 3rem;
-			.level{
-				text-align: center;
-				.fl,.fr{
-					font-size:0.24rem;
-					line-height: 0.4rem;
-					color: #90A2C7;
-					img{
-						width: 0.2rem;
-					}
-					.left{
-						transform: rotate(180deg);
-						margin-top: 0.08rem;
-					}
-				}
-				.text{
-					font-size:0.28rem;
-					line-height: 0.4rem;
-					color: #1A2642;
-				}
+		.swiper-inner {
+			width: 100%;
+			height: 3.5rem;
+		}
+		.swiper-slide {
+			width: 5.62rem;
+			height: 4.18rem;
+			img {
+				width: 100%;
+				height: 100%;
+				display: block;
 			}
-			.levContent{
-				position: absolute;
-				width: 40rem;
-				height: 2.42rem;
-				z-index: 2;
+		}
+		.isfix {
+			position: fixed;
+			width: 100%;
+			top: 0;
+			left: 0;
+			background-color: white;
+			z-index: 15;
+		}
+		.title-box {
+			font-size: 0.36rem;
+			font-family: PingFangSC-Semibold;
+			color: rgba(51, 51, 51, 1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-bottom: 0.27rem;
+			padding-top: 0.53rem;
+			p {
+				margin: 0 0.28rem;
 			}
-			.achieve{
-				width: 7.5rem;
-				margin-top: 0.3rem;
+			img {
+				width: 0.45rem;
+				height: 0.35rem;
+			}
+		}
+		.top1 {
+			padding-top: 1rem;
+		}
+		.pad-box {
+			padding: 0 0.29rem;
+			box-sizing: border-box;
+			.join-box {
+				height: 4rem;
+			}
+			.join-box,
+			.join-box3 {
+				padding-top: 0.70rem;
+				box-sizing: border-box;
+				border-bottom: 1px dashed rgba(228, 71, 44, 1);
 				display: flex;
-				.achieveLeft{
-					flex: 1;
-					border-right: 1px solid #D8DFF0;
-					padding-left: 0.2rem;
-					.brige{
-						display: inline-block;
-						background-color: #336FFF;
-						height:0.4rem;
-						line-height: 0.4rem;
-						font-size:0.2rem;
-						color: #FFFFFF;
-						padding: 0 0.1rem;
-						border-radius: 0.1rem;
-						position: relative;
-						border:1px solid #336fff;
-					}
-					.brige:before{
-						content: '';
-						transform: rotate(270deg);
-						border-top: 0.15rem solid transparent;/*方框上部分背景颜色为透明*/
-						border-bottom: 0.15rem solid transparent;/*方框下部分背景为透明*/
-						border-right: 0.15rem solid #336fff;/*箭头背景颜色*/
-						position: absolute;/*绝对定位1*/
-						top: 0.34rem;/*距离顶部位置偏移量2*/
-						left: 34%;/*距离左边位置偏移量3*/ /*123都是控制显示位置的*/
-					}
-					.achieveCondition{
-						margin-top: 0.3rem;
-					}
-					.recharge{
+				justify-content: space-between;
+				flex-direction: column;
+				.dis-div {
+					display: flex;
+					align-items: center;
+					div {
+						width: 50%;
 						text-align: center;
-						img{
-							width: 0.64rem;
+						img {
+							width: 2.10rem;
+							height: 2.10rem;
 						}
-						.rechargeName{
-							font-size: 0.2rem;
-							color: #1A2642;
-						}
-					}
-					img.fl{
-						margin-top: 0.18rem;
-						width: 0.43rem;
-					}
-					.rechargePrice{
-						font-size: 0.36rem;
-						margin-top: 0.06rem;
-						margin-left: 0.2rem;
-						/*margin-top: 0.14rem;*/
-						color: #1A2642;
-						.text{
-							color: #425884;
-							font-size: 0.24rem;
-						}
-					}
-					.achieveText{
-						margin-top: 0.3rem;
-						font-size: 0.24rem;
-						color: #90A2C7;
 					}
 				}
-				.achieveRight{
-					flex: 1;
-					padding-left: 0.2rem;
-					.brige{
-						display: inline-block;
-						background-color: #336FFF;
-						height:0.4rem;
-						line-height: 0.4rem;
-						font-size:0.2rem;
-						color: #FFFFFF;
-						padding: 0 0.1rem;
-						border-radius: 0.1rem;
-						position: relative;
-						border:1px solid #336fff;
-					}
-					.brige:before{
-						content: '';
-						transform: rotate(270deg);
-						border-top: 0.15rem solid transparent;/*方框上部分背景颜色为透明*/
-						border-bottom: 0.15rem solid transparent;/*方框下部分背景为透明*/
-						border-right: 0.15rem solid #336fff;/*箭头背景颜色*/
-						position: absolute;/*绝对定位1*/
-						top: 0.34rem;/*距离顶部位置偏移量2*/
-						left: 34%;/*距离左边位置偏移量3*/ /*123都是控制显示位置的*/
-					}
-					.achieveCondition{
-						margin-top: 0.3rem;
-					}
-					.recharge{
+				.join-p {
+					display: flex;
+					justify-content: space-between;
+					margin-bottom: 0.44rem;
+					.one {
+						flex: 1;
+						display: flex;
+						justify-content: center;
+						font-size: 0.24rem;
+						font-family: PingFangSC-Semibold;
+						color: rgba(51, 51, 51, 1);
+						margin-top: 0.35rem;
 						text-align: center;
-						img{
-							width: 0.64rem;
-						}
-						.rechargeName{
-							font-size: 0.2rem;
-							color: #1A2642;
-						}
 					}
-					img.fl{
-						margin-top: 0.18rem;
-						width: 0.43rem;
-					}
-					.rechargePrice{
-						font-size: 0.36rem;
-						margin-top: 0.06rem;
-						margin-left: 0.2rem;
-						/*margin-top: 0.14rem;*/
-						color: #1A2642;
-						.text{
-							color: #425884;
-							font-size: 0.24rem;
-						}
-					}
-					.achieveText{
-						margin-top: 0.3rem;
+					.two {
+						flex: 1;
 						font-size: 0.24rem;
-						color: #90A2C7;
+						font-family: PingFangSC-Semibold;
+						color: rgba(51, 51, 51, 1);
+						text-align: center;
 					}
 				}
 			}
-			.left{
-				float: left;
-			}
-		}
-		.levelRules{
-			padding: 0 0.24rem;
-			background-color: #F5F6FA;
-			nav{
-				font-size:.24rem;
-				line-height: 0.8rem;
-				color: #7386AD;
-				img{
-					width: 0.2rem;
+			.join-box2 {
+				box-sizing: border-box;
+				border-bottom: 1px dashed rgba(228, 71, 44, 1);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				flex-direction: column;
+				text-align: center;
+				.benefit {
+					.one-title {
+						font-size: 0.32rem;
+						font-family: PingFangSC-Semibold;
+						color: rgba(51, 51, 51, 1);
+						margin-top: 0.27rem;
+						margin-bottom: 0.38rem;
+					}
+					.one-img {
+						width: 4.5rem;
+						height: 2.1rem;
+						margin-bottom: 0.3rem;
+					}
+					.two-img {
+						width: 6.74rem;
+						height: 3.6rem;
+						margin-bottom: 0.3rem;
+					}
+					.three-img {
+						width: 6.17rem;
+						height: 4.75rem;
+						margin-bottom: 0.3rem;
+					}
+					.zhu {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(160, 160, 160, 1);
+						margin-bottom: 0.36rem;
+						display: flex;
+						text-align: left;
+					}
+					.bottom-img-box {
+						img:nth-child(1) {
+							width: 5.87rem;
+							height: 0.63rem;
+						}
+						img:nth-child(2) {
+							width: 2.05rem;
+							height: 2.07rem;
+						}
+					}
+					.bottom-tip-box {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Semibold;
+						color: rgba(51, 51, 51, 1);
+						margin-bottom: 0.22rem;
+						span {
+							color: #F23030;
+						}
+					}
 				}
 			}
-			.equity{
-				margin-bottom: 0.4rem;
-				background-color: #fff;
-				width: 6.5rem;
-				padding: 0.3rem 0.26rem;
-				.head{
-					position: relative;
-					text-align: center;
-					.xian{
-						width: 3.4rem;
-						height: 1px;
-						background-color: #90A2C7;
-						display: inline-block;
-					}
-					.text{
-						position: absolute;
-						left: 36%;
-						top: 0;
-						font-size:0.36rem;
-						line-height: 0.5rem;
-						color: #1A2642;
-						display: inline-block;
-						width: 2rem;
-						background-color: #fff;
+			.join-box2:last-child {
+				border-bottom: none;
+				padding-bottom: 1.25rem;
+			}
+			.btn-box {
+				display: flex;
+				padding: 0.5rem 0.46rem;
+				box-sizing: border-box;
+				justify-content: space-between;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Medium;
+				.left {
+					width: 2.85rem;
+					height: 0.9rem;
+					border-radius: 45px;
+					border: 1px solid rgba(242, 48, 48, 1);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: rgba(245, 64, 46, 1);
+					box-sizing: border-box;
+					img {
+						width: 0.4rem;
+						height: 0.4rem;
+						margin-right: 0.12rem;
 					}
 				}
-				.coupon{
-					margin-top: 0.3rem;
-					p{
-						font-size:0.32rem;
-						color: #1A2642;
-						margin-bottom: 0.2rem;
-					}
-					article{
-						margin-bottom: 0.2rem;
-						background-color: #D8DFF0;
-						height: 1rem;
-						line-height: 1rem;
-						padding-right: 0.4rem;
-						.discount{
-							width: 1.44rem;
-							text-align: center;
-							color: #1A2642;
-							font-size: 0.42rem;
-							span{
-								font-size: 0.24rem;
-							}
-						}
-						.quan{
-							margin-top: 0.24rem;
-							height: 0.52rem;
-							line-height: 0.52rem;
-							border-left: 1px dashed #1A2642;
-							padding: 0 0.24rem;
-							font-size:0.28rem;
-							color: #1A2642;
-						}
-						.fr{
-							color: #7386AD;
-							font-size: 0.22rem;
-						}
-					}
-					.account{
-						font-size: 0.8rem;
-						color: #1A2642;
-						span{
-							font-size: 0.24rem;
-						}
+				.right {
+					width: 2.85rem;
+					height: 0.9rem;
+					border-radius: 45px;
+					background: rgba(245, 64, 46, 1);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: white;
+					img {
+						width: 0.4rem;
+						height: 0.4rem;
+						margin-right: 0.12rem;
 					}
 				}
 			}

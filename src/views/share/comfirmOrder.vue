@@ -1,260 +1,312 @@
 <template>
-	<section>
+	<section class="sure-box">
 		<settingHeader :title="title"></settingHeader>
-
-		<div class="shops">
-			<group style='margin-bottom:0.38rem;'>
-                <cell title="优衣库旗舰店" :border-intent="false" >
-			        <img slot="icon" width="20" style="display:block;margin-right:5px;" src="../../assets/images/share/md_logo.png">	
-			    </cell>
-                <div class="shopInfo">
-					<img src="../../assets/images/share/yiqi2.png" alt="" class='fl'>
-					<div class='fl' style='padding-top:0.1rem;'>
-						<p class="shopName">30分钟威伐光-750W单人套餐</p>
-						<p class="shopSize">型号：威伐光-750W</p>
-						<p class="shopPrice"><span class="priceNum">￥{{unitPrice}}</span></p>
-					</div>
-					<div class="clear"></div>
-                </div>
-                <cell title="购买数量">
-                	<x-number @on-change="changeNum" v-model="totalNum" button-style="round" fillable :min="1" :max="999"></x-number>
-                </cell>
-                <cell title="店铺优惠" value="省10元：100减5" :border-intent="false"></cell>
-                <cell :border-intent="false">
-					<span slot="title" style="color:#F23030; width: 3rem;display: inline-block;">CGC通用积分抵扣</span>
-					<span class="banlance" style='font-size: 0.24rem;color: #90A2C7;'>
-						<x-switch :title="'积分: ￥'+balance" v-model="defaultValue" @on-change="onPrice" :value-map="[0,1]" sytle="padding-right: 10 !important;"></x-switch>
-					</span>
-
-                </cell>
-
-            </group>
-		</div>
-
-
-		<div class="submit">
-			<div class="total fl">
-				共 <span class='color'>{{totalNum}}</span> 件，总计：<span class="totalNum">¥{{totalPrice}}</span>
+		<div class="order-box">
+			<div class="order_top">
+				<div class="left">
+					<img :src="'./static/images/shopLogo.png'" alt="" />
+					<p>成高成大健康</p>
+					<i class="icon iconfont icon-arrow-right"></i>
+				</div>
 			</div>
-			<div class="confirmSumbit fr" @click='popup'>确认提交</div>
-			<div class="clear"></div>
-		</div>
-
-		<div v-transfer-dom>
-			<popup v-model="paytype">
-				<popup-header right-text="取消" title="请选择支付方式" :show-bottom-border="false" @on-click-left="paytype = false" @on-click-right="paytype = false"></popup-header>
-				<group gutter="0">
-					<radio :options="list" value="1" @on-change="change"></radio>
-					<div class="pay-box">
-						<router-link to='/share/orderSuccess'><div class="add-btn">立即支付</div></router-link>
+			<div class="order_middle">
+				<div class="left">
+					<img :src="'./static/images/cai2.png'" />
+				</div>
+				<div class="middle">
+					<div>
+						<p class="name">威伐光 - 750W </p>
+						<p class="pinfo">套餐:30分钟</p>
 					</div>
-				</group>
-			</popup>
+					<p class="price">¥120</p>
+				</div>
+			</div>
+			<div class="order_bottom">
+				<p>优惠券选择</p>
+				<p>4张可用<i class="iconfont icon-arrow-right"></i></p>
+			</div>
 		</div>
-
+		<div class="fix-box">
+			<div class="one">
+				<div class="left">
+					通用积分
+				</div>
+				<div class="right">
+					<p class="ky">可用：23400 </p>
+					<x-switch title="" v-model="value"></x-switch>
+				</div>
+			</div>
+			<div class="two">
+				<input type="number" placeholder="请输入使用的通用积分" />
+			</div>
+			<div class="three">
+				<div class="left">
+					<p>需付款：</p>
+					<p><i>¥</i>120</p>
+				</div>
+				<div class="right" @click="$router.push({path:'/share/orderSuccess'})">确认提交</div>
+			</div>
+		</div>
 	</section>
 </template>
 
 <script>
 	import settingHeader from '../../components/setting_header'
-	import { Group, CellBox, XButton, PopupHeader, Radio,Checklist } from 'vux'
+	import { XSwitch } from 'vux'
 
 	export default {
 		data() {
 			return {
-				title:"确认订单",
-				totalNum:1,  //默认数量,总计
-				unitPrice:120,//单价
-				totalPrice:120,//总价
-				paytype:false,
-				list: [{
-					icon: './static/member/bandCard.png',
-					key: '1',
-					value: '银行卡支付'
-				}, {
-					icon: './static/member/treasure.png',
-					key: '2',
-					value: '支付宝支付'
-				}, {
-					icon: './static/member/wechapaid.png',
-					key: '3',
-					value: '微信支付'
-				}],
-				balance:1200,
-				// price:120
-				defaultValue:1
+				title: "确认订单"
 			}
-				
-		},
-		components:{
-			settingHeader,
-			Group,
-			CellBox,
-			XButton,
-			PopupHeader,
-			Radio,
-			Checklist
-		},
-		/*created(){
 
-		},*/
-		mounted(){
-			
 		},
-		computed:{
-			
+		components: {
+			settingHeader,
+			XSwitch
 		},
-		methods:{
-			popup(){
-				this.paytype = true;
-			},
-			change(value, label) {
-				console.log('change:', value, label)
-			},
-			goShopsuccess(){
-				this.$router.push('/share/orderSuccess');
-			},
-			changeNum(totalNum){//改变订单数量
-				// console.log(totalNum)
-				this.totalPrice=this.totalNum * this.unitPrice
-			},
-			onPrice(newVal){
-				console.log(newVal)
-			}
-			
+		created() {
+
+		},
+		mounted() {
+
+		},
+		computed: {
+
+		},
+		methods: {
+
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-	@import url('../../../static/css/global');
-
-	.shopInfo{
-		border-top: 1px solid #D9D9D9;
-		padding: 12px 15px;
-		background-color: #F5F6FA;
-		img{
-			width: 1.52rem;
-			height: 1.52rem;
-			margin-right: 0.28rem;
+	.sure-box {
+		.settingHeader {
+			border-bottom: 1px solid rgba(225, 225, 225, 1);
 		}
-		.shopName{
-			font-size: 0.28rem;
-			color: #1A2642;
-			font-weight: 700;
-			line-height:0.33rem;
-			width: 5.05rem;
-			word-wrap:break-word;
-		}
-		.shopSize{
-			font-size: 0.24rem;
-			color: #90A2C7;
-			line-height:0.53rem;
-		}
-		.shopPrice{
-			margin-top: 0.24rem;
-			.priceNum{
-				display: inline-block;
-				
-				font-size: 0.32rem;
-				color: #F23030;
-				font-weight: 700;
-				vertical-align: middle;
+		.order-box {
+			background-color: white;
+			.order_top {
+				height: 0.8rem;
+				display: flex;
+				justify-content: space-between;
+				box-sizing: border-box;
+				padding: 0.17rem 0.30rem;
+				.left {
+					width: 65%;
+					display: flex;
+					align-items: center;
+					img {
+						width: 0.36rem;
+						height: 0.36rem;
+						margin-right: 0.23rem;
+					}
+					p {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
+					}
+					i {
+						font-size: 0.5rem;
+					}
+				}
 			}
-			.shopAcount{
-				font-weight: normal;
-				display: inline-block;
-				padding-left: 6px;
-				padding-right: 8px;
-				height: 0.4rem;
-				text-align: center;
-				font-size: 0.24rem;
-				line-height: 0.4rem;
-				background-image: linear-gradient(238deg, #5EC3FF 0%, #106FE3 100%);
-				border-radius: 4px;
-				color:#fff;
+			.order_middle {
+				display: flex;
+				background: rgba(245, 246, 250, 1);
+				position: relative;
+				padding: 0.14rem 0.25rem;
+				box-sizing: border-box;
+				.left {
+					width: 1.50rem;
+					height: 1.50rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+				.middle {
+					flex: 1;
+					display: flex;
+					justify-content: space-between;
+					flex-direction: column;
+					margin-left: 0.27rem;
+					.name {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
+					}
+					.pinfo {
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(144, 162, 199, 1);
+						margin-top: 0.05rem;
+					}
+					.price {
+						font-size: 0.32rem;
+						font-family: PingFangSC-Medium;
+						color: rgba(242, 48, 48, 1);
+					}
+				}
+			}
+			.order_bottom {
+				height: 1.02rem;
+				background: rgba(255, 255, 255, 1);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 0.26rem;
+				box-sizing: border-box;
+				p:nth-child(1) {
+					font-size: 0.28rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(26, 38, 66, 1);
+				}
+				p:nth-child(2) {
+					font-size: 0.30rem;
+					font-family: PingFangSC-Regular;
+					color: #1A2642;
+					display: flex;
+					align-items: center;
+					i {
+						font-size: 0.40rem;
+						color: rgba(115, 134, 173, 1);
+					}
+				}
 			}
 		}
-	}
-
-	.submit{
-		width: 100%;
-		position: fixed;
-		bottom:0;
-		background-color: #fff;
-		border-top: 1px solid #E1E1E1;
-		box-sizing:border-box;
-		height: 1rem;
-		.total{
-			/*background-color: #fff;*/
-			width: 4.4rem;
-			padding-left: 0.7rem;
-			line-height: 1rem;
-			font-size: 0.28rem;
-			color:#1A1A1A;
-			.color{
-				color:#f45656;
+		.fix-box {
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+			background-color: white;
+			.one {
+				height: 1.02rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 0.24rem;
+				box-sizing: border-box;
+				.left {
+					width: 1.64rem;
+					height: 0.46rem;
+					line-height: 0.46rem;
+					text-align: center;
+					background: rgba(51, 111, 255, 0.21);
+					border-radius: 4px;
+					border: 1px solid rgba(51, 111, 255, 1);
+					font-size: 0.24rem;
+					font-family: TRENDS;
+					color: rgba(51, 111, 255, 1);
+				}
+				.right {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					.ky {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(144, 162, 199, 1);
+						margin-right: 0.16rem;
+						.weui-cell:before {
+							border-top: none;
+						}
+					}
+				}
 			}
-			.totalNum{
-				font-weight: 700;
-				font-size: 0.32rem;
-				color: #F23030;
+			.two {
+				height: 1.02rem;
+				padding: 0 0.24rem;
+				box-sizing: border-box;
+				width: 100%;
+				position: relative;
+				input {
+					width: 100%;
+					height: 100%;
+					font-size: 0.24rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(160, 160, 160, 1);
+				}
 			}
-			.totalAccount{
-				float:right;
-				font-size: 0.24rem;
-				color: #FFFFFF;
-				background-image: linear-gradient(238deg, #5EC3FF 0%, #106FE3 100%);
-				border-radius: 4px;
-				height: 0.4rem;
-				width: 1.2rem;
-				line-height: 0.4rem;
-				text-align: center;
-				margin-top: 0.32rem;
-				margin-right: 0.2rem;
+			.two:before,
+			.three:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #D8DFF0;
+				color: #D8DFF0;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
 			}
-		}
-		.confirmSumbit{
-			width: 2.4rem;
-			padding: 0.3rem 0;
-			line-height: 0.4rem;
-			text-align: center;
-			background: #336FFF;
-			font-size: 0.28rem;
-			color: #FFFFFF;
-		}
-	}
-
-	.pay-box {
-		padding: 10px 15px;
-		.add-btn {
-			height: 0.88rem;
-			line-height: 0.88rem;
-			background: rgba(51, 111, 255, 1);
-			font-size: 0.28rem;
-			text-align: center;
-			font-family: MicrosoftYaHei;
-			color: rgba(255, 255, 255, 1);
-			border-radius: 2px;
+			.three {
+				width: 100%;
+				height: 1rem;
+				display: flex;
+				position: relative;
+				.left {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					padding-right: 0.20rem;
+					box-sizing: border-box;
+					p:nth-child(1) {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(34, 34, 34, 1);
+					}
+					p:nth-child(2) {
+						font-size: 0.38rem;
+						font-family: PingFangSC-Medium;
+						color: rgba(242, 48, 48, 1);
+						i {
+							font-size: 0.24rem;
+						}
+					}
+				}
+				.right {
+					width: 2.4rem;
+					height: 1rem;
+					line-height: 1rem;
+					background: rgba(51, 111, 255, 1);
+					text-align: center;
+					font-size: 0.28rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(255, 255, 255, 1);
+				}
+			}
 		}
 	}
 </style>
 <style lang="less">
-	.shops .weui-cells{
-		margin-top: 0 !important;
-	}
-	.shops .weui-label{
-		width: 9em!important;
-		padding-right: 5px;
-	}
-	.shops{
-		.vux-label{
-			font-size: 0.28rem;
-			color:#1A2642;
-		}
-		.weui-cell__ft{
-			font-size: 0.3rem;
-			color:#1A2642;
+	.sure-box {
+		.fix-box {
+			.right {
+				.weui-cell:before {
+					border-top: none!important;
+				}
+			}
 		}
 	}
 </style>

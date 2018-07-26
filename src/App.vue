@@ -47,7 +47,7 @@
 		},
 		created() {
 			var _this = this
-
+			
 			window.onorientationchange = function() {
 				if(window.orientation == 90 || window.orientation == -90) {
 					_this.orientation = true;
@@ -87,7 +87,6 @@
 		},
 		watch: {
 			'$route' (to, from, next) {
-
 				var _this = this
 
 				//判断是否微信端   奖励弹窗  
@@ -110,6 +109,7 @@
 							_this.$popup.hide()
 						} else {
 							if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/reg') {
+								sessionStorage.setItem('isPay', 1)
 								_this.getUserPayPassword()
 							}
 						}
@@ -131,6 +131,7 @@
 						_this.$popup.hide()
 					} else {
 						if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/reg') {
+							sessionStorage.setItem('isPay', 1)
 							_this.getUserPayPassword()
 						}
 					}
@@ -186,6 +187,10 @@
 		font-family: 'Avenir', Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+	}
+	
+	[v-cloak] {
+		display: none !important;
 	}
 	
 	.vux-pop-out-enter-active,

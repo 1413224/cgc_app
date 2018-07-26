@@ -4,17 +4,17 @@
 		<div class="searchBox">
 			<div class="searchInput">
 				<img :src="'./static/images/ss.png'" />
-				<input type="text" placeholder="搜索商品" @click="showCanel" ref="search" @focus="showCanel">
+				<input type="text" placeholder="搜索商品" v-model="keyword" ref="search" @keyup.13="search">
 			</div>
-			<div class="canel" v-if="canel == true" @click="back">取消</div>
+			<div class="canel" @click="back">取消</div>
 			<div class="clear"></div>
 		</div>
-		<div class="recommended-search">
+		<!--<div class="recommended-search">
 			<div class="searchList">
 				<li v-for="(item, index) in searchList" @click="goProduct">{{ item}}</li>
 			</div>
 			<div class="clear"></div>
-		</div>
+		</div>-->
 	</section>
 </template>
 
@@ -24,27 +24,39 @@
 		data() {
 			return {
 				title: "店铺内搜索",
-				canel: false,
 				searchList: [
 					'短裤', '时尚大牌', '热卖推荐', '男士衬衫'
-				]
+				],
+				keyword: '',
+				fromPath: ''
 			}
 		},
 		components: {
 			settingHeader
 		},
+		beforeRouteEnter(to, from, next) {
+			next(vm => {
+				vm.fromPath = from.path
+			})
+		},
 		mounted() {
-			this.$refs.search.focus()
-			console.log('---', this.$refs.search)
+//			this.$refs.search.focus()
 		},
 		methods: {
+			search() {
+				var _this = this
+				_this.$router.push({
+					path: _this.fromPath,
+					query: {
+						keyword: _this.keyword,
+						tabNo2: true
+					}
+				})
+			},
 			goProduct() {
 				this.$router.push({
 					path: '/shop/product'
 				})
-			},
-			showCanel() {
-				this.canel = true
 			},
 			back() {
 				this.$router.go(-1)

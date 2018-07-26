@@ -21,9 +21,10 @@
 					<div v-else style="padding-bottom: 0rem;">
 						<ul class="ul-record" v-for="(item,index) in recordList" :key="index" @click="$router.push({path:'/draw/details'})">
 							<div class="re-content">
-								<div class="left" style="padding-top: 0.05rem;">{{ item.drawTitle}}</div>
-								<div class="period left">{{ item.period}}期</div>
-								<div class="win">{{ item.stateValue}}</div>
+								<div>
+									<div>{{ item.drawTitle}}</div>
+									<div class="period">{{ item.period}}期</div>
+								</div>
 							</div>
 
 							<div class="clear pd">
@@ -57,7 +58,7 @@
 									<div class="dia_content">
 										<p class="title">{{headMessage}}</p>
 										<p class="note">{{message}}</p>
-										<div class="btnList">{{btnText}}</div>
+										<div class="btnList" @click="$router.push({path:'/draw/awards'})">{{btnText}}</div>
 									</div>
 								</div>
 								<div class="close" @click="showDialog=false"><img src="../../assets/images/draw/open.png"></div>
@@ -240,7 +241,7 @@
 				message: '进行实名认证之后才可以领取奖励',
 				btnText: '立即去认证',
 				imgSrc: './static/draw/warning.png',
-				isWinning: true
+				isWinning: false
 				// 1、未实名认证  进行实名认证之后才可以领取奖励 按钮:立即去认证 图片: warning.png
 				// 2、等待审核 请您耐心等待审核 图片wait.png
 				// 3、审核未通过 审核未通过
@@ -329,8 +330,7 @@
 								awardStatus: '未领取'
 							}
 						];
-						_this.recordList = _this.recordList.concat(obj);
-						console.log(_this.recordList);
+						_this.recordList = _this.recordList.concat(obj)
 					}
 
 				}, 3000)
@@ -366,18 +366,20 @@
 		background-color: #fff;
 		padding-bottom: 2px;
 	}
-	.settingHeader ~ .wrapper{
+	
+	.settingHeader~.wrapper {
 		position: absolute;
-		top:.92rem;
+		top: .92rem;
 		left: 0;
 		right: 0;
 		bottom: 0;
 		overflow: hidden;
 	}
+	
 	.wrapper {
 		// height: 100%;
 		position: absolute;
-		top:0;
+		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
@@ -473,6 +475,8 @@
 			height: 1.14rem;
 			line-height: 1.14rem;
 			overflow: hidden;
+			display: flex;
+			justify-content: space-between;
 			.period {
 				position: absolute;
 				color: #fff;
@@ -487,23 +491,6 @@
 				line-height: 0.36rem;
 				left: 50%;
 				top: 35%;
-			}
-			.win {
-				position: absolute;
-				float: right;
-				height: 0.52rem;
-				background-color: #E5EAEF;
-				padding: 0 0.38rem;
-				color: #666666;
-				font-size: 0.28rem;
-				text-align: center;
-				border-radius: 0.37rem;
-				margin: auto;
-				margin-right: 0.2rem;
-				line-height: 0.56rem;
-				right: 0;
-				top: 28%;
-				padding-top: 0.04rem;
 			}
 		}
 		.pd {
