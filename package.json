@@ -16,6 +16,7 @@
     "cropperjs": "^1.4.0",
     "echarts": "^4.0.4",
     "fastclick": "^1.0.6",
+    "gsap": "^2.0.1",
     "js-md5": "^0.7.3",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.1.3",

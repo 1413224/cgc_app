@@ -32,6 +32,7 @@ import banlancelog from '@/views/member/purse/banlancelog'
 import banlance from '@/views/member/purse/banlance'
 import recharge from '@/views/member/purse/recharge'
 import card from '@/views/member/card/index'
+import card1 from '@/views/member/card/index1'
 import carddetail from '@/views/member/card/detail'
 import setting from '@/views/member/setting/index'
 import follow from '@/views/member/follow/index'
@@ -313,6 +314,13 @@ const memberModule = [{
 			title: '我的卡包'
 		}
 	}, {
+		path: '/member/card/index1',
+		name: 'card1',
+		component: resolve => require(['@/views/member/card/index1'], resolve),
+		meta: {
+			title: '我的卡包1'
+		}
+	},{
 		path: '/member/card/detail',
 		name: 'carddetail',
 		component: resolve => require(['@/views/member/card/detail'], resolve),
