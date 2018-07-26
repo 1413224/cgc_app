@@ -13,7 +13,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="clear"></div>
 	</section>
 </template>
 
@@ -47,7 +46,7 @@
 
 <style lang="less" scoped>
 	.qrcode{
-		background: #336FFF;
+		background: #90A2C7;
 		height: 100%;
 		.blue{
 			padding-top: 1.19rem;

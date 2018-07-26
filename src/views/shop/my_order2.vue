@@ -187,7 +187,6 @@
 				showNum: 10,
 				showLoading: false,
 				showLoading2: false,
-				isLess: false,
 				changeTip: '下拉刷新',
 				showNo: false,
 				typeOrderList: ['全部分类', '线下门店', '实物商品', '共享服务', '点餐', '酒店', '门票', '游戏', '手机充值', '电影票', '演出票', '加油卡'],
@@ -299,15 +298,6 @@
 								_this.move = true
 							}, 800)
 
-						}
-
-						if(isLess) {
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'top',
-								text: '刷新成功'
-							})
 						}
 					} else {
 						if(time) {
@@ -536,6 +526,7 @@
 						})
 						//下拉刷新
 						_this.scroll.on('pullingDown', () => {
+							console.log(123)
 							_this.$nextTick(function() {
 								_this.scroll.finishPullDown()
 								_this.scroll.refresh()
@@ -555,33 +546,21 @@
 
 						//滚动开始
 						_this.scroll.on('scroll', (pos) => {
-							if(_this.scroll.scroller.clientHeight >= _this.scroll.wrapperHeight) {
-								if(_this.orderList.length > 0) {
-									if(pos.y > -30 && pos.y <= 80) {
-										if(_this.move) {
-											_this.showLoading2 = true
-											if(pos.y < 0) {
-												_this.changeTip = '下拉刷新'
-												_this.huan = false
-											} else if(pos.y >= 20) {
-												_this.changeTip = '释放更新'
-												_this.huan = true
-											}
-										}
-									}
-								}
-							} else if(_this.scroll.scroller.clientHeight < _this.scroll.wrapperHeight) {
-								if(_this.orderList.length > 0) {
-									if(pos.y > -30 && pos.y <= 80) {
-										if(_this.move) {
-											_this.showLoading2 = true
+							console.log(pos.y)
+							if(_this.orderList.length > 0) {
+								if(pos.y > -30 && pos.y <= 80) {
+									if(_this.move) {
+										_this.showLoading2 = true
+										if(pos.y < 0) {
+											_this.changeTip = '下拉刷新'
+											_this.huan = false
+										} else if(pos.y >= 20) {
 											_this.changeTip = '释放更新'
 											_this.huan = true
 										}
 									}
 								}
 							}
-
 						})
 
 						//滚动结束
@@ -595,29 +574,19 @@
 						//手指离开
 						_this.scroll.on('touchEnd', (pos) => {
 							_this.move = false
-							if(_this.scroll.scroller.clientHeight >= _this.scroll.wrapperHeight) {
-								if(pos.y >= 20) {
-									_this.changeTip = '加载中...'
-									if(_this.orderList.length > 0) {
-										_this.getOrderList(_this.orderList[0].createTime)
-									}
-								} else {
-									_this.showLoading2 = false
-								}
-							} else {
+							if(pos.y >= 20) {
 								_this.changeTip = '加载中...'
 								if(_this.orderList.length > 0) {
-									_this.getOrderList(_this.orderList[0].createTime, 'isLess')
+									_this.getOrderList(_this.orderList[0].createTime)
 								}
+							} else {
+								_this.showLoading2 = false
 							}
-
 						})
 
 					} else {
 						_this.scroll.refresh()
 					}
-
-					console.log()
 				})
 
 			},
@@ -628,8 +597,7 @@
 
 					_this.$http.get(_this.url.order.getOrderList, {
 						params: {
-							//						userId: _this.$store.state.user.userId,
-							userId: 'userDev01',
+							userId: _this.$store.state.user.userId,
 							type: _this.type,
 							status: _this.status,
 							timeType: _this.timeType,

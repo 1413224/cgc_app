@@ -8,7 +8,7 @@
 					<img :src="item" alt="" />
 				</swiper-slide>
 			</swiper>
-			<transition enter-active-class="zoomInDown animated" leave-active-class="zoomOutDown animated" :duration="1000">
+			<transition enter-active-class="fadeIn animated" leave-active-class="fadeOut animated">
 				<div v-if="show" @click="nextSwiper()">
 					<img class="jt-img" :class="{'rightan':show}" :src="'./static/images/sjt.png'" />
 				</div>
@@ -25,12 +25,10 @@
 			return {
 				title: "威伐光介绍",
 				swiperList: [
-					'./static/vip/swiper1.png',
-					'./static/vip/swiper2.png',
-					'./static/vip/swiper3.png',
-					'./static/vip/swiper4.png',
-					'./static/vip/swiper5.png',
-					'./static/vip/swiper6.png'
+					'./static/share/introduce1.png',
+					'./static/share/introduce2.png',
+					'./static/share/introduce3.png',
+					'./static/share/introduce4.png'
 				],
 				show: true,
 				realIndex: 0,
@@ -48,16 +46,8 @@
 			_this.swiperOption = {
 				// 所有的参数同 swiper 官方 api 参数
 				direction: 'vertical',
+				slidesOffsetBefore: 0,
 				autoplay: false,
-				effect: 'coverflow', //3D翻转效果
-				slidesPerView: 'auto',
-				coverflowEffect: {
-					rotate: 50,
-					stretch: 0,
-					depth: 100,
-					modifier: 1,
-					slideShadows: false //开启阴影效果
-				},
 				on: {
 					slideChange: function() {
 						_this.realIndex = this.realIndex //设置循环需要使用realIndex获取真实下标
@@ -71,11 +61,11 @@
 				if(this.realIndex == (this.swiperList.length - 1)) {
 					setTimeout(function() {
 						_this.show = false
-					}, 1000)
+					}, 100)
 				} else {
 					setTimeout(function() {
 						_this.show = true
-					}, 1000)
+					}, 100)
 				}
 			}
 		},
@@ -103,17 +93,21 @@
 			position: relative;
 			z-index: 11;
 			.jt-img {
-				width: 0.48rem;
-				height: 0.48rem;
+				width: 0.8rem;
+				height: 0.8rem;
 			}
 			@-webkit-keyframes rightan {
-				from {
-					bottom: 11%;
+				0% {
+					bottom: 15%;
+					opacity: 1;
+				}
+				80% {
+					bottom: 0;
 					opacity: 0;
 				}
-				to {
-					bottom: 0.8rem;
-					opacity: 1;
+				100% {
+					bottom: 15%;
+					opacity: 0;
 				}
 			}
 			.rightan {
@@ -130,11 +124,10 @@
 			width: 100%;
 			height: 100%;
 		}
-		.swiper-slide {
+		.swiper-slide{
 			width: 100%;
 			height: 100%;
 			display: flex;
-			align-items: center;
 			justify-content: center;
 			img {
 				width: 100%;

@@ -1,17 +1,26 @@
 <template>
 	<div class="tc-box">
-		<group gutter="0">
-			<x-switch title="短信验证弹窗" v-model="smsCode"></x-switch>
-			<x-switch title="密码验证弹窗" v-model="payPassword"></x-switch>
-			<x-switch title="询问弹窗" v-model="tc"></x-switch>
-			<x-switch title="点击按钮不会关闭的询问弹窗" v-model="antc"></x-switch>
-			<x-switch title="点击按钮延迟关闭的询问弹窗" v-model="yctc"></x-switch>
-			<x-switch title="注册奖励弹窗" v-model="zctc"></x-switch>
-			<x-switch title="消费奖励弹窗" v-model="sftc"></x-switch>
-			<x-switch title="提醒设置支付密码弹窗" v-model="zftc"></x-switch>
-			<x-switch title="支付方式弹窗" v-model="payOptions.showPayMode"></x-switch>
-		</group>
-		<payMode :options="payOptions"></payMode>
+		<div style="position: relative;z-index: 11;">
+			<group gutter="0">
+				<x-switch title="短信验证弹窗" v-model="smsCode"></x-switch>
+				<x-switch title="密码验证弹窗" v-model="payPassword"></x-switch>
+				<x-switch title="询问弹窗" v-model="tc"></x-switch>
+				<x-switch title="点击按钮不会关闭的询问弹窗" v-model="antc"></x-switch>
+				<x-switch title="点击按钮延迟关闭的询问弹窗" v-model="yctc"></x-switch>
+				<x-switch title="注册奖励弹窗" v-model="zctc"></x-switch>
+				<x-switch title="消费奖励弹窗" v-model="sftc"></x-switch>
+				<x-switch title="提醒设置支付密码弹窗" v-model="zftc"></x-switch>
+				<x-switch title="支付方式弹窗" v-model="payOptions.showPayMode"></x-switch>
+				<x-switch title="过渡弹窗" v-model="yutc"></x-switch>
+			</group>
+			<payMode :options="payOptions"></payMode>
+		</div>
+		<!--<scroll class="wrapper" :data="data" :pullup="true" @scrollToEnd="loadData">
+			<ul class="content">
+				<li style="height: 50px;" v-for="item in 50">{{item}}</li>
+			</ul>
+			<div class="loading-wrapper"></div>
+		</scroll>-->
 	</div>
 </template>
 
@@ -20,6 +29,7 @@
 <script>
 	import { XSwitch, Group, Cell } from 'vux'
 	import payMode from '@/components/payMode'
+	import scroll from '@/components/wrapper'
 	export default {
 		data() {
 			return {
@@ -29,33 +39,41 @@
 				antc: false,
 				yctc: false,
 				zctc: false,
-				zftc:false,
-				sftc:false,
-				payOptions:{
-					showPayMode:false,
-					data:{
-						money:1000,
+				zftc: false,
+				sftc: false,
+				yutc: false,
+				payOptions: {
+					showPayMode: false,
+					data: {
+						money: 1000,
 					},
-					changePay(index){
+					changePay(index) {
 						console.log(index)
 					},
-					toPay(index){
+					toPay(index) {
 						console.log(index)
 					},
-					hide(){
+					hide() {
 						console.log('hide')
 					},
-					show(){
+					show() {
 						console.log('show')
 					}
-				}
+				},
+				data: [1, 2, 23, 4]
 			}
 		},
 		components: {
 			XSwitch,
 			Group,
 			Cell,
-			payMode
+			payMode,
+			scroll
+		},
+		methods:{
+			loadData(){
+				console.log(1235)
+			}
 		},
 		watch: {
 			smsCode() {
@@ -187,16 +205,32 @@
 						showSr: true
 					})
 				}
+			},
+			yutc() {
+				var _this = this
+				if(this.yutc) {
+					this.$isload.show({
+						ishide() {
+							_this.yutc = false
+						}
+					})
+				}
 			}
-		},
-		created() {
-			console.log(payMode)
-		},
-		methods: {}
+		}
 	}
 </script>
 <style lang="less" scoped>
 	.tc-box {
 		background-color: white;
+		.wrapper {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			z-index: 15;
+			background-color: white;
+		}
 	}
 </style>
