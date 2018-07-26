@@ -1,44 +1,53 @@
 <template>
 	<section class='multi_user_mall_box'>
 		<settingHeader :title="title"></settingHeader>
-		<div class="swiper-inner">
-			<swiper :options="swiperOption">
-				<swiper-slide v-for="(item, index) in demoList" :key="index">
-					<router-link :to="item.url">
-						<img :src="item.img">
-					</router-link>
-				</swiper-slide>
-				<div class="swiper-pagination" slot="pagination"></div>
-			</swiper>
-		</div>
-		<div class="summary-box">
-			<div class="one">
-				<div class="left">
-					<img :src="'./static/share/shop1.png'" alt="" />
-				</div>
-				<div class="right">
-					<div>
-						<p class="title">蛙来哒娃娃要来啦（番禺天安科技园店）蛙来哒娃娃要来</p>
-						<p class="sf"><span class="lm">联盟企业</span><span class="ly">联营企业</span></p>
-					</div>
-					<p class="num">健康美容/娱乐会所</p>
-				</div>
+		<div v-if="!nohas">
+			<div class="logo-bg">
+				<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="" />
 			</div>
-			<div class="two">
-				<div class="bottom" style="border-top: none;">
-					<p>店铺编号</p>
-					<p>252423ffd3235325afasdfz42fa2324</p>
-				</div>
-				<div class="top">
+			<!--<div class="swiper-inner">
+				<swiper :options="swiperOption">
+					<swiper-slide v-for="(item, index) in demoList" :key="index">
+						<router-link :to="item.url">
+							<img :src="item.img">
+						</router-link>
+					</swiper-slide>
+					<div class="swiper-pagination" slot="pagination"></div>
+				</swiper>
+			</div>-->
+			<div class="summary-box">
+				<div class="one">
 					<div class="left">
-						<img :src="'./static/images/dibiao.png'" alt="" />
-						<p>番禺区大夫山南门对面马路直走200米右转(距您100.6km)</p>
+						<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="" />
 					</div>
 					<div class="right">
-						<img :src="'./static/images/dianhua.png'" alt="" />
+						<div>
+							<p class="title">{{info.name}}</p>
+							<p class="sf">
+								<span class="lm" v-if="info.isAlliance">联盟企业</span>
+								<span class="ly" v-if="info.isChains">联营企业</span>
+							</p>
+						</div>
+						<p class="num" v-if="info.domainCateid1">{{info.domainCateid1}}/{{info.domainCateid2}}</p>
 					</div>
 				</div>
-				<!--<div class="middle">
+				<div class="two">
+					<div class="bottom" style="border-top: none;">
+						<p>店铺编号</p>
+						<p>{{info.number}}</p>
+					</div>
+					<div class="top">
+						<div class="left">
+							<img :src="'./static/images/dibiao.png'" alt="" />
+							<p v-if="info.area">{{info.area.country}}{{info.area.province}}{{info.area.city}}{{info.area.area}}{{info.area.town}}</p>
+						</div>
+						<div class="right">
+							<a :href="'tel://'+info.tel">
+								<img :src="'./static/images/dianhua.png'" alt="" />
+							</a>
+						</div>
+					</div>
+					<!--<div class="middle">
 					<div class="title">
 						<p>店铺二维码(<span>扫码进入店铺</span>)</p>
 						<p><i class="iconfont icon-arrow-right"></i></p>
@@ -47,31 +56,41 @@
 						<qrcode :value="storeUrl" :size="qrcodeWidth" type="img"></qrcode>
 					</div>
 				</div>-->
-				<div class="bottom">
-					<p>开店时间</p>
-					<p>2018-04-14 </p>
-				</div>
-				<div class="bottom" @click="$router.push({path:'/multi_user_mall/store_qrcode'})">
-					<p>店铺二维码</p>
-					<p class="code"><img src="../../assets/images/multi_user_mall/qrcode.png" alt=""><i class="iconfont icon-arrow-right"></i></p>
+					<div class="bottom">
+						<p>开店时间</p>
+						<p>{{info.joinTime}}</p>
+					</div>
+					<div class="bottom" @click="toStoreQc(info)">
+						<p>店铺二维码</p>
+						<p class="code"><img src="../../assets/images/multi_user_mall/qrcode.png" alt=""><i class="iconfont icon-arrow-right"></i></p>
+					</div>
+					<div class="bottom" @click="$router.push({path: '/member/setting/preview'})">
+						<p>店铺图册</p>
+						<p class="code"><img src="../../assets/images/multi_user_mall/tuce.png" alt=""><i class="iconfont icon-arrow-right"></i></p>
+					</div>
 				</div>
 			</div>
+			<div class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end">
+				<img :src="'./static/images/wfgImg.png'" alt="" />
+				<p>2台</p>
+			</div>
+			<div class="back-index" :class="{'bottom2':info.isAlliance== 0 ||info.isChains == 0}" @click="$router.push({path:'/share/storelist'})">
+				<p>返回</p>
+				<p>首页</p>
+			</div>
+			<div class="foot-box" v-if="info.isAlliance == 1 || info.isChains == 1">
+				<ul>
+					<li v-for="(item,index) in navList" :key="index" @click="navActive(index)" v-if="item.show">
+						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
+						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
+					</li>
+				</ul>
+			</div>
 		</div>
-		<div class="wfg-box">
-			<img :src="'./static/images/wfgImg.png'" alt="" />
-			<p>2台</p>
-		</div>
-		<div class="back-index" @click="$router.push({path:'/share/storelist'})">
-			<p>返回</p>
-			<p>首页</p>
-		</div>
-		<div class="foot-box">
-			<ul>
-				<li v-for="(item,index) in navList" :key="index" @click="navActive(index)">
-					<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
-					<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
-				</li>
-			</ul>
+		<div class="no_data1" v-else>
+			<div class="pr">
+				<noData :status="2" stateText="找不到该企业"></noData>
+			</div>
 		</div>
 	</section>
 </template>
@@ -79,6 +98,7 @@
 <script>
 	import settingHeader from '@/components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
+	import noData from '@/components/noData'
 	import { Qrcode } from 'vux'
 	export default {
 		data() {
@@ -100,25 +120,48 @@
 				},
 				qrcodeWidth: 0,
 				navIndex: 0,
+				info: {},
+				logo: '',
+				isAlliance: false, //联盟
+				isChains: false, //联营
+				tabIndex: 0,
+				nohas: false,
+
+				flags: false,
+				position: {
+					x: 0,
+					y: 0
+				},
+				nx: '',
+				ny: '',
+				dx: '',
+				dy: '',
+				xPum: '',
+				yPum: '',
+
 				navList: [{
 						navTitle: '首页',
 						logo: './static/images/shop-bottom1.png',
-						activeLogo: './static/images/shop-bottom1-in.png'
+						activeLogo: './static/images/shop-bottom1-in.png',
+						show: true
 					},
 					{
 						navTitle: '商品',
 						logo: './static/images/shop-bottom2.png',
-						activeLogo: './static/images/shop-bottom2-in.png'
+						activeLogo: './static/images/shop-bottom2-in.png',
+						show: false
 					},
 					{
 						navTitle: '服务',
 						logo: './static/images/shop-bottom3.png',
-						activeLogo: './static/images/shop-bottom3-in.png'
+						activeLogo: './static/images/shop-bottom3-in.png',
+						show: false
 					},
 					{
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
-						activeLogo: './static/images/shop-bottom4-in.png'
+						activeLogo: './static/images/shop-bottom4-in.png',
+						show: true
 					},
 				],
 				demoList: [{
@@ -140,32 +183,291 @@
 			settingHeader,
 			swiper,
 			swiperSlide,
-			Qrcode
+			Qrcode,
+			noData
 		},
 		created() {
-			this.title = this.mainApp.getCs('title')
-			this.type = this.mainApp.getCs('type')
-			this.storeUrl = 'http://www.cgc999.com/new/index.html#/multi_user_mall?id=' + this.mainApp.getCs('enterpriseId')
+			this.getBasicInfo()
+			this.getThumbInfo()
 
-			this.qrcodeWidth = Number(document.body.clientWidth * 0.31)
+			//阻止页面的滑动默认事件
+			document.body.addEventListener("touchmove", function(event) {
+				event.preventDefault()
+			}, false)
 		},
 		methods: {
 			navActive(index) {
 				this.navIndex = index
-				console.log(index)
+			},
+			toStoreQc(pinfo) {
+				var _this = this
+				if(pinfo.isAlliance == 1) {
+					var type = '联盟企业'
+				} else if(pinfo.isChains == 1) {
+					var type = '联营企业'
+				} else {
+					var type = '其他'
+				}
+				_this.$router.push({
+					path: '/multi_user_mall/store_qrcode',
+					query: {
+						enterpriseId: _this.$route.query.id,
+						title: pinfo.enterpriseName,
+						type: type
+					}
+				})
+			},
+			// 获取企业详情
+			getBasicInfo() {
+				var _this = this
+				_this.$http.get(_this.url.qy.getBasicInfo, {
+					params: {
+						enterpriseId: _this.$route.query.id
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.info = res.data.data
+
+						_this.navList[1].show = _this.info.isAlliance == 1 ? true : false
+						_this.navList[2].show = _this.info.isChains == 1 ? true : false
+
+						localStorage.setItem('storeInfo', JSON.stringify(res.data.data))
+						if(_this.info.logo) {
+							_this.logo = _this.info.logo.original
+						}
+
+						if(_this.info.isAlliance == 1 && _this.$store.state.page.isLogin == "true") {
+							_this.getAllianceConcern(_this.info.allianceId)
+						}
+						if(_this.info.isChains == 1 && _this.$store.state.page.isLogin == "true") {
+							_this.getChainsConcern(res.data.data.chainsId)
+						}
+					} else if(res.data.status == 'plat-0003') {
+						_this.nohas = true
+					}
+				})
+			},
+			// 获取企业图册
+			getThumbInfo() {
+				var _this = this
+				_this.$http.get(_this.url.qy.getThumbInfo, {
+					params: {
+						enterpriseId: _this.$route.query.id
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+
+					}
+				})
+			},
+			// 获取用户是否关注联盟企业角色接口
+			getAllianceConcern(id) {
+				var _this = this
+				_this.$http.get(_this.url.qy.getAllianceConcern, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						allianceId: id
+					}
+				}).then((res) => {
+					if(res.data.status == '00000000') {
+						if(res.data.data.status == 1) {
+							_this.isAlliance = true
+						} else {
+							_this.isAlliance = false
+						}
+					}
+				})
+			},
+			// 获取用户是否关注联营企业角色接口
+			getChainsConcern(id) {
+				var _this = this
+				_this.$http.get(_this.url.qy.getChainsConcern, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						chainsId: id
+					}
+				}).then((res) => {
+					if(res.data.status == '00000000') {
+						if(res.data.data.status == 1) {
+							_this.isChains = true
+						} else {
+							_this.isChains = false
+						}
+					}
+				})
+			},
+			changeAlliance(id) {
+				var _this = this
+				//取消关注联盟企业
+				if(_this.isAlliance) {
+					_this.$http.post(_this.url.user.deleteConcern, {
+						userId: _this.$store.state.user.userId,
+						type: 2,
+						concernIds: id
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已取消关注'
+							})
+						}
+						_this.getBasicInfo()
+					})
+				} else {
+					//关注联盟企业
+					_this.$http.post(_this.url.user.addConcern, {
+						userId: _this.$store.state.user.userId,
+						type: 2,
+						platformId: _this.url.platformId,
+						objectId: id
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已关注'
+							})
+						}
+						_this.getBasicInfo()
+					})
+				}
+			},
+			changeChains(id) {
+				var _this = this
+				//取消关注联盟企业
+				if(_this.isChains) {
+					_this.$http.post(_this.url.user.deleteConcern, {
+						userId: _this.$store.state.user.userId,
+						type: 3,
+						concernIds: id
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已取消关注'
+							})
+						}
+						_this.getBasicInfo()
+					})
+				} else {
+					//关注联盟企业
+					_this.$http.post(_this.url.user.addConcern, {
+						userId: _this.$store.state.user.userId,
+						type: 3,
+						platformId: _this.url.platformId,
+						objectId: id
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '已关注'
+							})
+						}
+						_this.getBasicInfo()
+					})
+				}
+			},
+			goSearch() {
+				this.$router.push({
+					path: '/multi_user_mall/search'
+				})
+			},
+			// 实现移动端拖拽
+			down() {
+				this.flags = true;
+				var touch;
+				if(event.touches) {
+					touch = event.touches[0];
+				} else {
+					touch = event;
+				}
+				this.position.x = touch.clientX;
+				this.position.y = touch.clientY;
+				this.dx = this.$refs.moveDiv.offsetLeft;
+				this.dy = this.$refs.moveDiv.offsetTop;
+			},
+			move() {
+				if(this.flags) {
+					var touch;
+					if(event.touches) {
+						touch = event.touches[0];
+					} else {
+						touch = event;
+					}
+					this.nx = touch.clientX - this.position.x;
+					this.ny = touch.clientY - this.position.y;
+					this.xPum = this.dx + this.nx;
+					this.yPum = this.dy + this.ny;
+
+					if(this.xPum >= 0 && this.xPum < document.body.clientWidth) {
+						this.$refs.moveDiv.style.left = this.xPum + "px";
+					} else if(this.xPum < 0) {
+						this.$refs.moveDiv.style.left = 0 + "px";
+					}
+					if(this.yPum >= 0 && this.yPum < document.body.clientHeight) {
+						this.$refs.moveDiv.style.top = this.yPum + "px";
+					} else if(this.yPum < 0) {
+						this.$refs.moveDiv.style.top = 0 + "px";
+					}
+					//阻止页面的滑动默认事件
+					document.addEventListener("touchstart", function(event) {
+						event.preventDefault()
+					}, false)
+				}
+			},
+			//鼠标释放时候的函数
+			end() {
+				this.flags = false;
 			}
 		}
 	}
 </script>
 <style lang="less" scoped>
+	.multi_user_mall_box .no_data1 {
+		height: 100%;
+		width: 100%;
+		background-color: white;
+		overflow: hidden;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		.pr {
+			height: 100%;
+			width: 100%;
+			position: relative;
+			.no_data {
+				position: absolute;
+				top: 30%;
+				left: 50%;
+				transform: translate(-50%, -30%);
+			}
+		}
+	}
+	
 	.multi_user_mall_box {
 		background-color: #F5F6FA;
-		padding-bottom: 1.33rem;
+		/*padding-bottom: 1.33rem;*/
+		.logo-bg {
+			height: 2.80rem;
+			img {
+				width: 100%;
+				height: 100%;
+				display: block;
+				filter: blur(5px);
+			}
+		}
 		.swiper-inner {
 			position: relative;
 			z-index: 11;
 			.swiper-slide {
-				height: 4.20rem;
+				height: 2.80rem;
 				img {
 					width: 100%;
 					height: 100%;
@@ -219,7 +521,7 @@
 					flex: 1;
 					display: flex;
 					flex-direction: column;
-					justify-content: space-between;
+					/*justify-content: space-between;*/
 					div {
 						.title {
 							font-size: 0.32rem;
@@ -400,6 +702,9 @@
 				font-family: PingFangSC-Regular;
 				color: rgba(255, 255, 255, 1);
 			}
+		}
+		.bottom2 {
+			bottom: 0.26rem!important;
 		}
 		.back-index {
 			position: fixed;

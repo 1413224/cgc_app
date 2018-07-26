@@ -31,12 +31,12 @@
 							</div>
 						</div>
 					</cell>
-					<cell class="item" primary="content" is-link @click.native="toCreditReward('信用积分',2)">
+					<cell class="item" primary="content" is-link @click.native="toCreditReward('信用积分',4)">
 						<div class="left">
 							<img :src="'./static/member/xfjl.png'" alt="" />
 							<div>
-								<p>消费</p>
-								<p>累计奖励：{{fundInfo.taskPoints}}</p>
+								<p>购物奖励</p>
+								<p>累计奖励：{{fundInfo.cashbackPoints}}</p>
 							</div>
 						</div>
 					</cell>
