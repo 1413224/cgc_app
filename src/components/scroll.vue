@@ -1,8 +1,9 @@
 <template>
   <div ref="wrapper">
     <div>
-      <div v-if="dropDown" class="pulldown-tip">松手刷新数据</div>
+      <div v-if="dropDown" class="pulldown-tip">{{pullingDownText}}</div>
       <slot></slot>
+      <!-- <div v-if="dropUp" class="pulldown-tip">{{pullingUpText}}</div> -->
     </div>
     
   </div>
@@ -20,7 +21,7 @@
        */
       probeType:{
         type:Number,
-        default:1
+        default:2
       },
       //点击列表是否派发click事件
       click:{
@@ -71,11 +72,13 @@
       pullingDownText:{
         type:String,
         default:"下拉刷新"
-      }
+      },
     },
     data(){
       return {
         // pullingDownText:"下拉刷新"
+        pullingUpText:"上拉加载",
+        dropUp:false
       }
     },
     mounted() {
@@ -94,7 +97,10 @@
         this.scroll = new BScroll(this.$refs.wrapper,{
           probeType:this.probeType,
           click:this.click,
-          scrollX:this.scrollX
+          scrollX:this.scrollX,
+          /*pullUpLoad:{
+            threshold:-70
+          }*/
         })
 
         //是否派发滚动事件
@@ -109,21 +115,15 @@
           let me = this
           this.scroll.on('scroll',(pos) => {
 
-            console.log(pos.y)
+            // console.log(pos.y)
 
-            if(pos.y>50){
+            if(20 <= pos.y && pos.y<=30){
               this.dropDown = true
-            }else{
-              this.dropDown = false
-            }
-
-            /*if(20 <= pos.y && pos.y<=30){
-              this.dropDown = true
-              // this.pullingDownText = "下拉刷新"
+              this.pullingDownText = "下拉刷新"
             }else if(pos.y > 50){
               // alert(0)
               me.pullingDownText = "松开立即刷新"
-            }*/
+            }
 
             if(this.listenScroll){
               me.$emit('scroll',pos)
@@ -136,7 +136,7 @@
 
         //是否派发滚动到底部事件，用于上拉加载
         if(this.pullingUp){
-          this.scroll.on('scrollEnd',() => {
+          this.scroll.on('scrollEnd',(pos) => {
             //滚动到底部
             if(this.scroll.y <= (this.scroll.maxScrollY + 50)){
               this.$emit('pullingUp')
@@ -146,12 +146,14 @@
 
         //是否派发顶部下拉事件，用于下拉刷新
         if(this.pullingDown){
+          var _this=this
           this.scroll.on('touchEnd',(pos) => {
             //下拉动作
             if(pos.y > 50){
-              /*console.log("下拉刷新成功")
-              this.dropDown = false*/
-              this.$emit('pullingDown')
+              this.dropDown = false
+              this.$emit('pullDown')
+            }else{
+              this.dropDown = false
             }
           })
         }
