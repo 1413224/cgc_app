@@ -23,7 +23,7 @@
 	export default {
 		data() {
 			return {
-				title: "威伐光介绍",
+				title: "威健康介绍",
 				swiperList: [
 					'./static/share/introduce1.png',
 					'./static/share/introduce2.png',

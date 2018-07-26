@@ -16,7 +16,7 @@
 		        					<div class="sw_wrap">
 		        						<div class="content">
 		        							<p class="tit ellipsis">设备1<span>（多台设备时，可左右滑动切换）</span></p>
-		        							<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威伐光-60005</p>
+		        							<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威健康-60005</p>
 		        						</div>
 		        					</div>
 		        </swiper-slide> -->
@@ -138,7 +138,7 @@
 				data: [{
 						name: '设备1',
 						logo: './static/images/sb_logo.png',
-						num: '威伐光-60005',
+						num: '威健康-60005',
 						sbnum: '60005',
 						status: 1, //设备已开启过
 						isopen: 1, //设备是否开启 1开启 0关闭
@@ -148,7 +148,7 @@
 					{
 						name: '设备2',
 						logo: './static/images/sb_logo.png',
-						num: '威伐光-60006',
+						num: '威健康-60006',
 						sbnum: '60006',
 						status: 0, //设备未开启过
 						isopen: 0, //设备是否开启 1开启 0关闭

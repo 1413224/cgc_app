@@ -21,7 +21,7 @@
 						<img src="../../assets/images/share/shebei.png">
 					</div>
 					<div class="text-right">
-						<span>30分钟威伐光单人套餐</span>
+						<span>30分钟威健康单人套餐</span>
 						<p class="text-gray">型号:750w <span class="fr">X4</span></p>
 					</div>
 				</div>

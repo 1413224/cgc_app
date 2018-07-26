@@ -15,7 +15,7 @@
 				</div>
 				<div class="middle">
 					<div>
-						<p class="name">威伐光 - 750W </p>
+						<p class="name">威健康 - 750W </p>
 						<p class="pinfo">套餐:30分钟</p>
 					</div>
 					<p class="price">¥120</p>

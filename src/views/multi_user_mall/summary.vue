@@ -45,7 +45,7 @@
 					</li>
 					<li @click="goShare">
 						<img src="../../assets/images/multi_user_mall/coupon.png">
-						<p>威伐光</p>
+						<p>威健康</p>
 					</li>
 				</ul>
 			</div>

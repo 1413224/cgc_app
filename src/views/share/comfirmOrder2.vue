@@ -10,8 +10,8 @@
                 <div class="shopInfo">
 					<img src="../../assets/images/share/yiqi2.png" alt="" class='fl'>
 					<div class='fl' style='padding-top:0.1rem;'>
-						<p class="shopName">30分钟威伐光-750W单人套餐</p>
-						<p class="shopSize">型号：威伐光-750W</p>
+						<p class="shopName">30分钟威健康-750W单人套餐</p>
+						<p class="shopSize">型号：威健康-750W</p>
 						<p class="shopPrice"><span class="priceNum">￥{{unitPrice}}</span></p>
 					</div>
 					<div class="clear"></div>

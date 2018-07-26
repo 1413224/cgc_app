@@ -40,7 +40,7 @@
 		<div class="store">
 			<div class="storename">
 				<img src="../../assets/images/shop/UNIQLO.png">
-				<span>威伐光番禺店</span>
+				<span>威健康番禺店</span>
 			</div>
 			<div class="store-star">
 				<div class="s-text">商品打分</div>
