@@ -291,7 +291,9 @@
 					_this.region = res.province + res.city
 					if(_this.$store.state.page.isWx == false) {
 						_this.lat = res.latitude
+						// _this.lat = 22.9377200000
 						_this.lng = res.longitude
+						// _this.lng = 113.3842400000
 						_this.checkQuery(_this.$route.query)
 						_this.hasDw = true
 						_this.getEnterpriseListInfo()
@@ -897,19 +899,20 @@
 			.item {
 				display: flex;
 				.logo {
-					width: 2.06rem;
+					width: 2.4rem;
 					height: 1.62rem;
 					margin-right: 0.18rem;
-					display: flex;
+					/* display: flex;
 					align-items: center;
-					justify-content: center;
+					justify-content: center; */
 					img {
 						width: 100%;
 						height: 100%;
 					}
 				}
 				div {
-					flex: 1;
+					/*flex: 1;*/
+					width: 5rem;
 					display: flex;
 					flex-direction: column;
 					justify-content: space-between;
