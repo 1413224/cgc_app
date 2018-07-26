@@ -44,20 +44,19 @@
 			</transition>
 		</div>
 
-		<swiper :options="swiperOption" class="swiper">
-			<swiper-slide v-for="(item, index) in demoList" :key="index">
-				<a v-if="item.wbu">
-					<img :src="item.img">
-				</a>
-				<router-link v-else :to="item.url">
-					<img :src="item.img">
-				</router-link>
-			</swiper-slide>
-			<div class="swiper-pagination" slot="pagination"></div>
-		</swiper>
-
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
 			<div class="content">
+				<swiper :options="swiperOption" class="swiper">
+					<swiper-slide v-for="(item, index) in demoList" :key="index">
+						<a v-if="item.wbu">
+							<img :src="item.img">
+						</a>
+						<router-link v-else :to="item.url">
+							<img :src="item.img">
+						</router-link>
+					</swiper-slide>
+					<div class="swiper-pagination" slot="pagination"></div>
+				</swiper>
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
 				<div v-if="list.length > 0">
 					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
@@ -67,9 +66,13 @@
 							</div>
 							<div>
 								<p class="name">{{item.name}}</p>
-								<p class="type">快速简餐 l 特色美食</p>
-								<p class="address"><span>番禺大道北55号天安节能科技园</span><span>{{item.distance}}km</span></p>
-								<p class="sf"><span class="lm">联盟企业</span><span class="ly">联营企业</span></p>
+								<p class="type" v-if="item.domainCateid1">{{item.domainCateid1}} l {{item.domainCateid2}}</p>
+								<p class="address"><span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
+									<span>{{item.distance}}km</span></p>
+								<p class="sf">
+									<span class="lm" v-if="item.isAlliance == 1">联盟企业</span>
+									<span class="ly" v-if="item.isChains == 1">联营企业</span>
+								</p>
 							</div>
 						</div>
 					</div>
@@ -196,18 +199,9 @@
 					loop: true
 				},
 				demoList: [{
-						img: './static/share/banner1.png',
-						url: '/member/join/index'
-					},
-					{
-						img: './static/share/banner1.png',
-						url: '/member/join/index'
-					},
-					{
-						img: './static/share/banner1.png',
-						url: '/member/join/index'
-					}
-				],
+					img: './static/share/banner1.png',
+					url: '/member/join/index'
+				}]
 			}
 		},
 		components: {
@@ -225,6 +219,7 @@
 			this.InitScroll()
 			this.itemsInit()
 			this.getLg()
+			this.getLocation()
 		},
 		methods: {
 			toDetail(id) {
@@ -248,6 +243,38 @@
 					_this[i] = v[index]
 				})
 			},
+			getLocation() {
+				//微信扫一扫
+				var _this = this
+
+				var uri = window.location.href.split('#')[0] //截取#前面的路径
+
+				_this.$http.post(_this.url.zf.wxScan, {
+					appid: 'wx7a4933a7a3c33ec8',
+					url: uri
+				}).then((res) => {
+					wx.config({
+						debug: false,
+						appId: 'wx7a4933a7a3c33ec8',
+						timestamp: res.data.data.timestamp,
+						nonceStr: res.data.data.nonceStr,
+						signature: res.data.data.signature,
+						jsApiList: ['checkJsApi', 'scanQRCode', 'getLocation']
+					})
+
+					wx.ready(function() {
+						wx.getLocation({
+							success: function(res) {
+								_this.lat = res.latitude
+								_this.lng = res.longitude
+								_this.checkQuery(_this.$route.query)
+								_this.hasDw = true
+								_this.getEnterpriseListInfo()
+							}
+						})
+					})
+				})
+			},
 			getLg() {
 
 				var _this = this
@@ -260,14 +287,15 @@
 
 				geolocation.getLocation(showPosition, showErr, options)
 
-				function showPosition(position) {
-
-					_this.region = position.province + position.city
-					_this.lat = position.lat
-					_this.lng = position.lng
-					_this.checkQuery(_this.$route.query)
-					_this.hasDw = true
-					_this.getEnterpriseListInfo()
+				function showPosition(res) {
+					_this.region = res.province + res.city
+					if(_this.$store.state.page.isWx == false) {
+						_this.lat = res.latitude
+						_this.lng = res.longitude
+						_this.checkQuery(_this.$route.query)
+						_this.hasDw = true
+						_this.getEnterpriseListInfo()
+					}
 				}
 
 				function showErr(position) {
@@ -739,14 +767,14 @@
 	}
 	
 	.h {
-		top: 5.05rem!important;
+		top: 2.75rem!important;
 	}
 	
 	.wrapper {
 		position: absolute;
 		width: 100%;
 		bottom: 0.5rem;
-		top: 4.09rem;
+		top: 1.79rem;
 		overflow: hidden;
 	}
 	
@@ -876,8 +904,8 @@
 					align-items: center;
 					justify-content: center;
 					img {
-						width: 70%;
-						height: auto;
+						width: 100%;
+						height: 100%;
 					}
 				}
 				div {

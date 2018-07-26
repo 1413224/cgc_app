@@ -167,6 +167,15 @@
 								})
 							}
 						})
+
+						wx.getLocation({
+							success: function(res) {
+								var oldLat = res.latitude
+								var oldLng = res.longitude
+								alert(res.latitude)
+								alert(res.longitude)
+							}
+						})
 					})
 				})
 			},

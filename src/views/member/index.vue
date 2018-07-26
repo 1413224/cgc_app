@@ -252,7 +252,6 @@
 			},
 			getUserInfo() {
 				var _this = this
-
 				//获取用户信息
 				_this.$http.get(_this.url.user.getBasicInfo, {
 					params: {
@@ -264,6 +263,8 @@
 						if(_this.userInfo != res.data.data) {
 							_this.userInfo = res.data.data
 						}
+
+						console.log(res.data.data.availablePoints)
 					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401' || res.data.status == 'user-0009') {
 						_this.isLogin = false
 						localStorage.removeItem('userInfo')
