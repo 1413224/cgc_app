@@ -1,34 +1,23 @@
 <template>
 	<div class="usetime">
 		<settingHeader :title="title"></settingHeader>
-		<div v-if="1>0">
+		<div v-if="list.length>0">
 			<div class="lunbo">
 				<swiper :options="swiperOption">
-					<swiper-slide v-for="(item,index) in data" :key="index">
+					<swiper-slide v-for="(item,index) in list" :key="index">
 						<div class="sw_wrap">
 							<div class="content">
-								<p class="tit ellipsis">{{item.name}}<span>（多台设备时，可左右滑动切换）</span></p>
-								<p class="xinghao"><span><img :src="item.logo" alt=""></span>{{item.num}}</p>
+								<p class="tit ellipsis">{{item.goodsName}}</p>
+								<p class="xinghao"><span></span>设备编号:{{item.equipNumber}}</p>
 							</div>
 						</div>
 					</swiper-slide>
-					<!-- <swiper-slide>
-		        					<div class="sw_wrap">
-		        						<div class="content">
-		        							<p class="tit ellipsis">设备1<span>（多台设备时，可左右滑动切换）</span></p>
-		        							<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威伐光-60005</p>
-		        						</div>
-		        					</div>
-		        </swiper-slide> -->
-					<!-- <div class="swiper-pagination" slot="pagination"></div> -->
 				</swiper>
 			</div>
 
-			<div class="start" v-show="startUp==false || slideStatus==false">
-				<div class="cont" @click="startEquipment">
+			<div class="start" v-show="infoItem.status == 0 || infoItem.status == 2">
+				<div class="cont" @click="startEquipment(infoItem.itemId,infoItem.status)">
 					<img src="../../assets/images/share/button0.png" alt="" class="btn0">
-					<!-- <img v-if="shBtn==false" :src="lanBtn" alt="" class="btn0">
-				<img v-if="shBtn==true" :src="shlanBtn" alt="" class="btn0"> -->
 					<img src="../../assets/images/share/sh_btn0.png" alt="" class="sh_btn0">
 					<div class="nr">
 						<p class="tit">启动</p>
@@ -38,8 +27,8 @@
 				</div>
 			</div>
 
-			<div class="suspend" v-show="startUp==true || slideStatus==true">
-				<div class="cont" @click="suspendEquipment">
+			<div class="suspend" v-show="infoItem.status == 1">
+				<div class="cont" @click="startEquipment(infoItem.itemId,infoItem.status)">
 					<img src="../../assets/images/share/button2.png" alt="" class="btn0">
 					<img src="../../assets/images/share/sh_btn2.png" alt="" class="sh_btn0">
 					<div class="nr">
@@ -50,13 +39,11 @@
 				</div>
 			</div>
 
-			<div class="enduse" @click=endOfUse>结束使用</div>
+			<div class="enduse" @click='endOfUse(infoItem.itemId)' v-if="infoItem.status == 1">结束使用</div>
 
 			<div class="footer">
-				<!-- <div class="num">设备编号：60005</div>
-			<div class="address ellipsis">所在门店：广东省成高成大健康管理公司</div> -->
-				<div class="num">设备编号：{{changeEquiDate.sbnum ? changeEquiDate.sbnum : data[0].sbnum}}</div>
-				<div class="address ellipsis">所在门店：{{changeEquiDate.storename ? changeEquiDate.storename : data[0].storename}}</div>
+				<div class="num">设备编号：{{infoItem.equipNumber}}</div>
+				<div class="address ellipsis">所在门店：{{infoItem.name}}</div>
 			</div>
 
 		</div>
@@ -97,70 +84,21 @@
 					},
 					on: {
 						slideChangeTransitionEnd: function(e) {
-
-							var info = _this.data[this.activeIndex];
-							_this.changeEquiDate = info;
-
-							_this.onIndex = this.activeIndex;
-							// console.log(_this.onIndex)
-							_this.closeIndex = this.activeIndex; //关闭的机器
-
-							clearInterval(_this.clearTime);
-
-							//检查设备是否已开启
-							if(info.status == 1) {
-
-								//倒计时
-								_this.countDown(info.overtime);
-
-								//设备是否开启状态
-								if(info.isopen == 1) {
-									_this.startUp = true;
-									_this.slideStatus = true;
-								} else {
-									_this.startUp = false;
-									_this.slideStatus = false;
-								}
-
-							} else {
-								_this.startUp = false;
-								_this.slideStatus = false;
-								_this.remainTime = "";
-							}
+							_this.infoItem = _this.list[this.activeIndex]
+							clearInterval(_this.clearTime)
 						}
 					}
 				},
-				startUp: false, //控制暂停或启动
 				shBtn: false,
 				lanBtn: '../../../static/images/button0.png',
 				shlanBtn: '../../../static/images/on_btn0.png',
-				//模拟数据
-				data: [{
-						name: '设备1',
-						logo: './static/images/sb_logo.png',
-						num: '威伐光-60005',
-						sbnum: '60005',
-						status: 1, //设备已开启过
-						isopen: 1, //设备是否开启 1开启 0关闭
-						overtime: 1000,
-						storename: '随便取个名字1'
-					},
-					{
-						name: '设备2',
-						logo: './static/images/sb_logo.png',
-						num: '威伐光-60006',
-						sbnum: '60006',
-						status: 0, //设备未开启过
-						isopen: 0, //设备是否开启 1开启 0关闭
-						overtime: 1200,
-						storename: '随便取个名字2'
-					}
-				],
 				clearTime: '', //定时器清除使用的
 				remainTime: '', //当前设备剩余时间 01:00:00
 				onIndex: 0, //当前显示设备的下标
-				slideStatus: false, //当前机器状态
-				closeIndex: 0, //关闭的机器index
+
+				list: [],
+				info: {},
+				infoItem: {}
 
 			}
 
@@ -170,63 +108,65 @@
 			swiper,
 			swiperSlide
 		},
-		/*created(){
-
-		},*/
+		created() {
+			this.getMyEquipmentInfo()
+		},
 		mounted() {
-			var data = this.data,
-				_this = this;
-			// console.log(data[0].overtime)
-
-			for(var i in data) {
-
-				if(data[i].status == 1) {
-					_this.outTime(data[i]);
-					if(i == 0) {
-						_this.startUp = true;
-						_this.slideStatus = true;
-						_this.countDown(data[i].overtime);
-					}
-
-				}
-			}
 
 		},
 		computed: {
 
 		},
 		methods: {
-			startEquipment() { //开启设备
+			getMyEquipmentInfo() {
+				var _this = this
 
-				this.startUp = true;
-				this.slideStatus = true;
-				var info = this.data[this.onIndex];
-
-				//首次开启设备，定时器计时
-				if(info.status == 0) {
-					this.outTime(info);
-				}
-
-				//开启设备
-				this.data[this.onIndex].status = 1;
-				this.data[this.onIndex].isopen = 1;
-
-				clearInterval(this.clearTime);
-				this.countDown(info.overtime);
-
+				_this.$http.get(_this.url.share.getMyEquipmentInfo, {
+					params: {
+						userId: _this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.info = res.data.data
+						_this.list = res.data.data.list
+						_this.infoItem = res.data.data.list[0]
+						if(res.data.data.list[0].status == 1) {
+							_this.countdown(res.data.data.list[0].canUseTime)
+						}
+					}
+				})
 			},
-			suspendEquipment() { //暂停设备
-				this.startUp = false;
-				this.slideStatus = false;
-
-				//暂停设备
-				this.data[this.onIndex].isopen = 0;
+			startEquipment(id, status) { //开启设备
+				var _this = this
+				_this.$http.post(_this.url.share.changeEquipmentStatus, {
+					userId: _this.$store.state.user.userId,
+					itemId: id,
+					status: status == 0 || status == 2 ? 1 : 2
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						this.getMyEquipmentInfo()
+						_this.countdown(res.data.data.list[0].canUseTime)
+					}
+				})
 
 			},
 			outTime(info) { //计算所有设备的剩余时间
 				setInterval(function() {
 					--info.overtime;
 				}, 998);
+			},
+			//倒计时
+			countdown2(item) {
+				if(item < 0) return
+				let vm = this
+				let m = (Math.floor(item / 60) + '').padStart(2, '0')
+				let t = (item % 60 + '').padStart(2, '0')
+				let arr = (m + t).split('')
+				item -= 1
+				setTimeout(() => {
+					vm.countdown2(item)
+				}, 1000)
+				vm.remainTime = arr
 			},
 			countDown(overtime) { //当前设备的倒计时
 
@@ -258,8 +198,16 @@
 			useend() {
 				clearInterval(this.clearTime);
 			},
-			endOfUse() {
-				alert(this.closeIndex)
+			endOfUse(id) {
+				var _this = this
+				_this.$http.post(_this.url.share.finishEquipmentOrder, {
+					userId: _this.$store.state.user.userId,
+					itemId: id
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						console.log(res.data.data)
+					}
+				})
 			}
 
 		}

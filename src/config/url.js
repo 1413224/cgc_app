@@ -86,6 +86,12 @@ var url = {
 	},
 	share: {
 		getEquipmentInfo: uri4 + '/public/v1/goods/getEquipmentInfo', //获取设备详细信息接口
+		getEquipmentOrderConfirmInfo: uri4 + '/v1/goods/getEquipmentOrderConfirmInfo', //获取设备优惠券信息
+		getMyEquipmentInfo:uri4 +'/v1/goods/getMyEquipmentInfo',//获取设备列表信息接口
+		finishEquipmentOrder:uri4 +'/v1/goods/finishEquipmentOrder',//完成设备订单信息接口
+		changeEquipmentStatus:uri4 +'/v1/goods/changeEquipmentStatus',//变更设备状态信息接口
+		createEquipmentOrder:uri3 +'/v1/goods/createEquipmentOrder',//创建设备订单信息接口
+		getMyEquipmentNotice:uri4+'/v1/goods/getMyEquipmentNotice',//
 	}
 
 }
