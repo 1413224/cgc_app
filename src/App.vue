@@ -19,6 +19,14 @@
 				</div>
 			</x-dialog>
 		</div>
+
+		<!-- 设备数开始 -->
+		<div class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
+			<img :src="'./static/images/wfgImg.png'" alt="" />
+			<p>{{equipmentNum}}台</p>
+		</div>
+		<!-- 设备数结束 -->
+
 	</div>
 </template>
 
@@ -42,7 +50,20 @@
 		},
 		data() {
 			return {
-				orientation: false
+				orientation: false,
+				flags: false,
+				position: {
+					x: 0,
+					y: 0
+				},
+				nx: '',
+				ny: '',
+				dx: '',
+				dy: '',
+				xPum: '',
+				yPum: '',
+				equipmentNum:''
+
 			}
 		},
 		created() {
@@ -65,6 +86,9 @@
 			ButtonTabItem,
 			settingFooter
 		},
+		mounted(){
+			this.getEquipment();
+		},
 		methods: {
 			//检测是否设置支付密码
 			getUserPayPassword() {
@@ -84,6 +108,81 @@
 					}
 				})
 			},
+			getEquipment(){
+				var _this = this
+				_this.$http.get(_this.url.share.getMyEquipmentNotice,{
+					params:{
+						userId:_this.$store.state.user.userId
+					}
+				}).then((res)=>{
+					if(res.data.status == "00000000"){
+						console.log(res.data.data)
+						this.equipmentNum = res.data.data.num
+						// alert(this.equipmentNum)
+					}
+				})
+			},
+			goDetail(){
+				var _this = this
+				if(_this.equipmentNum == 0){
+					this.$vux.toast.text('暂无设备', 'top')
+				}else{
+					this.$router.push({
+						path:'/share/usetime',
+						query:{
+							id:_this.$store.state.user.userId
+						}	
+					})
+				}
+				
+			},
+			// 实现移动端拖拽
+			down() {
+				this.flags = true;
+				var touch;
+				if(event.touches) {
+					touch = event.touches[0];
+				} else {
+					touch = event;
+				}
+				this.position.x = touch.clientX;
+				this.position.y = touch.clientY;
+				this.dx = this.$refs.moveDiv.offsetLeft;
+				this.dy = this.$refs.moveDiv.offsetTop;
+			},
+			move() {
+				if(this.flags) {
+					var touch;
+					if(event.touches) {
+						touch = event.touches[0];
+					} else {
+						touch = event;
+					}
+					this.nx = touch.clientX - this.position.x;
+					this.ny = touch.clientY - this.position.y;
+					this.xPum = this.dx + this.nx;
+					this.yPum = this.dy + this.ny;
+
+					if(this.xPum >= 0 && this.xPum < document.body.clientWidth) {
+						this.$refs.moveDiv.style.left = this.xPum + "px";
+					} else if(this.xPum < 0) {
+						this.$refs.moveDiv.style.left = 0 + "px";
+					}
+					if(this.yPum >= 0 && this.yPum < document.body.clientHeight) {
+						this.$refs.moveDiv.style.top = this.yPum + "px";
+					} else if(this.yPum < 0) {
+						this.$refs.moveDiv.style.top = 0 + "px";
+					}
+					//阻止页面的滑动默认事件
+					document.addEventListener("touchstart", function(event) {
+						event.preventDefault()
+					}, false)
+				}
+			},
+			//鼠标释放时候的函数
+			end() {
+				this.flags = false;
+			}
 		},
 		watch: {
 			'$route' (to, from, next) {
@@ -253,4 +352,31 @@
 			}
 		}
 	}
+	/*设备数*/
+	.wfg-box {
+			position: fixed;
+			bottom: 2.26rem;
+			right: 0.20rem;
+			z-index: 16;
+			width: 1.26rem;
+			height: 1.26rem;
+			background: rgba(18, 183, 245, 1);
+			box-shadow: 0px 4px 12px 0px rgba(18, 183, 245, 0.5);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			margin-bottom: 0.39rem;
+			margin-right: 0.20rem;
+			img {
+				width: 0.66rem;
+				height: 0.33rem;
+			}
+			p {
+				font-size: 0.24rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(255, 255, 255, 1);
+			}
+		}
 </style>

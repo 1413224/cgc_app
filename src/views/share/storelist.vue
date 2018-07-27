@@ -290,10 +290,10 @@
 				function showPosition(res) {
 					_this.region = res.province + res.city
 					if(_this.$store.state.page.isWx == false) {
-						_this.lat = res.latitude
-						// _this.lat = 22.9377200000
-						_this.lng = res.longitude
-						// _this.lng = 113.3842400000
+						// _this.lat = res.latitude
+						_this.lat = 22.9377200000
+						// _this.lng = res.longitude
+						_this.lng = 113.3842400000
 						_this.checkQuery(_this.$route.query)
 						_this.hasDw = true
 						_this.getEnterpriseListInfo()

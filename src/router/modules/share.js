@@ -147,6 +147,14 @@ const share =[
 		}
 	},
 	{
+		path: '/share/service',
+		name: 'service',
+		component:resolve => require(['@/views/share/service'], resolve),
+		meta: {
+			title: '店铺服务'
+		}
+	},
+	{
 		path: '/share/guidance',
 		name: 'guidance',
 		component:resolve => require(['@/views/share/guidance'], resolve),
