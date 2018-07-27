@@ -44,7 +44,7 @@
 								<p>{{ item.price}} <span>元</span></p>
 								<p v-if="item.content != ''">{{ item.content}}</p>
 							</div>
-							<div class="purchase" @click="toBuy(infoData.enterpriseId,item.skuId)">购买</div>
+							<div class="purchase" @click="toBuy(item.skuId)">购买</div>
 						</div>
 					</div>
 				</div>
@@ -78,13 +78,12 @@
 
 		},
 		methods: {
-			toBuy(id, num) {
+			toBuy(num) {
 				this.$router.push({
 					path: '/share/comfirmOrder',
 					query: {
-						'equipNumber': id, //设备编号
+						'equipNumber': this.equipNumber, //设备编号
 						'skuId': num, //设备价格套餐
-						'equipNumber': this.equipNumber
 					}
 				})
 			},

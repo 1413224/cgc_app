@@ -15,26 +15,22 @@
 				</div>
 				<div class="middle">
 					<div>
-<<<<<<< HEAD
 						<p class="name">{{info.shortName}}</p>
 						<p class="pinfo">{{info.skuName}}:{{info.serviceTime}}</p>
-=======
-						<p class="name">威健康 - 750W </p>
-						<p class="pinfo">套餐:30分钟</p>
->>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
 					</div>
 					<p class="price">¥{{info.price}}</p>
 				</div>
 			</div>
 			<div class="order_bottom">
 				<p>优惠券选择</p>
-				<p @click="showCouponList">{{info.availableCouponNums}}张可用<i class="iconfont icon-arrow-right"></i></p>
+				<p @click="showCouponList">{{info.availableCouponNums}} 张可用<i class="iconfont icon-arrow-right"></i></p>
 			</div>
 		</div>
 		<div class="fix-box">
 			<div class="one">
 				<div class="left">
-					通用积分
+					<!--通用积分-->
+					<img :src="'./static/share/tyjf.png'" alt="" />
 				</div>
 				<div class="right">
 					<p class="ky">可用：{{info.availableBalance}} </p>
@@ -47,7 +43,7 @@
 			<div class="three">
 				<div class="left">
 					<p>需付款：</p>
-					<p><i>¥</i>{{info.payPrice}}</p>
+					<p><i>¥ </i>{{info.payPrice}}</p>
 				</div>
 				<div class="right" @click="submit()">确认提交</div>
 			</div>
@@ -60,7 +56,7 @@
 			</div>
 			<div class="couponlist-box">
 				<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.userCouponId)">
-					<img class="sureImg" v-if="sureIndex == index" :src="'./static/images/guo.png'" />
+					<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/images/guo.png'" />
 					<div class="bg">
 						<div class="top">
 							<div>
@@ -86,7 +82,7 @@
 						<img class="r180" :src="'./static/images/xia.png'" alt="" />
 					</div>
 				</div>
-				<div class="btn" @click="show = false">确定</div>
+				<div class="btn" @click="show = false">关闭</div>
 			</div>
 		</popup>
 		<payMode :options="payOptions"></payMode>
@@ -107,7 +103,7 @@
 				sureIndex: 100,
 				userCouponId: '',
 				max: 0,
-				maxPayPrice:0,
+				maxPayPrice: 0,
 				payOptions: {}
 			}
 		},
@@ -118,7 +114,8 @@
 			payMode
 		},
 		created() {
-			this.getEquipmentOrderConfirmInfo(60009, this.$route.query.skuId)
+
+			this.getEquipmentOrderConfirmInfo(this.$route.query.equipNumber, this.$route.query.skuId)
 
 			this.payOptions = {
 				showPayMode: false,
@@ -149,14 +146,15 @@
 		computed: {
 
 		},
-		watch:{
-			value(){
-				if(!this.value){
+		watch: {
+			value() {
+				if(!this.value) {
 					return this.info.payPrice = this.info.price
-				}else{
+				} else {
 					this.inputChange()
 				}
 			}
+
 		},
 		methods: {
 			submit() {
@@ -191,7 +189,7 @@
 				})
 			},
 			inputChange() {
-				
+
 				if(Number(this.max) >= Number(this.info.price)) {
 					if(Number(this.info.recommendBalance) <= Number(this.info.price)) {
 						this.info.payPrice = this.info.price - this.info.recommendBalance
@@ -225,7 +223,13 @@
 						res.data.data.serviceTime = _this.getTime(res.data.data.serviceTime)
 						_this.max = res.data.data.availableBalance
 						_this.maxPayPrice = res.data.data.payPrice
+
+						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
+							res.data.data.availableCoupon[i].show = false
+						}
+						
 						_this.info = res.data.data
+
 					}
 				})
 			},
@@ -260,10 +264,27 @@
 				var _this = this
 				_this.show = true
 			},
-			sure(index, userCouponId) {
+			sure(index) {
 				this.sureIndex = index
-				this.userCouponId = userCouponId
-			},
+
+				for(var i = 0; i < this.info.availableCoupon.length; i++) {
+					if(i != index) {
+						this.info.availableCoupon[i].show = false
+					} else {
+						this.info.availableCoupon[i].show = this.info.availableCoupon[index].show
+					}
+				}
+
+				this.info.availableCoupon[index].show = !this.info.availableCoupon[index].show
+				
+				for(var i = 0; i < this.info.availableCoupon.length; i++) {
+					if(this.info.availableCoupon[i].show) {
+						this.userCouponId = this.info.availableCoupon[i].userCouponId
+					}else{
+						this.userCouponId = ''
+					}
+				}
+			}
 		}
 	}
 </script>
@@ -312,13 +333,13 @@
 			.bs {
 				box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
 				margin-bottom: 0.24rem;
+				position: relative;
 			}
 			.bg {
 				background-size: cover;
 				height: 2.04rem;
 				display: flex;
 				flex-direction: column;
-				position: relative;
 				overflow: hidden;
 				img {
 					position: absolute;
@@ -549,14 +570,18 @@
 				.left {
 					width: 1.64rem;
 					height: 0.46rem;
-					line-height: 0.46rem;
+					/*line-height: 0.46rem;
 					text-align: center;
 					background: rgba(51, 111, 255, 0.21);
 					border-radius: 4px;
 					border: 1px solid rgba(51, 111, 255, 1);
 					font-size: 0.24rem;
 					font-family: TRENDS;
-					color: rgba(51, 111, 255, 1);
+					color: rgba(51, 111, 255, 1);*/
+					img {
+						width: 100%;
+						height: 100%;
+					}
 				}
 				.right {
 					flex: 1;

@@ -12,18 +12,16 @@
 							</div>
 						</div>
 					</swiper-slide>
-<<<<<<< HEAD
-=======
-					<!-- <swiper-slide>
-		        					<div class="sw_wrap">
-		        						<div class="content">
-		        							<p class="tit ellipsis">设备1<span>（多台设备时，可左右滑动切换）</span></p>
-		        							<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威健康-60005</p>
-		        						</div>
-		        					</div>
-		        </swiper-slide> -->
-					<!-- <div class="swiper-pagination" slot="pagination"></div> -->
->>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
+					<<<<<<< HEAD=======< !-- <swiper-slide>
+						<div class="sw_wrap">
+							<div class="content">
+								<p class="tit ellipsis">设备1<span>（多台设备时，可左右滑动切换）</span></p>
+								<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威健康-60005</p>
+							</div>
+						</div>
+						</swiper-slide> -->
+						<!-- <div class="swiper-pagination" slot="pagination"></div> -->
+						>>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
 				</swiper>
 			</div>
 
@@ -97,7 +95,7 @@
 					on: {
 						slideChangeTransitionEnd: function(e) {
 							_this.infoItem = _this.list[this.activeIndex]
-							clearInterval(_this.clearTime)
+							_this.onIndex = this.activeIndex
 						}
 					}
 				},
@@ -110,7 +108,8 @@
 
 				list: [],
 				info: {},
-				infoItem: {}
+				infoItem: {},
+				time: [18000, 2400]
 
 			}
 
@@ -122,9 +121,40 @@
 		},
 		created() {
 			this.getMyEquipmentInfo()
-		},
-		mounted() {
 
+			var time = localStorage.getItem('time' + this.$route.query.onIndex)
+
+			if(time) {
+				this.countdown(time)
+			} else {
+				this.countdown(this.time[this.onIndex])
+			}
+		},
+		watch: {
+			onIndex() {
+
+				var _this = this
+				
+				clearInterval(_this.clearTime)
+
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'onIndex': _this.onIndex
+					})
+				})
+
+				var time = localStorage.getItem('time' + _this.$route.query.onIndex)
+				
+				
+				if(time) {
+					_this.countdown(time)
+					console.log(time)
+				} else {
+					_this.countdown(_this.time[_this.onIndex])
+					console.log(_this.time[_this.onIndex])
+				}
+							
+			}
 		},
 		computed: {
 
@@ -145,6 +175,7 @@
 						if(res.data.data.list[0].status == 1) {
 							_this.countdown(res.data.data.list[0].canUseTime)
 						}
+						_this.countdown(18000)
 					}
 				})
 			},
@@ -167,20 +198,7 @@
 					--info.overtime;
 				}, 998);
 			},
-			//倒计时
-			countdown2(item) {
-				if(item < 0) return
-				let vm = this
-				let m = (Math.floor(item / 60) + '').padStart(2, '0')
-				let t = (item % 60 + '').padStart(2, '0')
-				let arr = (m + t).split('')
-				item -= 1
-				setTimeout(() => {
-					vm.countdown2(item)
-				}, 1000)
-				vm.remainTime = arr
-			},
-			countDown(overtime) { //当前设备的倒计时
+			countdown(overtime) { //当前设备的倒计时
 
 				var _this = this;
 				_this.setTime(overtime);
@@ -192,6 +210,9 @@
 						return;
 					}
 					--overtime;
+
+					localStorage.setItem('time' + _this.onIndex, --overtime)
+
 					_this.setTime(overtime);
 
 				}, 998);

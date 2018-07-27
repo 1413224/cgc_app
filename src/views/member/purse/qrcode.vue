@@ -105,17 +105,17 @@
 		},
 		created() {
 
-			if(this.$store.state.page.isLogin == 'false') {
-				this.$vux.toast.show({
-					width: '60%',
-					type: 'text',
-					position: 'middle',
-					text: '请先登录再体验此功能'
-				})
-				this.$router.replace({
-					path: '/user/reg'
-				})
-			}
+//			if(this.$store.state.page.isLogin == 'false') {
+//				this.$vux.toast.show({
+//					width: '60%',
+//					type: 'text',
+//					position: 'middle',
+//					text: '请先登录再体验此功能'
+//				})
+//				this.$router.replace({
+//					path: '/user/reg'
+//				})
+//			}
 
 			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
 			document.title = this.$route.query.text ? this.$route.query.text : '会员码'
@@ -165,15 +165,6 @@
 									position: 'middle',
 									text: '使用失败'
 								})
-							}
-						})
-
-						wx.getLocation({
-							success: function(res) {
-								var oldLat = res.latitude
-								var oldLng = res.longitude
-								alert(res.latitude)
-								alert(res.longitude)
 							}
 						})
 					})
