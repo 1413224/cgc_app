@@ -226,7 +226,8 @@
 				this.$router.push({
 					path: '/multi_user_mall',
 					query: {
-						id: id
+						id: id,
+						oIndex:3
 					}
 				})
 			},

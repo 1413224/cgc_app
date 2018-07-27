@@ -18,7 +18,7 @@
 						<span class="name">威伐光-750w</span>
 					</div>
 					<div class="right">
-						<div>
+						<div @click="goProductDetail">
 							<img src="../../assets/images/share/pd.png">
 							<span>产品简介</span>
 						</div>
@@ -40,16 +40,34 @@
 								<p>120 <span>元</span></p>
 								<p>消费奖励通用积分</p>
 							</div>
-							<div class="purchase" @click="$router.push({path:'/share/comfirmOrder'})">购买</div>
+							<div class="purchase" @click="buyEquiment()">购买</div>
+							<!-- $router.push({path:'/share/comfirmOrder'}) -->
 						</div>
 					</div>
 				</div>
+
+				<popup v-model="show" class="popwrap">
+					<p class="tit">选择设备</p>
+					<div class="list equipment">
+						<check-icon :value.sync="check">
+							<div class="checkwap">
+								<p class="num">NO:123456</p>
+								<p class="name">威健康</p>
+							</div>
+						</check-icon>
+					</div>
+					<div class="bottom">
+						<p class="btn btncancel" @click="hidePopup">取消</p>
+						<p class="btn btndet">确定</p>
+					</div>
+				</popup>
 
 			</div>
 			<!-- 服务结束 -->
 
 			
 			<div class="four" v-show="showIndex==3">
+
 				<div class="logo-bg">
 					<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="" />
 				</div>
@@ -150,7 +168,7 @@
 	import settingHeader from '@/components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import noData from '@/components/noData'
-	import { Qrcode } from 'vux'
+	import { Qrcode,Popup,CheckIcon } from 'vux'
 	export default {
 		data() {
 			return {
@@ -189,6 +207,8 @@
 				dy: '',
 				xPum: '',
 				yPum: '',*/
+				show:false,
+				check:true,
 
 				navList: [{
 						navTitle: '首页',
@@ -215,7 +235,7 @@
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
 						activeLogo: './static/images/shop-bottom4-in.png',
-						show: true,
+						show: false,
 						oIndex:3
 					},
 				],
@@ -239,6 +259,8 @@
 			swiper,
 			swiperSlide,
 			Qrcode,
+			Popup,
+			CheckIcon,
 			noData
 		},
 		created() {
@@ -249,11 +271,20 @@
 			document.body.addEventListener("touchmove", function(event) {
 				event.preventDefault()
 			}, false)
+
+			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
+			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3 
 		},
 		methods: {
 			navActive(index,iIndex) {
 				this.navIndex = index
 				this.showIndex = iIndex
+				// this.$route.query.oIndex = iIndex
+				this.$router.replace({
+					query: this.merge(this.$route.query, {
+						'oIndex': iIndex
+					})
+				})
 			},
 			toStoreQc(pinfo) {
 				var _this = this
@@ -439,6 +470,17 @@
 					path: '/multi_user_mall/search'
 				})
 			},
+			goProductDetail(){
+				this.$router.push({
+					path:'/share/pintroduce'
+				})
+			},
+			buyEquiment(){
+				this.show = true
+			},
+			hidePopup(){
+				this.show = false
+			}
 			
 		}
 	}
@@ -889,5 +931,64 @@
 			}
 		}
 	}
+
+	.popwrap{
+		background: #fff;
+		height: 7.36rem !important;
+		padding-bottom: 1rem;
+		overflow-y: scroll;
+		.tit{
+			font-size: .32rem;
+			color:rgba(34,34,34,1);
+			text-align: center;
+			margin:.4rem 0;
+		}
+		.bottom{
+			width: 100%;
+			height: .9rem;
+			position: fixed;
+			bottom: 0;
+			display: flex;
+			border-top:1px solid #eee;
+			.btn{
+				flex: 1;
+				text-align: center;
+				line-height: .9rem;
+				font-size: .28rem;
+			}
+			.btncancel{
+				background: #fff;
+			}
+			.btndet{
+				background: #336FFF;
+				color: #fff;
+			}
+		}
+		.list{
+			padding:0 .3rem;
+			margin-bottom: .2rem;
+		}
+		.list .vux-check-icon{
+			border:1px solid #90A2C7;
+			width: 100%;
+			height: 1.4rem;
+			border-radius: 6px;
+
+		}
+		.checkwap{
+			padding-left: .4rem;
+			padding-top: .22rem;
+			.num{
+				font-weight: bold;
+				font-size: .42rem;
+			}
+		}
+	}
 	/*服务结束*/
+</style>
+<style>
+.equipment .vux-check-icon i{
+	float: right;
+	margin: .4rem .24rem 0 0;
+}
 </style>
