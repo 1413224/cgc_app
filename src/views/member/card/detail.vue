@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="b-w">
 			<div class="top">
-				<div>威伐光25分钟 体验套餐卡</div>
+				<div>威健康25分钟 体验套餐卡</div>
 				<div>
 					<span class="left">可用次数 :6次</span>
 					<span>剩余次数 :6次</span>
@@ -32,8 +32,8 @@
 					<span class="left">套餐卡说明</span>
 				</div>
 				<ul>
-					<li>改套餐只能在威伐光设备上使用</li>
-					<li>体验威伐光设备的时候可以使用此套餐卡</li>
+					<li>改套餐只能在威健康设备上使用</li>
+					<li>体验威健康设备的时候可以使用此套餐卡</li>
 					<li>次数使用完后，该套餐卡失效</li>
 				</ul>
 			</div>

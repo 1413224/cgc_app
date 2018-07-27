@@ -37,7 +37,7 @@
 						{
 							icon: './static/images/xwfg.png',
 							iconIn: './static/images/zwfg.png',
-							title: '威伐光',
+							title: '威健康',
 							url: '/share'
 						},
 						{

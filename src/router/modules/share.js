@@ -67,11 +67,11 @@ const share =[
 		}
 	},
 	{
-		path:'/share/pintroduce',//威伐光介绍
+		path:'/share/pintroduce',//威健康介绍
 		name:'pintroduce',
 		component:resolve => require(['@/views/share/pintroduce'], resolve),
 		meta: {
-			title:'威伐光介绍'
+			title:'威健康介绍'
 		}
 	},
 	{
@@ -144,6 +144,14 @@ const share =[
 		component:resolve => require(['@/views/share/instrumentCode'], resolve),
 		meta: {
 			title: '仪器扫码'
+		}
+	},
+	{
+		path: '/share/service',
+		name: 'service',
+		component:resolve => require(['@/views/share/service'], resolve),
+		meta: {
+			title: '店铺服务'
 		}
 	},
 	{

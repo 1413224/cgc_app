@@ -60,7 +60,7 @@
 							<span>120</span><span>元</span>
 						</div>
 						<div class="two">
-							<p>威伐光体验卷</p>
+							<p>威健康体验卷</p>
 							<p>全国通用</p>
 						</div>
 						<div class="three">

@@ -15,8 +15,13 @@
 				</div>
 				<div class="middle">
 					<div>
+<<<<<<< HEAD
 						<p class="name">{{info.shortName}}</p>
 						<p class="pinfo">{{info.skuName}}:{{info.serviceTime}}</p>
+=======
+						<p class="name">威健康 - 750W </p>
+						<p class="pinfo">套餐:30分钟</p>
+>>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
 					</div>
 					<p class="price">¥{{info.price}}</p>
 				</div>

@@ -51,9 +51,9 @@
 												<span>适用所有联营门店</span>
 												<span>查看详情</span>
 											</div>
-											<div class="name">威伐光25分钟体验套餐卡</div>
+											<div class="name">威健康25分钟体验套餐卡</div>
 											<div class="top2">
-												<span>仅支持威伐光设备</span>
+												<span>仅支持威健康设备</span>
 												<span>可用次数： 10</span>
 											</div>
 										</div>
@@ -128,45 +128,45 @@
 				typeText: '全部',
 				cardList: [
 				{
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '1',
 						tip: '9折',
 						typename: 'VIP会员卡'
 					},
 					{
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '0',
 						tip: '8折',
 						typename: 'VIP会员卡'
 					},
 					{
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '1',
 						tip: '9折',
 						typename: 'VIP会员卡'
 					},
 					{
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '0',
 						tip: '8折',
 						typename: 'VIP会员卡'
 					}, {
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '1',
 						tip: '8折',
 						typename: 'VIP会员卡'
 					}, {
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '0',
 						tip: '8折',
 						typename: 'VIP会员卡'
 					}, {
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '1',
 						tip: '8折',
 						typename: 'VIP会员卡'
 					}, {
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '0',
 						tip: '8折',
 						typename: 'VIP会员卡'
@@ -227,7 +227,7 @@
 					_this.show = true
 					_this.showNo = false
 					_this.cardList = _this.cardList.concat({
-						store: '威伐光番禺门店',
+						store: '威健康番禺门店',
 						type: '0',
 						tip: '8折',
 						typename: 'VIP会员卡'

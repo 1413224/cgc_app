@@ -34,7 +34,7 @@
 		<div class="middle">
 			<div class="all">
 				<div class="left" @click="$router.push('/share/pintroduce')">
-					<p>威伐光介绍</p>
+					<p>威健康介绍</p>
 					<img :src="'./static/share/weifaguang.png'" />
 				</div>
 				<div class="right">

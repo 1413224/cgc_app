@@ -4,11 +4,13 @@
 
 		</x-header>
 		
-		
+		<div class="tip" v-show="tip">正在刷新...</div>
+
 			<scroll class="wrapper" 
 			:listenScroll="listscroll" 
 			:pullingDown="pullingdown"
-			@pullingDown = "onpullingDown"
+			@pullDown="onpullingDown"
+			:pullingUp = "pullingUp"
 			>
 				<div>
 					<div class="list">测试数据1</div>
@@ -51,11 +53,10 @@
 			return {
 				title: '全部卡包',
 				pullingdown:true,
-				downText:'下拉刷新',
-				// downTip:false
-				// onpullingDownTip:false,
+				pullingUp:true,
 				listscroll:true,
-				dropdown:false
+				dropDown:false,
+				tip:false
 			}
 		},
 		created() {
@@ -66,15 +67,14 @@
 		},
 		methods: {
 			
-			onPullingDown(){
+			onpullingDown(){
 				// 模拟更新数据
 				var _this = this
-				console.log("下拉刷新成功")
-				alert(9)
-				/*setTimeout(() => {
-					_this.dropdown = false
-				},2000)*/
-				// this.downTip = false
+				this.tip = true
+				setTimeout(() => {
+					_this.tip = false
+				},2000)
+				
 			}
 
 
@@ -111,5 +111,15 @@
 		height: 50px;
 		background: #ccc;
 		border-bottom: 1px solid #fff;
+	}
+	.tip{
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		background: rgba(0,0,0,.5);
+		position: fixed;
+		z-index: 1;
+		color: #fff;
+		text-align: center;
 	}
 </style>

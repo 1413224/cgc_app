@@ -22,7 +22,7 @@
 		<div class="nav-brief">
 			<div class="main">
 				<div class="left" @click="showProduct()">
-					<span>威伐光介绍</span>
+					<span>威健康介绍</span>
 				</div>
 				<div class="right">
 					<div class="cont" @click="goTreatment()">

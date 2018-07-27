@@ -36,7 +36,7 @@
 							<img src="../../assets/images/share/md_logo.png" alt="">
 						</div>
 						<div class="right">
-							<p class="title ellipise">30分钟 威伐光-750w单人套餐 </p>
+							<p class="title ellipise">30分钟 威健康-750w单人套餐 </p>
 							<p class="content ellipise">金牌双人套餐，提供眼罩、免费WiFi</p>
 							<p class="nr"><span class="momey">￥120</span><span class="ms_price">门市价:￥150</span><span class="num">已售：2414</span></p>
 							<!-- <p class="zhekou">8折</p> -->
@@ -47,7 +47,7 @@
 							<img src="../../assets/images/share/md_logo.png" alt="">
 						</div>
 						<div class="right">
-							<p class="title ellipise">60分钟 威伐光-750w单人套餐 </p>
+							<p class="title ellipise">60分钟 威健康-750w单人套餐 </p>
 							<p class="content ellipise">金牌双人套餐，提供眼罩、免费WiFi</p>
 							<p class="nr"><span class="momey">￥120</span><span class="ms_price">门市价:￥150</span><span class="num">已售：2414</span></p>
 							<!-- <p class="zhekou">8折</p> -->
@@ -58,7 +58,7 @@
 							<img src="../../assets/images/share/md_logo.png" alt="">
 						</div>
 						<div class="right">
-							<p class="title ellipise">60分钟 威伐光-750w双人套餐 </p>
+							<p class="title ellipise">60分钟 威健康-750w双人套餐 </p>
 							<p class="content ellipise">金牌双人套餐，提供眼罩、免费WiFi</p>
 							<p class="nr"><span class="momey">￥120</span><span class="ms_price">门市价:￥150</span><span class="num">已售：2414</span></p>
 							<!-- <p class="zhekou">8折</p> -->

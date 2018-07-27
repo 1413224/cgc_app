@@ -92,28 +92,28 @@
 				cardlist: [{
 						img: './static/images/pro8.png',
 						name: '天安总部16号楼',
-						num: '威伐光理疗室01房',
+						num: '威健康理疗室01房',
 						status: '未生效',
 						time: '2018.04.23 12:30 ~ 2018.04.23 12:30'
 					},
 					{
 						img: './static/images/pro8.png',
 						name: '天安总部16号楼',
-						num: '威伐光理疗室02房',
+						num: '威健康理疗室02房',
 						status: '生效中',
 						time: '2018.04.23 12:30 ~ 2018.04.23 12:30'
 					},
 					{
 						img: './static/images/pro8.png',
 						name: '天安总部16号楼',
-						num: '威伐光理疗室03房',
+						num: '威健康理疗室03房',
 						status: '已过期',
 						time: '2018.04.23 12:30 ~ 2018.04.23 12:30'
 					},
 					{
 						img: './static/images/pro8.png',
 						name: '天安总部16号楼',
-						num: '威伐光理疗室04房',
+						num: '威健康理疗室04房',
 						status: '未生效',
 						time: '2018.04.23 12:30 ~ 2018.04.23 12:30'
 					},
