@@ -53,7 +53,7 @@
 				<p>开启设备</p>
 			</div>
 		</div>
-		<div class="bottom-box">
+		<div class="bottom-box" v-if="1>2">
 			<div class="title">
 				<p>附件商家</p>
 				<p @click="$router.push({path:'/share/storelist'})">更多<i class="iconfont icon-arrow-right"></i></p>

@@ -7,17 +7,17 @@
 					<div class="left">
 						<p>{{infoData.goodsName}}</p>
 						<p class="tag">{{infoData.shortName}}</p>
-						<div class="p3">
+						<div class="p3" @click="toDetail(infoData.enterpriseId)">
 							<span>{{infoData.name}}</span>
 							<p class="arrow"></p>
 						</div>
 					</div>
 					<div class="right">
-						<div>
+						<div @click="$router.push({path:'/share/pintroduce'})">
 							<img src="../../assets/images/share/pd.png">
 							<span>产品简介</span>
 						</div>
-						<div>
+						<div @click="$router.push({path:'/share/guidance'})">
 							<img src="../../assets/images/share/direction.png">
 							<span>使用指导</span>
 						</div>
@@ -36,7 +36,7 @@
 					<div class="select">请选择价格套餐</div>
 					<div class="item" v-for="(item,index) in infoData.list" :key="index">
 						<div class="left">
-							<p>{{ item.serviceTime}}分钟</p>
+							<p>{{ item.serviceTime}}</p>
 							<p>{{ item.skuName}}</p>
 						</div>
 						<div class="right">
@@ -44,7 +44,7 @@
 								<p>{{ item.price}} <span>元</span></p>
 								<p v-if="item.content != ''">{{ item.content}}</p>
 							</div>
-							<div class="purchase" @click="$router.push({path:'/share/comfirmOrder'})">购买</div>
+							<div class="purchase" @click="toBuy(infoData.enterpriseId,item.skuId)">购买</div>
 						</div>
 					</div>
 				</div>
@@ -60,16 +60,17 @@
 		data() {
 			return {
 				title: "仪器扫码",
-				infoData: {}
+				infoData: {},
+				equipNumber:60009
 			}
 
 		},
 		components: {
 			settingHeader,
 		},
-		/*created(){
-
-		},*/
+		created(){
+			this.equipNumber = this.mainApp.getCs('n')?this.mainApp.getCs('n'):60009
+		},
 		mounted() {
 			this.getEquipmentInfo()
 		},
@@ -77,35 +78,70 @@
 
 		},
 		methods: {
+			toBuy(id, num) {
+				this.$router.push({
+					path: '/share/comfirmOrder',
+					query: {
+						'equipNumber': id, //设备编号
+						'skuId': num, //设备价格套餐
+						'equipNumber': this.equipNumber
+					}
+				})
+			},
 			getEquipmentInfo() {
 				var _this = this
 
 				_this.$http.get(_this.url.share.getEquipmentInfo, {
 					params: {
 						userId: _this.$store.state.user.userId,
-						equipNumber: 60009
+						equipNumber: _this.equipNumber
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+
+						for(var i = 0; i < res.data.data.list.length; i++) {
+							res.data.data.list[i].serviceTime = _this.getTime(res.data.data.list[i].serviceTime)
+						}
+						
 						_this.infoData = res.data.data
 					}
 				})
 			},
-			InitScroll() {
-				this.$nextTick(() => {
-					if(!this.scroll) {
-						this.scroll = new BScroll(this.$refs.wrapper, {
-							click: true,
-							scrollY: true,
-							pullUpLoad: {
-								threshold: 0, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
-							}
-						})
-					} else {
-						this.scroll.refresh()
+			getTime(value) {
+				var secondTime = parseInt(value); // 秒
+				var minuteTime = 0; // 分
+				var hourTime = 0; // 小时
+				if(secondTime > 60) { //如果秒数大于60，将秒数转换成整数
+					//获取分钟，除以60取整数，得到整数分钟
+					minuteTime = parseInt(secondTime / 60);
+					//获取秒数，秒数取佘，得到整数秒数
+					secondTime = parseInt(secondTime % 60);
+					//如果分钟大于60，将分钟转换成小时
+					if(minuteTime > 60) {
+						//获取小时，获取分钟除以60，得到整数小时
+						hourTime = parseInt(minuteTime / 60);
+						//获取小时后取佘的分，获取分钟除以60取佘的分
+						minuteTime = parseInt(minuteTime % 60);
+					}
+				}
+				var result = "" + parseInt(secondTime) + "秒";
+
+				if(minuteTime > 0) {
+					result = "" + parseInt(minuteTime) + "分钟";
+				}
+				if(hourTime > 0) {
+					result = "" + parseInt(hourTime) + "小时";
+				}
+				return result;
+			},
+			toDetail(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
 					}
 				})
-			}
+			},
 		}
 	}
 </script>
