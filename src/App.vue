@@ -21,7 +21,7 @@
 		</div>
 
 		<!-- 设备数开始 -->
-		<div class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
+		<div v-if="equipmentShow" class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
 			<img :src="'./static/images/wfgImg.png'" alt="" />
 			<p>{{equipmentNum}}台</p>
 		</div>
@@ -62,7 +62,8 @@
 				dy: '',
 				xPum: '',
 				yPum: '',
-				equipmentNum:''
+				equipmentNum:'',
+				equipmentShow:false
 
 			}
 		},
@@ -110,17 +111,24 @@
 			},
 			getEquipment(){
 				var _this = this
-				_this.$http.get(_this.url.share.getMyEquipmentNotice,{
-					params:{
-						userId:_this.$store.state.user.userId
-					}
-				}).then((res)=>{
-					if(res.data.status == "00000000"){
-						console.log(res.data.data)
-						this.equipmentNum = res.data.data.num
-						// alert(this.equipmentNum)
-					}
-				})
+				// alert(_this.$store.state.page.isLogin)
+				if(_this.$store.state.page.isLogin == 'true'){
+					_this.$http.get(_this.url.share.getMyEquipmentNotice,{
+						params:{
+							userId:_this.$store.state.user.userId
+						}
+					}).then((res)=>{
+						if(res.data.status == "00000000"){
+							console.log(res.data.data)
+							this.equipmentNum = res.data.data.num
+							this.equipmentShow = true
+							// alert(this.equipmentNum)
+						}
+					})
+				}
+				
+				
+				
 			},
 			goDetail(){
 				var _this = this
