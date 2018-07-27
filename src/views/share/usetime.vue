@@ -12,18 +12,7 @@
 							</div>
 						</div>
 					</swiper-slide>
-<<<<<<< HEAD
-=======
-					<!-- <swiper-slide>
-		        					<div class="sw_wrap">
-		        						<div class="content">
-		        							<p class="tit ellipsis">设备1<span>（多台设备时，可左右滑动切换）</span></p>
-		        							<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威健康-60005</p>
-		        						</div>
-		        					</div>
-		        </swiper-slide> -->
-					<!-- <div class="swiper-pagination" slot="pagination"></div> -->
->>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
+
 				</swiper>
 			</div>
 
@@ -373,7 +362,8 @@
 			}
 		}
 		.null-box {
-			background-color: #F5F8F9;
+			/*background-color: #F5F8F9;*/
+			background: #fff;
 			height: 100%;
 			.null-img {
 				height: 5.38rem;
