@@ -12,16 +12,6 @@
 							</div>
 						</div>
 					</swiper-slide>
-					<<<<<<< HEAD=======< !-- <swiper-slide>
-						<div class="sw_wrap">
-							<div class="content">
-								<p class="tit ellipsis">设备1<span>（多台设备时，可左右滑动切换）</span></p>
-								<p class="xinghao"><span><img :src="'../../../static/images/sb_logo.png'" alt=""></span>威健康-60005</p>
-							</div>
-						</div>
-						</swiper-slide> -->
-						<!-- <div class="swiper-pagination" slot="pagination"></div> -->
-						>>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
 				</swiper>
 			</div>
 
@@ -32,7 +22,7 @@
 					<div class="nr">
 						<p class="tit">启动</p>
 						<p class="text">开启后开始计时</p>
-						<p class="time">{{remainTime}}</p>
+						<p class="time" v-for="(item,index) in remainTime">{{item.time}}</p>
 					</div>
 				</div>
 			</div>
@@ -103,7 +93,11 @@
 				lanBtn: '../../../static/images/button0.png',
 				shlanBtn: '../../../static/images/on_btn0.png',
 				clearTime: '', //定时器清除使用的
-				remainTime: '', //当前设备剩余时间 01:00:00
+				remainTime: [{
+					time: 0
+				}, {
+					time: 0
+				}, ], //当前设备剩余时间 01:00:00
 				onIndex: 0, //当前显示设备的下标
 
 				list: [],
@@ -122,38 +116,8 @@
 		created() {
 			this.getMyEquipmentInfo()
 
-			var time = localStorage.getItem('time' + this.$route.query.onIndex)
-
-			if(time) {
-				this.countdown(time)
-			} else {
-				this.countdown(this.time[this.onIndex])
-			}
-		},
-		watch: {
-			onIndex() {
-
-				var _this = this
-				
-				clearInterval(_this.clearTime)
-
-				_this.$router.replace({
-					query: _this.merge(_this.$route.query, {
-						'onIndex': _this.onIndex
-					})
-				})
-
-				var time = localStorage.getItem('time' + _this.$route.query.onIndex)
-				
-				
-				if(time) {
-					_this.countdown(time)
-					console.log(time)
-				} else {
-					_this.countdown(_this.time[_this.onIndex])
-					console.log(_this.time[_this.onIndex])
-				}
-							
+			for(var i = 0; i < this.time.length; i++) {
+				this.remainTime[i].time = this.countdown(this.time[i])
 			}
 		},
 		computed: {
@@ -175,7 +139,6 @@
 						if(res.data.data.list[0].status == 1) {
 							_this.countdown(res.data.data.list[0].canUseTime)
 						}
-						_this.countdown(18000)
 					}
 				})
 			},
@@ -187,8 +150,7 @@
 					status: status == 0 || status == 2 ? 1 : 2
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						this.getMyEquipmentInfo()
-						_this.countdown(res.data.data.list[0].canUseTime)
+						_this.getMyEquipmentInfo()
 					}
 				})
 
@@ -200,36 +162,36 @@
 			},
 			countdown(overtime) { //当前设备的倒计时
 
-				var _this = this;
-				_this.setTime(overtime);
+				var _this = this
+				_this.setTime(overtime)
 
 				_this.clearTime = setInterval(function() {
 
 					if(overtime == 0) {
-						_this.useend();
-						return;
+						_this.useend()
+						return
 					}
-					--overtime;
+					--overtime
 
-					localStorage.setItem('time' + _this.onIndex, --overtime)
+					//                     localStorage.setItem('time' + _this.onIndex, --overtime)
 
-					_this.setTime(overtime);
+					_this.setTime(overtime)
 
 				}, 998);
 			},
 			setTime(overtime) { //设置设备剩余时间
 				var hour = Math.floor(overtime / 60 / 60),
 					min = Math.floor((overtime - hour * 60 * 60) / 60),
-					sec = Math.floor(overtime - hour * 60 * 60 - min * 60);
+					sec = Math.floor(overtime - hour * 60 * 60 - min * 60)
 
-				hour = hour > 9 ? hour : '0' + hour;
-				min = min > 9 ? min : '0' + min;
-				sec = sec > 9 ? sec : '0' + sec;
+				hour = hour > 9 ? hour : '0' + hour
+				min = min > 9 ? min : '0' + min
+				sec = sec > 9 ? sec : '0' + sec
 
-				this.remainTime = hour + ":" + min + ":" + sec;
+				return hour + ":" + min + ":" + sec
 			},
 			useend() {
-				clearInterval(this.clearTime);
+				clearInterval(this.clearTime)
 			},
 			endOfUse(id) {
 				var _this = this

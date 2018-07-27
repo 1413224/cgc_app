@@ -11,7 +11,7 @@
 			</div>
 			<div class="order_middle">
 				<div class="left">
-					<img :src="'./static/images/cai2.png'" />
+					<img v-if="info.logo" :src="info.logo.original" alt="" />
 				</div>
 				<div class="middle">
 					<div>
@@ -50,40 +50,45 @@
 		</div>
 
 		<popup class="coupon-popup" v-model="show">
-			<div class="header">
-				<p>优惠券</p>
-				<img @click="show = false" :src="'./static/images/guanbi.png'" />
-			</div>
-			<div class="couponlist-box">
-				<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.userCouponId)">
-					<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/images/guo.png'" />
-					<div class="bg">
-						<div class="top">
-							<div>
-								<div class="one">
-									<div class="type-btn" v-if="item.type == 0">满减券</div>
-									<div class="type-btn" v-if="item.type == 10">体验券</div>
-									<div class="type-btn" v-if="item.type == 20">满减券</div>
-									<div class="type-btn" v-if="item.type == 30">折扣券</div>
-									<div class="type-btn" v-if="item.type == 40">运费券</div>
-									<div class="type-btn" v-if="item.type == 50">现金券</div>
-									<span>{{item.name}}</span>
-								</div>
-								<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
-							</div>
-							<div class="money">
-								<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
-								<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
-							</div>
-						</div>
-					</div>
-					<div class="bottom show">
-						<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
-						<img class="r180" :src="'./static/images/xia.png'" alt="" />
+			<div class="pr-box">
+				<div class="header">
+					<div class="all">
+						<p>优惠券</p>
+						<img @click="show = false" :src="'./static/images/guanbi.png'" />
 					</div>
 				</div>
-				<div class="btn" @click="show = false">关闭</div>
+				<div class="couponlist-box">
+					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.userCouponId)">
+						<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/images/guo.png'" />
+						<div class="bg">
+							<div class="top">
+								<div>
+									<div class="one">
+										<div class="type-btn" v-if="item.type == 0">满减券</div>
+										<div class="type-btn" v-if="item.type == 10">体验券</div>
+										<div class="type-btn" v-if="item.type == 20">满减券</div>
+										<div class="type-btn" v-if="item.type == 30">折扣券</div>
+										<div class="type-btn" v-if="item.type == 40">运费券</div>
+										<div class="type-btn" v-if="item.type == 50">现金券</div>
+										<span>{{item.name}}</span>
+									</div>
+									<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
+								</div>
+								<div class="money">
+									<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
+									<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
+								</div>
+							</div>
+						</div>
+						<div class="bottom show">
+							<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
+							<img class="r180" :src="'./static/images/xia.png'" alt="" />
+						</div>
+					</div>
+					<div class="btn" @click="show = false">关闭</div>
+				</div>
 			</div>
+
 		</popup>
 		<payMode :options="payOptions"></payMode>
 	</section>
@@ -227,7 +232,7 @@
 						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
 							res.data.data.availableCoupon[i].show = false
 						}
-						
+
 						_this.info = res.data.data
 
 					}
@@ -276,11 +281,11 @@
 				}
 
 				this.info.availableCoupon[index].show = !this.info.availableCoupon[index].show
-				
+
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
 					if(this.info.availableCoupon[i].show) {
 						this.userCouponId = this.info.availableCoupon[i].userCouponId
-					}else{
+					} else {
 						this.userCouponId = ''
 					}
 				}
@@ -294,23 +299,36 @@
 		background-color: white;
 		padding: 0 0.20rem;
 		box-sizing: border-box;
+		.pr-box {
+			position: relative;
+		}
 		.header {
 			height: 1.25rem;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			position: relative;
-			img {
-				width: 0.25rem;
-				height: 0.25rem;
-				position: absolute;
-				top: 50%;
-				right: 0%;
-				transform: translate(0%, -50%);
+			/*position: absolute;
+			top: 0;
+			width: 100%;*/
+			background-color: white;
+			.all {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				z-index: 15;
+				height:100%;
+				img {
+					width: 0.25rem;
+					height: 0.25rem;
+					position: absolute;
+					top: 50%;
+					right: 0%;
+					transform: translate(0%, -50%);
+				}
 			}
 		}
 		.couponlist-box {
 			position: relative;
+			height: 8rem;
+			z-index: 11;
 			.btn {
 				width: 6.18rem;
 				height: 0.88rem;
