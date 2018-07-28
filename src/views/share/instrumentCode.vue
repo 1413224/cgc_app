@@ -61,7 +61,7 @@
 			return {
 				title: "仪器扫码",
 				infoData: {},
-				equipNumber:60009
+				equipNumber:''
 			}
 
 		},
@@ -69,7 +69,7 @@
 			settingHeader,
 		},
 		created(){
-			this.equipNumber = this.mainApp.getCs('n')?this.mainApp.getCs('n'):60009
+			this.equipNumber = this.mainApp.getCs('n')?this.mainApp.getCs('n'):''
 		},
 		mounted() {
 			this.getEquipmentInfo()

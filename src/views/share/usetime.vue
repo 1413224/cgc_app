@@ -22,7 +22,7 @@
 					<div class="nr">
 						<p class="tit">启动</p>
 						<p class="text">开启后开始计时</p>
-						<p class="time" v-for="(item,index) in remainTime">{{item.time}}</p>
+						<p class="time">{{remainTime}}</p>
 					</div>
 				</div>
 			</div>
@@ -86,6 +86,8 @@
 						slideChangeTransitionEnd: function(e) {
 							_this.infoItem = _this.list[this.activeIndex]
 							_this.onIndex = this.activeIndex
+							
+							_this.countdown(_this.infoItem.canUseTime)
 						}
 					}
 				},
@@ -115,10 +117,6 @@
 		},
 		created() {
 			this.getMyEquipmentInfo()
-
-			for(var i = 0; i < this.time.length; i++) {
-				this.remainTime[i].time = this.countdown(this.time[i])
-			}
 		},
 		computed: {
 
@@ -155,40 +153,27 @@
 				})
 
 			},
-			outTime(info) { //计算所有设备的剩余时间
-				setInterval(function() {
-					--info.overtime;
-				}, 998);
-			},
 			countdown(overtime) { //当前设备的倒计时
-
 				var _this = this
-				_this.setTime(overtime)
-
 				_this.clearTime = setInterval(function() {
-
 					if(overtime == 0) {
 						_this.useend()
 						return
 					}
 					--overtime
-
-					//                     localStorage.setItem('time' + _this.onIndex, --overtime)
-
 					_this.setTime(overtime)
-
 				}, 998);
 			},
 			setTime(overtime) { //设置设备剩余时间
 				var hour = Math.floor(overtime / 60 / 60),
 					min = Math.floor((overtime - hour * 60 * 60) / 60),
 					sec = Math.floor(overtime - hour * 60 * 60 - min * 60)
-
+					
 				hour = hour > 9 ? hour : '0' + hour
 				min = min > 9 ? min : '0' + min
 				sec = sec > 9 ? sec : '0' + sec
 
-				return hour + ":" + min + ":" + sec
+				this.remainTime = hour + ":" + min + ":" + sec
 			},
 			useend() {
 				clearInterval(this.clearTime)

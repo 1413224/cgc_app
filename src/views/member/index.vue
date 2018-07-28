@@ -97,15 +97,15 @@
 				</div>
 				<div class="navigation" style="margin-top: 0;">
 					<ul>
-						<li @click="toOrder(0)">
+						<li @click="toOrder(1)">
 							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-1.png'">
 								</div>
-								<p>待付款</p>
+								<p>待处理</p>
 							</a>
 						</li>
-						<li @click="toOrder(1)">
+						<li @click="toOrder(2)">
 							<a href="javascript:void(0)">
 								<div class="li-box2">
 									<img :src="'./static/member/order-6.png'">
@@ -246,7 +246,8 @@
 				_this.$router.push({
 					path: '/shop/my_order2',
 					query: {
-						tabNo: true
+						'tabNo': true,
+						'status':index
 					}
 				})
 			},

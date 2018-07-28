@@ -5,7 +5,7 @@
 			<div class="order_top">
 				<div class="left">
 					<img :src="'./static/images/shopLogo.png'" alt="" />
-					<p>{{info.name}}</p>
+					<p @click="toDetail(info.enterpriseId)">{{info.name}}</p>
 					<i class="icon iconfont icon-arrow-right"></i>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			</div>
 			<div class="order_bottom">
 				<p>优惠券选择</p>
-				<p @click="showCouponList">{{info.availableCouponNums}} 张可用<i class="iconfont icon-arrow-right"></i></p>
+				<p @click="showCouponList">{{couponName?couponName:info.availableCouponNums+'张可用'}}<i class="iconfont icon-arrow-right"></i></p>
 			</div>
 		</div>
 		<div class="fix-box">
@@ -58,7 +58,7 @@
 					</div>
 				</div>
 				<div class="couponlist-box">
-					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.userCouponId)">
+					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.name)">
 						<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/images/guo.png'" />
 						<div class="bg">
 							<div class="top">
@@ -85,8 +85,9 @@
 							<img class="r180" :src="'./static/images/xia.png'" alt="" />
 						</div>
 					</div>
-					<div class="btn" @click="show = false">关闭</div>
+
 				</div>
+				<div class="btn" @click="show = false">关闭</div>
 			</div>
 
 		</popup>
@@ -109,7 +110,8 @@
 				userCouponId: '',
 				max: 0,
 				maxPayPrice: 0,
-				payOptions: {}
+				payOptions: {},
+				couponName: ''
 			}
 		},
 		components: {
@@ -269,9 +271,9 @@
 				var _this = this
 				_this.show = true
 			},
-			sure(index) {
+			sure(index, name) {
 				this.sureIndex = index
-
+				console.log(name)
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
 					if(i != index) {
 						this.info.availableCoupon[i].show = false
@@ -285,10 +287,21 @@
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
 					if(this.info.availableCoupon[i].show) {
 						this.userCouponId = this.info.availableCoupon[i].userCouponId
+						this.couponName = name
+						return
 					} else {
 						this.userCouponId = ''
+						this.couponName = ''
 					}
 				}
+			},
+			toDetail(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
+					}
+				})
 			}
 		}
 	}
@@ -314,7 +327,7 @@
 				justify-content: center;
 				position: relative;
 				z-index: 15;
-				height:100%;
+				height: 100%;
 				img {
 					width: 0.25rem;
 					height: 0.25rem;
@@ -325,23 +338,28 @@
 				}
 			}
 		}
+		.btn {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 0.88rem;
+			background: rgba(51, 111, 255, 1);
+			font-size: 0.30rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(255, 255, 255, 1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+			z-index: 15;
+		}
 		.couponlist-box {
 			position: relative;
-			height: 8rem;
+			height: 7rem;
 			z-index: 11;
-			.btn {
-				width: 6.18rem;
-				height: 0.88rem;
-				background: rgba(51, 111, 255, 1);
-				font-size: 0.30rem;
-				font-family: PingFang-SC-Medium;
-				color: rgba(255, 255, 255, 1);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				margin: 0.20rem auto;
-				margin-top: 1.88rem;
-			}
+			padding-bottom: 0.88rem;
+			padding-top: 0.24rem;
+			overflow-y: auto;
 			.sureImg {
 				position: absolute;
 				top: 0;
