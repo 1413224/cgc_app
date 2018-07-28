@@ -199,7 +199,6 @@ router.beforeEach(function(to, from, next) {
 	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
 
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
-
 		let ua = window.navigator.userAgent.toLowerCase()
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
 			next({

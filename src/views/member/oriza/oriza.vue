@@ -8,12 +8,14 @@
 	export default {
 		data() {
 			return {
-
+				url2: ''
 			}
 		},
 		created() {
-			this.updateRouter();
-
+			this.updateRouter()
+			
+			var url = localStorage['beforeLoginUrl'].split('?')[0]
+			this.url2 = url.split('?')[0]
 		},
 		methods: {
 			grant() {
@@ -34,6 +36,7 @@
 			},
 			updateRouter() {
 				var _this = this
+				
 				let openid = this.$route.query.openId
 				// let params = this.$route.query
 
@@ -65,12 +68,9 @@
 							}
 						}).then((res) => {
 							if(res.data.status == "00000000") {
-
 								_this.$store.commit('UPDATE_USER_INFO', res.data.data)
-
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-
-								if(localStorage['beforeLoginUrl'] == '/share/instrumentCode') {
+								if(_this.url2 == '/share/instrumentCode') {
 									_this.$router.push({
 										path: localStorage['beforeLoginUrl']
 									})
@@ -82,9 +82,10 @@
 
 							}
 						})
-
+						
 					} else {
-						if(localStorage['beforeLoginUrl'] == '/share/instrumentCode') {
+						var url = localStorage['beforeLoginUrl'].split('?')[0]
+						if(url == '/share/instrumentCode') {
 							_this.$router.push({
 								path: localStorage['beforeLoginUrl']
 							})
