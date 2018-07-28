@@ -12,6 +12,10 @@
 							</div>
 						</div>
 					</swiper-slide>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d3d39f3ed6d093776293673da8890d72c96d92d
 				</swiper>
 			</div>
 
@@ -341,7 +345,8 @@
 			}
 		}
 		.null-box {
-			background-color: #F5F8F9;
+			/*background-color: #F5F8F9;*/
+			background: #fff;
 			height: 100%;
 			.null-img {
 				height: 5.38rem;

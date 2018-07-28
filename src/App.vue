@@ -171,13 +171,16 @@
 					this.xPum = this.dx + this.nx;
 					this.yPum = this.dy + this.ny;
 
+					// console.log(this.xPum)
+
+
 					if(this.xPum >= 0 && this.xPum < document.body.clientWidth) {
-						this.$refs.moveDiv.style.left = this.xPum + "px";
+						this.$refs.moveDiv.style.left = (this.xPum-60) + "px";
 					} else if(this.xPum < 0) {
 						this.$refs.moveDiv.style.left = 0 + "px";
 					}
 					if(this.yPum >= 0 && this.yPum < document.body.clientHeight) {
-						this.$refs.moveDiv.style.top = this.yPum + "px";
+						this.$refs.moveDiv.style.top = (this.yPum-60) + "px";
 					} else if(this.yPum < 0) {
 						this.$refs.moveDiv.style.top = 0 + "px";
 					}
@@ -365,7 +368,7 @@
 			position: fixed;
 			bottom: 2.26rem;
 			right: 0.20rem;
-			z-index: 16;
+			z-index: 116;
 			width: 1.26rem;
 			height: 1.26rem;
 			background: rgba(18, 183, 245, 1);
