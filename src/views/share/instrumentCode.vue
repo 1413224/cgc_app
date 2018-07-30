@@ -61,15 +61,15 @@
 			return {
 				title: "仪器扫码",
 				infoData: {},
-				equipNumber:''
+				equipNumber: ''
 			}
 
 		},
 		components: {
 			settingHeader,
 		},
-		created(){
-			this.equipNumber = this.mainApp.getCs('n')?this.mainApp.getCs('n'):''
+		created() {
+			this.equipNumber = this.mainApp.getCs('n') ? this.mainApp.getCs('n') : ''
 		},
 		mounted() {
 			this.getEquipmentInfo()
@@ -101,7 +101,7 @@
 						for(var i = 0; i < res.data.data.list.length; i++) {
 							res.data.data.list[i].serviceTime = _this.getTime(res.data.data.list[i].serviceTime)
 						}
-						
+
 						_this.infoData = res.data.data
 					}
 				})
@@ -184,6 +184,13 @@
 				font-size: 0.28rem;
 				display: flex;
 				align-items: center;
+				span {
+					width: 2.6rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					-webkit-line-clamp: 1;
+				}
 			}
 			.arrow {
 				width: 7px;

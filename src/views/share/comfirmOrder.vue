@@ -58,8 +58,12 @@
 					</div>
 				</div>
 				<div class="couponlist-box">
-					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.name)">
-						<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/images/guo.png'" />
+					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.name,item.denomination,item.type,item.condition)">
+						<div class="blue" v-if="sureIndex == index && item.show">
+							<div class="pr-box">
+								<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
+							</div>
+						</div>
 						<div class="bg">
 							<div class="top">
 								<div>
@@ -111,7 +115,10 @@
 				max: 0,
 				maxPayPrice: 0,
 				payOptions: {},
-				couponName: ''
+				couponName: '',
+				denomination: 0,
+				type: 0,
+				condition: 0
 			}
 		},
 		components: {
@@ -155,24 +162,34 @@
 		},
 		watch: {
 			value() {
+				//false时重置商品所需金额
 				if(!this.value) {
 					return this.info.payPrice = this.info.price
 				} else {
+					//true时计算 输入的积分 和 所选优惠券  金额
 					this.inputChange()
 				}
 			}
-
 		},
 		methods: {
 			submit() {
 				var _this = this
+
+				//当输入积分为空 变成0
+				if(this.info.recommendBalance == "") {
+					this.info.recommendBalance = 0
+				}
+
+				console.log(this.info.recommendBalance)
+				console.log(_this.userCouponId)
+				return false
 				_this.$http.post(_this.url.share.createEquipmentOrder, {
 					userId: _this.$store.state.user.userId,
 					platformId: _this.url.platformId,
 					equipNumber: this.$route.query.equipNumber,
 					skuId: this.$route.query.skuId,
 					enterprisePrice: 0,
-					balance: _this.info.recommendBalance,
+					balance: _this.value ? _this.info.recommendBalance : 0,
 					userCouponId: _this.userCouponId
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -196,7 +213,7 @@
 				})
 			},
 			inputChange() {
-
+				//当拥有积分大于等于商品所需支付金额  输入积分不能大于商品所需支付金额
 				if(Number(this.max) >= Number(this.info.price)) {
 					if(Number(this.info.recommendBalance) <= Number(this.info.price)) {
 						this.info.payPrice = this.info.price - this.info.recommendBalance
@@ -205,13 +222,24 @@
 						this.info.payPrice = this.maxPayPrice
 					}
 				}
-
+				//当拥有积分小于等于商品所需支付金额  输入积分不能大于拥有积分
 				if(Number(this.max) <= Number(this.info.price)) {
 					if(Number(this.info.recommendBalance) <= Number(this.max)) {
 						this.info.payPrice = this.info.price - this.info.recommendBalance
 					} else {
 						this.info.recommendBalance = this.max
 						this.info.payPrice = this.maxPayPrice
+					}
+				}
+				//当选择了优惠券  类型不为打折券时：
+				if(this.info.payPrice > 0 && (this.type == 0 || this.type == 20 || this.type == 50)) {
+					let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
+					this.info.payPrice = money.toFixed(2)
+				} else if(this.info.payPrice > 0 && this.type == 30) {
+					//当选择了优惠券  类型为打折券且满足使用门槛时：
+					if(this.info.payPrice > 0 && this.info.price >= this.condition) {
+						let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
+						this.info.payPrice = money.toFixed(2)
 					}
 				}
 			},
@@ -271,9 +299,12 @@
 				var _this = this
 				_this.show = true
 			},
-			sure(index, name) {
+			//  优惠券  下标 名字 减去金额 类型  使用门槛 
+			sure(index, name, denomination, type, condition) {
 				this.sureIndex = index
-				console.log(name)
+				
+				let sureCouponList = []
+
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
 					if(i != index) {
 						this.info.availableCoupon[i].show = false
@@ -287,13 +318,27 @@
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
 					if(this.info.availableCoupon[i].show) {
 						this.userCouponId = this.info.availableCoupon[i].userCouponId
-						this.couponName = name
-						return
-					} else {
-						this.userCouponId = ''
-						this.couponName = ''
+						sureCouponList.push(this.info.availableCoupon[i])
 					}
+
 				}
+
+				if(sureCouponList.length > 0) {
+					this.couponName = name
+					this.denomination = denomination
+					this.type = type
+					this.condition = condition
+				} else {
+					this.userCouponId = ''
+					this.couponName = ''
+					this.denomination = 0
+					this.type = 0
+					this.condition = 0
+				}
+				
+				console.log(sureCouponList)
+
+				this.inputChange()
 			},
 			toDetail(id) {
 				this.$router.push({
@@ -309,14 +354,14 @@
 
 <style lang="less" scoped>
 	.coupon-popup {
-		background-color: white;
-		padding: 0 0.20rem;
 		box-sizing: border-box;
+		/*background: #F5F6FA;*/
 		.pr-box {
 			position: relative;
 		}
 		.header {
 			height: 1.25rem;
+			padding: 0 0.20rem;
 			/*position: absolute;
 			top: 0;
 			width: 100%;*/
@@ -354,29 +399,48 @@
 			z-index: 15;
 		}
 		.couponlist-box {
+			padding: 0 0.20rem;
 			position: relative;
 			height: 7rem;
 			z-index: 11;
+			overflow-y: auto;
 			padding-bottom: 0.88rem;
 			padding-top: 0.24rem;
-			overflow-y: auto;
-			.sureImg {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-			}
 			.bs {
 				box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
 				margin-bottom: 0.24rem;
 				position: relative;
+				box-sizing: border-box;
+				border-radius: 3px;
+				background: #F5F6FA;
+				.blue {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					border: 2px solid #336fff;
+					border-radius: 3px;
+					box-sizing: border-box;
+					.pr-box {
+						position: relative;
+						.sureImg {
+							position: absolute;
+							top: 0;
+							right: 0;
+							width: 0.68rem;
+							height: 0.68rem;
+						}
+					}
+				}
 			}
 			.bg {
-				background-size: cover;
 				height: 2.04rem;
 				display: flex;
 				flex-direction: column;
 				overflow: hidden;
+				/*background: url(../../assets/images/member/coupon-bg.png) no-repeat;*/
+				background-size: cover;
 				img {
 					position: absolute;
 					top: -0.15rem;
@@ -454,6 +518,7 @@
 				padding: 0.18rem 0.40rem;
 				background: rgb(249, 250, 255);
 				box-sizing: border-box;
+				border-radius: 3px;
 				.shang {
 					display: inline-block;
 					width: 5.84rem;
