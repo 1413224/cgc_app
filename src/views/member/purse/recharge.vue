@@ -9,7 +9,7 @@
 				<span>当前积分</span><span>{{userInfo.availablePoints}}</span>
 			</div> -->
 			<div class="jifen">
-				<div class="price">{{userInfo.availablePoints}}<span>通用积分</span></div>
+				<div class="price">{{userInfo.balance}}<span>通用积分</span></div>
 				<div class="ptai">当前平台：<span>{{info.name?info.name:'当前平台不可用'}}</span></div>
 			</div>
 		</div>
