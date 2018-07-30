@@ -4,67 +4,70 @@
 		<div v-if="!nohas">
 
 			<div class="one" v-show="showIndex==0">
-				1
+			1
 			</div>
 			<div class="two" v-show="showIndex==1">
-				2
+			2
 			</div>
 			<!-- 服务开始 -->
 			<div class="three" v-show="showIndex==2">
-				<div class="tops">
-					<div class="left clearfix">
-						<div class="logo fl"><img src="../../assets/images/share/wfg.png" alt=""></div>
-						<p class="title fl">德国专利威伐光</p>
-						<span class="name">威伐光-750w</span>
-					</div>
-					<div class="right">
-						<div @click="goProductDetail">
-							<img src="../../assets/images/share/pd.png">
-							<span>产品简介</span>
-						</div>
-						<!-- <div>
-							<img src="../../assets/images/share/direction.png">
-							<span>使用指导</span>
-						</div> -->
-					</div>
-				</div>
-
-				<div class="price">
-					<div class="item">
-						<div class="left">
-							<p>90分钟</p>
-							<p>单人套餐</p>
+				<div class="item" v-for="(item,index) in fuwuData" :key="index">
+					<div class="tops">
+						<div class="left clearfix">
+							<div class="logo fl"><img src="../../assets/images/share/wfg.png" alt=""></div>
+							<p class="title fl">{{item.goodsName}}</p>
+							<span class="name">{{item.shortName}}</span>
 						</div>
 						<div class="right">
-							<div class="money">
-								<p>120 <span>元</span></p>
-								<p>消费奖励通用积分</p>
+							<div @click="goProductDetail">
+								<img src="../../assets/images/share/pd.png">
+								<span>产品简介</span>
 							</div>
-							<div class="purchase" @click="buyEquiment()">购买</div>
-							<!-- $router.push({path:'/share/comfirmOrder'}) -->
+							<!-- <div>
+								<img src="../../assets/images/share/direction.png">
+								<span>使用指导</span>
+							</div> -->
 						</div>
 					</div>
-				</div>
 
-				<popup v-model="show" class="popwrap">
-					<p class="tit">选择设备</p>
-					<div class="list equipment">
-						<check-icon :value.sync="check">
-							<div class="checkwap">
-								<p class="num">NO:123456</p>
-								<p class="name">威健康</p>
+					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
+						<div class="item">
+							<div class="left">
+								<p>{{skuList.serviceTime / 60}}分钟</p>
+								<p>{{skuList.skuName}}</p>
 							</div>
-						</check-icon>
+							<div class="right">
+								<div class="money">
+									<p>{{skuList.price}} <span>元</span></p>
+									<p>消费奖励通用积分</p>
+								</div>
+								<div class="purchase" @click="buyEquiment()">购买</div>
+								<!-- $router.push({path:'/share/comfirmOrder'}) -->
+							</div>
+						</div>
 					</div>
-					<div class="bottom">
-						<p class="btn btncancel" @click="hidePopup">取消</p>
-						<p class="btn btndet">确定</p>
-					</div>
-				</popup>
+
+					<popup v-model="show" class="popwrap" v-for="(equipList,index) in item.skuList" :key="index">
+						<p class="tit">选择设备</p>
+						<div class="list equipment">
+							<check-icon :value.sync="check">
+								<div class="checkwap">
+									<p class="num">NO:123456</p>
+									<p class="name">威健康</p>
+								</div>
+							</check-icon>
+						</div>
+						<div class="bottom">
+							<p class="btn btncancel" @click="hidePopup">取消</p>
+							<p class="btn btndet">确定</p>
+						</div>
+					</popup>
+				</div>
 
 			</div>
 			<!-- 服务结束 -->
 
+			
 			<div class="four" v-show="showIndex==3">
 
 				<div class="logo-bg">
@@ -144,11 +147,11 @@
 				<p>返回</p>
 				<p>首页</p>
 			</div>
-			<div class="foot-box">
-				<!-- v-if="info.isAlliance == 1 || info.isChains == 1" -->
+			<div class="foot-box" v-if="info.isAlliance == 1 || info.isChains == 1">
+			<!-- v-if="info.isAlliance == 1 || info.isChains == 1" -->
 				<ul>
-					<li v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
-						<!-- v-if="item.show" -->
+					<li v-if="item.show" v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
+					<!-- v-if="item.show" -->
 						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
 						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
 					</li>
@@ -167,7 +170,7 @@
 	import settingHeader from '@/components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import noData from '@/components/noData'
-	import { Qrcode, Popup, CheckIcon } from 'vux'
+	import { Qrcode,Popup,CheckIcon } from 'vux'
 	export default {
 		data() {
 			return {
@@ -194,7 +197,9 @@
 				isChains: false, //联营
 				tabIndex: 0,
 				nohas: false,
-				showIndex: 3,
+				showIndex:3,
+				chainsId:'',//联营企业角色id
+				fuwuData:[],
 				// flags: false,
 				/*position: {
 					x: 0,
@@ -206,36 +211,36 @@
 				dy: '',
 				xPum: '',
 				yPum: '',*/
-				show: false,
-				check: true,
+				show:false,
+				check:true,
 
 				navList: [{
 						navTitle: '首页',
 						logo: './static/images/shop-bottom1.png',
 						activeLogo: './static/images/shop-bottom1-in.png',
 						show: true,
-						oIndex: 0
+						oIndex:0
 					},
 					{
 						navTitle: '商品',
 						logo: './static/images/shop-bottom2.png',
 						activeLogo: './static/images/shop-bottom2-in.png',
 						show: false,
-						oIndex: 1
+						oIndex:1
 					},
 					{
 						navTitle: '服务',
 						logo: './static/images/shop-bottom3.png',
 						activeLogo: './static/images/shop-bottom3-in.png',
 						show: false,
-						oIndex: 2
+						oIndex:2
 					},
 					{
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
 						activeLogo: './static/images/shop-bottom4-in.png',
-						show: false,
-						oIndex: 3
+						show: true,
+						oIndex:3
 					},
 				],
 				demoList: [{
@@ -272,13 +277,22 @@
 			}, false)
 
 			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
-			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
+			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3 
+		},
+		mounted(){
+			// this.getEquipmentInfo()
 		},
 		methods: {
-			navActive(index, iIndex) {
+			navActive(index,iIndex) {
 				this.navIndex = index
 				this.showIndex = iIndex
 				// this.$route.query.oIndex = iIndex
+				// 
+				if(iIndex==2){
+					// this.getEquipmentInfo('enterBasic554689511100000001') //联营企业服务信息
+					this.getEquipmentInfo(this.chainsId) //联营企业服务信息
+				}
+
 				this.$router.replace({
 					query: this.merge(this.$route.query, {
 						'oIndex': iIndex
@@ -314,6 +328,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
+						
+						console.log(res.data.data)
+
 						// _this.showIndex=4
 						_this.info = res.data.data
 
@@ -330,6 +347,7 @@
 						}
 						if(_this.info.isChains == 1 && _this.$store.state.page.isLogin == "true") {
 							_this.getChainsConcern(res.data.data.chainsId)
+							_this.chainsId = res.data.data.chainsId  //联营企业
 						}
 
 					} else if(res.data.status == 'plat-0003') {
@@ -469,18 +487,33 @@
 					path: '/multi_user_mall/search'
 				})
 			},
-			goProductDetail() {
+			goProductDetail(){
 				this.$router.push({
-					path: '/share/pintroduce'
+					path:'/share/pintroduce'
 				})
 			},
-			buyEquiment() {
+			buyEquiment(){
 				this.show = true
 			},
-			hidePopup() {
+			hidePopup(){
 				this.show = false
+			},
+			//服务
+			getEquipmentInfo(){
+				var _this = this
+				_this.$http.get(_this.url.share.getEquipmentInfo,{
+					params:{
+						// chainsId:_this.chainsId
+						chainsId:'enterBasic554689511100000001'
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						_this.fuwuData = res.data.data
+						console.log(_this.fuwuData)
+					}
+				})
 			}
-
+			
 		}
 	}
 </script>
@@ -511,9 +544,9 @@
 		/*padding-bottom: 1.33rem;*/
 		.logo-bg {
 			height: 2.80rem;
-			overflow: hidden;
 			img {
 				width: 100%;
+				height: 100%;
 				display: block;
 				filter: blur(5px);
 			}
@@ -815,8 +848,8 @@
 			}
 		}
 	}
+
 	/*服务开始*/
-	
 	.tops {
 		height: 3rem;
 		background: linear-gradient(-90deg, rgba(71, 172, 255, 1), rgba(34, 116, 255, 1));
@@ -825,10 +858,11 @@
 		font-size: 0.24rem;
 		.left {
 			margin: 0.55rem 0.2rem 0rem 0.41rem;
-			.logo {
+			.logo{
 				width: 1.5rem;
 				height: 1.5rem;
-				img {
+				
+				img{
 					width: 100%;
 					height: 100%;
 					border-radius: 5px;
@@ -836,17 +870,17 @@
 			}
 			p.title {
 				font-size: 0.36rem;
-				padding-top: .2rem;
-				padding-left: .1rem;
+				padding-top:.2rem;
+				padding-left: .1rem; 
 				font-weight: bold;
 				span {
 					font-size: 0.24rem;
 				}
 			}
-			.name {
+			.name{
 				background: #618CF0;
 				color: #fff;
-				padding: 2px 10px;
+				padding:2px 10px;
 				display: inline-block;
 				border-radius: 3px;
 				margin-top: 5px;
@@ -868,7 +902,6 @@
 			}
 		}
 	}
-	
 	.price {
 		background: #fff;
 		font-size: 0.24rem;
@@ -930,53 +963,54 @@
 			}
 		}
 	}
-	
-	.popwrap {
+
+	.popwrap{
 		background: #fff;
 		height: 7.36rem !important;
 		padding-bottom: 1rem;
 		overflow-y: scroll;
-		.tit {
+		.tit{
 			font-size: .32rem;
-			color: rgba(34, 34, 34, 1);
+			color:rgba(34,34,34,1);
 			text-align: center;
-			margin: .4rem 0;
+			margin:.4rem 0;
 		}
-		.bottom {
+		.bottom{
 			width: 100%;
 			height: .9rem;
 			position: fixed;
 			bottom: 0;
 			display: flex;
-			border-top: 1px solid #eee;
-			.btn {
+			border-top:1px solid #eee;
+			.btn{
 				flex: 1;
 				text-align: center;
 				line-height: .9rem;
 				font-size: .28rem;
 			}
-			.btncancel {
+			.btncancel{
 				background: #fff;
 			}
-			.btndet {
+			.btndet{
 				background: #336FFF;
 				color: #fff;
 			}
 		}
-		.list {
-			padding: 0 .3rem;
+		.list{
+			padding:0 .3rem;
 			margin-bottom: .2rem;
 		}
-		.list .vux-check-icon {
-			border: 1px solid #90A2C7;
+		.list .vux-check-icon{
+			border:1px solid #90A2C7;
 			width: 100%;
 			height: 1.4rem;
 			border-radius: 6px;
+
 		}
-		.checkwap {
+		.checkwap{
 			padding-left: .4rem;
 			padding-top: .22rem;
-			.num {
+			.num{
 				font-weight: bold;
 				font-size: .42rem;
 			}
@@ -985,8 +1019,8 @@
 	/*服务结束*/
 </style>
 <style>
-	.equipment .vux-check-icon i {
-		float: right;
-		margin: .4rem .24rem 0 0;
-	}
+.equipment .vux-check-icon i{
+	float: right;
+	margin: .4rem .24rem 0 0;
+}
 </style>

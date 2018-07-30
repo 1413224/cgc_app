@@ -92,6 +92,7 @@ var url = {
 		changeEquipmentStatus:uri4 +'/v1/goods/changeEquipmentStatus',//变更设备状态信息接口
 		createEquipmentOrder:uri3 +'/v1/goods/createEquipmentOrder',//创建设备订单信息接口
 		getMyEquipmentNotice:uri4+'/v1/goods/getMyEquipmentNotice',//
+		getEquipmentInfo:uri1 + '/public/v1/enterprise/getEquipmentInfo'//获取企业提供的服务列表信息
 	}
 
 }
