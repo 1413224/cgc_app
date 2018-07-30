@@ -75,7 +75,7 @@ var url = {
 		getArticleLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=getArticleLists' //快讯列表接口
 	},
 	zf: {
-		wxScan: '/pay/v1/wechat/wxScan',
+		wxScan: '/pay/public/v1/wechat/wxScan',
 	},
 	order: {
 		getOrderList: uri3 + '/v1/order/getOrderList', //获取订单列表

@@ -5,36 +5,32 @@
 			<div class="order_top">
 				<div class="left">
 					<img :src="'./static/images/shopLogo.png'" alt="" />
-					<p>{{info.name}}</p>
+					<p @click="toDetail(info.enterpriseId)">{{info.name}}</p>
 					<i class="icon iconfont icon-arrow-right"></i>
 				</div>
 			</div>
 			<div class="order_middle">
 				<div class="left">
-					<img :src="'./static/images/cai2.png'" />
+					<img v-if="info.logo" :src="info.logo.original" alt="" />
 				</div>
 				<div class="middle">
 					<div>
-<<<<<<< HEAD
 						<p class="name">{{info.shortName}}</p>
 						<p class="pinfo">{{info.skuName}}:{{info.serviceTime}}</p>
-=======
-						<p class="name">威健康 - 750W </p>
-						<p class="pinfo">套餐:30分钟</p>
->>>>>>> 4517a3837a3b0fa7fdd8c3b0c02389fa0d3055b1
 					</div>
 					<p class="price">¥{{info.price}}</p>
 				</div>
 			</div>
 			<div class="order_bottom">
 				<p>优惠券选择</p>
-				<p @click="showCouponList">{{info.availableCouponNums}}张可用<i class="iconfont icon-arrow-right"></i></p>
+				<p @click="showCouponList">{{couponName?couponName:info.availableCouponNums+'张可用'}}<i class="iconfont icon-arrow-right"></i></p>
 			</div>
 		</div>
 		<div class="fix-box">
 			<div class="one">
 				<div class="left">
-					通用积分
+					<!--通用积分-->
+					<img :src="'./static/share/tyjf.png'" alt="" />
 				</div>
 				<div class="right">
 					<p class="ky">可用：{{info.availableBalance}} </p>
@@ -47,47 +43,53 @@
 			<div class="three">
 				<div class="left">
 					<p>需付款：</p>
-					<p><i>¥</i>{{info.payPrice}}</p>
+					<p><i>¥ </i>{{info.payPrice}}</p>
 				</div>
 				<div class="right" @click="submit()">确认提交</div>
 			</div>
 		</div>
 
 		<popup class="coupon-popup" v-model="show">
-			<div class="header">
-				<p>优惠券</p>
-				<img @click="show = false" :src="'./static/images/guanbi.png'" />
-			</div>
-			<div class="couponlist-box">
-				<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.userCouponId)">
-					<img class="sureImg" v-if="sureIndex == index" :src="'./static/images/guo.png'" />
-					<div class="bg">
-						<div class="top">
-							<div>
-								<div class="one">
-									<div class="type-btn" v-if="item.type == 0">满减券</div>
-									<div class="type-btn" v-if="item.type == 10">体验券</div>
-									<div class="type-btn" v-if="item.type == 20">满减券</div>
-									<div class="type-btn" v-if="item.type == 30">折扣券</div>
-									<div class="type-btn" v-if="item.type == 40">运费券</div>
-									<div class="type-btn" v-if="item.type == 50">现金券</div>
-									<span>{{item.name}}</span>
-								</div>
-								<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
-							</div>
-							<div class="money">
-								<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
-								<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
-							</div>
-						</div>
-					</div>
-					<div class="bottom show">
-						<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
-						<img class="r180" :src="'./static/images/xia.png'" alt="" />
+			<div class="pr-box">
+				<div class="header">
+					<div class="all">
+						<p>优惠券</p>
+						<img @click="show = false" :src="'./static/images/guanbi.png'" />
 					</div>
 				</div>
-				<div class="btn" @click="show = false">确定</div>
+				<div class="couponlist-box">
+					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.name)">
+						<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/images/guo.png'" />
+						<div class="bg">
+							<div class="top">
+								<div>
+									<div class="one">
+										<div class="type-btn" v-if="item.type == 0">满减券</div>
+										<div class="type-btn" v-if="item.type == 10">体验券</div>
+										<div class="type-btn" v-if="item.type == 20">满减券</div>
+										<div class="type-btn" v-if="item.type == 30">折扣券</div>
+										<div class="type-btn" v-if="item.type == 40">运费券</div>
+										<div class="type-btn" v-if="item.type == 50">现金券</div>
+										<span>{{item.name}}</span>
+									</div>
+									<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
+								</div>
+								<div class="money">
+									<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
+									<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
+								</div>
+							</div>
+						</div>
+						<div class="bottom show">
+							<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
+							<img class="r180" :src="'./static/images/xia.png'" alt="" />
+						</div>
+					</div>
+
+				</div>
+				<div class="btn" @click="show = false">关闭</div>
 			</div>
+
 		</popup>
 		<payMode :options="payOptions"></payMode>
 	</section>
@@ -107,8 +109,9 @@
 				sureIndex: 100,
 				userCouponId: '',
 				max: 0,
-				maxPayPrice:0,
-				payOptions: {}
+				maxPayPrice: 0,
+				payOptions: {},
+				couponName: ''
 			}
 		},
 		components: {
@@ -118,7 +121,8 @@
 			payMode
 		},
 		created() {
-			this.getEquipmentOrderConfirmInfo(60009, this.$route.query.skuId)
+
+			this.getEquipmentOrderConfirmInfo(this.$route.query.equipNumber, this.$route.query.skuId)
 
 			this.payOptions = {
 				showPayMode: false,
@@ -149,14 +153,15 @@
 		computed: {
 
 		},
-		watch:{
-			value(){
-				if(!this.value){
+		watch: {
+			value() {
+				if(!this.value) {
 					return this.info.payPrice = this.info.price
-				}else{
+				} else {
 					this.inputChange()
 				}
 			}
+
 		},
 		methods: {
 			submit() {
@@ -191,7 +196,7 @@
 				})
 			},
 			inputChange() {
-				
+
 				if(Number(this.max) >= Number(this.info.price)) {
 					if(Number(this.info.recommendBalance) <= Number(this.info.price)) {
 						this.info.payPrice = this.info.price - this.info.recommendBalance
@@ -225,7 +230,13 @@
 						res.data.data.serviceTime = _this.getTime(res.data.data.serviceTime)
 						_this.max = res.data.data.availableBalance
 						_this.maxPayPrice = res.data.data.payPrice
+
+						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
+							res.data.data.availableCoupon[i].show = false
+						}
+
 						_this.info = res.data.data
+
 					}
 				})
 			},
@@ -260,10 +271,38 @@
 				var _this = this
 				_this.show = true
 			},
-			sure(index, userCouponId) {
+			sure(index, name) {
 				this.sureIndex = index
-				this.userCouponId = userCouponId
+				console.log(name)
+				for(var i = 0; i < this.info.availableCoupon.length; i++) {
+					if(i != index) {
+						this.info.availableCoupon[i].show = false
+					} else {
+						this.info.availableCoupon[i].show = this.info.availableCoupon[index].show
+					}
+				}
+
+				this.info.availableCoupon[index].show = !this.info.availableCoupon[index].show
+
+				for(var i = 0; i < this.info.availableCoupon.length; i++) {
+					if(this.info.availableCoupon[i].show) {
+						this.userCouponId = this.info.availableCoupon[i].userCouponId
+						this.couponName = name
+						return
+					} else {
+						this.userCouponId = ''
+						this.couponName = ''
+					}
+				}
 			},
+			toDetail(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -273,36 +312,54 @@
 		background-color: white;
 		padding: 0 0.20rem;
 		box-sizing: border-box;
+		.pr-box {
+			position: relative;
+		}
 		.header {
 			height: 1.25rem;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			position: relative;
-			img {
-				width: 0.25rem;
-				height: 0.25rem;
-				position: absolute;
-				top: 50%;
-				right: 0%;
-				transform: translate(0%, -50%);
-			}
-		}
-		.couponlist-box {
-			position: relative;
-			.btn {
-				width: 6.18rem;
-				height: 0.88rem;
-				background: rgba(51, 111, 255, 1);
-				font-size: 0.30rem;
-				font-family: PingFang-SC-Medium;
-				color: rgba(255, 255, 255, 1);
+			/*position: absolute;
+			top: 0;
+			width: 100%;*/
+			background-color: white;
+			.all {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				margin: 0.20rem auto;
-				margin-top: 1.88rem;
+				position: relative;
+				z-index: 15;
+				height: 100%;
+				img {
+					width: 0.25rem;
+					height: 0.25rem;
+					position: absolute;
+					top: 50%;
+					right: 0%;
+					transform: translate(0%, -50%);
+				}
 			}
+		}
+		.btn {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 0.88rem;
+			background: rgba(51, 111, 255, 1);
+			font-size: 0.30rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(255, 255, 255, 1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+			z-index: 15;
+		}
+		.couponlist-box {
+			position: relative;
+			height: 7rem;
+			z-index: 11;
+			padding-bottom: 0.88rem;
+			padding-top: 0.24rem;
+			overflow-y: auto;
 			.sureImg {
 				position: absolute;
 				top: 0;
@@ -312,13 +369,13 @@
 			.bs {
 				box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
 				margin-bottom: 0.24rem;
+				position: relative;
 			}
 			.bg {
 				background-size: cover;
 				height: 2.04rem;
 				display: flex;
 				flex-direction: column;
-				position: relative;
 				overflow: hidden;
 				img {
 					position: absolute;
@@ -549,14 +606,18 @@
 				.left {
 					width: 1.64rem;
 					height: 0.46rem;
-					line-height: 0.46rem;
+					/*line-height: 0.46rem;
 					text-align: center;
 					background: rgba(51, 111, 255, 0.21);
 					border-radius: 4px;
 					border: 1px solid rgba(51, 111, 255, 1);
 					font-size: 0.24rem;
 					font-family: TRENDS;
-					color: rgba(51, 111, 255, 1);
+					color: rgba(51, 111, 255, 1);*/
+					img {
+						width: 100%;
+						height: 100%;
+					}
 				}
 				.right {
 					flex: 1;

@@ -88,7 +88,7 @@
 			settingFooter
 		},
 		mounted(){
-			this.getEquipment();
+//			this.getEquipment();
 		},
 		methods: {
 			//检测是否设置支付密码

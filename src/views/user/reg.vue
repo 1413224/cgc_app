@@ -307,9 +307,10 @@
 							if(window.sessionStorage.length > 2) {
 								if(_this.frompath) {
 									if(_this.frompath != '/user/changeLoginPassword2') {
-										_this.$router.replace({
-											path: _this.frompath
-										})
+										//	_this.$router.replace({
+										//		path: _this.frompath
+										//	})
+										_this.$router.go(-1)
 									} else {
 										_this.$router.replace({
 											path: '/index'
@@ -342,16 +343,16 @@
 			//用户名输入改变时
 			nameChange(val) {
 				var _this = this
-				
+
 				_this.isReg = 1
-				
+
 				_this.posReg = false
-				
+
 				_this.codeText = "发送验证码"
 				_this.num = 60
 				_this.sendFlag = false
 				clearTimeout(_this.Timeout)
-				
+
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
 					//					_this.$refs.password.focus()
