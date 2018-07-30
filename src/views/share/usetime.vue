@@ -96,7 +96,7 @@
 							clearInterval(_this.clearTime)
 
 
-							alert(_this.infoItem.status)
+							// alert(_this.infoItem.status)
 
 							if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
 
@@ -193,8 +193,8 @@
 						var i = _this.$refs.mySwiper.swiper.activeIndex
 					
 							
-							alert(i)
-							alert(_this.list[i].status)
+							// alert(i)
+							// alert(_this.list[i].status)
 
 								if(_this.list[i].status == 0){
 									_this.list[i].status = 1
@@ -257,7 +257,9 @@
 						_this.list.splice(i,1) 
 
 						// this.$refs.mySwiper.swiper.activeIndex
-						_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+						setTimeout(()=>{
+							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+						})
 
 						if(_this.list.length ==0 ){
 							_this.$router.push({
@@ -313,13 +315,13 @@
 							
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
-							alert(_this.list.length)
+							// alert(_this.list.length)
 							// this.$refs.mySwiper.swiper.activeIndex
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 							})
 						}else{
-							alert(_this.list.length)
+							// alert(_this.list.length)
 							_this.$router.push({
 								path:'/shop/my_order'
 							})
