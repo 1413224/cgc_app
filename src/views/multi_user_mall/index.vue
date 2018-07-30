@@ -11,56 +11,58 @@
 			</div>
 			<!-- 服务开始 -->
 			<div class="three" v-show="showIndex==2">
-				<div class="tops">
-					<div class="left clearfix">
-						<div class="logo fl"><img src="../../assets/images/share/wfg.png" alt=""></div>
-						<p class="title fl">德国专利威伐光</p>
-						<span class="name">威伐光-750w</span>
-					</div>
-					<div class="right">
-						<div @click="goProductDetail">
-							<img src="../../assets/images/share/pd.png">
-							<span>产品简介</span>
-						</div>
-						<!-- <div>
-							<img src="../../assets/images/share/direction.png">
-							<span>使用指导</span>
-						</div> -->
-					</div>
-				</div>
-
-				<div class="price">
-					<div class="item">
-						<div class="left">
-							<p>90分钟</p>
-							<p>单人套餐</p>
+				<div class="item" v-for="(item,index) in fuwuData" :key="index">
+					<div class="tops">
+						<div class="left clearfix">
+							<div class="logo fl"><img src="../../assets/images/share/wfg.png" alt=""></div>
+							<p class="title fl">{{item.goodsName}}</p>
+							<span class="name">{{item.shortName}}</span>
 						</div>
 						<div class="right">
-							<div class="money">
-								<p>120 <span>元</span></p>
-								<p>消费奖励通用积分</p>
+							<div @click="goProductDetail">
+								<img src="../../assets/images/share/pd.png">
+								<span>产品简介</span>
 							</div>
-							<div class="purchase" @click="buyEquiment()">购买</div>
-							<!-- $router.push({path:'/share/comfirmOrder'}) -->
+							<!-- <div>
+								<img src="../../assets/images/share/direction.png">
+								<span>使用指导</span>
+							</div> -->
 						</div>
 					</div>
-				</div>
 
-				<popup v-model="show" class="popwrap">
-					<p class="tit">选择设备</p>
-					<div class="list equipment">
-						<check-icon :value.sync="check">
-							<div class="checkwap">
-								<p class="num">NO:123456</p>
-								<p class="name">威健康</p>
+					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
+						<div class="item">
+							<div class="left">
+								<p>{{skuList.serviceTime / 60}}分钟</p>
+								<p>{{skuList.skuName}}</p>
 							</div>
-						</check-icon>
+							<div class="right">
+								<div class="money">
+									<p>{{skuList.price}} <span>元</span></p>
+									<p>消费奖励通用积分</p>
+								</div>
+								<div class="purchase" @click="buyEquiment()">购买</div>
+								<!-- $router.push({path:'/share/comfirmOrder'}) -->
+							</div>
+						</div>
 					</div>
-					<div class="bottom">
-						<p class="btn btncancel" @click="hidePopup">取消</p>
-						<p class="btn btndet">确定</p>
-					</div>
-				</popup>
+
+					<popup v-model="show" class="popwrap" v-for="(equipList,index) in item.skuList" :key="index">
+						<p class="tit">选择设备</p>
+						<div class="list equipment">
+							<check-icon :value.sync="check">
+								<div class="checkwap">
+									<p class="num">NO:123456</p>
+									<p class="name">威健康</p>
+								</div>
+							</check-icon>
+						</div>
+						<div class="bottom">
+							<p class="btn btncancel" @click="hidePopup">取消</p>
+							<p class="btn btndet">确定</p>
+						</div>
+					</popup>
+				</div>
 
 			</div>
 			<!-- 服务结束 -->
@@ -145,10 +147,10 @@
 				<p>返回</p>
 				<p>首页</p>
 			</div>
-			<div class="foot-box">
+			<div class="foot-box" v-if="info.isAlliance == 1 || info.isChains == 1">
 			<!-- v-if="info.isAlliance == 1 || info.isChains == 1" -->
 				<ul>
-					<li v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
+					<li v-if="item.show" v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
 					<!-- v-if="item.show" -->
 						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
 						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
@@ -196,6 +198,8 @@
 				tabIndex: 0,
 				nohas: false,
 				showIndex:3,
+				chainsId:'',//联营企业角色id
+				fuwuData:[],
 				// flags: false,
 				/*position: {
 					x: 0,
@@ -235,7 +239,7 @@
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
 						activeLogo: './static/images/shop-bottom4-in.png',
-						show: false,
+						show: true,
 						oIndex:3
 					},
 				],
@@ -275,11 +279,20 @@
 			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
 			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3 
 		},
+		mounted(){
+			// this.getEquipmentInfo()
+		},
 		methods: {
 			navActive(index,iIndex) {
 				this.navIndex = index
 				this.showIndex = iIndex
 				// this.$route.query.oIndex = iIndex
+				// 
+				if(iIndex==2){
+					// this.getEquipmentInfo('enterBasic554689511100000001') //联营企业服务信息
+					this.getEquipmentInfo(this.chainsId) //联营企业服务信息
+				}
+
 				this.$router.replace({
 					query: this.merge(this.$route.query, {
 						'oIndex': iIndex
@@ -315,6 +328,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
+						
+						console.log(res.data.data)
+
 						// _this.showIndex=4
 						_this.info = res.data.data
 
@@ -331,6 +347,7 @@
 						}
 						if(_this.info.isChains == 1 && _this.$store.state.page.isLogin == "true") {
 							_this.getChainsConcern(res.data.data.chainsId)
+							_this.chainsId = res.data.data.chainsId  //联营企业
 						}
 
 					} else if(res.data.status == 'plat-0003') {
@@ -480,6 +497,21 @@
 			},
 			hidePopup(){
 				this.show = false
+			},
+			//服务
+			getEquipmentInfo(){
+				var _this = this
+				_this.$http.get(_this.url.share.getEquipmentInfo,{
+					params:{
+						// chainsId:_this.chainsId
+						chainsId:'enterBasic554689511100000001'
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						_this.fuwuData = res.data.data
+						console.log(_this.fuwuData)
+					}
+				})
 			}
 			
 		}
