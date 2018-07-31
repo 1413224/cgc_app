@@ -14,7 +14,7 @@
 				<div class="order_middle" v-for="(item,index) in orderDetail.items" :key="index" :class="{'m':(index != orderDetail.items.length - 1)}">
 					<div class="left">
 						<img v-if="item.thumb" :src="item.thumb.original" />
-						<img v-else :src="'./static/images/cai2.png'" />
+						<img v-else :src="'./static/images/pr.png'" />
 					</div>
 					<div class="middle">
 						<p class="name">{{item.goodsName}}</p>
@@ -86,7 +86,7 @@
 			<!--线下门店-->
 			<div class="b-top" v-if="orderDetail.type == 1">
 				<div class="btn" v-if="orderDetail.status == 70">
-					<div @click="deleteOrder">删除订单</div>
+					<div @click="deleteOrder(orderDetail.orderSn)">删除订单</div>
 					<!--<div>评价订单</div>-->
 				</div>
 			</div>
@@ -109,7 +109,7 @@
 				</div>
 				<!--使用中-->
 				<div class="btn" v-if="orderDetail.status == 60">
-					<div @click="deleteOrder">删除订单</div>
+					<div @click="deleteOrder(orderDetail.orderSn)">删除订单</div>
 					<div>设备管理</div>
 				</div>
 				<!--已完成-->
@@ -124,11 +124,11 @@
 				</div>
 				<!--订单超时-->
 				<div class="btn" v-if="orderDetail.status == 130">
-					<div @click="deleteOrder">删除订单</div>
+					<div @click="deleteOrder(orderDetail.orderSn)">删除订单</div>
 				</div>
 				<!--已取消-->
 				<div class="btn" v-if="orderDetail.status == 140">
-					<div @click="deleteOrder">删除订单</div>
+					<div @click="deleteOrder(orderDetail.orderSn)">删除订单</div>
 				</div>
 			</div>
 		</div>
@@ -160,8 +160,7 @@
 
 				_this.$http.get(_this.url.order.getOrderDetail, {
 					params: {
-						//userId: _this.$store.state.user.userId,
-						userId: 'userDev01',
+						userId: _this.$store.state.user.userId,
 						orderSn: _this.orderSn
 					}
 				}).then((res) => {
@@ -169,7 +168,7 @@
 						_this.orderDetail = res.data.data.data
 
 						_this.good = res.data.data.data.items[0] //设备商品
-					}else{
+					} else {
 						_this.$router.back(-1)
 					}
 				})
@@ -186,11 +185,19 @@
 
 					},
 					confirm() {
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '删除成功'
+						_this.$http.post(_this.url.order.deleteOrderByOrderSn, {
+							userId: _this.$store.state.user.userId,
+							orderSn: orderSn,
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '删除成功'
+								})
+								_this.$router.back(-1)
+							}
 						})
 					}
 				})

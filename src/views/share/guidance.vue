@@ -1,7 +1,7 @@
 <template>
 	<div class="producte">
 		<settingHeader :title="title"></settingHeader>
-		<img style="width: 100%;height: auto;" :src="'./static/images/treatment.png'" alt="">
+		<img style="width: 100%;height: auto;" :src="'./static/share/long.png'" alt="">
 	</div>
 </template>
 
