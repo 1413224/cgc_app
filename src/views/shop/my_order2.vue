@@ -106,7 +106,8 @@
 								</div>
 								<!--已完成-->
 								<div class="btn" v-if="item.status == 70">
-									<div @click="cancelOrder(item.orderSn)">取消订单</div>
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
+									
 									<div>查看发票</div>
 									<!--<div>评价晒单</div>-->
 								</div>
@@ -117,11 +118,11 @@
 								</div>
 								<!--订单超时-->
 								<div class="btn" v-if="item.status == 130">
-									<div @click="deleteOrder">删除订单</div>
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
 								</div>
 								<!--已取消-->
 								<div class="btn" v-if="item.status == 140">
-									<div @click="deleteOrder">删除订单</div>
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
 								</div>
 							</div>
 						</div>

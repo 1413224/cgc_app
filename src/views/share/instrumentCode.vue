@@ -43,6 +43,7 @@
 							<div class="money">
 								<p>{{ item.price}} <span>元</span></p>
 								<p v-if="item.content != ''">{{ item.content}}</p>
+								<!--<p>消费奖励通用积分</p>-->
 							</div>
 							<div class="purchase" @click="toBuy(item.skuId)">购买</div>
 						</div>

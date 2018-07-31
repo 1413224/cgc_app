@@ -88,7 +88,7 @@
 			settingFooter
 		},
 		mounted() {
-			
+
 		},
 		methods: {
 			//检测是否设置支付密码
@@ -119,10 +119,10 @@
 					}).then((res) => {
 						if(res.data.status == "00000000") {
 							_this.equipmentNum = res.data.data.num
-							_this.equipmentShow = true
+							_this.equipmentShow = res.data.data.num > 0 ? true : false
 						}
 					})
-				}else{
+				} else {
 					_this.equipmentShow = false
 				}
 
@@ -180,9 +180,9 @@
 						this.$refs.moveDiv.style.top = 0 + "px";
 					}
 					//阻止页面的滑动默认事件
-//					document.addEventListener("touchmove", function() {
-						event.preventDefault();
-//					}, false);
+					//					document.addEventListener("touchmove", function() {
+					event.preventDefault();
+					//					}, false);
 				}
 			},
 			//鼠标释放时候的函数
@@ -193,7 +193,7 @@
 		watch: {
 			'$route' (to, from, next) {
 				var _this = this
-				
+
 				_this.getEquipment()
 
 				//判断是否微信端   奖励弹窗  

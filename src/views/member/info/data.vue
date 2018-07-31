@@ -139,7 +139,7 @@
 						} else if(info.education == 6) {
 							_this.education = '博士'
 						}
-						_this.birthday = _this.mainApp.frDateTimehp.getFormatDateTamp(info.birthday * 1000)
+						_this.birthday = info.birthday ? _this.mainApp.frDateTimehp.getFormatDateTamp(info.birthday * 1000) : '请选择日期'
 						_this.wxnum = info.wechat
 						_this.zfbnum = info.alipay
 						_this.email = info.email

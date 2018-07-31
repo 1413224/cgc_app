@@ -41,18 +41,18 @@
 									<p>{{skuList.price}} <span>元</span></p>
 									<p>消费奖励通用积分</p>
 								</div>
-								<div class="purchase" @click="buyEquiment()">购买</div>
+								<div class="purchase" @click="buyEquiment(item.equipList)">购买</div>
 								<!-- $router.push({path:'/share/comfirmOrder'}) -->
 							</div>
 						</div>
 					</div>
 
-					<popup v-model="show" class="popwrap" v-for="(equipList,index) in item.skuList" :key="index">
+					<popup v-model="show" class="popwrap">
 						<p class="tit">选择设备</p>
-						<div class="list equipment">
+						<div class="list equipment" v-for="(item,index) in equipList" :key="index">
 							<check-icon :value.sync="check">
 								<div class="checkwap">
-									<p class="num">NO:123456</p>
+									<p class="num">NO:{{item}}</p>
 									<p class="name">威健康</p>
 								</div>
 							</check-icon>
@@ -213,6 +213,7 @@
 				yPum: '',*/
 				show:false,
 				check:true,
+				equipList:[],
 
 				navList: [{
 						navTitle: '首页',
@@ -492,8 +493,9 @@
 					path:'/share/pintroduce'
 				})
 			},
-			buyEquiment(){
+			buyEquiment(equipList){
 				this.show = true
+				this.equipList = equipList
 			},
 			hidePopup(){
 				this.show = false
@@ -504,7 +506,7 @@
 				_this.$http.get(_this.url.share.getEquipmentInfo2,{
 					params:{
 						// chainsId:_this.chainsId
-						chainsId:'enterBasic554689511100000001'
+						chainsId:'roleChains564602418700000001'
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){

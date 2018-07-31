@@ -1,14 +1,14 @@
 <template>
 	<div class="usetime">
 		<settingHeader :title="title"></settingHeader>
-		<div v-show="showDiv">
+		<div v-if="showDiv">
 			<div class="lunbo">
 				<p class="tip">（多台设备时，可左右切换）</p>
 				<swiper :options="swiperOption" ref="mySwiper">
 					<swiper-slide v-for="(item,index) in list" :key="index">
 						<div class="sw_wrap">
 							<div class="content">
-								<p class="num">NO:{{index+1}}</p>
+								<p class="num">NO:{{index}}</p>
 								<p class="tit ellipsis">{{item.goodsName}}</p>
 								<p class="xinghao"><span></span>设备名称:{{item.shortName}}</p>
 							</div>
@@ -52,7 +52,7 @@
 			</div>
 
 		</div>
-		<div v-show="!showDiv" class="null-box">
+		<div v-if="!showDiv" class="null-box">
 			<div class="null-img">
 				<img :src="'./static/share/null.png'" />
 				<p>暂无可用共享设备</p>
@@ -96,7 +96,7 @@
 
 							clearInterval(_this.clearTime)
 
-							//							alert(_this.infoItem.status)
+							// alert(_this.infoItem.status)
 
 							if(_this.infoItem.status == 1 || _this.infoItem.status == 2) {
 
@@ -153,10 +153,9 @@
 
 						_this.info = res.data.data
 						_this.list = res.data.data.list
+						_this.infoItem = res.data.data.list[0]
 
 						_this.showDiv = res.data.data.list.length > 0 ? true : false
-
-						_this.infoItem = res.data.data.list[0]
 
 						for(var i = 0; i < _this.list.length; i++) {
 							if(i == 0) {
@@ -190,8 +189,8 @@
 
 						var i = _this.$refs.mySwiper.swiper.activeIndex
 
-						//							alert(i)
-						//							alert(_this.list[i].status)
+						// alert(i)
+						// alert(_this.list[i].status)
 
 						if(_this.list[i].status == 0) {
 							_this.list[i].status = 1
@@ -247,7 +246,9 @@
 						_this.list.splice(i, 1)
 
 						// this.$refs.mySwiper.swiper.activeIndex
-						_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+						setTimeout(() => {
+							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+						})
 
 						if(_this.list.length == 0) {
 							_this.$router.push({
@@ -302,13 +303,13 @@
 
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex, 1)
 
-							//							alert(_this.list.length)
+							// alert(_this.list.length)
 							// this.$refs.mySwiper.swiper.activeIndex
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 							})
 						} else {
-							//							alert(_this.list.length)
+							// alert(_this.list.length)
 							_this.$router.push({
 								path: '/shop/my_order'
 							})
