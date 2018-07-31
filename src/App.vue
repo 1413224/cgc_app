@@ -118,8 +118,10 @@
 						}
 					}).then((res) => {
 						if(res.data.status == "00000000") {
-							_this.equipmentNum = res.data.data.num
-							_this.equipmentShow = res.data.data.num > 0 ? true : false
+							if(res.data.data){
+								_this.equipmentNum = res.data.data.num
+								_this.equipmentShow = res.data.data.num > 0 ? true : false
+							}
 						}
 					})
 				} else {
@@ -194,11 +196,11 @@
 			'$route' (to, from, next) {
 				var _this = this
 
-				_this.getEquipment()
-
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
 					if(sessionStorage['_openid_']) {
+
+						_this.getEquipment()
 
 						//控制新人奖励弹窗
 						if(sessionStorage.getItem('isZc')) {
@@ -241,6 +243,10 @@
 							sessionStorage.setItem('isPay', 1)
 							_this.getUserPayPassword()
 						}
+					}
+					
+					if(_this.$store.state.page.isLogin == 'true'){
+						_this.getEquipment()
 					}
 				}
 

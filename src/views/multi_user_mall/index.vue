@@ -4,10 +4,10 @@
 		<div v-if="!nohas">
 
 			<div class="one" v-show="showIndex==0">
-			1
+				1
 			</div>
 			<div class="two" v-show="showIndex==1">
-			2
+				2
 			</div>
 			<!-- 服务开始 -->
 			<div class="three" v-show="showIndex==2">
@@ -33,7 +33,7 @@
 					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
 						<div class="item">
 							<div class="left">
-								<p>{{skuList.serviceTime / 60}}分钟</p>
+								<p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p>
 								<p>{{skuList.skuName}}</p>
 							</div>
 							<div class="right">
@@ -41,7 +41,7 @@
 									<p>{{skuList.price}} <span>元</span></p>
 									<p>消费奖励通用积分</p>
 								</div>
-								<div class="purchase" @click="buyEquiment(item.equipList)">购买</div>
+								<div class="purchase" @click="buyEquiment(item.equipList,skuList.skuId)">购买</div>
 								<!-- $router.push({path:'/share/comfirmOrder'}) -->
 							</div>
 						</div>
@@ -49,25 +49,24 @@
 
 					<popup v-model="show" class="popwrap">
 						<p class="tit">选择设备</p>
-						<div class="list equipment" v-for="(item,index) in equipList" :key="index">
-							<check-icon :value.sync="check">
-								<div class="checkwap">
-									<p class="num">NO:{{item}}</p>
-									<p class="name">威健康</p>
+						<div class="ov-box">
+							<div class="list equipment" v-for="(item,index) in equipList" :key="index" @click="activeEq(index,item.num)">
+								<div class="item">
+									<p><i>设备编号:</i>{{item.num}}</p>
+									<check-icon :value.sync="item.show"></check-icon>
 								</div>
-							</check-icon>
+							</div>
 						</div>
+
 						<div class="bottom">
 							<p class="btn btncancel" @click="hidePopup">取消</p>
-							<p class="btn btndet">确定</p>
+							<p class="btn btndet" @click="purchase">确定</p>
 						</div>
 					</popup>
 				</div>
-
 			</div>
 			<!-- 服务结束 -->
 
-			
 			<div class="four" v-show="showIndex==3">
 
 				<div class="logo-bg">
@@ -102,7 +101,7 @@
 					<div class="two">
 						<div class="bottom" style="border-top: none;">
 							<p>店铺编号</p>
-							<p>{{info.number}}</p>
+							<p class="nukm">{{info.number}}</p>
 						</div>
 						<div class="top">
 							<div class="left">
@@ -115,15 +114,7 @@
 								</a>
 							</div>
 						</div>
-						<!--<div class="middle">
-						<div class="title">
-							<p>店铺二维码(<span>扫码进入店铺</span>)</p>
-							<p><i class="iconfont icon-arrow-right"></i></p>
-						</div>
-						<div class="qrcode-box">
-							<qrcode :value="storeUrl" :size="qrcodeWidth" type="img"></qrcode>
-						</div>
-					</div>-->
+
 						<div class="bottom">
 							<p>开店时间</p>
 							<p>{{info.joinTime}}</p>
@@ -139,19 +130,14 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end">
-				<img :src="'./static/images/wfgImg.png'" alt="" />
-				<p>2台</p>
-			</div> -->
 			<div class="back-index" :class="{'bottom2':info.isAlliance != 1 && info.isChains != 1}" @click="$router.push({path:'/share/storelist'})">
+
 				<p>返回</p>
 				<p>首页</p>
 			</div>
 			<div class="foot-box" v-if="info.isAlliance == 1 || info.isChains == 1">
-			<!-- v-if="info.isAlliance == 1 || info.isChains == 1" -->
 				<ul>
 					<li v-if="item.show" v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
-					<!-- v-if="item.show" -->
 						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
 						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
 					</li>
@@ -170,7 +156,7 @@
 	import settingHeader from '@/components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import noData from '@/components/noData'
-	import { Qrcode,Popup,CheckIcon } from 'vux'
+	import { Qrcode, Popup, CheckIcon, Radio, Checklist } from 'vux'
 	export default {
 		data() {
 			return {
@@ -197,51 +183,44 @@
 				isChains: false, //联营
 				tabIndex: 0,
 				nohas: false,
-				showIndex:3,
-				chainsId:'',//联营企业角色id
-				fuwuData:[],
+				showIndex: 3,
+				chainsId: '', //联营企业角色id
+				fuwuData: [],
+				// radio:['1','2'],
 				// flags: false,
-				/*position: {
-					x: 0,
-					y: 0
-				},
-				nx: '',
-				ny: '',
-				dx: '',
-				dy: '',
-				xPum: '',
-				yPum: '',*/
-				show:false,
-				check:true,
-				equipList:[],
+				show: false,
+				check: true,
+				equipList: [],
+				skuId: '',
+				equipNumber: '',
 
 				navList: [{
 						navTitle: '首页',
 						logo: './static/images/shop-bottom1.png',
 						activeLogo: './static/images/shop-bottom1-in.png',
 						show: true,
-						oIndex:0
+						oIndex: 0
 					},
 					{
 						navTitle: '商品',
 						logo: './static/images/shop-bottom2.png',
 						activeLogo: './static/images/shop-bottom2-in.png',
 						show: false,
-						oIndex:1
+						oIndex: 1
 					},
 					{
 						navTitle: '服务',
 						logo: './static/images/shop-bottom3.png',
 						activeLogo: './static/images/shop-bottom3-in.png',
 						show: false,
-						oIndex:2
+						oIndex: 2
 					},
 					{
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
 						activeLogo: './static/images/shop-bottom4-in.png',
 						show: true,
-						oIndex:3
+						oIndex: 3
 					},
 				],
 				demoList: [{
@@ -265,6 +244,8 @@
 			swiperSlide,
 			Qrcode,
 			Popup,
+			Radio,
+			Checklist,
 			CheckIcon,
 			noData
 		},
@@ -278,18 +259,46 @@
 			}, false)
 
 			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
-			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3 
+			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
 		},
-		mounted(){
+		mounted() {
 			// this.getEquipmentInfo()
 		},
 		methods: {
-			navActive(index,iIndex) {
+			purchase() {
+				if(this.equipNumber != '' && this.skuId != '') {
+					this.$router.push({
+						path: '/share/comfirmOrder',
+						query: {
+							'equipNumber': this.equipNumber, //设备编号
+							'skuId': this.skuId, //设备价格套餐
+						}
+					})
+				} else {
+					this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'middle',
+						text: '请选择需要开启的设备'
+					})
+				}
+
+			},
+			activeEq(i, equipNumber) {
+				var _this = this
+				_this.equipList.forEach(function(index, value, array) {
+					_this.equipList[value].show = false
+					_this.equipList[i].show = true
+				})
+
+				this.equipNumber = equipNumber
+			},
+			navActive(index, iIndex) {
 				this.navIndex = index
 				this.showIndex = iIndex
 				// this.$route.query.oIndex = iIndex
 				// 
-				if(iIndex==2){
+				if(iIndex == 2) {
 					// this.getEquipmentInfo('enterBasic554689511100000001') //联营企业服务信息
 					this.getEquipmentInfo(this.chainsId) //联营企业服务信息
 				}
@@ -329,7 +338,6 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
-						
 						console.log(res.data.data)
 
 						// _this.showIndex=4
@@ -343,12 +351,16 @@
 							_this.logo = _this.info.logo.original
 						}
 
-						if(_this.info.isAlliance == 1 && _this.$store.state.page.isLogin == "true") {
+						if(res.data.data.isAlliance == 1) {
 							_this.getAllianceConcern(_this.info.allianceId)
 						}
-						if(_this.info.isChains == 1 && _this.$store.state.page.isLogin == "true") {
+						if(res.data.data.isChains == 1) {
 							_this.getChainsConcern(res.data.data.chainsId)
-							_this.chainsId = res.data.data.chainsId  //联营企业
+							_this.chainsId = res.data.data.chainsId //联营企业
+						}
+
+						if(_this.navIndex == 2) {
+							_this.getEquipmentInfo(_this.chainsId) //联营企业服务信息
 						}
 
 					} else if(res.data.status == 'plat-0003') {
@@ -488,34 +500,50 @@
 					path: '/multi_user_mall/search'
 				})
 			},
-			goProductDetail(){
+			goProductDetail() {
 				this.$router.push({
-					path:'/share/pintroduce'
+					path: '/share/pintroduce'
 				})
 			},
-			buyEquiment(equipList){
+			buyEquiment(equipList, skuId) {
+				var _this = this
 				this.show = true
-				this.equipList = equipList
+				_this.equipList = []
+				equipList.forEach(function(value) {
+					var data = {}
+					data.num = value
+					data.show = false
+					_this.equipList.push(data)
+				})
+
+				this.skuId = skuId
 			},
-			hidePopup(){
+			hidePopup() {
 				this.show = false
+				this.skuId = ''
+				this.equipNumber = ''
 			},
 			//服务
-			getEquipmentInfo(){
+			getEquipmentInfo() {
 				var _this = this
-				_this.$http.get(_this.url.share.getEquipmentInfo2,{
-					params:{
-						// chainsId:_this.chainsId
-						chainsId:'roleChains564602418700000001'
+				_this.$http.get(_this.url.share.getEquipmentInfo2, {
+					params: {
+
+						chainsId: _this.chainsId
 					}
 				}).then((res) => {
-					if(res.data.status == "00000000"){
+					if(res.data.status == "00000000") {
 						_this.fuwuData = res.data.data
+						/*_this.radio = res.data.data[0].equipList
+						console.log(_this.radio)*/
 						console.log(_this.fuwuData)
 					}
 				})
+			},
+			change(value, label) {
+				alert(value + label)
 			}
-			
+
 		}
 	}
 </script>
@@ -550,7 +578,7 @@
 				width: 100%;
 				height: 100%;
 				display: block;
-				filter: blur(5px);
+				filter: brightness(.5)blur(2px);
 			}
 		}
 		.swiper-inner {
@@ -603,8 +631,8 @@
 					align-items: center;
 					justify-content: center;
 					img {
-						width: 90%;
-						height: auto;
+						width: 100%;
+						height: 100%;
 					}
 				}
 				.right {
@@ -618,6 +646,7 @@
 							font-family: PingFangSC-Medium;
 							color: rgba(26, 38, 66, 1);
 							margin-bottom: 0.18rem;
+							margin-top: 0.20rem;
 							word-wrap: break-word;
 							display: -webkit-box;
 							-webkit-line-clamp: 2;
@@ -749,8 +778,16 @@
 						font-family: PingFangSC-Regular;
 						color: rgba(26, 38, 66, 1);
 					}
-					p:nth-child(2) {
+					.nukm {
 						color: #90A2C7;
+						width: 4.78rem;
+						word-wrap: break-word;
+						display: -webkit-box;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
+						word-break: break-all;
+						overflow: hidden;
+						text-align: right;
 					}
 					.code {
 						display: flex;
@@ -850,8 +887,8 @@
 			}
 		}
 	}
-
 	/*服务开始*/
+	
 	.tops {
 		height: 3rem;
 		background: linear-gradient(-90deg, rgba(71, 172, 255, 1), rgba(34, 116, 255, 1));
@@ -860,11 +897,10 @@
 		font-size: 0.24rem;
 		.left {
 			margin: 0.55rem 0.2rem 0rem 0.41rem;
-			.logo{
+			.logo {
 				width: 1.5rem;
 				height: 1.5rem;
-				
-				img{
+				img {
 					width: 100%;
 					height: 100%;
 					border-radius: 5px;
@@ -872,17 +908,17 @@
 			}
 			p.title {
 				font-size: 0.36rem;
-				padding-top:.2rem;
-				padding-left: .1rem; 
+				padding-top: .2rem;
+				padding-left: .1rem;
 				font-weight: bold;
 				span {
 					font-size: 0.24rem;
 				}
 			}
-			.name{
+			.name {
 				background: #618CF0;
 				color: #fff;
-				padding:2px 10px;
+				padding: 2px 10px;
 				display: inline-block;
 				border-radius: 3px;
 				margin-top: 5px;
@@ -904,6 +940,7 @@
 			}
 		}
 	}
+	
 	.price {
 		background: #fff;
 		font-size: 0.24rem;
@@ -965,64 +1002,87 @@
 			}
 		}
 	}
-
-	.popwrap{
+	
+	.eqnum {
+		/*color: #f00;*/
+		font-size: .14rem;
+		span {
+			font-size: .36rem;
+			font-weight: bold;
+			position: relative;
+			top: 2px;
+		}
+	}
+	
+	.popwrap {
 		background: #fff;
 		height: 7.36rem !important;
 		padding-bottom: 1rem;
-		overflow-y: scroll;
-		.tit{
-			font-size: .32rem;
-			color:rgba(34,34,34,1);
-			text-align: center;
-			margin:.4rem 0;
+		.ov-box {
+			height: 6rem;
+			overflow-y: auto;
 		}
-		.bottom{
+		.item {
+			width: 100%;
+			height: 1.4rem;
+			border: 1px solid #90A2C7;
+			border-radius: 3px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 0.40rem;
+			box-sizing: border-box;
+			p {
+				font-size: 0.42rem;
+				font-family: PingFangSC-Medium;
+				color: rgba(26, 38, 66, 1);
+				i {
+					font-size: 0.20rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(26, 38, 66, 1);
+					margin-right: 0.10rem;
+				}
+			}
+		}
+		.tit {
+			font-size: .32rem;
+			color: rgba(34, 34, 34, 1);
+			text-align: center;
+			margin: .4rem 0;
+		}
+		.bottom {
 			width: 100%;
 			height: .9rem;
 			position: fixed;
 			bottom: 0;
 			display: flex;
-			border-top:1px solid #eee;
-			.btn{
+			border-top: 1px solid #eee;
+			.btn {
 				flex: 1;
 				text-align: center;
 				line-height: .9rem;
 				font-size: .28rem;
 			}
-			.btncancel{
+			.btncancel {
 				background: #fff;
 			}
-			.btndet{
+			.btndet {
 				background: #336FFF;
 				color: #fff;
 			}
 		}
-		.list{
-			padding:0 .3rem;
+		.list {
+			padding: 0 .3rem;
 			margin-bottom: .2rem;
 		}
-		.list .vux-check-icon{
-			border:1px solid #90A2C7;
-			width: 100%;
-			height: 1.4rem;
-			border-radius: 6px;
-
-		}
-		.checkwap{
+		.checkwap {
 			padding-left: .4rem;
 			padding-top: .22rem;
-			.num{
+			.num {
 				font-weight: bold;
 				font-size: .42rem;
 			}
 		}
 	}
 	/*服务结束*/
-</style>
-<style>
-.equipment .vux-check-icon i{
-	float: right;
-	margin: .4rem .24rem 0 0;
-}
 </style>
