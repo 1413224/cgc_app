@@ -33,7 +33,7 @@
 					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
 						<div class="item">
 							<div class="left">
-								<p>{{skuList.serviceTime / 60}}分钟</p>
+								<p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p>
 								<p>{{skuList.skuName}}</p>
 							</div>
 							<div class="right">
@@ -49,13 +49,33 @@
 
 					<popup v-model="show" class="popwrap">
 						<p class="tit">选择设备</p>
-						<div class="list equipment" v-for="(item,index) in equipList" :key="index">
-							<check-icon :value.sync="check">
+						<div class="list equipment">
+						<!-- v-for="(item,index) in equipList" :key="index" -->
+							<!-- <check-icon>
+							:value.sync="check"
 								<div class="checkwap">
 									<p class="num">NO:{{item}}</p>
 									<p class="name">威健康</p>
 								</div>
-							</check-icon>
+							</check-icon> -->
+							
+						    <!-- <group>
+						    
+						    								<radio :options="item.equipList" @on-change="change"></radio>
+						    </group> -->
+						   
+
+						   
+							
+							<div class="item">
+								<!-- <div class="equnum">设备编号：<span>6009</span></div> -->
+								<check-icon :value.sync="demo1"> biaoqiin</check-icon>
+							</div>
+
+							
+						   
+							
+
 						</div>
 						<div class="bottom">
 							<p class="btn btncancel" @click="hidePopup">取消</p>
@@ -115,15 +135,7 @@
 								</a>
 							</div>
 						</div>
-						<!--<div class="middle">
-						<div class="title">
-							<p>店铺二维码(<span>扫码进入店铺</span>)</p>
-							<p><i class="iconfont icon-arrow-right"></i></p>
-						</div>
-						<div class="qrcode-box">
-							<qrcode :value="storeUrl" :size="qrcodeWidth" type="img"></qrcode>
-						</div>
-					</div>-->
+	
 						<div class="bottom">
 							<p>开店时间</p>
 							<p>{{info.joinTime}}</p>
@@ -139,10 +151,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end">
-				<img :src="'./static/images/wfgImg.png'" alt="" />
-				<p>2台</p>
-			</div> -->
+
 			<div class="back-index" :class="{'bottom2':info.isAlliance== 0 || info.isChains == 0}" @click="$router.push({path:'/share/storelist'})">
 				<p>返回</p>
 				<p>首页</p>
@@ -170,7 +179,7 @@
 	import settingHeader from '@/components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import noData from '@/components/noData'
-	import { Qrcode,Popup,CheckIcon } from 'vux'
+	import { Qrcode,Popup,CheckIcon,Radio,Checklist } from 'vux'
 	export default {
 		data() {
 			return {
@@ -200,20 +209,12 @@
 				showIndex:3,
 				chainsId:'',//联营企业角色id
 				fuwuData:[],
+				// radio:['1','2'],
 				// flags: false,
-				/*position: {
-					x: 0,
-					y: 0
-				},
-				nx: '',
-				ny: '',
-				dx: '',
-				dy: '',
-				xPum: '',
-				yPum: '',*/
 				show:false,
 				check:true,
 				equipList:[],
+				demo1:false,
 
 				navList: [{
 						navTitle: '首页',
@@ -265,6 +266,8 @@
 			swiperSlide,
 			Qrcode,
 			Popup,
+			Radio,
+			Checklist,
 			CheckIcon,
 			noData
 		},
@@ -349,6 +352,7 @@
 						if(_this.info.isChains == 1 && _this.$store.state.page.isLogin == "true") {
 							_this.getChainsConcern(res.data.data.chainsId)
 							_this.chainsId = res.data.data.chainsId  //联营企业
+							// alert(_this.chainsId)
 						}
 
 					} else if(res.data.status == 'plat-0003') {
@@ -505,15 +509,20 @@
 				var _this = this
 				_this.$http.get(_this.url.share.getEquipmentInfo2,{
 					params:{
-						// chainsId:_this.chainsId
-						chainsId:'roleChains564602418700000001'
+						
+						chainsId:_this.chainsId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
 						_this.fuwuData = res.data.data
+						/*_this.radio = res.data.data[0].equipList
+						console.log(_this.radio)*/
 						console.log(_this.fuwuData)
 					}
 				})
+			},
+			change(value,label){
+				alert(value + label)
 			}
 			
 		}
@@ -965,12 +974,39 @@
 			}
 		}
 	}
-
+	.eqnum{
+		/*color: #f00;*/
+		font-size: .14rem;
+		span{
+			font-size: .36rem;
+			font-weight: bold;
+			position: relative;
+			top: 2px;
+		}
+	}
 	.popwrap{
 		background: #fff;
 		height: 7.36rem !important;
 		padding-bottom: 1rem;
 		overflow-y: scroll;
+		.item{
+			width: 100%;
+			height: 1.4rem;
+			/* border:1px solid #90A2C7;
+			border-radius: 6px; */
+			margin-bottom: .1rem;
+			.equnum{
+				height: 100%;
+				line-height: 1.4rem;
+				padding-left:.4rem;
+				span{
+					font-size: .36rem;
+					font-weight: bold;
+					position: relative;
+					top: 2px;
+				}
+			}
+		}
 		.tit{
 			font-size: .32rem;
 			color:rgba(34,34,34,1);
