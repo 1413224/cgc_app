@@ -1,14 +1,14 @@
 <template>
 	<div class="usetime">
 		<settingHeader :title="title"></settingHeader>
-		<div v-show="list.length>0">
+		<div v-show="showDiv">
 			<div class="lunbo">
 				<p class="tip">（多台设备时，可左右切换）</p>
 				<swiper :options="swiperOption" ref="mySwiper">
 					<swiper-slide v-for="(item,index) in list" :key="index">
 						<div class="sw_wrap">
 							<div class="content">
-								<p class="num">NO:{{index}}</p>
+								<p class="num">NO:{{index+1}}</p>
 								<p class="tit ellipsis">{{item.goodsName}}</p>
 								<p class="xinghao"><span></span>设备名称:{{item.shortName}}</p>
 							</div>
@@ -52,7 +52,7 @@
 			</div>
 
 		</div>
-		<div v-show="list.length<=0" class="null-box">
+		<div v-show="!showDiv" class="null-box">
 			<div class="null-img">
 				<img :src="'./static/share/null.png'" />
 				<p>暂无可用共享设备</p>
@@ -77,6 +77,7 @@
 			var _this = this;
 			return {
 				title: "使用时间",
+				showDiv: true,
 				changeEquiDate: {},
 				swiperOption: {
 					slidesPerView: 'auto',
@@ -88,27 +89,24 @@
 					},
 					on: {
 						slideChangeTransitionEnd: function(e) {
-							_this.infoItem = _this.list[this.activeIndex]  //当前选中的设备
+							_this.infoItem = _this.list[this.activeIndex] //当前选中的设备
 
 							//切换时，设置设备剩余可用时间
 							// _this.remainTime = _this.setTime(_this.infoItem.canUseTime)
 
 							clearInterval(_this.clearTime)
 
+							//							alert(_this.infoItem.status)
 
-							alert(_this.infoItem.status)
-
-							if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
+							if(_this.infoItem.status == 1 || _this.infoItem.status == 2) {
 
 								_this.countDown(_this.infoItem.canUseTime)
 
-							}else{
+							} else {
 								_this.remainTime = _this.setTime(_this.infoItem.canUseTime)
 								// alert(_this.infoItem.status)
 							}
-							
 
-							
 						}
 					}
 				},
@@ -119,9 +117,9 @@
 				remainTime: '', //当前设备剩余时间 01:00:00
 				onIndex: 0, //当前显示设备的下标
 
-				list: [],//所有订单列表  看看能不能初始化，解决页面显示问题
-				info: {},//订单列表整体数据
-				infoItem: {}//当前选中的订单数据
+				list: [], //所有订单列表  看看能不能初始化，解决页面显示问题
+				info: {}, //订单列表整体数据
+				infoItem: {} //当前选中的订单数据
 
 			}
 
@@ -143,7 +141,7 @@
 
 		},
 		methods: {
-			getMyEquipmentInfo() {//获取设备订单列表列表
+			getMyEquipmentInfo() { //获取设备订单列表列表
 				var _this = this
 
 				_this.$http.get(_this.url.share.getMyEquipmentInfo, {
@@ -155,28 +153,28 @@
 
 						_this.info = res.data.data
 						_this.list = res.data.data.list
+
+						_this.showDiv = res.data.data.list.length > 0 ? true : false
+
 						_this.infoItem = res.data.data.list[0]
 
+						for(var i = 0; i < _this.list.length; i++) {
+							if(i == 0) {
+								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2) {
+									_this.countDown(_this.list[i].canUseTime) //当前设备倒计时
 
-						for(var i=0;i<_this.list.length;i++){
-							if(i==0){
-								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
-									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-
-									_this.outTime(_this.list[i],i) //设备剩余时间
-								}else{
+									_this.outTime(_this.list[i], i) //设备剩余时间
+								} else {
 									_this.remainTime = _this.setTime(res.data.data.list[0].canUseTime)
 								}
-							}else{
-								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
-									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+							} else {
+								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2) {
+									_this.countDown(_this.list[i].canUseTime) //当前设备倒计时
 
-									_this.outTime(_this.list[i],i) //设备剩余时间
+									_this.outTime(_this.list[i], i) //设备剩余时间
 								}
 							}
 						}
-						
-
 
 					}
 				})
@@ -191,28 +189,24 @@
 					if(res.data.status == "00000000") {
 
 						var i = _this.$refs.mySwiper.swiper.activeIndex
-					
-							
-							alert(i)
-							alert(_this.list[i].status)
 
-								if(_this.list[i].status == 0){
-									_this.list[i].status = 1
-									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+						//							alert(i)
+						//							alert(_this.list[i].status)
 
-									_this.outTime(_this.list[i],i) //设备剩余时间
+						if(_this.list[i].status == 0) {
+							_this.list[i].status = 1
+							_this.countDown(_this.list[i].canUseTime) //当前设备倒计时
 
-								}else{
-									_this.list[i].status = 2
-	
-								}
-	
-							
+							_this.outTime(_this.list[i], i) //设备剩余时间
 
-						
+						} else {
+							_this.list[i].status = 2
+
+						}
+
 					}
 				})
-				
+
 				// console.log(_this.list)
 				/*for(var i=0;i<this.list.length;i++){
 					
@@ -243,29 +237,24 @@
 
 				}*/
 
-
-
 			},
-			outTime(info,i) { //计算所有设备的剩余时间
+			outTime(info, i) { //计算所有设备的剩余时间
 				var _this = this
 				setInterval(function() {
 					--info.canUseTime;
-					if(info.canUseTime ==0 ){
+					if(info.canUseTime == 0) {
 
-						
-
-						_this.list.splice(i,1) 
+						_this.list.splice(i, 1)
 
 						// this.$refs.mySwiper.swiper.activeIndex
 						_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 
-						if(_this.list.length ==0 ){
+						if(_this.list.length == 0) {
 							_this.$router.push({
-								paht:'/shop/my_order2'
+								paht: '/shop/my_order2'
 							})
 						}
 
-						
 					}
 				}, 998);
 			},
@@ -279,11 +268,11 @@
 
 					if(overtime == 0) {
 						_this.useend();
-						
+
 						return;
 					}
 					--overtime;
-					
+
 					_this.remainTime = _this.setTime(overtime);
 
 				}, 998);
@@ -309,19 +298,19 @@
 					itemId: id
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						if(_this.list.length > 0){
-							
-							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
+						if(_this.list.length > 0) {
 
-							alert(_this.list.length)
+							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex, 1)
+
+							//							alert(_this.list.length)
 							// this.$refs.mySwiper.swiper.activeIndex
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 							})
-						}else{
-							alert(_this.list.length)
+						} else {
+							//							alert(_this.list.length)
 							_this.$router.push({
-								path:'/shop/my_order'
+								path: '/shop/my_order'
 							})
 						}
 					}
@@ -353,11 +342,11 @@
 		}
 		.lunbo {
 			padding-top: .2rem;
-			.tip{
+			.tip {
 				font-size: .22rem;
 				color: #90A2C7;
 				text-align: center;
-				padding-bottom:5px;
+				padding-bottom: 5px;
 			}
 		}
 		.sw_wrap {
@@ -375,7 +364,7 @@
 				width: 100%;
 				position: relative;
 				/*padding: .3rem 0;*/
-				.num{
+				.num {
 					position: absolute;
 					top: .6rem;
 					left: 0.02rem;
@@ -385,6 +374,9 @@
 					padding: 0 5px;
 					background: #90A2C7;
 					border-radius: 2px 0 0 2px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 				}
 				.tit {
 					font-size: .22rem;

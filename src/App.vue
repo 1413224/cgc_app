@@ -62,14 +62,14 @@
 				dy: '',
 				xPum: '',
 				yPum: '',
-				equipmentNum:'',
-				equipmentShow:false
+				equipmentNum: '',
+				equipmentShow: false
 
 			}
 		},
 		created() {
 			var _this = this
-			
+
 			window.onorientationchange = function() {
 				if(window.orientation == 90 || window.orientation == -90) {
 					_this.orientation = true;
@@ -87,8 +87,8 @@
 			ButtonTabItem,
 			settingFooter
 		},
-		mounted(){
-//			this.getEquipment();
+		mounted() {
+			
 		},
 		methods: {
 			//检测是否设置支付密码
@@ -109,40 +109,37 @@
 					}
 				})
 			},
-			getEquipment(){
+			getEquipment() {
 				var _this = this
-				// alert(_this.$store.state.page.isLogin)
-				if(_this.$store.state.page.isLogin == 'true'){
-					_this.$http.get(_this.url.share.getMyEquipmentNotice,{
-						params:{
-							userId:_this.$store.state.user.userId
+				if(_this.$store.state.page.isLogin == 'true') {
+					_this.$http.get(_this.url.share.getMyEquipmentNotice, {
+						params: {
+							userId: _this.$store.state.user.userId
 						}
-					}).then((res)=>{
-						if(res.data.status == "00000000"){
-							console.log(res.data.data)
-							this.equipmentNum = res.data.data.num
-							this.equipmentShow = true
-							// alert(this.equipmentNum)
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.equipmentNum = res.data.data.num
+							_this.equipmentShow = true
 						}
 					})
-				}
-				
-				
-				
-			},
-			goDetail(){
-				var _this = this
-				if(_this.equipmentNum == 0){
-					this.$vux.toast.text('暂无设备', 'top')
 				}else{
+					_this.equipmentShow = false
+				}
+
+			},
+			goDetail() {
+				var _this = this
+				if(_this.equipmentNum == 0) {
+					this.$vux.toast.text('暂无设备', 'top')
+				} else {
 					this.$router.push({
-						path:'/share/usetime',
-						query:{
-							id:_this.$store.state.user.userId
-						}	
+						path: '/share/usetime',
+						query: {
+							id: _this.$store.state.user.userId
+						}
 					})
 				}
-				
+
 			},
 			// 实现移动端拖拽
 			down() {
@@ -171,23 +168,21 @@
 					this.xPum = this.dx + this.nx;
 					this.yPum = this.dy + this.ny;
 
-					// console.log(this.xPum)
-
-
-					if(this.xPum >= 0 && this.xPum < document.body.clientWidth) {
-						this.$refs.moveDiv.style.left = (this.xPum-60) + "px";
+					if(this.xPum >= Number(document.body.clientWidth / 6) && this.xPum < Number(document.body.clientWidth - 70)) {
+						this.$refs.moveDiv.style.left = this.xPum + "px";
 					} else if(this.xPum < 0) {
-						this.$refs.moveDiv.style.left = 0 + "px";
+						this.$refs.moveDiv.style.left = Number(document.body.clientWidth / 6) + "px";
 					}
-					if(this.yPum >= 0 && this.yPum < document.body.clientHeight) {
-						this.$refs.moveDiv.style.top = (this.yPum-60) + "px";
+					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 120) : Number(document.body.clientHeight - 70)
+					if(this.yPum >= 0 && this.yPum < h) {
+						this.$refs.moveDiv.style.top = this.yPum + "px";
 					} else if(this.yPum < 0) {
 						this.$refs.moveDiv.style.top = 0 + "px";
 					}
 					//阻止页面的滑动默认事件
-					document.addEventListener("touchstart", function(event) {
-						event.preventDefault()
-					}, false)
+//					document.addEventListener("touchmove", function() {
+						event.preventDefault();
+//					}, false);
 				}
 			},
 			//鼠标释放时候的函数
@@ -198,6 +193,8 @@
 		watch: {
 			'$route' (to, from, next) {
 				var _this = this
+				
+				_this.getEquipment()
 
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
@@ -364,30 +361,31 @@
 		}
 	}
 	/*设备数*/
+	
 	.wfg-box {
-			position: fixed;
-			bottom: 2.26rem;
-			right: 0.20rem;
-			z-index: 116;
-			width: 1.26rem;
-			height: 1.26rem;
-			background: rgba(18, 183, 245, 1);
-			box-shadow: 0px 4px 12px 0px rgba(18, 183, 245, 0.5);
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			margin-bottom: 0.39rem;
-			margin-right: 0.20rem;
-			img {
-				width: 0.66rem;
-				height: 0.33rem;
-			}
-			p {
-				font-size: 0.24rem;
-				font-family: PingFangSC-Regular;
-				color: rgba(255, 255, 255, 1);
-			}
+		position: fixed;
+		bottom: 2.26rem;
+		right: 0.20rem;
+		z-index: 999999;
+		width: 1.26rem;
+		height: 1.26rem;
+		background: rgba(18, 183, 245, 1);
+		box-shadow: 0px 4px 12px 0px rgba(18, 183, 245, 0.5);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		margin-bottom: 0.39rem;
+		margin-right: 0.20rem;
+		img {
+			width: 0.66rem;
+			height: 0.33rem;
 		}
+		p {
+			font-size: 0.24rem;
+			font-family: PingFangSC-Regular;
+			color: rgba(255, 255, 255, 1);
+		}
+	}
 </style>

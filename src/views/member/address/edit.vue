@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<group :gutter="0" class="input-div">
 			<x-input class="address-item" placeholder="收货人姓名" v-model="info.name"></x-input>
-			<x-input class="address-item" placeholder="联系方式" type="text" v-model="info.mobile"></x-input>
+			<x-input class="address-item" placeholder="联系方式" type="number" v-model="info.mobile"></x-input>
 			<cell title="中国" value-align="left" class="addr-cell">
 				<x-address :list="list" class="address-item address-check" v-model="addArr" title='' placeholder="请选择地址" value-text-align="left" @on-show="onAddArr"></x-address>
 			</cell>
@@ -151,14 +151,14 @@
 					})
 					return
 				}
-				if(!_this.mainApp.isemail(_this.info.email)) {
-					_this.$vux.toast.show({
-						type: 'text',
-						width: '50%',
-						text: '请输入正确的邮箱地址'
-					})
-					return
-				}
+//				if(!_this.mainApp.isemail(_this.info.email)) {
+//					_this.$vux.toast.show({
+//						type: 'text',
+//						width: '50%',
+//						text: '请输入正确的邮箱地址'
+//					})
+//					return
+//				}
 				_this.info.provinceId = _this.addArr[0]
 				_this.info.cityId = _this.addArr[1]
 				_this.info.areaId = _this.addArr[2]

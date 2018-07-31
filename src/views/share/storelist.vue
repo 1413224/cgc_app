@@ -195,12 +195,12 @@
 					pagination: {
 						el: '.swiper-pagination'
 					},
-					autoplay: true,
+					autoplay: false,
 					loop: true
 				},
 				demoList: [{
 					img: './static/share/banner1.png',
-					url: '/member/join/index'
+					url: '/member/vip/right'
 				}]
 			}
 		},

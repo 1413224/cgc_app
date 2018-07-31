@@ -276,7 +276,6 @@
 
 						if(time) {
 							_this.orderList = res.data.data.list.concat(_this.orderList)
-							console.log(_this.orderList)
 						} else {
 							_this.orderList = res.data.data.list
 						}
@@ -453,7 +452,6 @@
 			},
 			//取消订单
 			cancelOrder(orderSn) {
-				console.log(orderSn)
 				var _this = this
 				_this.$dialog.show({
 					type: 'warning',
@@ -526,7 +524,6 @@
 						})
 						//下拉刷新
 						_this.scroll.on('pullingDown', () => {
-							console.log(123)
 							_this.$nextTick(function() {
 								_this.scroll.finishPullDown()
 								_this.scroll.refresh()
@@ -534,10 +531,9 @@
 						})
 
 						//滚动开始
-						_this.scroll.on('scrollStart', () => {
+						_this.scroll.on('scrollStart', (pos) => {
 							_this.move = true
 							_this.huan = false
-							_this.changeTip = '下拉刷新'
 
 							if(_this.timeOut) {
 								clearTimeout(_this.timeOut)
@@ -546,8 +542,7 @@
 
 						//滚动开始
 						_this.scroll.on('scroll', (pos) => {
-							console.log(pos.y)
-							if(_this.orderList.length > 0) {
+							if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight >_this.scroll.wrapperHeight) {
 								if(pos.y > -30 && pos.y <= 80) {
 									if(_this.move) {
 										_this.showLoading2 = true

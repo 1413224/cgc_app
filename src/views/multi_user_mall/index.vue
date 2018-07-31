@@ -143,7 +143,7 @@
 				<img :src="'./static/images/wfgImg.png'" alt="" />
 				<p>2台</p>
 			</div> -->
-			<div class="back-index" :class="{'bottom2':info.isAlliance== 0 || info.isChains == 0}" @click="$router.push({path:'/share/storelist'})">
+			<div class="back-index" :class="{'bottom2':info.isAlliance != 1 && info.isChains != 1}" @click="$router.push({path:'/share/storelist'})">
 				<p>返回</p>
 				<p>首页</p>
 			</div>
@@ -501,7 +501,7 @@
 			//服务
 			getEquipmentInfo(){
 				var _this = this
-				_this.$http.get(_this.url.share.getEquipmentInfo,{
+				_this.$http.get(_this.url.share.getEquipmentInfo2,{
 					params:{
 						// chainsId:_this.chainsId
 						chainsId:'enterBasic554689511100000001'
