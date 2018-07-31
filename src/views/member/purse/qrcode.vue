@@ -5,9 +5,9 @@
 			<div class="middle-box">
 				<div class="bw-box" v-if="noOpen">
 					<div class="box">
-						<img :src="'./static/qrcode/code.png'" alt="" />
-						<p class="tip">扫码付全面升级，欢迎体验</p>
-						<p class="xy">点击下方按钮即同意 <span>《CGC全球智慧产业联盟扫码付款用户协议》</span></p>
+						<img :src="'./static/qrcode/code2.png'" alt="" />
+						<!--<p class="tip">您尚未开启会员码功能，开启后向商家 出示，支付更安全快捷</p>-->
+						<!--<p class="xy">点击下方按钮即同意 <span>《CGC全球智慧产业联盟扫码付款用户协议》</span></p>-->
 						<div class="btn" @click="open">立即开启</div>
 					</div>
 				</div>
@@ -105,17 +105,17 @@
 		},
 		created() {
 
-//			if(this.$store.state.page.isLogin == 'false') {
-//				this.$vux.toast.show({
-//					width: '60%',
-//					type: 'text',
-//					position: 'middle',
-//					text: '请先登录再体验此功能'
-//				})
-//				this.$router.replace({
-//					path: '/user/reg'
-//				})
-//			}
+			if(this.$store.state.page.isLogin == 'false') {
+				this.$vux.toast.show({
+					width: '60%',
+					type: 'text',
+					position: 'middle',
+					text: '请先登录再体验此功能'
+				})
+				this.$router.replace({
+					path: '/user/reg'
+				})
+			}
 
 			this.qrcodeIndex = this.$route.query.index ? this.$route.query.index : 0
 			document.title = this.$route.query.text ? this.$route.query.text : '会员码'
@@ -250,16 +250,17 @@
 						align-items: center;
 						justify-content: center;
 						img {
-							width: 1.8rem;
-							height: 1.8rem;
+							width: 4.04rem;
+							height: 4.04rem;
 							margin-bottom: 0.68rem;
-							margin-top: 0.5rem;
+							margin-top: 0.36rem;
 						}
 						.tip {
-							font-size: 0.34rem;
+							font-size: 0.30rem;
 							font-family: PingFang-SC-Medium;
 							color: rgba(26, 38, 66, 1);
-							margin-bottom: 1.13rem;
+							text-align: center;
+							margin-bottom: 0.43rem;
 						}
 						.xy {
 							font-size: 0.32rem;
@@ -275,7 +276,7 @@
 							width: 5.76rem;
 							height: 0.82rem;
 							line-height: 0.82rem;
-							background: rgba(203, 24, 28, 1);
+							background: #336FFF;
 							border-radius: 3px;
 							font-size: 0.32rem;
 							font-family: PingFang-SC-Medium;

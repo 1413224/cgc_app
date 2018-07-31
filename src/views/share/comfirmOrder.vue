@@ -118,7 +118,8 @@
 				couponName: '',
 				denomination: 0,
 				type: 0,
-				condition: 0
+				condition: 0,
+				recommendBalance: 0
 			}
 		},
 		components: {
@@ -164,7 +165,8 @@
 			value() {
 				//false时重置商品所需金额
 				if(!this.value) {
-					return this.info.payPrice = this.info.price
+					console.log(this.info.price - this.denomination)
+					return this.info.payPrice = this.info.price - this.denomination
 				} else {
 					//true时计算 输入的积分 和 所选优惠券  金额
 					this.inputChange()
@@ -179,10 +181,7 @@
 				if(this.info.recommendBalance == "") {
 					this.info.recommendBalance = 0
 				}
-
-				console.log(this.info.recommendBalance)
-				console.log(_this.userCouponId)
-				return false
+				
 				_this.$http.post(_this.url.share.createEquipmentOrder, {
 					userId: _this.$store.state.user.userId,
 					platformId: _this.url.platformId,
@@ -213,6 +212,11 @@
 				})
 			},
 			inputChange() {
+
+				if(this.info.recommendBalance >= (this.info.price - this.denomination)) {
+					this.info.recommendBalance = this.info.price - this.denomination
+				}
+
 				//当拥有积分大于等于商品所需支付金额  输入积分不能大于商品所需支付金额
 				if(Number(this.max) >= Number(this.info.price)) {
 					if(Number(this.info.recommendBalance) <= Number(this.info.price)) {
@@ -231,15 +235,16 @@
 						this.info.payPrice = this.maxPayPrice
 					}
 				}
+
 				//当选择了优惠券  类型不为打折券时：
 				if(this.info.payPrice > 0 && (this.type == 0 || this.type == 20 || this.type == 50)) {
 					let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
-					this.info.payPrice = money.toFixed(2)
+					this.info.payPrice = Math.ceil(money).toFixed(2)
 				} else if(this.info.payPrice > 0 && this.type == 30) {
 					//当选择了优惠券  类型为打折券且满足使用门槛时：
-					if(this.info.payPrice > 0 && this.info.price >= this.condition) {
+					if(this.info.payPrice > 0 && this.info.payPrice >= this.condition) {
 						let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
-						this.info.payPrice = money.toFixed(2)
+						this.info.payPrice = Math.ceil(money).toFixed(2)
 					}
 				}
 			},
@@ -258,6 +263,7 @@
 						res.data.data.serviceTime = _this.getTime(res.data.data.serviceTime)
 						_this.max = res.data.data.availableBalance
 						_this.maxPayPrice = res.data.data.payPrice
+						_this.recommendBalance = res.data.data.recommendBalance
 
 						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
 							res.data.data.availableCoupon[i].show = false
@@ -302,7 +308,7 @@
 			//  优惠券  下标 名字 减去金额 类型  使用门槛 
 			sure(index, name, denomination, type, condition) {
 				this.sureIndex = index
-				
+
 				let sureCouponList = []
 
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
@@ -328,17 +334,28 @@
 					this.denomination = denomination
 					this.type = type
 					this.condition = condition
+					if(this.value) {
+						this.info.recommendBalance = (this.info.price - this.denomination) < this.info.availableBalance ? this.info.price - this.denomination : this.info.availableBalance
+					}else{
+						this.info.payPrice = this.info.price - this.denomination
+					}
 				} else {
 					this.userCouponId = ''
 					this.couponName = ''
 					this.denomination = 0
 					this.type = 0
 					this.condition = 0
+					if(this.value) {
+						this.info.recommendBalance = this.recommendBalance
+					}else{
+						this.info.payPrice = this.info.price - this.denomination
+					}
 				}
-				
-				console.log(sureCouponList)
+				console.log(this.denomination)
 
-				this.inputChange()
+				if(this.value){
+					this.inputChange()
+				}
 			},
 			toDetail(id) {
 				this.$router.push({

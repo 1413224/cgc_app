@@ -43,6 +43,7 @@
 							<div class="money">
 								<p>{{ item.price}} <span>元</span></p>
 								<p v-if="item.content != ''">{{ item.content}}</p>
+								<!--<p>消费奖励通用积分</p>-->
 							</div>
 							<div class="purchase" @click="toBuy(item.skuId)">购买</div>
 						</div>
@@ -164,9 +165,14 @@
 			justify-content: space-between;
 			flex-direction: column;
 			p:nth-child(1) {
+				width: 2.8rem;
 				font-size: 0.36rem;
 				line-height: 0.5rem;
 				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				-webkit-line-clamp: 1;
 				span {
 					font-size: 0.24rem;
 				}
@@ -185,7 +191,7 @@
 				display: flex;
 				align-items: center;
 				span {
-					width: 2.6rem;
+					width: 3rem;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;

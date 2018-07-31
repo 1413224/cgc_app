@@ -10,7 +10,7 @@
 							<p>{{balanceDetail.remark}}</p>
 						</div>
 					</div>
-					<div class="bottom" v-if="balanceDetail.type == 1 || balanceDetail.type == 4">
+					<div class="bottom" v-if="balanceDetail.type == 5">
 						<card>
 							<div slot="content" class="card-demo-flex card-demo-content01">
 								<div class="vux-1px-r">

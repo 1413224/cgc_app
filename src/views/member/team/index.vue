@@ -7,10 +7,10 @@
 					<p>{{totalNums}}</p>
 					<p>合伙人</p>
 				</div>
-				<!--<div class="right" @click="toQrcode">
+				<div class="right" @click="toQrcode" v-if="list.length > 0">
 					<img src="../../../assets/images/member/yq@2x.png" />
 					<span>我要邀请</span>
-				</div>-->
+				</div>
 			</div>
 
 			<div class="list-box">
