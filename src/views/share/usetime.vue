@@ -192,11 +192,13 @@
 
 						var i = _this.$refs.mySwiper.swiper.activeIndex
 					
-							
-							// alert(i)
-							// alert(_this.list[i].status)
+						
+							console.log(res.data)
 
-								if(_this.list[i].status == 0){
+							var datas = res.data
+
+
+								/*if(_this.list[i].status == 0){
 									_this.list[i].status = 1
 									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
 
@@ -205,12 +207,64 @@
 								}else{
 									_this.list[i].status = 2
 	
+								}*/
+
+								if(_this.list[i].status == 0){
+									if(datas.data == 1){
+
+										_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+										_this.outTime(_this.list[i],i) //设备剩余时间
+
+										_this.list[i].status = datas.data
+
+									}else if(datas.data == -1){
+										_this.$vux.toast.show({
+											width: '50%',
+											type: 'text',
+											position: 'top',
+											text: '请求超时'
+										})
+									}
+								}else{
+									alert(datas.data)
+									if(datas.data == -1){
+										_this.$vux.toast.show({
+											width: '50%',
+											type: 'text',
+											position: 'top',
+											text: '请求超时'
+										})
+									}else{
+										_this.list[i].status = datas.data
+									}
+									// _this.list[i].status = datas.data
 								}
 	
 							
 
 						
-					}
+					}else if(res.data.status == "goods-00003"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '共享设备更新状态失败'
+						})
+					}else if(res.data.status == "goods-00002"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '设备维修中'
+						})
+					}else if(res.data.status == "goods-00004"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '订单不存在'
+						})
+					} 
 				})
 				
 				// console.log(_this.list)
@@ -252,14 +306,13 @@
 					--info.canUseTime;
 					if(info.canUseTime ==0 ){
 
-						
 
 						_this.list.splice(i,1) 
 
 						// this.$refs.mySwiper.swiper.activeIndex
 						setTimeout(()=>{
 							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
-						})
+						},500)
 
 						if(_this.list.length ==0 ){
 							_this.$router.push({
@@ -275,13 +328,28 @@
 
 				var _this = this;
 
+
 				_this.remainTime = _this.setTime(overtime);
 
 				_this.clearTime = setInterval(function() {
 
 					if(overtime == 0) {
+
 						_this.useend();
-						
+
+						_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
+
+						setTimeout(() => {
+							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+						},500)
+
+						if(_this.list.length==0){
+							_this.$router.push({
+								paht:'/shop/my_order2'
+							})
+							
+						}
+
 						return;
 					}
 					--overtime;
@@ -311,6 +379,17 @@
 					itemId: id
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+
+						if(res.data.data == -1){
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'top',
+								text: '请求超时'
+							})
+							return;
+						}
+
 						if(_this.list.length > 0){
 							
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
@@ -319,11 +398,12 @@
 							// this.$refs.mySwiper.swiper.activeIndex
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
-							})
+							},500)
 						}else{
 							// alert(_this.list.length)
+							alert(0)
 							_this.$router.push({
-								path:'/shop/my_order'
+								path:'/shop/my_order2'
 							})
 						}
 					}
