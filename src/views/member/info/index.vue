@@ -17,7 +17,7 @@
 				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>
 			</group>
 			<group>
-				<cell class="list-item" title="我的二维码" is-link link="/member/purse/qrcode"><img class="code" src="../../../assets/images/member/code@2x.png" /></cell>
+				<cell class="list-item" title="我的二维码" is-link @click.native="goCode"><img class="code" src="../../../assets/images/member/code@2x.png" /></cell>
 				<cell class="list-item user-address" title="地址管理" is-link link="/member/address/index"></cell>
 			</group>
 			<group>
@@ -125,6 +125,15 @@
 					},
 					Cancel() {
 						_this.isC = true
+					}
+				})
+			},
+			goCode(){
+				this.$router.push({
+					path:"/member/purse/qrcode",
+					query:{
+						index:1,
+						text:'推广码'
 					}
 				})
 			}

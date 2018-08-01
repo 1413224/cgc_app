@@ -168,7 +168,9 @@
 		},
 		mounted() {
 			var _this = this
+			
 			window.addEventListener('scroll', this.handleScroll)
+
 		},
 		computed: {
 			swiper() {
@@ -200,9 +202,10 @@
 			handleScroll() {
 				var _this = this
 				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-				var oneOffsetTop = this.$refs.one.offsetTop
-				var twoOffsetTop = this.$refs.two.offsetTop
-				var threeOffsetTop = this.$refs.three.offsetTop
+				// var oneOffsetTop = _this.$refs.one.offsetTop
+				var oneOffsetTop = _this.$refs.one.getBoundingClientRect().top
+				var twoOffsetTop = _this.$refs.two.offsetTop
+				var threeOffsetTop = _this.$refs.three.offsetTop
 
 				if(scrollTop >= oneOffsetTop - 44 && scrollTop < twoOffsetTop - 44) {
 					_this.tabIndex = 0

@@ -8,7 +8,7 @@
 					<swiper-slide v-for="(item,index) in list" :key="index">
 						<div class="sw_wrap">
 							<div class="content">
-								<p class="num">NO:{{index}}</p>
+								<p class="num">NO:{{index + 1}}</p>
 								<p class="tit ellipsis">{{item.goodsName}}</p>
 								<p class="xinghao"><span></span>设备名称:{{item.shortName}}</p>
 							</div>
@@ -182,6 +182,43 @@
 				})
 			},
 			startEquipment(id, status) { //开启设备
+
+
+				var _this = this,
+					id = id,
+					status = status;
+				
+				if(status == 0 || status ==2){
+					_this.$dialog.show({
+						type:'warning',
+						headMessage:"是否开启设备？",
+						// message: '是否开启设备？',
+						buttons: ['确定', '取消'],
+						canel() {
+							// console.log('你点击了取消')
+						},
+						confirm() {
+							_this.goEquipment(id,status)
+							
+						},
+					});
+				}else if(status == 1){
+					_this.$dialog.show({
+						type:'warning',
+						headMessage:"是否暂停设备？",
+						// message: '是否暂停设备？',
+						buttons: ['确定', '取消'],
+						canel() {
+							// console.log('你点击了取消')
+						},
+						confirm() {
+							_this.goEquipment(id,status)
+							
+						},
+					});
+				}
+			},
+			goEquipment(id,status){
 				var _this = this
 				_this.$http.post(_this.url.share.changeEquipmentStatus, {
 					userId: _this.$store.state.user.userId,
@@ -193,9 +230,9 @@
 						var i = _this.$refs.mySwiper.swiper.activeIndex
 					
 						
-							console.log(res.data)
+						console.log(res.data)
 
-							var datas = res.data
+						var datas = res.data
 
 
 								/*if(_this.list[i].status == 0){
@@ -209,39 +246,43 @@
 	
 								}*/
 
-								if(_this.list[i].status == 0){
-									if(datas.data == 1){
+						if(_this.list[i].status == 0){
+							if(datas.data == 1){
 
-										_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-										_this.outTime(_this.list[i],i) //设备剩余时间
+								_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+								_this.outTime(_this.list[i],i) //设备剩余时间
 
-										_this.list[i].status = datas.data
+								_this.list[i].status = datas.data
 
-									}else if(datas.data == -1){
-										_this.$vux.toast.show({
-											width: '50%',
-											type: 'text',
-											position: 'top',
-											text: '请求超时'
-										})
-									}
-								}else{
-									alert(datas.data)
-									if(datas.data == -1){
-										_this.$vux.toast.show({
-											width: '50%',
-											type: 'text',
-											position: 'top',
-											text: '请求超时'
-										})
-									}else{
-										_this.list[i].status = datas.data
-									}
-									// _this.list[i].status = datas.data
-								}
+							}else if(datas.data == -1){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '请求超时'
+								})
+							}else if(datas.data == 0){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '设备使用中'
+								})
+							}
+						}else{
+							if(datas.data == -1){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '请求超时'
+								})
+							}else{
+								_this.list[i].status = datas.data
+							}
+							// _this.list[i].status = datas.data
+						}
 	
-							
-
 						
 					}else if(res.data.status == "goods-00003"){
 						_this.$vux.toast.show({
@@ -296,9 +337,6 @@
 					
 
 				}*/
-
-
-
 			},
 			outTime(info,i) { //计算所有设备的剩余时间
 				var _this = this
@@ -373,6 +411,29 @@
 				clearInterval(this.clearTime);
 			},
 			endOfUse(id) { //结束订单
+
+
+				var id = id,
+					_this = this;
+
+				_this.$dialog.show({
+					type:'warning',
+					headMessage:"是否结束订单？",
+					// message: '是否结束订单？',
+					buttons: ['确定', '取消'],
+					canel() {
+						// console.log('你点击了取消')
+					},
+					confirm() {
+						_this.goEndOfuse(id)
+						
+					},
+				});
+				
+			},
+			goEndOfuse(id){
+
+
 				var _this = this
 				_this.$http.post(_this.url.share.finishEquipmentOrder, {
 					userId: _this.$store.state.user.userId,
@@ -391,7 +452,7 @@
 						}
 
 						if(_this.list.length > 0){
-							
+							// alert(_this.list.length)
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
 							// alert(_this.list.length)
@@ -399,15 +460,43 @@
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 							},500)
+							// alert(_this.list.length)可提供参考
+							if(_this.list.length == 0){
+								_this.$router.push({
+									path:'/shop/my_order2'
+								})
+							}
 						}else{
 							// alert(_this.list.length)
-							alert(0)
+							// alert(0)
 							_this.$router.push({
 								path:'/shop/my_order2'
 							})
 						}
+					}else if(res.data.status == "goods-00003"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '状态更新失败'
+						})
+					}else if(res.data.status == "goods-00004"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '订单不存在'
+						})
+					}else if(res.data.status == "goods-00002"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '设备维修中'
+						})
 					}
 				})
+
 			}
 
 		}

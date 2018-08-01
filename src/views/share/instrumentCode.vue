@@ -51,6 +51,20 @@
 				</div>
 			</div>
 		</div>
+		<div class="bottomnav">
+			<div class="item">
+				<div class="wap" @click="goList">
+					<img src="../../assets/images/share/cylm.png" alt="">
+					<span>产业联盟</span>
+				</div>
+			</div>
+			<div class="item">
+				<div class="wap" @click="goDetail">
+					<img src="../../assets/images/share/dpu.png" alt="">
+					<span>进入店铺</span>
+				</div>
+			</div>
+		</div>
 	</section>
 </template>
 
@@ -62,7 +76,8 @@
 			return {
 				title: "仪器扫码",
 				infoData: {},
-				equipNumber: ''
+				equipNumber: '',
+				enterpriseId:''
 			}
 
 		},
@@ -99,11 +114,13 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
+
 						for(var i = 0; i < res.data.data.list.length; i++) {
 							res.data.data.list[i].serviceTime = _this.getTime(res.data.data.list[i].serviceTime)
 						}
 
 						_this.infoData = res.data.data
+						_this.enterpriseId = res.data.data.enterpriseId
 					}
 				})
 			},
@@ -142,6 +159,21 @@
 					}
 				})
 			},
+			goList(){
+				this.$router.push({
+					path:'/share/storelist'
+				})
+			},
+			goDetail(){
+				var _this=this
+				this.$router.push({
+					path:'/multi_user_mall',
+					query:{
+						id:_this.enterpriseId,
+						index:3
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -307,4 +339,34 @@
 			}
 		}
 	}
+
+	/*底部开始*/
+	.bottomnav{
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: .8rem;
+		line-height: .8rem;
+		display: flex;
+		/*border-top: 1px solid #000000;*/
+		box-shadow: -2px -2px 5px #ccc;
+		padding: 5px 0;
+		.item{
+			flex: 1;
+			text-align: center;
+			border-left: 1px solid #ccc;
+			&:first-child{
+				border-left: none;
+			}
+			.wap{
+				img{
+					width: .4rem;
+					height: .4rem;
+					position: relative;
+					top: .05rem;
+				}
+			}
+		}
+	}
+	/*底部结束*/
 </style>
