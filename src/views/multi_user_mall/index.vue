@@ -3,10 +3,10 @@
 		<settingHeader :title="title"></settingHeader>
 		<div v-if="!nohas">
 
-			<div class="one" v-if="showIndex==0">
-
-			</div>
-			<div class="two" v-if="showIndex==1">
+			<!-- <div class="one" v-if="showIndex==0">
+			
+			</div> -->
+			<div class="two" v-if="showIndex==0">
 				<div class="top2">
 					<div class="left">
 						<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
@@ -63,7 +63,7 @@
 				</div>
 			</div>
 			<!-- 服务开始 -->
-			<div class="three" v-if="showIndex==2">
+			<div class="three" v-if="showIndex==1">
 				<div class="top2">
 					<div class="left">
 						<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
@@ -103,7 +103,8 @@
 					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
 						<div class="item">
 							<div class="left">
-								<p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p>
+								<!-- <p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p> -->
+								<p>{{setServiceTime(skuList.serviceTime)}}</p>
 								<p>{{skuList.skuName}}</p>
 							</div>
 							<div class="right">
@@ -137,7 +138,7 @@
 			</div>
 			<!-- 服务结束 -->
 
-			<div class="four" v-if="showIndex==3">
+			<div class="four" v-if="showIndex==2">
 
 				<div class="logo-bg">
 					<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="" />
@@ -257,10 +258,11 @@
 				isChains: false, //联营
 				tabIndex: 0,
 				nohas: false,
-				showIndex: 3,
+				showIndex: 2,
 				chainsId: '', //联营企业角色id
 				allianceId: '', //联盟企业角色id
 				fuwuData: [],
+				skuList:[],
 				// radio:['1','2'],
 				// flags: false,
 				show: false,
@@ -291,33 +293,34 @@
 				showLoading: false,
 				showNomore: false,
 
-				navList: [{
+				navList: [
+					/*{
 						navTitle: '首页',
 						logo: './static/images/shop-bottom1.png',
 						activeLogo: './static/images/shop-bottom1-in.png',
 						show: true,
 						oIndex: 0
-					},
+					},*/
 					{
 						navTitle: '商品',
 						logo: './static/images/shop-bottom2.png',
 						activeLogo: './static/images/shop-bottom2-in.png',
-						show: false,
-						oIndex: 1
+						show: true,
+						oIndex: 0
 					},
 					{
 						navTitle: '服务',
 						logo: './static/images/shop-bottom3.png',
 						activeLogo: './static/images/shop-bottom3-in.png',
 						show: false,
-						oIndex: 2
+						oIndex: 1
 					},
 					{
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
 						activeLogo: './static/images/shop-bottom4-in.png',
 						show: true,
-						oIndex: 3
+						oIndex: 2
 					},
 				],
 				demoList: [{
@@ -717,11 +720,32 @@
 							
 						}
 						_this.fuwuData = res.data.data
+
+						_this.skuList = res.data.data
+
+
 					}
 				})
 			},
-			change(value, label) {
-				alert(value + label)
+			setServiceTime(serviceTime){
+				var time_str='';
+				if(serviceTime>=3600)
+				{
+					var hour = Math.floor(serviceTime / 3600);
+					time_str += hour + '时';
+					serviceTime -=hour*3600;
+				}
+				if(serviceTime>=60)
+				{
+					var minute = Math.floor(serviceTime / 60);
+					time_str += minute + '分';
+					serviceTime -=minute*60;
+				}
+				if(serviceTime>0)
+				{
+					time_str += serviceTime + '秒';
+				}
+				return time_str;
 			}
 
 		}
