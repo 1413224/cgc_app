@@ -52,7 +52,7 @@
 									</div>
 									<p class="title">{{item.goodsName}}</p>
 									<p class="price"><span class="jg">¥ {{item.minPrice}}</span></p>
-									<p class="oldprice"><span>¥{{item.maxOriginPrice}}</span><span>销量{{item.salesNum}}</span></p>
+									<p class="oldprice"><span v-if="item.minPrice != item.minOriginPrice">¥{{item.minOriginPrice}}</span><span>销量{{item.salesNum}}</span></p>
 								</div>
 							</div>
 							<loading v-if="showLoading"></loading>
@@ -420,6 +420,8 @@
 
 				console.log(this.prType)
 				console.log(this.hasStock)
+				
+				this.curPage = 1
 
 				this.getGoodsList()
 			},
