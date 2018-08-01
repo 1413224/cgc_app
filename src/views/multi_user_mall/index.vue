@@ -533,6 +533,10 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+						// alert(0)
+						if(res.data.data.length ==0 ){
+							
+						}
 						_this.fuwuData = res.data.data
 						/*_this.radio = res.data.data[0].equipList
 						console.log(_this.radio)*/

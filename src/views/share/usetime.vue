@@ -8,7 +8,7 @@
 					<swiper-slide v-for="(item,index) in list" :key="index">
 						<div class="sw_wrap">
 							<div class="content">
-								<p class="num">NO:{{index}}</p>
+								<p class="num">NO:{{index + 1}}</p>
 								<p class="tit ellipsis">{{item.goodsName}}</p>
 								<p class="xinghao"><span></span>设备名称:{{item.shortName}}</p>
 							</div>
@@ -193,9 +193,9 @@
 						var i = _this.$refs.mySwiper.swiper.activeIndex
 					
 						
-							console.log(res.data)
+						console.log(res.data)
 
-							var datas = res.data
+						var datas = res.data
 
 
 								/*if(_this.list[i].status == 0){
@@ -209,39 +209,43 @@
 	
 								}*/
 
-								if(_this.list[i].status == 0){
-									if(datas.data == 1){
+						if(_this.list[i].status == 0){
+							if(datas.data == 1){
 
-										_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-										_this.outTime(_this.list[i],i) //设备剩余时间
+								_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+								_this.outTime(_this.list[i],i) //设备剩余时间
 
-										_this.list[i].status = datas.data
+								_this.list[i].status = datas.data
 
-									}else if(datas.data == -1){
-										_this.$vux.toast.show({
-											width: '50%',
-											type: 'text',
-											position: 'top',
-											text: '请求超时'
-										})
-									}
-								}else{
-									alert(datas.data)
-									if(datas.data == -1){
-										_this.$vux.toast.show({
-											width: '50%',
-											type: 'text',
-											position: 'top',
-											text: '请求超时'
-										})
-									}else{
-										_this.list[i].status = datas.data
-									}
-									// _this.list[i].status = datas.data
-								}
+							}else if(datas.data == -1){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '请求超时'
+								})
+							}else if(datas.data == 0){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '设备使用中'
+								})
+							}
+						}else{
+							if(datas.data == -1){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '请求超时'
+								})
+							}else{
+								_this.list[i].status = datas.data
+							}
+							// _this.list[i].status = datas.data
+						}
 	
-							
-
 						
 					}else if(res.data.status == "goods-00003"){
 						_this.$vux.toast.show({
@@ -391,7 +395,7 @@
 						}
 
 						if(_this.list.length > 0){
-							
+							// alert(_this.list.length)
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
 							// alert(_this.list.length)
@@ -399,13 +403,40 @@
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 							},500)
+							// alert(_this.list.length)可提供参考
+							if(_this.list.length == 0){
+								_this.$router.push({
+									path:'/shop/my_order2'
+								})
+							}
 						}else{
 							// alert(_this.list.length)
-							alert(0)
+							// alert(0)
 							_this.$router.push({
 								path:'/shop/my_order2'
 							})
 						}
+					}else if(res.data.status == "goods-00003"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '状态更新失败'
+						})
+					}else if(res.data.status == "goods-00004"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '订单不存在'
+						})
+					}else if(res.data.status == "goods-00002"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '设备维修中'
+						})
 					}
 				})
 			}
