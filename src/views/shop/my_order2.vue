@@ -433,8 +433,7 @@
 					},
 					confirm() {
 						_this.$http.post(_this.url.order.deleteOrderByOrderSn, {
-							//userId: _this.$store.state.user.userId,
-							userId: 'userDev01',
+							userId: _this.$store.state.user.userId,
 							orderSn: orderSn,
 						}).then((res) => {
 							if(res.data.status == "00000000") {
@@ -447,7 +446,6 @@
 								_this.getOrderList()
 							}
 						})
-
 					}
 				})
 			},
@@ -464,8 +462,8 @@
 					},
 					confirm() {
 						_this.$http.post(_this.url.order.cancelOrderByOrderSn, {
-							//userId: _this.$store.state.user.userId,
-							userId: 'userDev01',
+							userId: _this.$store.state.user.userId,
+//							userId: 'userDev01',
 							orderSn: orderSn,
 						}).then((res) => {
 							if(res.data.status == "00000000") {

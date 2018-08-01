@@ -4,10 +4,61 @@
 		<div v-if="!nohas">
 
 			<div class="one" v-show="showIndex==0">
-				1
+
 			</div>
 			<div class="two" v-show="showIndex==1">
-				2
+				<div class="top2">
+					<div class="left">
+						<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
+						<div class="middle">
+							<p>{{info.enterpriseName}}</p>
+							<div>
+								<img class="left-img" src="../../assets/images/multi_user_mall/position.png">
+								<p>{{info.address}}</p>
+								<img class="right-img" src="../../assets/images/multi_user_mall/right.png">
+							</div>
+						</div>
+					</div>
+					<div class="right">
+						<p @click="changeAlliance(info.allianceId)">{{isAlliance?'已关注':'关注'}}</p>
+						<p>{{info.allianceConcern}}人关注</p>
+					</div>
+				</div>
+				<div class="searchBox">
+					<div class="search">
+						<img :src="'./static/images/ss.png'" />
+						<input type="text" placeholder="搜索商品" @click="goSearch">
+					</div>
+				</div>
+				<ul class="pr-nav">
+					<li v-for="(item,index) in prList" :key="index" :class="{'blue':prNavIndex == index}" @click="prNavClick(index)">
+						{{item.title}}
+						<div class="sjx" v-if="index == 0">
+							<img class="r180" :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+						</div>
+						<div class="sjx" v-if="index == 2" :class="{'r180':(prNavIndex == 2) && huan}">
+							<img :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+							<img :src="'./static/images/x.png'" />
+						</div>
+					</li>
+				</ul>
+				<div class="pro-allbox">
+					<scroll :pullingUp="true" @pullingUp="pullingUp" :listenScroll="true" @scroll="scroll" @scrollEnd="scrollEnd" class="wrapper" :class="{'h':!$store.state.page.isWx}">
+						<div class="content">
+							<div class="item-box">
+								<div class="item" v-for="(item,index) in caiList" :key="index">
+									<div class="da-box">
+										<img :src="item.img" alt="" />
+									</div>
+									<p class="title">{{item.title}}</p>
+									<p class="price"><span class="jg" v-if="item.money">¥ {{item.money}}</span></p>
+									<p class="oldprice"><span>¥4355</span><span>销量4714</span></p>
+								</div>
+							</div>
+						</div>
+					</scroll>
+
+				</div>
 			</div>
 			<!-- 服务开始 -->
 			<div class="three" v-show="showIndex==2">
@@ -39,7 +90,7 @@
 							<div class="right">
 								<div class="money">
 									<p>{{skuList.price}} <span>元</span></p>
-									<p>消费奖励通用积分</p>
+									<p v-if="item.content != ''">{{ item.content}}</p>
 								</div>
 								<div class="purchase" @click="buyEquiment(item.equipList,skuList.skuId)">购买</div>
 								<!-- $router.push({path:'/share/comfirmOrder'}) -->
@@ -131,18 +182,19 @@
 				</div>
 			</div>
 			<div class="back-index" :class="{'bottom2':info.isAlliance != 1 && info.isChains != 1}" @click="$router.push({path:'/share/storelist'})">
-
 				<p>返回</p>
 				<p>首页</p>
 			</div>
-			<div class="foot-box" v-if="info.isAlliance == 1 || info.isChains == 1">
-				<ul>
-					<li v-if="item.show" v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
-						<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
-						<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
-					</li>
-				</ul>
-			</div>
+			<transition enter-active-class="fadeInUp animated" leave-active-class="zoomOut animated" :duration="{ enter: 150, leave: 100 }">
+				<div class="foot-box" v-if="(info.isAlliance == 1 || info.isChains == 1) && showFoot">
+					<ul>
+						<li v-if="item.show" v-for="(item,index) in navList" :key="index" @click="navActive(index,item.oIndex)">
+							<img :src="navIndex == index?item.activeLogo:item.logo" alt="" />
+							<p :class="{'blue':navIndex == index}">{{item.navTitle}}</p>
+						</li>
+					</ul>
+				</div>
+			</transition>
 		</div>
 		<div class="no_data1" v-else>
 			<div class="pr">
@@ -157,6 +209,7 @@
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import noData from '@/components/noData'
 	import { Qrcode, Popup, CheckIcon, Radio, Checklist } from 'vux'
+	import scroll from '@/components/scroll'
 	export default {
 		data() {
 			return {
@@ -193,6 +246,25 @@
 				equipList: [],
 				skuId: '',
 				equipNumber: '',
+				prList: [{
+						title: '综合',
+						s: true
+					},
+					{
+						title: '销量'
+					},
+					{
+						title: '价格',
+						s: true,
+						x: true
+					},
+					{
+						title: '仅看有货'
+					}
+				],
+				prNavIndex: 0,
+				huan: false,
+				showFoot: true,
 
 				navList: [{
 						navTitle: '首页',
@@ -236,6 +308,37 @@
 						url: '/draw'
 					}
 				],
+				caiList: [{
+						img: './static/index/index_pro1.png',
+						title: '桂林漓江三日五星三人奢华之旅',
+						money: '52.00',
+						zf: '588.00',
+						dh: true
+					}, {
+						img: './static/index/index_pro2.png',
+						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
+						money: '52.00',
+					},
+					{
+						img: './static/index/index_pro3.png',
+						title: 'Swarovski 施华洛世奇 女士Iconic Swan黑天鹅',
+						money: '880.00'
+					}, {
+						img: './static/index/index_pro4.png',
+						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
+						money: '1520.00'
+					},
+					{
+						img: './static/index/index_pro5.png',
+						title: 'ESTĒE LAUDER 雅诗兰黛 小棕瓶面部精华',
+						money: '688.00'
+					},
+					{
+						img: './static/index/index_pro6.png',
+						title: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米',
+						money: '196.00'
+					}
+				],
 			}
 		},
 		components: {
@@ -247,7 +350,8 @@
 			Radio,
 			Checklist,
 			CheckIcon,
-			noData
+			noData,
+			scroll
 		},
 		created() {
 			this.getBasicInfo()
@@ -261,10 +365,29 @@
 			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
 			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
 		},
-		mounted() {
-			// this.getEquipmentInfo()
-		},
+		mounted() {},
 		methods: {
+			pullingUp(){
+				console.log(123)
+			},
+			scroll(pos,scroll) {
+				if(pos.y > scroll.maxScrollY){
+					this.showFoot = false
+				}else{
+					this.showFoot = true
+				}
+			},
+			scrollEnd() {
+				this.showFoot = true
+			},
+			prNavClick(index) {
+				this.prNavIndex = index
+				if(index == 2) {
+					this.huan = !this.huan
+				} else if(index == 1) {
+					this.huan = true
+				}
+			},
 			purchase() {
 				if(this.equipNumber != '' && this.skuId != '') {
 					this.$router.push({
@@ -552,6 +675,251 @@
 	}
 </script>
 <style lang="less" scoped>
+	.multi_user_mall_box .two {
+		background-color: white;
+		.top2 {
+			height: 2rem;
+			background: url(../../../src/assets/images/multi_user_mall/bg.png) no-repeat;
+			background-size: cover;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 0.20rem;
+			box-sizing: border-box;
+			.left {
+				display: flex;
+				align-items: center;
+				.store-logo {
+					width: 1.20rem;
+					height: 1.20rem;
+					margin-right: 0.16rem;
+					background-color: rgba(213, 213, 214, 0.35);
+				}
+				.middle {
+					p:nth-child(1) {
+						font-size: 0.32rem;
+						font-family: PingFangSC-Medium;
+						color: rgba(255, 255, 255, 1);
+						margin-bottom: 0.23rem;
+					}
+					div {
+						display: flex;
+						align-items: center;
+						.left-img {
+							width: 0.28rem;
+							height: 0.28rem;
+						}
+						p {
+							width: 3.4rem;
+							font-size: 0.24rem;
+							font-family: PingFangSC-Regular;
+							color: rgba(255, 255, 255, 1);
+							margin: 0 0.07rem;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							-webkit-line-clamp: 2;
+							-webkit-box-orient: vertical;
+						}
+						.right-img {
+							width: 0.16rem;
+							height: 0.16rem;
+						}
+					}
+				}
+			}
+			.right {
+				p:nth-child(1) {
+					width: 1.16rem;
+					height: 0.46rem;
+					line-height: 0.46rem;
+					text-align: center;
+					border-radius: 33px;
+					border: 1px solid rgba(255, 255, 255, 1);
+					font-size: 0.24rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(255, 255, 255, 1);
+				}
+				p:nth-child(2) {
+					margin-top: 0.10rem;
+					font-size: 0.20rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(255, 255, 255, 1);
+					text-align: center;
+				}
+			}
+		}
+		.searchBox {
+			width: 100%;
+			background: #fff;
+			height: 1rem;
+			display: flex;
+			align-items: center;
+			padding: 0 0.20rem;
+			box-sizing: border-box;
+			.search {
+				position: relative;
+				width: 100%;
+				img {
+					width: 0.32rem;
+					height: 0.32rem;
+					position: absolute;
+					left: 0.4rem;
+					top: 50%;
+					transform: translate(-50%, -50%);
+				}
+				input {
+					vertical-align: middle;
+					width: 100%;
+					background: #F5F6FA;
+					border-radius: 3px;
+					color: #1A2642;
+					height: 0.66rem;
+					line-height: 0.66rem;
+					vertical-align: middle;
+					padding: 0rem 0rem 0rem 0.78rem;
+					box-sizing: border-box;
+				}
+				input::-webkit-input-placeholder {
+					color: #90A2C7 !important; // WebKit browsers 
+				}
+				input:-moz-placeholder {
+					color: #90A2C7 !important; // Mozilla Firefox 4 to 18 
+				}
+				input::-moz-placeholder {
+					color: #90A2C7 !important; //Mozilla Firefox 19+ /
+				}
+				input:-ms-input-placeholder {
+					color: #90A2C7 !important; //Internet Explorer 10+ */
+				}
+			}
+		}
+		.pr-nav {
+			display: flex;
+			height: 0.90rem;
+			border-top: 1px solid rgba(228, 235, 251, 1);
+			li {
+				flex: 1;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+				.sjx {
+					display: flex;
+					flex-direction: column;
+					margin-left: 0.10rem;
+					img {
+						width: 0.12rem;
+					}
+					img:nth-child(2) {
+						margin-top: 0.05rem;
+					}
+				}
+				.r180 {
+					transform: rotate(180deg);
+				}
+			}
+			.blue {
+				color: #336FFF;
+			}
+		}
+		.pro-allbox {
+			background-color: #F5F8F9;
+			.wrapper {
+				position: fixed;
+				top: 3.90rem;
+				bottom: 0;
+				width: 100%;
+				overflow: hidden;
+				.content {
+					padding-top: 0.20rem;
+					padding-bottom: 1.20rem;
+				}
+			}
+			.h {
+				top: 4.90rem;
+			}
+			.item-box {
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				padding: 0 0.1rem;
+				.item {
+					width: 3.62rem;
+					margin-bottom: 0.06rem;
+					background-color: white;
+					position: relative;
+					.po-img {
+						position: absolute;
+						top: 0;
+						left: 0;
+						img {
+							width: 1.28rem;
+							height: 0.4rem;
+						}
+					}
+					.da-box {
+						height: 3.62rem;
+						overflow: hidden;
+						img {
+							width: 100%;
+							height: auto;
+						}
+					}
+					.title {
+						width: 100%;
+						box-sizing: border-box;
+						padding: 0 0.17rem;
+						font-size: 0.26rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(34, 34, 34, 1);
+						height: 0.76rem;
+						line-height: 0.38rem;
+						margin-top: 0.1rem;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
+					}
+					.price {
+						padding: 0.13rem 0.17rem 0.2rem 0.17rem;
+						.jg {
+							font-size: 0.28rem;
+							font-family: PingFangSC-Semibold;
+							color: rgba(242, 48, 48, 1);
+						}
+					}
+					.oldprice {
+						display: flex;
+						justify-content: space-between;
+						font-size: 0.24rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(144, 162, 199, 1);
+						padding: 0 0.17rem 0.17rem 0.17rem;
+						box-sizing: border-box;
+						span:nth-child(1) {
+							text-decoration: line-through;
+						}
+					}
+				}
+			}
+			.shuaxin {
+				width: 100%;
+				height: 0.88rem;
+				line-height: 0.88rem;
+				font-size: 0.28rem;
+				text-align: center;
+				font-family: PingFangSC-Regular;
+				color: rgba(119, 119, 119, 1);
+				background: rgba(255, 255, 255, 1);
+			}
+		}
+	}
+	
 	.multi_user_mall_box .no_data1 {
 		height: 100%;
 		width: 100%;
@@ -578,9 +946,11 @@
 		/*padding-bottom: 1.33rem;*/
 		.logo-bg {
 			height: 2.80rem;
+			overflow: hidden;
 			img {
 				width: 100%;
 				height: 100%;
+				transform: scale(13);
 				display: block;
 				filter: brightness(.5)blur(2px);
 			}

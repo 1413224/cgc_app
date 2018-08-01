@@ -118,7 +118,7 @@
 						}
 					}).then((res) => {
 						if(res.data.status == "00000000") {
-							if(res.data.data){
+							if(res.data.data) {
 								_this.equipmentNum = res.data.data.num
 								_this.equipmentShow = res.data.data.num > 0 ? true : false
 							}
@@ -244,9 +244,11 @@
 							_this.getUserPayPassword()
 						}
 					}
-					
-					if(_this.$store.state.page.isLogin == 'true'){
+
+					if(_this.$store.state.page.isLogin == 'true') {
 						_this.getEquipment()
+					} else {
+						_this.equipmentShow = false
 					}
 				}
 
