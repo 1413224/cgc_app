@@ -182,6 +182,43 @@
 				})
 			},
 			startEquipment(id, status) { //开启设备
+
+
+				var _this = this,
+					id = id,
+					status = status;
+				
+				if(status == 0 || status ==2){
+					_this.$dialog.show({
+						type:'warning',
+						headMessage:"是否开启设备？",
+						// message: '是否开启设备？',
+						buttons: ['确定', '取消'],
+						canel() {
+							// console.log('你点击了取消')
+						},
+						confirm() {
+							_this.goEquipment(id,status)
+							
+						},
+					});
+				}else if(status == 1){
+					_this.$dialog.show({
+						type:'warning',
+						headMessage:"是否暂停设备？",
+						// message: '是否暂停设备？',
+						buttons: ['确定', '取消'],
+						canel() {
+							// console.log('你点击了取消')
+						},
+						confirm() {
+							_this.goEquipment(id,status)
+							
+						},
+					});
+				}
+			},
+			goEquipment(id,status){
 				var _this = this
 				_this.$http.post(_this.url.share.changeEquipmentStatus, {
 					userId: _this.$store.state.user.userId,
@@ -300,9 +337,6 @@
 					
 
 				}*/
-
-
-
 			},
 			outTime(info,i) { //计算所有设备的剩余时间
 				var _this = this
@@ -377,6 +411,29 @@
 				clearInterval(this.clearTime);
 			},
 			endOfUse(id) { //结束订单
+
+
+				var id = id,
+					_this = this;
+
+				_this.$dialog.show({
+					type:'warning',
+					headMessage:"是否结束订单？",
+					// message: '是否结束订单？',
+					buttons: ['确定', '取消'],
+					canel() {
+						// console.log('你点击了取消')
+					},
+					confirm() {
+						_this.goEndOfuse(id)
+						
+					},
+				});
+				
+			},
+			goEndOfuse(id){
+
+
 				var _this = this
 				_this.$http.post(_this.url.share.finishEquipmentOrder, {
 					userId: _this.$store.state.user.userId,
@@ -439,6 +496,7 @@
 						})
 					}
 				})
+
 			}
 
 		}
