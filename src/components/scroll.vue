@@ -81,11 +81,11 @@
 				dropUp: false
 			}
 		},
-		mounted() {
+		created() {
 			//保证在DOM渲染完毕后初始化better-scroll
-			setTimeout(() => {
-				this._initScroll();
-			}, 20)
+			this.$nextTick(()=>{
+				this._initScroll()
+			})
 		},
 		methods: {
 			_initScroll() {
@@ -137,6 +137,15 @@
 					this.scroll.on('scrollEnd', (pos) => {
 						if(this.listenScroll) {
 							me.$emit('scrollEnd', pos)
+						}
+					})
+				}
+				
+				if(this.listenScroll) {
+					let me = this
+					this.scroll.on('scrollStart', (pos) => {
+						if(this.listenScroll) {
+							me.$emit('scrollStart', pos)
 						}
 					})
 				}
@@ -196,9 +205,10 @@
 		},
 		watch: {
 			data() {
+				var _this = this
 				setTimeout(() => {
-					this.refresh()
-				}, this.refreshDelay)
+					_this.refresh()
+				}, _this.refreshDelay)
 			}
 		}
 	}

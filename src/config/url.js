@@ -57,6 +57,7 @@ var url = {
 		getAllianceConcern: uri1 + '/v1/enterprise/getAllianceConcern', //获取用户是否关注联盟企业角色接口
 		getChainsConcern: uri1 + '/v1/enterprise/getChainsConcern', //获取用户是否关注联盟企业角色
 		getEnterpriseListInfo: uri1 + '/public/v1/enterprise/getEnterpriseListInfo', //获取产业联盟企业列表信息接口
+		getGoodsList: uri1 + '/public/v1/enterprise/getGoodsList', //获取企业提供的商品列表信息接口
 	},
 	origin: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //微信授权
@@ -87,12 +88,12 @@ var url = {
 	share: {
 		getEquipmentInfo: uri4 + '/public/v1/goods/getEquipmentInfo', //获取设备详细信息接口
 		getEquipmentOrderConfirmInfo: uri4 + '/v1/goods/getEquipmentOrderConfirmInfo', //获取设备优惠券信息
-		getMyEquipmentInfo:uri4 +'/v1/goods/getMyEquipmentInfo',//获取设备列表信息接口
-		finishEquipmentOrder:uri4 +'/v1/goods/finishEquipmentOrder',//完成设备订单信息接口
-		changeEquipmentStatus:uri4 +'/v1/goods/changeEquipmentStatus',//变更设备状态信息接口
-		createEquipmentOrder:uri3 +'/v1/goods/createEquipmentOrder',//创建设备订单信息接口
-		getMyEquipmentNotice:uri4+'/v1/goods/getMyEquipmentNotice',//
-		getEquipmentInfo2:uri1 + '/public/v1/enterprise/getEquipmentInfo'//获取企业提供的服务列表信息
+		getMyEquipmentInfo: uri4 + '/v1/goods/getMyEquipmentInfo', //获取设备列表信息接口
+		finishEquipmentOrder: uri4 + '/v1/goods/finishEquipmentOrder', //完成设备订单信息接口
+		changeEquipmentStatus: uri4 + '/v1/goods/changeEquipmentStatus', //变更设备状态信息接口
+		createEquipmentOrder: uri3 + '/v1/goods/createEquipmentOrder', //创建设备订单信息接口
+		getMyEquipmentNotice: uri4 + '/v1/goods/getMyEquipmentNotice', //
+		getEquipmentInfo2: uri1 + '/public/v1/enterprise/getEquipmentInfo' //获取企业提供的服务列表信息
 	}
 
 }
