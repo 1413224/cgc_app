@@ -31,7 +31,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="suspend" v-show="infoItem.status == 1">
 				<div class="cont" @click="startEquipment(infoItem.itemId,infoItem.status)">
 					<img src="../../assets/images/share/button2.png" alt="" class="btn0">
