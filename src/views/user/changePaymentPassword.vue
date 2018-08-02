@@ -24,7 +24,7 @@
 		</div>
 		<div class="content bounceInRight animated" v-if="isRemember == 1">
 			<group gutter="0" class="input-div">
-				<x-input class="input-item" ref="oldpassword" v-model="oldpassword" placeholder="输入旧密码" type="number" :max="6" @on-change="oldpasswordChange"></x-input>
+				<x-input class="input-item" ref="oldpassword" v-model="oldpassword" placeholder="输入旧密码" type="password" :max="6" @on-change="oldpasswordChange"></x-input>
 			</group>
 			<div class="tip">
 				<x-button class="add-btn" @click.native="submit2" :show-loading="showLoading">下一步</x-button>
@@ -170,16 +170,16 @@
 			},
 			oldpasswordChange(val) {
 				if(val.length == 6) {
-					//					if(/^[0-9]+$/.test(val)) {
-					//						this.$refs.oldpassword.blur()
-					//					} else {
-					//						this.$vux.toast.show({
-					//							width: '60%',
-					//							type: 'text',
-					//							position: 'middle',
-					//							text: '请输入6位纯数字的支付密码'
-					//						})
-					//					}
+					if(/^[0-9]+$/.test(val)) {
+						this.$refs.oldpassword.blur()
+					} else {
+						this.$vux.toast.show({
+							width: '60%',
+							type: 'text',
+							position: 'middle',
+							text: '请输入6位纯数字的支付密码'
+						})
+					}
 					this.$refs.oldpassword.blur()
 				}
 			},

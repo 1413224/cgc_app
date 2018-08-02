@@ -70,8 +70,25 @@
 			payMode,
 			scroll
 		},
-		methods:{
-			loadData(){
+		created() {
+			var hiddenProperty = 'hidden' in document ? 'hidden' :
+				'webkitHidden' in document ? 'webkitHidden' :
+				'mozHidden' in document ? 'mozHidden' :
+				null;
+			var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+			var onVisibilityChange = function() {
+				if(!document[hiddenProperty]) {
+					document.title = '页面激活'
+					alert(1)
+				} else {
+					document.title = '页面非激活'
+					alert(2)
+				}
+			}
+			document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+		},
+		methods: {
+			loadData() {
 				console.log(1235)
 			}
 		},
