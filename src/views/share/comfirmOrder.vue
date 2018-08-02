@@ -91,7 +91,7 @@
 					</div>
 
 				</div>
-				<div class="btn" @click="show = false">关闭</div>
+				<div class="btn" @click="show = false">确定</div>
 			</div>
 
 		</popup>

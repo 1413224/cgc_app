@@ -28,7 +28,7 @@
 						</div>
 					</transition>
 
-					<div class="order_item" v-for="(item,index) in orderList" v-if="orderList.length > 0">
+					<div class="order_item" v-for="(item,index) in orderList" v-if="showList">
 						<div class="order_top">
 							<div class="left" @click="toShopDetail(item.enterpriseId)">
 								<img :src="'./static/images/shopLogo.png'" alt="" />
@@ -129,7 +129,7 @@
 					</div>
 					<Loading v-if="showLoading"></Loading>
 					<noMore v-if="showNo"></noMore>
-					<noData v-if="orderList.length == 0" :status="2" stateText="暂无订单"></noData>
+					<noData v-if="!showList" :status="2" stateText="暂无订单"></noData>
 				</div>
 			</div>
 		</div>
@@ -207,7 +207,8 @@
 				orderList: [],
 				timeOut: '',
 				move: true,
-				huan: false
+				huan: false,
+				showList:true
 			}
 		},
 		components: {
@@ -279,6 +280,8 @@
 							_this.orderList = res.data.data.list.concat(_this.orderList)
 						} else {
 							_this.orderList = res.data.data.list
+
+							_this.showList = res.data.data.list.length > 0 ? true : false
 						}
 
 						for(var i = 0; i < _this.orderList.length; i++) {
@@ -332,6 +335,8 @@
 				_this.status = index
 
 				_this.curPage = 1
+
+				_this.showList = true
 
 				_this.getOrderList()
 

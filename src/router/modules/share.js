@@ -47,7 +47,8 @@ const share =[
 		meta: {
 			navShow: true,
 			navIndex:3,
-			title:'门店列表'
+			title:'门店列表',
+			keepAlive:true
 		}
 	},
 	{

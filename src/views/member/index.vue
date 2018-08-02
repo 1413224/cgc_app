@@ -243,13 +243,24 @@
 		methods: {
 			toOrder(index) {
 				var _this = this
-				_this.$router.push({
-					path: '/shop/my_order2',
-					query: {
-						'tabNo': true,
-						'status':index
-					}
-				})
+				if(index == 1 || index ==2){
+					_this.$router.push({
+						path: '/shop/my_order2',
+						query: {
+							// 'tabNo': true,
+							'status':index,
+							'tabIndex':index
+						}
+					})
+				}else{
+					_this.$router.push({
+						path: '/shop/my_order2',
+						query: {
+							// 'tabNo': true,
+							'status':index,
+						}
+					})
+				}
 			},
 			getUserInfo() {
 				var _this = this

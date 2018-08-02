@@ -319,7 +319,7 @@
 						navTitle: '首页',
 						logo: './static/images/shop-bottom1.png',
 						activeLogo: './static/images/shop-bottom1-in.png',
-						show: true,
+						show: false,
 						oIndex: 0
 					},
 					{
@@ -423,6 +423,8 @@
 							this.scroll.on('scrollEnd', (pos) => {
 								_this.showFoot = true
 							})
+							
+							console.log(this.scroll)
 						}
 
 					} else {
@@ -459,6 +461,7 @@
 			},
 
 			prNavClick(index) {
+
 				if(index != 3) {
 					this.prNavIndex = index
 				}
@@ -468,7 +471,6 @@
 				} else if(index == 1) {
 					this.huan = true
 					this.prType = 2 //销量 2
-					this.InitScroll()
 				} else if(index == 2) {
 					this.huan = !this.huan
 					this.prType = this.huan ? 4 : 3 //价格  3 4
@@ -476,9 +478,6 @@
 					this.ishasStock = !this.ishasStock
 					this.hasStock = this.ishasStock ? 1 : 0 //库存 1 0
 				}
-
-				console.log(this.prType)
-				console.log(this.hasStock)
 
 				this.curPage = 1
 
@@ -527,6 +526,9 @@
 						'oIndex': iIndex
 					})
 				})
+				
+				
+				this.InitScroll()
 			},
 			toStoreQc(pinfo) {
 				var _this = this
