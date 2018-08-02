@@ -58,7 +58,8 @@
 					<div class="swiper-pagination" slot="pagination"></div>
 				</swiper>
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
-				<div v-if="list.length > 0">
+				<div v-if="showShop">
+				<!-- list.length > 0 -->
 					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
 						<div class="item">
 							<div class="logo">
@@ -81,7 +82,8 @@
 				<Loading v-if="showLoading"></Loading>
 				<noMore v-if="showNoMore"></noMore>
 				<div style="margin-top: 3px;">
-					<noData v-if="list.length == 0" :status="2" :stateText="hasDw?'暂无门店':'请允许获取您的当前位置'"></noData>
+					<noData v-if="!showShop" :status="2" :stateText="'暂无门店'"></noData>
+					<noData v-if="!showShop" :status="2" :stateText="'请允许获取您的当前位置'"></noData>
 				</div>
 			</div>
 		</div>
@@ -132,6 +134,7 @@
 
 	import { Group, XInput } from 'vux'
 	export default {
+		name:'storeList',
 		data() {
 			return {
 				title: '门店列表',
@@ -152,6 +155,7 @@
 				priceShang: false, //价格箭头
 				active: 1, //列表选中样式（地址）
 				items: null, //三级联动地址
+				showShop:true,
 				opPrice: [
 					/*'离我最近',
 					'价格最低'*/
@@ -310,7 +314,7 @@
 				var data = {
 					listType: _this.listType,
 					countryId: _this.countryId,
-					distance: _this.distance,
+					distance: _this.distance = _this.distance > 0 ? _this.distance : 5,
 					lat: _this.lat,
 					lng: _this.lng,
 					curPage: _this.curPage,
@@ -332,6 +336,7 @@
 					if(res.data.status == "00000000") {
 						if(res.data.data) {
 							_this.list = res.data.data.list
+							_this.showShop = _this.list.length > 0 ? true : false
 						}
 					}
 				})

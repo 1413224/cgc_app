@@ -2,6 +2,7 @@
 	<div id="app" ref="fBox" v-cloak>
 		<!--动画  页面缓存-->
 		<transition :name="viewTransition" :css="!!direction">
+		<!-- includeList -->
 			<keep-alive :include="includeList">
 				<router-view></router-view>
 			</keep-alive>
