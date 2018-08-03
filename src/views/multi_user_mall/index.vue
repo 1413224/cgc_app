@@ -3,67 +3,88 @@
 		<settingHeader :title="title"></settingHeader>
 		<div v-if="!nohas">
 
-			<!-- <div class="one" v-if="showIndex==0">
-			
-			</div> -->
-			<div class="two" v-if="showIndex==0">
-				<div class="top2">
-					<div class="left">
-						<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
-						<div class="middle">
-							<p>{{info.enterpriseName}}</p>
-							<div>
-								<img class="left-img" src="../../assets/images/multi_user_mall/position.png">
-								<p>{{info.address}}</p>
-								<img class="right-img" src="../../assets/images/multi_user_mall/right.png">
+			<div class="one" v-if="showIndex==0">
+
+			</div>
+			<div class="two" v-if="showIndex==1">
+				<popup v-model="isW" :show-mask="false" position="top">
+					<ul class="pr-nav2" ref="paNav2">
+						<li class="li" v-for="(item,index) in prList" :key="index" :class="[{'blue':prNavIndex == index || (index == 3 && ishasStock)}]" @click="prNavClick(index)">
+							{{item.title}}
+							<div class="sjx" v-if="index == 0">
+								<img class="r180" :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+							</div>
+							<div class="sjx" v-if="index == 2" :class="{'r180':(prNavIndex == 2) && huan}">
+								<img :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+								<img :src="'./static/images/x.png'" />
+							</div>
+						</li>
+					</ul>
+				</popup>
+
+				<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
+					<div class="content">
+						<div class="top2">
+							<div class="left">
+								<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
+								<div class="middle">
+									<p>{{info.enterpriseName}}</p>
+									<div>
+										<img class="left-img" src="../../assets/images/multi_user_mall/position.png">
+										<p>{{info.address}}</p>
+										<img class="right-img" src="../../assets/images/multi_user_mall/right.png">
+									</div>
+								</div>
+							</div>
+							<div class="right">
+								<p @click="changeAlliance(info.allianceId)">{{isAlliance?'已关注':'关注'}}</p>
+								<p>{{info.allianceConcern}}人关注</p>
 							</div>
 						</div>
-					</div>
-					<div class="right">
-						<p @click="changeAlliance(info.allianceId)">{{isAlliance?'已关注':'关注'}}</p>
-						<p>{{info.allianceConcern}}人关注</p>
-					</div>
-				</div>
-				<div class="searchBox">
-					<div class="search">
-						<img :src="'./static/images/ss.png'" />
-						<input type="text" placeholder="搜索商品" @click="goSearch">
-					</div>
-				</div>
-				<ul class="pr-nav">
-					<li v-for="(item,index) in prList" :key="index" :class="{'blue':prNavIndex == index}" @click="prNavClick(index)">
-						{{item.title}}
-						<div class="sjx" v-if="index == 0">
-							<img class="r180" :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+						<div class="searchBox">
+							<div class="search">
+								<img :src="'./static/images/ss.png'" />
+								<input type="text" placeholder="搜索商品" @click="goSearch">
+							</div>
 						</div>
-						<div class="sjx" v-if="index == 2" :class="{'r180':(prNavIndex == 2) && huan}">
-							<img :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
-							<img :src="'./static/images/x.png'" />
-						</div>
-					</li>
-				</ul>
-				<div class="pro-allbox">
-					<scroll :data="goodsList" :pullingUp="true" @pullingUp="pullingUp" :listenScroll="true" @scroll="scroll" @scrollEnd="scrollEnd" class="wrapper" :class="[{'h':!$store.state.page.isWx},{'b-white':goodsList.length == 0}]">
-						<div class="content">
-							<div class="item-box" v-if="goodsList.length > 0">
+
+						<ul class="pr-nav" ref="paNav">
+							<li class="li" v-for="(item,index) in prList" :key="index" :class="[{'blue':prNavIndex == index || (index == 3 && ishasStock)}]" @click="prNavClick(index)">
+								{{item.title}}
+								<div class="sjx" v-if="index == 0">
+									<img class="r180" :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+								</div>
+								<div class="sjx" v-if="index == 2" :class="{'r180':(prNavIndex == 2) && huan}">
+									<img :src="prNavIndex == index?'./static/images/s-in.png':'./static/images/s.png'" />
+									<img :src="'./static/images/x.png'" />
+								</div>
+							</li>
+						</ul>
+
+						<div class="pro-allbox">
+							<!--<scroll :data="goodsList" :pullingUp="true" @pullingUp="pullingUp" :listenScroll="true" @scroll="scroll" @scrollEnd="scrollEnd" class="wrapper" :class="[{'h':!$store.state.page.isWx},{'b-white':goodsList.length == 0}]">-->
+
+							<div class="item-box" v-if="showGoods">
 								<div class="item" v-for="(item,index) in goodsList" :key="index">
 									<div class="da-box">
 										<img v-if="item.logo" :src="item.logo.original" alt="" />
 									</div>
 									<p class="title">{{item.goodsName}}</p>
 									<p class="price"><span class="jg">¥ {{item.minPrice}}</span></p>
-									<p class="oldprice"><span v-if="item.minPrice != item.minOriginPrice">¥{{item.minOriginPrice}}</span><span>销量{{item.salesNum}}</span></p>
+									<p class="oldprice"><span class="op">{{item.minPrice != item.minOriginPrice?'¥'+item.minOriginPrice:''}}</span><span>销量{{item.salesNum}}</span></p>
 								</div>
 							</div>
-							<loading v-if="showLoading"></loading>
-							<noMore v-if="showNomore"></noMore>
-							<noData v-if="goodsList.length == 0" :status="2" stateText="暂无商品"></noData>
+
+							<!--</scroll>-->
 						</div>
-					</scroll>
+						<Loading v-if="showLoading"></Loading>
+						<noMore v-if="showNomore"></noMore>
+						<noData v-if="!showGoods" :status="2" stateText="暂无商品"></noData>
+					</div>
 				</div>
 			</div>
 			<!-- 服务开始 -->
-			<div class="three" v-if="showIndex==1">
+			<div class="three" v-if="showIndex==2">
 				<div class="top2">
 					<div class="left">
 						<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
@@ -103,8 +124,7 @@
 					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
 						<div class="item">
 							<div class="left">
-								<!-- <p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p> -->
-								<p>{{setServiceTime(skuList.serviceTime)}}</p>
+								<p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p>
 								<p>{{skuList.skuName}}</p>
 							</div>
 							<div class="right">
@@ -138,7 +158,7 @@
 			</div>
 			<!-- 服务结束 -->
 
-			<div class="four" v-if="showIndex==2">
+			<div class="four" v-if="showIndex==3">
 
 				<div class="logo-bg">
 					<img :src="logo?logo:'./static/shop/storeLogo.png'" alt="" />
@@ -229,6 +249,7 @@
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import { Qrcode, Popup, CheckIcon, Radio, Checklist } from 'vux'
 	import scroll from '@/components/scroll'
+	import BScroll from 'better-scroll'
 	import Loading from '@/components/loading'
 	import noMore from '@/components/noMore'
 	import noData from '@/components/noData'
@@ -258,11 +279,10 @@
 				isChains: false, //联营
 				tabIndex: 0,
 				nohas: false,
-				showIndex: 2,
+				showIndex: 3,
 				chainsId: '', //联营企业角色id
 				allianceId: '', //联盟企业角色id
 				fuwuData: [],
-				skuList:[],
 				// radio:['1','2'],
 				// flags: false,
 				show: false,
@@ -290,37 +310,38 @@
 				pageSize: 20,
 				prType: 0,
 				hasStock: 0,
+				ishasStock: false,
 				showLoading: false,
 				showNomore: false,
+				showGoods: true,
 
-				navList: [
-					/*{
+				navList: [{
 						navTitle: '首页',
 						logo: './static/images/shop-bottom1.png',
 						activeLogo: './static/images/shop-bottom1-in.png',
-						show: true,
+						show: false,
 						oIndex: 0
-					},*/
+					},
 					{
 						navTitle: '商品',
 						logo: './static/images/shop-bottom2.png',
 						activeLogo: './static/images/shop-bottom2-in.png',
-						show: true,
-						oIndex: 0
+						show: false,
+						oIndex: 1
 					},
 					{
 						navTitle: '服务',
 						logo: './static/images/shop-bottom3.png',
 						activeLogo: './static/images/shop-bottom3-in.png',
 						show: false,
-						oIndex: 1
+						oIndex: 2
 					},
 					{
 						navTitle: '简介',
 						logo: './static/images/shop-bottom4.png',
 						activeLogo: './static/images/shop-bottom4-in.png',
 						show: true,
-						oIndex: 2
+						oIndex: 3
 					},
 				],
 				demoList: [{
@@ -337,6 +358,7 @@
 					}
 				],
 				goodsList: [],
+				isW: false
 			}
 		},
 		components: {
@@ -364,11 +386,52 @@
 
 			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
 			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
-		},
-		mounted() {
 
+			this.InitScroll()
 		},
+		mounted() {},
 		methods: {
+			InitScroll() {
+				var _this = this
+				this.$nextTick(() => {
+					if(!this.scroll) {
+						if(this.$refs.wrapper) {
+							this.scroll = new BScroll(this.$refs.wrapper, {
+								click: true,
+								scrollY: true,
+								pullUpLoad: {
+									threshold: -30
+								}
+							})
+							this.scroll.on('pullingUp', (pos) => {
+								this.pullingUp()
+								this.$nextTick(function() {
+									this.scroll.finishPullUp()
+									this.scroll.refresh()
+								})
+							})
+							this.scroll.on('scroll', (pos) => {
+
+								_this.isW = pos.y <= -180 ? true : false
+
+								if(pos.y > this.scroll.maxScrollY) {
+									_this.showFoot = false
+								} else {
+									_this.showFoot = true
+								}
+							})
+							this.scroll.on('scrollEnd', (pos) => {
+								_this.showFoot = true
+							})
+							
+							console.log(this.scroll)
+						}
+
+					} else {
+						this.scroll.refresh()
+					}
+				})
+			},
 			pullingUp() {
 				var _this = this
 
@@ -390,25 +453,19 @@
 								_this.showLoading = true
 								_this.showNoMore = false
 							} else {
-								_this.showLoading = true
+								_this.showLoading = false
 								_this.showNoMore = true
 							}
 						}
 					})
 			},
-			scroll(pos, scroll) {
-				if(pos.y > scroll.maxScrollY) {
-					this.showFoot = false
-				} else {
-					this.showFoot = true
-				}
-			},
-			scrollEnd() {
-				var _this = this
-				_this.showFoot = true
-			},
+
 			prNavClick(index) {
-				this.prNavIndex = index
+
+				if(index != 3) {
+					this.prNavIndex = index
+				}
+
 				if(index == 0) {
 					this.prType = 0 //综合 0
 				} else if(index == 1) {
@@ -417,13 +474,11 @@
 				} else if(index == 2) {
 					this.huan = !this.huan
 					this.prType = this.huan ? 4 : 3 //价格  3 4
+				} else if(index == 3) {
+					this.ishasStock = !this.ishasStock
+					this.hasStock = this.ishasStock ? 1 : 0 //库存 1 0
 				}
 
-				this.hasStock = this.prNavIndex == 3 ? 1 : 0 //库存 1 0
-
-				console.log(this.prType)
-				console.log(this.hasStock)
-				
 				this.curPage = 1
 
 				this.getGoodsList()
@@ -471,6 +526,9 @@
 						'oIndex': iIndex
 					})
 				})
+				
+				
+				this.InitScroll()
 			},
 			toStoreQc(pinfo) {
 				var _this = this
@@ -512,7 +570,9 @@
 
 						if(res.data.data.isAlliance == 1) {
 							//获取联盟信息
-							_this.getAllianceConcern(_this.info.allianceId)
+							if(_this.$store.state.page.isLogin == 'true') {
+								_this.getAllianceConcern(_this.info.allianceId)
+							}
 
 							//获取商品
 							_this.allianceId = res.data.data.allianceId
@@ -520,12 +580,12 @@
 						}
 						if(res.data.data.isChains == 1) {
 							//获取联营信息
-							_this.getChainsConcern(res.data.data.chainsId)
-							_this.chainsId = res.data.data.chainsId //联营企业
-						}
-
-						if(_this.navIndex == 2) {
-							_this.getEquipmentInfo(_this.chainsId) //联营企业服务信息
+							if(_this.$store.state.page.isLogin == 'true') {
+								_this.getChainsConcern(res.data.data.chainsId)
+							}
+							//获取服务
+							_this.chainsId = res.data.data.chainsId
+							_this.getEquipmentInfo()
 						}
 
 					} else if(res.data.status == 'plat-0003') {
@@ -545,8 +605,8 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						_this.goodsList = res.data.data.list
+						_this.showGoods = res.data.data.list.length > 0 ? true : false
 					}
 				})
 			},
@@ -716,36 +776,15 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						// alert(0)
-						if(res.data.data.length ==0 ){
-							
+						if(res.data.data.length == 0) {
+
 						}
 						_this.fuwuData = res.data.data
-
-						_this.skuList = res.data.data
-
-
 					}
 				})
 			},
-			setServiceTime(serviceTime){
-				var time_str='';
-				if(serviceTime>=3600)
-				{
-					var hour = Math.floor(serviceTime / 3600);
-					time_str += hour + '时';
-					serviceTime -=hour*3600;
-				}
-				if(serviceTime>=60)
-				{
-					var minute = Math.floor(serviceTime / 60);
-					time_str += minute + '分';
-					serviceTime -=minute*60;
-				}
-				if(serviceTime>0)
-				{
-					time_str += serviceTime + '秒';
-				}
-				return time_str;
+			change(value, label) {
+				alert(value + label)
 			}
 
 		}
@@ -775,7 +814,7 @@
 					p:nth-child(1) {
 						font-size: 0.32rem;
 						font-family: PingFangSC-Medium;
-						color:#1A2642;
+						color: #1A2642;
 						margin-bottom: 0.23rem;
 					}
 					div {
@@ -811,10 +850,12 @@
 					line-height: 0.46rem;
 					text-align: center;
 					border-radius: 33px;
-					border: 1px solid #1A2642;
+					/*border: 1px solid #1A2642;*/
+					background-color: #336FFF;
+					color: white;
 					font-size: 0.24rem;
 					font-family: PingFangSC-Regular;
-					color: #1A2642;
+					/*color: #1A2642;*/
 				}
 				p:nth-child(2) {
 					margin-top: 0.10rem;
@@ -829,6 +870,61 @@
 	
 	.multi_user_mall_box .two {
 		background-color: white;
+		.wrapper {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+			overflow: hidden;
+			.content {
+				padding-bottom: 1.20rem;
+			}
+		}
+		.b-white {
+			background-color: white;
+		}
+		.h {
+			top: 46px;
+		}
+		.pr-nav,
+		.pr-nav2 {
+			display: flex;
+			height: 0.90rem;
+			border-top: 1px solid rgba(228, 235, 251, 1);
+			background-color: white;
+			z-index: 15;
+			li {
+				flex: 1;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+				.sjx {
+					display: flex;
+					flex-direction: column;
+					margin-left: 0.10rem;
+					img {
+						width: 0.12rem;
+					}
+					img:nth-child(2) {
+						margin-top: 0.05rem;
+					}
+				}
+				.r180 {
+					transform: rotate(180deg);
+				}
+			}
+			.blue {
+				color: #336FFF;
+			}
+		}
+		.pr-nav2 {
+			z-index: 15;
+			background-color: white;
+		}
 		.top2 {
 			height: 2rem;
 			background: url(../../../src/assets/images/multi_user_mall/bg.png) no-repeat;
@@ -946,57 +1042,9 @@
 				}
 			}
 		}
-		.pr-nav {
-			display: flex;
-			height: 0.90rem;
-			border-top: 1px solid rgba(228, 235, 251, 1);
-			li {
-				flex: 1;
-				height: 100%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				font-size: 0.28rem;
-				font-family: PingFangSC-Regular;
-				color: rgba(26, 38, 66, 1);
-				.sjx {
-					display: flex;
-					flex-direction: column;
-					margin-left: 0.10rem;
-					img {
-						width: 0.12rem;
-					}
-					img:nth-child(2) {
-						margin-top: 0.05rem;
-					}
-				}
-				.r180 {
-					transform: rotate(180deg);
-				}
-			}
-			.blue {
-				color: #336FFF;
-			}
-		}
 		.pro-allbox {
 			background-color: #F5F8F9;
-			.wrapper {
-				position: fixed;
-				top: 3.90rem;
-				bottom: 0;
-				width: 100%;
-				overflow: hidden;
-				.content {
-					padding-top: 0.08rem;
-					padding-bottom: 1.20rem;
-				}
-			}
-			.b-white {
-				background-color: white;
-			}
-			.h {
-				top: 4.90rem;
-			}
+			padding-top: 0.06rem;
 			.item-box {
 				display: flex;
 				justify-content: space-between;
@@ -1056,7 +1104,7 @@
 						color: rgba(144, 162, 199, 1);
 						padding: 0 0.17rem 0.17rem 0.17rem;
 						box-sizing: border-box;
-						span:nth-child(1) {
+						.op {
 							text-decoration: line-through;
 						}
 					}
@@ -1420,7 +1468,9 @@
 	
 	.tops {
 		height: 3rem;
-		background: linear-gradient(-90deg, rgba(71, 172, 255, 1), rgba(34, 116, 255, 1));
+		/*background: linear-gradient(-90deg, rgba(71, 172, 255, 1), rgba(34, 116, 255, 1));*/
+		background: url(../../../src/assets/images/multi_user_mall/shop-bg.png) no-repeat;
+		background-size: cover;
 		display: flex;
 		color: #fff;
 		font-size: 0.24rem;

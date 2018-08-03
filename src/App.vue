@@ -199,9 +199,16 @@
 
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
+					
+					if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
+							_this.getEquipment()
+						} else {
+							_this.equipmentShow = false
+						}
+					
 					if(sessionStorage['_openid_']) {
 
-						_this.getEquipment()
+						
 
 						//控制新人奖励弹窗
 						if(sessionStorage.getItem('isZc')) {
@@ -246,7 +253,7 @@
 						}
 					}
 
-					if(_this.$store.state.page.isLogin == 'true') {
+					if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
 						_this.getEquipment()
 					} else {
 						_this.equipmentShow = false

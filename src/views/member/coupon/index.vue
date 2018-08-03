@@ -38,7 +38,7 @@
 		</div>
 
 		<div class="couponList">
-			<div class="wrapper" :class="{'top46':$store.state.page.isWx}" ref="wrapper">
+			<div class="wrapper" :class="{'top46':!$store.state.page.isWx}" ref="wrapper">
 				<div class="content">
 
 					<div class="couponlist-box" v-if="couponList.length>0">
@@ -658,7 +658,7 @@
 				}
 			}
 			.top46 {
-				top: 46px!important;
+				top: 11%!important;
 			}
 			.bgImgThree {
 				/*background: url(../../../assets/images/user/rollBg4.png) no-repeat;*/

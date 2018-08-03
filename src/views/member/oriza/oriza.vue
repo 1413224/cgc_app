@@ -70,7 +70,7 @@
 							if(res.data.status == "00000000") {
 								_this.$store.commit('UPDATE_USER_INFO', res.data.data)
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-								if(_this.url2 == '/share/instrumentCode') {
+								if(_this.url2 == '/share/instrumentCode' || _this.url2 == '/multi_user_mall') {
 									_this.$router.push({
 										path: localStorage['beforeLoginUrl']
 									})
@@ -85,7 +85,7 @@
 						
 					} else {
 						var url = localStorage['beforeLoginUrl'].split('?')[0]
-						if(url == '/share/instrumentCode') {
+						if(url == '/share/instrumentCode' || url == '/multi_user_mall') {
 							_this.$router.push({
 								path: localStorage['beforeLoginUrl']
 							})
