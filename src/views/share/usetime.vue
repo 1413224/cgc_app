@@ -339,10 +339,11 @@
 			},
 			outTime(info,i) { //计算所有设备的剩余时间
 				var _this = this
-				setInterval(function() {
+				i = setInterval(function() {
 					--info.canUseTime;
 					if(info.canUseTime ==0 ){
 
+						clearInterval(i);
 
 						_this.list.splice(i,1) 
 
@@ -357,6 +358,7 @@
 							})
 						}
 
+						return;
 						
 					}
 				}, 998);
