@@ -533,6 +533,13 @@ const memberModule = [{
 		meta: {
 			title: '微信支付'
 		}
+	},{
+		path: '/member/pay/scan_pay',
+		name: 'scan_pay',
+		component: resolve => require(['@/views/member/pay/scan_pay'], resolve),
+		meta: {
+			title: '向商家付款'
+		}
 	},
 	{
 		path: '/member/oriza',
