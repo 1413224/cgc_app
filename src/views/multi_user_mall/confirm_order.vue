@@ -61,7 +61,7 @@
 				<input type="text" class="input" placeholder="选填:填写内容已和卖家协商确认" />
 			</div>
 		</div>
-		<div class="fixed_box">
+		<div class="integral-box">
 			<div class="top pr">
 				<div class="left">
 					<div class="one">
@@ -87,6 +87,9 @@
 					<img :src="'./static/images/b-right.png'" />
 				</div>
 			</div>
+		</div>
+		<div class="fixed_box">
+
 			<div class="bottom-btn">
 				<div class="left">
 					共 <i>4</i> 件，总计 <span>¥ 0.00</span>
@@ -132,7 +135,7 @@
 </style>
 <style lang="less" scoped>
 	.commodity_order_box {
-		padding-bottom: 4.80rem;
+		padding-bottom: 1.80rem;
 		background-color: #F5F6FA;
 		.address-box {
 			display: flex;
@@ -379,11 +382,8 @@
 				}
 			}
 		}
-		.fixed_box {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			width: 100%;
+		.integral-box {
+			margin-top: 0.20rem;
 			background-color: white;
 			.top {
 				height: 1.40rem;
@@ -499,6 +499,13 @@
 					}
 				}
 			}
+		}
+		.fixed_box {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background-color: white;
 			.bottom-btn {
 				height: 1.0rem;
 				display: flex;

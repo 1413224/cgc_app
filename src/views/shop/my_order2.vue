@@ -448,6 +448,7 @@
 									position: 'middle',
 									text: '删除成功'
 								})
+								_this.curPage = 1 //重置页数
 								_this.getOrderList()
 							}
 						})

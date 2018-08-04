@@ -1182,7 +1182,7 @@
 			img {
 				width: 100%;
 				height: 100%;
-				transform: scale(13);
+				transform: scale(3);
 				display: block;
 				filter: brightness(.5)blur(2px);
 			}
