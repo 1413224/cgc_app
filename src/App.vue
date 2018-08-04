@@ -2,8 +2,8 @@
 	<div id="app" ref="fBox" v-cloak>
 		<!--动画  页面缓存-->
 		<transition :name="viewTransition" :css="!!direction">
-		<!-- includeList -->
-			<keep-alive include="storeList">
+			<!-- includeList -->
+			<keep-alive :include="includeList">
 				<router-view></router-view>
 			</keep-alive>
 		</transition>
@@ -199,16 +199,14 @@
 
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
-					
-					if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
+
+					if(sessionStorage['_openid_']) {
+
+						if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
 							_this.getEquipment()
 						} else {
 							_this.equipmentShow = false
 						}
-					
-					if(sessionStorage['_openid_']) {
-
-						
 
 						//控制新人奖励弹窗
 						if(sessionStorage.getItem('isZc')) {

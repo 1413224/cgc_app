@@ -231,7 +231,7 @@
 					path: '/multi_user_mall',
 					query: {
 						id: id,
-						oIndex:2
+						oIndex:3
 					}
 				})
 			},

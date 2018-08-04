@@ -8,6 +8,12 @@
 			</div>
 			<div class="two" v-if="showIndex==1">
 				<popup v-model="isW" :show-mask="false" position="top">
+					<div class="searchBox">
+						<div class="search">
+							<img :src="'./static/images/ss.png'" />
+							<input type="text" placeholder="搜索商品" @click="goSearch">
+						</div>
+					</div>
 					<ul class="pr-nav2" ref="paNav2">
 						<li class="li" v-for="(item,index) in prList" :key="index" :class="[{'blue':prNavIndex == index || (index == 3 && ishasStock)}]" @click="prNavClick(index)">
 							{{item.title}}
@@ -65,7 +71,7 @@
 							<!--<scroll :data="goodsList" :pullingUp="true" @pullingUp="pullingUp" :listenScroll="true" @scroll="scroll" @scrollEnd="scrollEnd" class="wrapper" :class="[{'h':!$store.state.page.isWx},{'b-white':goodsList.length == 0}]">-->
 
 							<div class="item-box" v-if="showGoods">
-								<div class="item" v-for="(item,index) in goodsList" :key="index">
+								<div class="item" v-for="(item,index) in goodsList" :key="index" @click="toGoodsDetails(item.goodsId)">
 									<div class="da-box">
 										<img v-if="item.logo" :src="item.logo.original" alt="" />
 									</div>
@@ -124,7 +130,7 @@
 					<div class="price" v-for="(skuList,index) in item.skuList" :key="index">
 						<div class="item">
 							<div class="left">
-								<p>{{(skuList.serviceTime / 60).toFixed(2)}}分钟</p>
+								<p>{{setServiceTime(skuList.serviceTime)}}</p>
 								<p>{{skuList.skuName}}</p>
 							</div>
 							<div class="right">
@@ -391,46 +397,70 @@
 		},
 		mounted() {},
 		methods: {
+			toGoodsDetails(goodsId){
+				var _this = this
+				_this.$router.push({
+					path:'/multi_user_mall/commodity_details',
+					query:{
+						goodsId:goodsId
+					}
+				})
+			},
 			InitScroll() {
 				var _this = this
 				this.$nextTick(() => {
-					if(!this.scroll) {
-						if(this.$refs.wrapper) {
-							this.scroll = new BScroll(this.$refs.wrapper, {
-								click: true,
-								scrollY: true,
-								pullUpLoad: {
-									threshold: -30
-								}
+					if(this.$refs.wrapper) {
+						this.scroll = new BScroll(this.$refs.wrapper, {
+							click: true,
+							scrollY: true,
+							pullUpLoad: {
+								threshold: -30
+							}
+						})
+						this.scroll.on('pullingUp', (pos) => {
+							this.pullingUp()
+							this.$nextTick(function() {
+								this.scroll.finishPullUp()
+								this.scroll.refresh()
 							})
-							this.scroll.on('pullingUp', (pos) => {
-								this.pullingUp()
-								this.$nextTick(function() {
-									this.scroll.finishPullUp()
-									this.scroll.refresh()
-								})
-							})
-							this.scroll.on('scroll', (pos) => {
+						})
+						this.scroll.on('scroll', (pos) => {
 
-								_this.isW = pos.y <= -180 ? true : false
+							_this.isW = pos.y <= -180 ? true : false
 
-								if(pos.y > this.scroll.maxScrollY) {
-									_this.showFoot = false
-								} else {
-									_this.showFoot = true
-								}
-							})
-							this.scroll.on('scrollEnd', (pos) => {
+							if(pos.y > this.scroll.maxScrollY) {
+								_this.showFoot = false
+							} else {
 								_this.showFoot = true
-							})
-							
-							console.log(this.scroll)
-						}
+							}
+						})
+						this.scroll.on('scrollEnd', (pos) => {
+							_this.showFoot = true
+						})
 
-					} else {
-						this.scroll.refresh()
+						console.log(this.scroll)
 					}
 				})
+			},
+			setServiceTime(serviceTime){
+				var time_str='';
+				if(serviceTime>=3600)
+				{
+					var hour = Math.floor(serviceTime / 3600);
+					time_str += hour + '时';
+					serviceTime -=hour*3600;
+				}
+				if(serviceTime>=60)
+				{
+					var minute = Math.floor(serviceTime / 60);
+					time_str += minute + '分';
+					serviceTime -=minute*60;
+				}
+				if(serviceTime>0)
+				{
+					time_str += serviceTime + '秒';
+				}
+				return time_str;
 			},
 			pullingUp() {
 				var _this = this
@@ -526,8 +556,7 @@
 						'oIndex': iIndex
 					})
 				})
-				
-				
+
 				this.InitScroll()
 			},
 			toStoreQc(pinfo) {
@@ -1153,7 +1182,7 @@
 			img {
 				width: 100%;
 				height: 100%;
-				transform: scale(13);
+				transform: scale(3);
 				display: block;
 				filter: brightness(.5)blur(2px);
 			}

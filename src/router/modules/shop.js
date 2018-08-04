@@ -214,6 +214,21 @@ const shopModule = [
 		meta: {
 			title:'商品详情'
 		}
+	},{
+		path: '/multi_user_mall/confirm_order',//确认订单
+		name: 'multi_confirm_order',
+		component: resolve => require(['@/views/multi_user_mall/confirm_order'], resolve),
+		meta: {
+			title:'确认订单'
+		}
+	},
+	{
+		path: '/multi_user_mall/commodity_details',//商品详情页
+		name: 'multi_commodity_details',
+		component: resolve => require(['@/views/multi_user_mall/commodity_details'], resolve),
+		meta: {
+			title:'商品详情'
+		}
 	},
 	{
 		path: '/multi_user_mall/summary', //多用户商城首页

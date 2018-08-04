@@ -473,7 +473,8 @@
 			},
 			backLogin() {
 				this.isCp = false
-				this.isReg = 0
+				this.isReg = 1
+				this.posReg = false
 			}
 		},
 		components: {

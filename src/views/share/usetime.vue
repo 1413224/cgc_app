@@ -131,7 +131,23 @@
 			swiperSlide
 		},
 		created() {
-			this.getMyEquipmentInfo()
+			var	_this = this
+
+			_this.getMyEquipmentInfo()
+			
+			var hiddenProperty = 'hidden' in document ? 'hidden' :
+				'webkitHidden' in document ? 'webkitHidden' :
+				'mozHidden' in document ? 'mozHidden' :
+				null;
+			var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+			var onVisibilityChange = function() {
+				if(!document[hiddenProperty]) {
+					_this.useend()
+					_this.getMyEquipmentInfo()
+				}
+			}
+			document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+			
 			// console.log(this.$refs.mySwiper.swiper)
 		},
 		mounted() {

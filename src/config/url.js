@@ -94,6 +94,9 @@ var url = {
 		createEquipmentOrder: uri3 + '/v1/goods/createEquipmentOrder', //创建设备订单信息接口
 		getMyEquipmentNotice: uri4 + '/v1/goods/getMyEquipmentNotice', //
 		getEquipmentInfo2: uri1 + '/public/v1/enterprise/getEquipmentInfo' //获取企业提供的服务列表信息
+	},
+	goods: {
+		getGoodsInfo: uri4 + '/public/v1/goods/getGoodsInfo', //获取商品信息接口
 	}
 
 }
