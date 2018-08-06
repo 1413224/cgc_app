@@ -135,7 +135,7 @@
 
 			_this.getMyEquipmentInfo()
 			
-			var hiddenProperty = 'hidden' in document ? 'hidden' :
+			/*var hiddenProperty = 'hidden' in document ? 'hidden' :
 				'webkitHidden' in document ? 'webkitHidden' :
 				'mozHidden' in document ? 'mozHidden' :
 				null;
@@ -146,19 +146,18 @@
 					_this.getMyEquipmentInfo()
 				}
 			}
-			document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+			document.addEventListener(visibilityChangeEvent, onVisibilityChange);*/
 			
 			// console.log(this.$refs.mySwiper.swiper)
 		},
 		mounted() {
-			/*console.log('mySwiper', this.$refs.mySwiper)
-			console.log(this.$refs.mySwiper.swiper.activeIndex)*/
+		
 		},
 		computed: {
 
 		},
 		methods: {
-			getMyEquipmentInfo() {//获取设备订单列表列表
+			getMyEquipmentInfo() {//获取设备订单列表
 				var _this = this
 
 				_this.$http.get(_this.url.share.getMyEquipmentInfo, {
@@ -184,7 +183,7 @@
 								}
 							}else{
 								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
-									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+									//_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
 
 									_this.outTime(_this.list[i],i) //设备剩余时间
 								}
@@ -233,7 +232,7 @@
 					});
 				}
 			},
-			goEquipment(id,status){
+			goEquipment(id,status){//开关设备
 				var _this = this
 				_this.$http.post(_this.url.share.changeEquipmentStatus, {
 					userId: _this.$store.state.user.userId,
@@ -245,21 +244,9 @@
 						var i = _this.$refs.mySwiper.swiper.activeIndex
 					
 						
-						console.log(res.data)
+						// console.log(res.data)
 
 						var datas = res.data
-
-
-								/*if(_this.list[i].status == 0){
-									_this.list[i].status = 1
-									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-
-									_this.outTime(_this.list[i],i) //设备剩余时间
-
-								}else{
-									_this.list[i].status = 2
-	
-								}*/
 
 						if(_this.list[i].status == 0){
 							if(datas.data == 1){
@@ -295,7 +282,7 @@
 							}else{
 								_this.list[i].status = datas.data
 							}
-							// _this.list[i].status = datas.data
+							
 						}
 	
 						
@@ -323,35 +310,7 @@
 					} 
 				})
 				
-				// console.log(_this.list)
-				/*for(var i=0;i<this.list.length;i++){
-					
-					if(_this.list[i].itemId==id){
-
-
-						if(_this.list[i].status == 0){
-							_this.list[i].status = 1
-							_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-
-							_this.outTime(_this.list[i],i) //设备剩余时间
-
-						}else{
-							_this.list[i].status = 2
-							_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-
-							_this.outTime(_this.list[i],i) //设备剩余时间
-						}
-						/*_this.list[i].status = 1
-
-						_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
-
-						_this.outTime(_this.list[i],i) //设备剩余时间
-
-						return;
-					}
-					
-
-				}*/
+			
 			},
 			outTime(info,i) { //计算所有设备的剩余时间
 				var _this = this
@@ -361,12 +320,12 @@
 
 						clearInterval(i);
 
-						_this.list.splice(i,1) 
+						// _this.list.splice(i,1) 
 
 						// this.$refs.mySwiper.swiper.activeIndex
-						setTimeout(()=>{
+						/*setTimeout(()=>{
 							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
-						},500)
+						},500)*/
 
 						if(_this.list.length ==0 ){
 							_this.$router.push({
@@ -395,15 +354,33 @@
 						_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
 						setTimeout(() => {
+
 							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+
+							if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
+								_this.countDown(_this.infoItem.canUseTime);
+							}else{
+								_this.setTime(_this.infoItem.canUseTime);
+							}
+
+							alert(_this.$refs.mySwiper.swiper.activeIndex)
+
+							console.log(_this.infoItem)
+
+							if(_this.list.length==0){
+								_this.$router.push({
+									paht:'/shop/my_order2'
+								})
+								
+							}
 						},500)
 
-						if(_this.list.length==0){
+						/*if(_this.list.length==0){
 							_this.$router.push({
 								paht:'/shop/my_order2'
 							})
 							
-						}
+						}*/
 
 						return;
 					}
@@ -439,7 +416,7 @@
 					// message: '是否结束订单？',
 					buttons: ['确定', '取消'],
 					canel() {
-						// console.log('你点击了取消')
+						
 					},
 					confirm() {
 						_this.goEndOfuse(id)
@@ -469,7 +446,7 @@
 						}
 
 						if(_this.list.length > 0){
-							// alert(_this.list.length)
+							
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
 							// alert(_this.list.length)
@@ -477,15 +454,14 @@
 							setTimeout(() => {
 								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 							},500)
-							// alert(_this.list.length)可提供参考
+							
 							if(_this.list.length == 0){
 								_this.$router.push({
 									path:'/shop/my_order2'
 								})
 							}
 						}else{
-							// alert(_this.list.length)
-							// alert(0)
+						
 							_this.$router.push({
 								path:'/shop/my_order2'
 							})
@@ -661,6 +637,8 @@
 			width: 3rem;
 			height: .6rem;
 			line-height: .6rem;
+			position: relative;
+			z-index: 5;
 			/*.border;*/
 		}
 		.footer {
