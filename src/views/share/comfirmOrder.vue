@@ -79,8 +79,16 @@
 									<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
 								</div>
 								<div class="money">
-									<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
-									<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
+									<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50">
+										<span>{{item.denomination}}</span>元
+										<br />
+										<i>满{{item.condition}}元可用</i>
+									</div>
+									<div v-if="item.type == 30">
+										<span>{{item.denomination}}</span>折
+										<br />
+										<i>满{{item.condition}}元可用</i>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -181,7 +189,7 @@
 				if(this.info.recommendBalance == "") {
 					this.info.recommendBalance = 0
 				}
-				
+
 				_this.$http.post(_this.url.share.createEquipmentOrder, {
 					userId: _this.$store.state.user.userId,
 					platformId: _this.url.platformId,
@@ -336,7 +344,7 @@
 					this.condition = condition
 					if(this.value) {
 						this.info.recommendBalance = (this.info.price - this.denomination) < this.info.availableBalance ? this.info.price - this.denomination : this.info.availableBalance
-					}else{
+					} else {
 						this.info.payPrice = this.info.price - this.denomination
 					}
 				} else {
@@ -347,13 +355,13 @@
 					this.condition = 0
 					if(this.value) {
 						this.info.recommendBalance = this.recommendBalance
-					}else{
+					} else {
 						this.info.payPrice = this.info.price - this.denomination
 					}
 				}
 				console.log(this.denomination)
 
-				if(this.value){
+				if(this.value) {
 					this.inputChange()
 				}
 			},
@@ -507,22 +515,12 @@
 							font-size: 0.68rem;
 							color: rgba(51, 111, 255, 1);
 						}
+						i {
+							font-size: 0.20rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(51, 111, 255, 1);
+						}
 					}
-				}
-			}
-			.no {
-				.type-btn {
-					background: rgba(144, 162, 199, 1)!important;
-				}
-				.money {
-					color: rgba(144, 162, 199, 1)!important;
-					span {
-						color: rgba(144, 162, 199, 1)!important;
-					}
-				}
-				.top .one span:nth-child(2),
-				.top p {
-					color: rgba(144, 162, 199, 1)!important;
 				}
 			}
 			.bottom {

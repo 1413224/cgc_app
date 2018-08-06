@@ -55,11 +55,20 @@
 											<div class="type-btn" v-if="item.type == 50">现金券</div>
 											<span>{{item.name}}</span>
 										</div>
-										<p>使用期限：{{item.startTime | getDate2}} 至  {{item.endTime | getDate2}}</p>
+										<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
 									</div>
 									<div class="money">
-										<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50"><span>{{item.denomination}}</span>元</div>
-										<div v-if="item.type == 30"><span>{{item.denomination}}</span>折</div>
+										<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50">
+											<span>{{item.denomination}}</span>元
+											<br />
+											<i>满{{item.condition}}元可用</i>
+										</div>
+										<div v-if="item.type == 30">
+											<span>{{item.denomination}}</span>折
+											<br />
+											<i>满{{item.condition}}元可用</i>
+										</div>
+
 									</div>
 								</div>
 								<img :src="'./static/member/used.png'" v-if="item.status == 2">
@@ -418,8 +427,8 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.couponList = res.data.data.list
-						
-						for(var i = 0;i<_this.couponList.length;i++){
+
+						for(var i = 0; i < _this.couponList.length; i++) {
 							_this.couponList[i].showAll = false
 						}
 					}
@@ -540,7 +549,7 @@
 				box-sizing: border-box;
 				.couponlist-box {
 					padding: 0.35rem 0;
-					.bs{
+					.bs {
 						box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
 						margin-bottom: 0.24rem;
 					}
@@ -601,6 +610,11 @@
 									font-size: 0.68rem;
 									color: rgba(51, 111, 255, 1);
 								}
+								i {
+									font-size: 0.20rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(51, 111, 255, 1);
+								}
 							}
 						}
 					}
@@ -610,7 +624,7 @@
 						}
 						.money {
 							color: rgba(144, 162, 199, 1)!important;
-							span {
+							span,i {
 								color: rgba(144, 162, 199, 1)!important;
 							}
 						}

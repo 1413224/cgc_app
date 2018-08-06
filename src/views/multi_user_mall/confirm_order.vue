@@ -42,7 +42,7 @@
 			<x-number v-model="num" @on-change="numChange" :min="0" width="50px" button-style="round"></x-number>
 		</div>
 		<div class="goods-spec pr">
-			<div>规格</div>
+			<div>优惠券</div>
 			<div>
 				<p>4张可用</p>
 				<img :src="'./static/images/b-right.png'" />
