@@ -6,11 +6,12 @@
 				<!-- storeLogo -->
 					<img class="store-logo" src="../../../static/shop/storeLogo.png">
 					<div class="middle">
-						<p>名字名字</p>
+						<p class="name">名字名字</p>
 						<div>
-							<img class="left-img" src="../../assets/images/multi_user_mall/position.png">
+							<!-- <img src="../../assets/images/index/busbg.png" alt=""> -->
+							<!-- <img class="left-img" src="../../assets/images/multi_user_mall/position.png"> -->
 							<p>地址地址</p>
-							<img class="right-img" src="../../assets/images/multi_user_mall/right.png">
+							<!-- <img class="right-img" src="../../assets/images/multi_user_mall/right.png"> -->
 						</div>
 					</div>
 				</div>
@@ -66,6 +67,8 @@ export default {
 		justify-content: space-between;
 		padding: 0 0.20rem;
 		box-sizing: border-box;
+		background: url('../../assets/images/index/busbg.png');
+		background-size: 100% 100%;
 		.left {
 			display: flex;
 			align-items: center;
@@ -76,11 +79,12 @@ export default {
 				background-color: rgba(213, 213, 214, 0.35);
 			}
 			.middle {
-				p:nth-child(1) {
+				.name{
 					font-size: 0.32rem;
 					font-family: PingFangSC-Medium;
 					color: #1A2642;
-					margin-bottom: 0.23rem;
+					/*margin-bottom: 0.23rem;*/
+					color: #fff;
 				}
 				div {
 					display: flex;
@@ -91,10 +95,16 @@ export default {
 					}
 					p {
 						width: 3.4rem;
-						font-size: 0.24rem;
+						font-size: 0.2rem;
 						font-family: PingFangSC-Regular;
 						color: #1A2642;
-						margin: 0 0.07rem;
+						margin-top:.2rem;
+						overflow : hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
+						color: #fff;
 						overflow: hidden;
 						text-overflow: ellipsis;
 						display: -webkit-box;
@@ -115,8 +125,7 @@ export default {
 				line-height: 0.46rem;
 				text-align: center;
 				border-radius: 33px;
-				/*border: 1px solid #1A2642;*/
-				background-color: #336FFF;
+				border: 1px solid #fff;
 				color: white;
 				font-size: 0.24rem;
 				font-family: PingFangSC-Regular;
