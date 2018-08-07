@@ -57,10 +57,8 @@
 				<p>暂无可用共享设备</p>
 			</div>
 			<div class="btn-box">
-				<div>返回首页</div>
-				<div>
-					立即购买
-				</div>
+				<div @click="goBack">返回首页</div>
+				<div @click="goShare">立即购买</div>
 			</div>
 		</div>
 	</div>
@@ -363,9 +361,9 @@
 								_this.setTime(_this.infoItem.canUseTime);
 							}
 
-							alert(_this.$refs.mySwiper.swiper.activeIndex)
+							// alert(_this.$refs.mySwiper.swiper.activeIndex)
 
-							console.log(_this.infoItem)
+							// console.log(_this.infoItem)
 
 							if(_this.list.length==0){
 								_this.$router.push({
@@ -451,17 +449,30 @@
 
 							// alert(_this.list.length)
 							// this.$refs.mySwiper.swiper.activeIndex
-							setTimeout(() => {
-								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
-							},500)
+							// 
+								if(_this.list.length == 0){
+									_this.$router.push({
+										path:'/shop/my_order2'
+									})
+								}
 							
-							if(_this.list.length == 0){
-								_this.$router.push({
-									path:'/shop/my_order2'
-								})
-							}
+								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+
+								// console.log(_this.infoItem)
+
+								if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
+									// alert(0)
+									_this.countDown(_this.infoItem.canUseTime);
+								}else{
+									// alert(1)
+									_this.useend();
+									_this.remainTime = _this.setTime(_this.infoItem.canUseTime);
+								}
+
+							
+							
 						}else{
-						
+							// alert("没有了")
 							_this.$router.push({
 								path:'/shop/my_order2'
 							})
@@ -490,6 +501,16 @@
 					}
 				})
 
+			},
+			goBack(){
+				this.$router.push({
+					path:'/'
+				})
+			},
+			goShare(){
+				this.$router.push({
+					path:'/share/storelist'
+				})
 			}
 
 		}
@@ -635,10 +656,12 @@
 			/*margin-top: .2rem;*/
 			margin: -.2rem auto 0;
 			width: 3rem;
-			height: .6rem;
-			line-height: .6rem;
+			height: 1rem;
+			line-height: 1rem;
 			position: relative;
+			top: -.5rem;
 			z-index: 5;
+			/*border:1px solid #333;*/
 			/*.border;*/
 		}
 		.footer {
