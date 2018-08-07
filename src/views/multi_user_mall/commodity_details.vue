@@ -14,7 +14,7 @@
 		<div class="goods-tip-box">
 			<div class="top">
 				<p class="price">¥{{goodsDetails.minPrice}} <span>¥{{goodsDetails.minOriginPrice}}</span></p>
-				<div>
+				<div @click="changeGoodsConcern">
 					<img :src="goodsDetails.hasConcern == 1?'./static/images/aixin.png':'./static/shop/collection.png'" />
 					<p>{{goodsDetails.hasConcern == 1 ?'已关注':'关注'}}</p>
 				</div>
@@ -151,6 +151,32 @@
 		mounted() {},
 		computed: {},
 		methods: {
+			changeGoodsConcern() {
+				var _this = this
+				if(_this.goodsDetails.hasConcern == 1) {
+					_this.$http.post(_this.url.user.deleteConcern, {
+						userId: _this.$store.state.user.userId,
+						type: 1,
+						concernIds: _this.goodsId
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.getGoodsInfo()
+						}
+					})
+				} else {
+					_this.$http.post(_this.url.user.addConcern, {
+						userId: _this.$store.state.user.userId,
+						type: 1,
+						platformId: _this.url.platformId,
+						objectId: _this.goodsId
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.getGoodsInfo()
+						}
+					})
+				}
+
+			},
 			numChange(val) {
 				console.log(val);
 			},
@@ -160,9 +186,9 @@
 					this.showGoodsSpec = true
 					return false;
 				}
-				
+
 				this.$router.push({
-					path:'/multi_user_mall/confirm_order'
+					path: '/multi_user_mall/confirm_order'
 				})
 
 			},
@@ -176,9 +202,9 @@
 					})
 					return false;
 				}
-				
+
 				this.$router.push({
-					path:'/multi_user_mall/confirm_order'
+					path: '/multi_user_mall/confirm_order'
 				})
 
 			},

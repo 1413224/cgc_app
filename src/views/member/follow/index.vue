@@ -77,17 +77,20 @@
 								<div @click="changePr()">
 									<check-icon v-if="proShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
-								<div class="img-box"><img :src="item.img" /></div>
-								<div class="pro-box">
-									<p>{{item.name}}</p>
-									<p>￥{{item.money}}</p>
-									<div class="btn-box">
-										<!-- <span>加入购物车</span> -->
-										<router-link to="/shop/confirm"><span>立即购买</span></router-link>
+								<div style="display: flex;" @click="toGoodsDetails(item.objectId)">
+									<div class="img-box"><img v-if="item.logo" :src="item.logo.original" /></div>
+									<div class="pro-box">
+										<p>{{item.name}}</p>
+										<p>￥{{item.minPrice}}</p>
+										<div class="btn-box" v-if="!isBj">
+											<!-- <span>加入购物车</span> -->
+											<span>立即购买</span>
+										</div>
 									</div>
 								</div>
 							</div>
-							<Loading v-if="show"> </Loading>
+							<Loading v-if="show3"> </Loading>
+							<Nomore v-if="showNo3"></Nomore>
 							<noData v-if="proList.length==0" :status="proState" :stateText="noPro"></noData>
 						</div>
 					</div>
@@ -183,6 +186,15 @@
 			this.InitScroll()
 		},
 		methods: {
+			toGoodsDetails(goodsId) {
+				var _this = this
+				_this.$router.push({
+					path: '/multi_user_mall/commodity_details',
+					query: {
+						goodsId: goodsId
+					}
+				})
+			},
 			changeBack() {
 				this.$router.go(-1)
 				this.$store.state.page.back = true
@@ -215,7 +227,10 @@
 							})
 
 						} else if(_this.type == 1) {
-
+							_this.proList = res.data.data.list
+							_this.lyList.forEach((value) => {
+								value.ischeck = false
+							})
 						}
 
 						if(res.data.data.list.length > 0) {
@@ -239,7 +254,7 @@
 							width: '50%',
 							type: 'text',
 							position: 'middle',
-							text: '未勾选任何联盟企业'
+							text: '未选择任何联盟企业'
 						})
 						return false
 					}
@@ -251,7 +266,19 @@
 							width: '50%',
 							type: 'text',
 							position: 'middle',
-							text: '未勾选任何联营企业'
+							text: '未选择任何联营企业'
+						})
+						return false
+					}
+				} else if(_this.type == 1) {
+					if(_this.proidList != '') {
+						concernIds = _this.proidList.join(',')
+					} else {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '未选择任何商品'
 						})
 						return false
 					}
@@ -331,75 +358,106 @@
 
 			},
 			LoadData() {
+				var _this = this
+				_this.curPage++
+					_this.$http.get(_this.url.user.getConcernLists, {
+						params: {
+							userId: _this.$store.state.user.userId,
+							type: _this.type,
+							pageSize: _this.pageSize,
+							curPage: _this.curPage,
+							islist: true
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.proList = _this.proList.concat(res.data.data.list)
+								_this.show3 = true
+								_this.showNo3 = false
+								_this.proList.forEach((value) => {
+									value.ischeck = false
+								})
+							} else {
+								_this.show3 = false
+								_this.showNo3 = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
 
+						}
+					})
 			},
 			LoadData2() {
 				var _this = this
-
-				_this.$http.get(_this.url.user.getConcernLists, {
-					params: {
-						userId: _this.$store.state.user.userId,
-						type: _this.type,
-						pageSize: _this.pageSize,
-						curPage: _this.curPage,
-						islist: true
-					}
-				}).then((res) => {
-					if(res.data.status == "00000000") {
-						if(res.data.data.list.length > 0) {
-							_this.lyList = _this.lyList.concat(res.data.data.list)
-							_this.show2 = true
-							_this.showNo2 = false
-							_this.lyList.forEach((value) => {
-								value.ischeck = false
-							})
-						} else {
-							_this.show2 = false
-							_this.showNo2 = true
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '已经到底了'
-							})
+				_this.curPage++
+					_this.$http.get(_this.url.user.getConcernLists, {
+						params: {
+							userId: _this.$store.state.user.userId,
+							type: _this.type,
+							pageSize: _this.pageSize,
+							curPage: _this.curPage,
+							islist: true
 						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.lyList = _this.lyList.concat(res.data.data.list)
+								_this.show2 = true
+								_this.showNo2 = false
+								_this.lyList.forEach((value) => {
+									value.ischeck = false
+								})
+							} else {
+								_this.show2 = false
+								_this.showNo2 = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
 
-					}
-				})
+						}
+					})
 			},
 			LoadData3() {
 				var _this = this
-
-				_this.$http.get(_this.url.user.getConcernLists, {
-					params: {
-						userId: _this.$store.state.user.userId,
-						type: _this.type,
-						pageSize: _this.pageSize,
-						curPage: _this.curPage,
-						islist: true
-					}
-				}).then((res) => {
-					if(res.data.status == "00000000") {
-						if(res.data.data.list.length > 0) {
-							_this.lmList = _this.lmList.concat(res.data.data.list)
-							_this.show1 = true
-							_this.showNo1 = false
-							_this.lmList.forEach((value) => {
-								value.ischeck = false
-							})
-						} else {
-							_this.show1 = false
-							_this.showNo1 = true
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '已经到底了'
-							})
+				_this.curPage++
+					_this.$http.get(_this.url.user.getConcernLists, {
+						params: {
+							userId: _this.$store.state.user.userId,
+							type: _this.type,
+							pageSize: _this.pageSize,
+							curPage: _this.curPage,
+							islist: true
 						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.lmList = _this.lmList.concat(res.data.data.list)
+								_this.show1 = true
+								_this.showNo1 = false
+								_this.lmList.forEach((value) => {
+									value.ischeck = false
+								})
+							} else {
+								_this.show1 = false
+								_this.showNo1 = true
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '已经到底了'
+								})
+							}
 
-					}
-				})
+						}
+					})
 			},
 			//点击全选
 			isallcheck() {
@@ -411,7 +469,7 @@
 					if(this.allprCheck == true) {
 						for(var i = 0; i < this.proList.length; i++) {
 							this.proList[i].ischeck = true
-							this.proidList.push(this.proList[i].id)
+							this.proidList.push(this.proList[i].objectId)
 						}
 					} else {
 						for(var i = 0; i < this.proList.length; i++) {
@@ -513,7 +571,7 @@
 				var idList = []
 				for(var i = 0; i < this.proList.length; i++) {
 					if(this.proList[i].ischeck == true) {
-						idList.push(this.proList[i].id)
+						idList.push(this.proList[i].objectId)
 					}
 				}
 				this.proidList = idList
@@ -581,7 +639,10 @@
 					this.type = 1 //商品
 				}
 
+				this.curPage = 1
+
 				this.getFollow()
+				this.InitScroll()
 			}
 		},
 		components: {
@@ -707,7 +768,7 @@
 			.wrapper3 {
 				position: absolute;
 				top: 50px;
-				bottom: 47px;
+				bottom: 0px;
 				overflow: hidden;
 				width: 100%;
 				/*.vux-loadmore {
@@ -759,6 +820,12 @@
 						font-size: 0.24rem;
 						color: rgba(26, 38, 66, 1);
 						line-height: 0.35rem;
+						width: 2.5rem;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
 					}
 					p:nth-child(2) {
 						font-size: 0.28rem;
@@ -773,7 +840,6 @@
 							padding: 0.05rem 0.15rem;
 							border-radius: 2px;
 							color: rgba(144, 162, 199, 1);
-							margin-right: 0.26rem;
 						}
 						span:nth-child(2) {
 							display: inline-block;

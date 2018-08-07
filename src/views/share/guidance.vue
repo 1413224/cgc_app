@@ -1,7 +1,8 @@
 <template>
 	<div class="producte">
 		<settingHeader :title="title"></settingHeader>
-		<img style="width: 100%;height: auto;" :src="'./static/share/long.png'" alt="">
+		<!--<img style="width: 100%;height: auto;" :src="'./static/share/long.png'" alt="">-->
+		<img style="width: 100%;height: auto;" v-for="(item,index) in 22" :key="index" :src="'./static/share/'+ Number(index+1) +'.jpg'"/>
 	</div>
 </template>
 
