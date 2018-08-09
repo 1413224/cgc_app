@@ -434,6 +434,15 @@
 					font-family: PingFangSC-Medium;
 					color: rgba(255, 255, 255, 1);
 				}
+				.sjx {
+					position: absolute;
+					left: 0.87rem;
+					bottom: 0;
+					width: 0;
+					height: 0;
+					border: 0.17rem solid;
+					border-color: transparent transparent white transparent;
+				}
 			}
 		}
 		.swiper-inner {

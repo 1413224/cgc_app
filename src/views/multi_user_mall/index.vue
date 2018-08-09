@@ -437,8 +437,6 @@
 						this.scroll.on('scrollEnd', (pos) => {
 							_this.showFoot = true
 						})
-
-						console.log(this.scroll)
 					}
 				})
 			},
