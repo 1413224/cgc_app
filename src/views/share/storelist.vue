@@ -58,8 +58,8 @@
 					<div class="swiper-pagination" slot="pagination"></div>
 				</swiper>
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
-				<div v-if="showShop">
-				<!-- list.length > 0 -->
+				<div v-if="showShop" class="pd_box">
+					<!-- list.length > 0 -->
 					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
 						<div class="item">
 							<div class="logo">
@@ -134,7 +134,7 @@
 
 	import { Group, XInput } from 'vux'
 	export default {
-		name:'storeList',
+		name: 'storeList',
 		data() {
 			return {
 				title: '门店列表',
@@ -155,7 +155,7 @@
 				priceShang: false, //价格箭头
 				active: 1, //列表选中样式（地址）
 				items: null, //三级联动地址
-				showShop:true,
+				showShop: true,
 				opPrice: [
 					/*'离我最近',
 					'价格最低'*/
@@ -185,7 +185,7 @@
 				iscity: '',
 				isdistrict: '',
 				areaId: '',
-				distance: 5,
+				distance: 100,
 				lat: '',
 				lng: '',
 				curPage: 1,
@@ -231,7 +231,7 @@
 					path: '/multi_user_mall',
 					query: {
 						id: id,
-						oIndex:3
+						oIndex: 3
 					}
 				})
 			},
@@ -881,8 +881,6 @@
 	}
 	
 	.wrapper .content {
-		padding: 0 0.19rem;
-		box-sizing: border-box;
 		h2 {
 			padding-left: 3%;
 			font-size: .36rem;
@@ -897,6 +895,10 @@
 				vertical-align: bottom;
 				padding-right: .2rem;
 			}
+		}
+		.pd_box {
+			padding: 0 0.19rem;
+			box-sizing: border-box;
 		}
 		.list {
 			padding: 0.30rem 0;
