@@ -373,13 +373,6 @@
 							}
 						},500)
 
-						/*if(_this.list.length==0){
-							_this.$router.push({
-								paht:'/shop/my_order2'
-							})
-							
-						}*/
-
 						return;
 					}
 					--overtime;
