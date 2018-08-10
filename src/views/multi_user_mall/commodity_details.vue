@@ -141,7 +141,8 @@
 				sizeIndex: 1115,
 				sizeList: ['1', '2', '3', '4', '5556'],
 				specItem: {},
-				num: 0
+				num: 1,
+				skuId: ''
 			}
 		},
 		created() {
@@ -181,14 +182,23 @@
 				console.log(val);
 			},
 			submit() {
-				console.log(this.specItem)
 				if(JSON.stringify(this.specItem) === '{}') {
 					this.showGoodsSpec = true
 					return false;
 				}
 
 				this.$router.push({
-					path: '/multi_user_mall/confirm_order'
+					path: '/multi_user_mall/confirm_order',
+					query: {
+						'enterpriseName': this.goodsDetails.enterpriseName,
+						'goodsLogo': this.goodsDetails.logo.original,
+						'goodsName': this.goodsDetails.goodsName,
+						'skuName': this.specItem.skuName,
+						'minPrice': this.goodsDetails.minPrice,
+						'minOriginPrice': this.goodsDetails.minOriginPrice,
+						'goodsNum': this.num,
+						'skuId': this.skuId
+					}
 				})
 
 			},
@@ -204,7 +214,17 @@
 				}
 
 				this.$router.push({
-					path: '/multi_user_mall/confirm_order'
+					path: '/multi_user_mall/confirm_order',
+					query: {
+						'enterpriseName': this.goodsDetails.enterpriseName,
+						'goodsLogo': this.goodsDetails.logo.original,
+						'goodsName': this.goodsDetails.goodsName,
+						'skuName': this.specItem.skuName,
+						'minPrice': this.goodsDetails.minPrice,
+						'minOriginPrice': this.goodsDetails.minOriginPrice,
+						'goodsNum': this.num,
+						'skuId': this.skuId
+					}
 				})
 
 			},
@@ -219,9 +239,15 @@
 					if(res.data.status == "00000000") {
 						_this.goodsDetails = res.data.data
 						_this.goodsTcList.push(res.data.data.logo.original)
+
 						_this.goodsDetails.skuList.forEach(function(value) {
 							value.isChoose = false
 						})
+						//只有一个规格时直接赋值
+						if(res.data.data.skuId) {
+							_this.chooseSpec(0, res.data.data.skuList[0], 'color')
+
+						}
 					}
 				})
 			},
@@ -241,7 +267,7 @@
 					this.specItem = {}
 				}
 
-				console.log(this.specItem)
+				this.skuId = this.specItem.skuId
 			},
 			toStoreDetails(id) {
 				this.$router.push({

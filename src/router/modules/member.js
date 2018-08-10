@@ -176,6 +176,13 @@ const memberModule = [{
 		meta: {
 			title: '地址管理'
 		}
+	},{
+		path: '/member/address/select_address',
+		name: 'select_address',
+		component: resolve => require(['@/views/member/address/select_address'], resolve),
+		meta: {
+			title: '选择收货地址'
+		}
 	},
 	{
 		path: '/member/address/edit',
