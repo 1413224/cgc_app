@@ -334,7 +334,7 @@
 							tip: '华为P20新品发售',
 							img: './static/index/shouji.png',
 							color: 'red',
-							url: ''
+							url: '/prc/index'
 						},
 						{
 							name: '全球热门',

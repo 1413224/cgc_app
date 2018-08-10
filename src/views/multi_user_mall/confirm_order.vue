@@ -1,11 +1,19 @@
 <template>
 	<section class="commodity_order_box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="address-box">
+		<div v-if="address != ''" class="address-box" @click="selectAddress">
 			<img class="left-img" :src="'./static/images/dibiao.png'">
 			<div>
-				<p class="user-tip"><span>张生</span><span>185****6787</span></p>
-				<p class="user-address">广东佛山市南海区桂城街道佛平路与宝翠路交 界万科金色领域界</p>
+				<p class="user-tip"><span>{{address.name}}</span><span>{{address.mobile}}</span></p>
+				<p class="user-address">{{address.province+address.city+address.area+address.address}}</p>
+			</div>
+			<img class="right-img" :src="'./static/images/b-right.png'" />
+		</div>
+		<div v-else class="address-box" @click="addAddress">
+			<img class="left-img" :src="'./static/images/dibiao.png'">
+			<div class="null_address">
+				<p>暂无收货地址</p>
+				<p>去设置</p>
 			</div>
 			<img class="right-img" :src="'./static/images/b-right.png'" />
 		</div>
@@ -18,33 +26,34 @@
 			<div class="order_top">
 				<div class="left">
 					<img :src="'./static/images/shopLogo.png'" alt="" />
-					<p>优衣库服饰（番禺店）</p>
+					<p>{{goodsInfo.enterpriseName}}</p>
 				</div>
 			</div>
 			<div class="order_middle">
 				<div class="left">
-					<img :src="'./static/images/pr.png'" />
+					<img :src="goodsInfo.logo?logo:'./static/images/pr.png'" />
 				</div>
 				<div class="middle">
-					<p class="name">女装U宽腿牛仔裤(水洗产品)</p>
-					<p class="pinfo">颜色:蓝色；尺码:L/170修身</p>
-					<p class="tip">信用积分最多可抵40元</p>
+					<p class="name">{{goodsInfo.name}}</p>
+					<p class="pinfo">{{goodsInfo.skuName}}</p>
+					<!--<p class="tip">信用积分最多可抵40元</p>-->
 				</div>
 				<div class="right">
-					<p class="price">¥69.00</p>
-					<p class="oldprice">¥82.00</p>
-					<p class="num">x4</p>
+					<p class="price">¥{{goodsInfo.minPrice}}</p>
+					<p class="oldprice">¥{{goodsInfo.minOriginPrice}}</p>
+					<p class="num">x {{goodsInfo.goodsNum}}</p>
 				</div>
 			</div>
 		</div>
 		<div class="number-box pr">
 			<p>购买数量</p>
-			<x-number v-model="num" @on-change="numChange" :min="0" width="50px" button-style="round"></x-number>
+			<x-number v-model="goodsInfo.goodsNum" :min="1" width="50px" button-style="round"></x-number>
 		</div>
 		<div class="goods-spec pr">
 			<div>优惠券</div>
-			<div>
-				<p>4张可用</p>
+			<div @click="show = true">
+				<p v-if="couponName">{{couponName}}</p>
+				<p v-else>{{availableCoupon.length}}张可用</p>
 				<img :src="'./static/images/b-right.png'" />
 			</div>
 		</div>
@@ -58,11 +67,11 @@
 		<div class="goods-spec">
 			<div>卖家留言</div>
 			<div class="input-box">
-				<input type="text" class="input" placeholder="选填:填写内容已和卖家协商确认" />
+				<input type="text" v-model="remark" class="input" placeholder="选填:填写内容已和卖家协商确认" />
 			</div>
 		</div>
 		<div class="integral-box">
-			<div class="top pr">
+			<div class="top pr" v-if="1>2">
 				<div class="left">
 					<div class="one">
 						<div>信用积分</div><span>可用：10000.00</span><img :src="'./static/images/taihao.png'" />
@@ -80,29 +89,103 @@
 						<img :src="'./static/images/qian.png'" />
 						<p>通用积分</p>
 					</div>
-					<p class="money">可用：876000.50</p>
+					<p class="money">可用：{{availableBalance}}</p>
 				</div>
-				<div class="right">
-					<p>已抵用<i>¥ 40.00</i></p>
+				<div class="right" @click="showIntegral = true">
+					<p>已抵用<i>¥ {{Number(integralNum).toFixed(2)}}</i></p>
 					<img :src="'./static/images/b-right.png'" />
 				</div>
 			</div>
 		</div>
 		<div class="fixed_box">
-
 			<div class="bottom-btn">
 				<div class="left">
-					共 <i>4</i> 件，总计 <span>¥ 0.00</span>
+					共 <i>{{goodsInfo.goodsNum}}</i> 件，总计 <span>¥ {{payMoney}}</span>
 				</div>
-				<div class="right">立即支付</div>
+				<div class="right" @click="payNow">立即支付</div>
 			</div>
 		</div>
+		<div v-transfer-dom>
+			<popup class="coupon-popup" v-model="show">
+				<div class="pr-box">
+					<div class="header">
+						<div class="all">
+							<p>优惠券</p>
+							<img @click="show = false" :src="'./static/images/guanbi.png'" />
+						</div>
+					</div>
+					<div class="couponlist-box">
+						<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item.name,item.denomination,item.type,item.condition)">
+							<div class="blue" v-if="sureIndex == index && item.show">
+								<div class="pr-box">
+									<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
+								</div>
+							</div>
+							<div class="bg">
+								<div class="top">
+									<div>
+										<div class="one">
+											<div class="type-btn" v-if="item.type == 0">满减券</div>
+											<div class="type-btn" v-if="item.type == 10">体验券</div>
+											<div class="type-btn" v-if="item.type == 20">满减券</div>
+											<div class="type-btn" v-if="item.type == 30">折扣券</div>
+											<div class="type-btn" v-if="item.type == 40">运费券</div>
+											<div class="type-btn" v-if="item.type == 50">现金券</div>
+											<span>{{item.name}}</span>
+										</div>
+										<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
+									</div>
+									<div class="money">
+										<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50">
+											<span>{{item.denomination}}</span>元
+											<br />
+											<i>满{{item.condition}}元可用</i>
+										</div>
+										<div v-if="item.type == 30">
+											<span>{{item.denomination}}</span>折
+											<br />
+											<i>满{{item.condition}}元可用</i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="bottom show">
+								<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
+								<img class="r180" :src="'./static/images/xia.png'" alt="" />
+							</div>
+						</div>
+
+					</div>
+					<div class="btn" @click="show = false">确定</div>
+				</div>
+			</popup>
+			<popup v-model="showIntegral">
+				<div class="integral_popup">
+					<div class="pd">
+						<p class="title">通用积分使用</p>
+						<div class="tip">
+							<p>使用金额</p>
+							<p>可用：{{availableBalance}}</p>
+						</div>
+						<div class="input-div">
+							<input type="number" v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
+						</div>
+						<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
+					</div>
+					<div class="btn" @click="showIntegral = false">确定</div>
+				</div>
+			</popup>
+		</div>
+		<payMode :options="payOptions"></payMode>
+		<addressMode :options="addressOptions" @watch="select"></addressMode>
 	</section>
 </template>
 
 <script>
 	import settingHeader from '@/components/setting_header'
 	import { Popup, Group, Cell, XNumber, XInput } from 'vux'
+	import payMode from '@/components/payMode'
+	import addressMode from '@/views/member/address/select_address'
 	export default {
 		components: {
 			settingHeader,
@@ -110,30 +193,548 @@
 			Group,
 			Cell,
 			XNumber,
-			XInput
+			XInput,
+			payMode,
+			addressMode
 		},
 		data() {
 			return {
 				title: '确认订单',
-
+				payOptions: {},
+				addressOptions: {
+					showAddressMode: false
+				},
+				address: {},
+				addressId: '',
+				goodsInfo: {},
+				availableCoupon: [],
+				show: false,
+				showIntegral: false,
+				sureIndex: 1115,
+				userCouponIds: [],
+				couponName: '',
+				denomination: 0,
+				condition: 0,
+				integralNum: '',
+				remark: '',
+				availableBalance: 0,
+				maxBalance: 0,
+				payMoney: 0,
 			}
 		},
 		created() {
+			var _this = this
+			//商品信息
+			this.goodsInfo = {
+				'enterpriseName': this.$route.query.enterpriseName,
+				'goodsLogo': this.$route.query.goodsLogo,
+				'goodsName': this.$route.query.goodsName,
+				'skuName': this.$route.query.skuName,
+				'minPrice': this.$route.query.minPrice,
+				'minOriginPrice': this.$route.query.minOriginPrice,
+				'goodsNum': this.$route.query.goodsNum,
+				'skuId': this.$route.query.skuId
+			}
+
+			this.payMoney = (Number(this.$route.query.minPrice) * Number(this.$route.query.goodsNum)).toFixed(2)
+
+			this.payOptions = {
+				showPayMode: false,
+				data: {
+					time: 900,
+					money: this.payMoney,
+				},
+				changePay(index) {
+					console.log(index)
+				},
+				toPay(index) {
+					if(index == 1) {
+						_this.$router.push({
+							path: '/member/pay/wxgzhpay'
+						})
+					}
+				},
+				close() {
+					_this.$dialog.show({
+						type: 'warning',
+						headMessage: '提示',
+						message: '亲，确定取消付款吗?',
+						buttons: ['继续支付', '取消支付'],
+						canel() {
+							_this.$router.replace({
+								path: '/shop/my_order2',
+								query: {
+									status: 1,
+									tabIndex: 1
+								}
+							})
+						},
+						confirm() {
+
+						}
+					})
+				},
+				hide() {
+
+				},
+				show() {
+
+				}
+			}
+
+			this.getShippingAddress()
+			this.getEquipmentOrderConfirmInfo()
+		},
+		mounted() {
 
 		},
-		mounted() {},
-		computed: {},
+		computed: {
+			//			payMoney() {
+			//				//是否满足最低门槛
+			//				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
+			//					return(this.goodsInfo.minPrice * this.goodsInfo.goodsNum - this.denomination).toFixed(2)
+			//				} else {
+			//					return(this.goodsInfo.minPrice * this.goodsInfo.goodsNum).toFixed(2)
+			//				}
+			//			}
+		},
 		methods: {
-			numChange(val) {
-				console.log(val)
+			select(addressItem) {
+				this.address = addressItem
+				this.addressId = addressItem.addressId
 			},
+			addAddress() {
+				this.$router.push({
+					path: '/member/address/edit'
+				})
+			},
+			selectAddress() {
+				this.addressOptions.showAddressMode = true
+			},
+			payNow() {
+				var _this = this
+
+				_this.$http.post(_this.url.goods.buynow, {
+					userId: _this.$store.state.user.userId,
+					platformId: _this.url.platformId,
+					addressId: _this.addressId,
+					balance: _this.integralNum != '' ? _this.integralNum : 0,
+					enterprisePrice: _this.payMoney,
+					nums: _this.goodsInfo.goodsNum,
+					skuId: _this.goodsInfo.skuId,
+					userCouponIds: _this.userCouponIds,
+					remark: _this.remark
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.status == 1) {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '支付成功'
+							})
+							setTimeout(function() {
+								_this.$router.push({
+									path: '/shop/o_success'
+								})
+							}, 1000)
+						} else if(res.data.data.status == 2) {
+							_this.payOptions.showPayMode = true
+							_this.payOptions.data.money = res.data.data.payPrice
+						}
+					}
+				})
+			},
+			integralNumChange(e) {
+
+				var inputNum = this.integralNum == '' ? 0 : this.integralNum
+
+				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
+					this.maxBalance = (this.goodsInfo.minPrice * this.goodsInfo.goodsNum) - this.denomination //选择优惠券减去的钱
+				}
+					
+				if(parseFloat(this.maxBalance) <= parseFloat(this.availableBalance)) {
+					if(parseFloat(inputNum) > parseFloat(this.maxBalance)) {
+						this.integralNum = parseFloat(this.maxBalance).toFixed(2)
+						inputNum = parseFloat(this.maxBalance).toFixed(2)
+					}
+					this.payMoney = (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) > 0 ? (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) : 0
+				} else if(parseFloat(this.maxBalance) > parseFloat(this.availableBalance)) {
+					if(parseFloat(inputNum) > parseFloat(this.availableBalance)) {
+						this.integralNum = parseFloat(this.availableBalance).toFixed(2)
+						inputNum = parseFloat(this.availableBalance).toFixed(2)
+					}
+					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0
+				}
+				
+//				console.log(parseFloat(this.payMoney))
+			},
+			// 获取收货地址列表
+			getShippingAddress() {
+				let _this = this
+				let param = {
+					'userId': _this.$store.state.user.userId,
+					'pageSize': 20,
+					'curPage': 1
+				}
+				_this.$http.get(_this.url.user.getShippingAddress, {
+					params: param
+				}).then(res => {
+					if(res.data.status === '00000000') {
+						if(res.data.data.list.length > 0) {
+							res.data.data.list.forEach(function(value) {
+								if(value.isDefault == 1) {
+									_this.address = value
+									_this.addressId = value.addressId
+									return false;
+								}
+							})
+						} else {
+							_this.address = ''
+						}
+					}
+				})
+
+			},
+			//获取优惠券列表
+			getEquipmentOrderConfirmInfo(id, num) {
+				var _this = this
+
+				_this.$http.get(_this.url.share.getEquipmentOrderConfirmInfo, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						platformId: _this.url.platformId,
+						equipNumber: 60009,
+						skuId: 2
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
+							res.data.data.availableCoupon[i].show = false
+						}
+						_this.availableCoupon = res.data.data.availableCoupon
+						_this.availableBalance = res.data.data.availableBalance
+					}
+				})
+			},
+			//  优惠券  下标 名字 减去金额 类型  使用门槛 
+			sure(index, name, denomination, type, condition) {
+				this.sureIndex = index
+
+				let sureCouponList = []
+
+				for(var i = 0; i < this.availableCoupon.length; i++) {
+					if(i != index) {
+						this.availableCoupon[i].show = false
+					} else {
+						this.availableCoupon[i].show = this.availableCoupon[index].show
+					}
+				}
+
+				this.availableCoupon[index].show = !this.availableCoupon[index].show
+
+				for(var i = 0; i < this.availableCoupon.length; i++) {
+					if(this.availableCoupon[i].show) {
+						this.userCouponIds.push(this.availableCoupon[i].userCouponId)
+						sureCouponList.push(this.availableCoupon[i])
+					}
+				}
+
+				if(sureCouponList.length > 0) {
+					this.couponName = name
+					this.denomination = denomination
+					this.condition = condition
+				} else {
+					this.userCouponIds = []
+					this.couponName = ''
+					this.denomination = 0
+					this.condition = 0
+				}
+
+				this.integralNumChange()
+			}
 		}
 	}
 </script>
-<style type="less">
-	.number-box .weui-cell{ padding-left: 0!important; padding-right: 0!important; } .number-box .weui-cell:before{ border-top: none; }
+<style lang="less">
+	.integral_popup {
+		.input-div {
+			width: 100%;
+			height: 0.8rem;
+			margin-top: 0.15rem;
+			input {
+				width: 100%;
+				height: 100%;
+				font-size: 0.30rem;
+			}
+		}
+	}
+	
+	.number-box .weui-cell {
+		padding-left: 0!important;
+		padding-right: 0!important;
+	}
+	
+	.number-box .weui-cell:before {
+		border-top: none;
+	}
 </style>
 <style lang="less" scoped>
+	.integral_popup {
+		height: 8.36rem;
+		background-color: white;
+		position: relative;
+		.pd {
+			padding: 0 0.30rem;
+			box-sizing: border-box;
+		}
+		.title {
+			font-size: 0.32rem;
+			font-family: Adobe Heiti Std R;
+			color: rgba(34, 34, 34, 1);
+			text-align: center;
+			padding: 0.40rem 0;
+		}
+		.tip {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 0.30rem;
+			p:nth-child(1) {
+				font-size: 0.28rem;
+				font-family: Adobe Heiti Std R;
+				color: rgba(34, 34, 34, 1);
+			}
+			p:nth-child(2) {
+				font-size: 0.28rem;
+				color: rgba(160, 160, 160, 1);
+			}
+		}
+		.input-div {
+			padding-bottom: 0.10rem;
+			position: relative;
+		}
+		.input-div:after {
+			content: " ";
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 1px;
+			border-top: 1px solid #E1E1E1;
+			color: #E1E1E1;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+			left: 0px;
+		}
+		.gz {
+			text-align: right;
+			margin-top: 0.15rem;
+			font-size: 0.24rem;
+			font-family: Adobe Heiti Std R;
+			color: rgba(46, 106, 255, 1);
+		}
+		.btn {
+			height: 0.90rem;
+			line-height: 0.90rem;
+			text-align: center;
+			background: rgba(51, 111, 255, 1);
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			font-size: 0.32rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(254, 254, 254, 1);
+		}
+	}
+	
+	.coupon-popup {
+		box-sizing: border-box;
+		/*background: #F5F6FA;*/
+		.pr-box {
+			position: relative;
+		}
+		.header {
+			height: 1.25rem;
+			padding: 0 0.20rem;
+			/*position: absolute;
+			top: 0;
+			width: 100%;*/
+			background-color: white;
+			.all {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				z-index: 15;
+				height: 100%;
+				img {
+					width: 0.25rem;
+					height: 0.25rem;
+					position: absolute;
+					top: 50%;
+					right: 0%;
+					transform: translate(0%, -50%);
+				}
+			}
+		}
+		.btn {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 0.88rem;
+			background: rgba(51, 111, 255, 1);
+			font-size: 0.30rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(255, 255, 255, 1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+			z-index: 15;
+		}
+		.couponlist-box {
+			padding: 0 0.20rem;
+			position: relative;
+			height: 7rem;
+			z-index: 11;
+			overflow-y: auto;
+			padding-bottom: 0.88rem;
+			padding-top: 0.24rem;
+			.bs {
+				box-shadow: 2px 0px 20px rgba(217, 223, 240, 1);
+				margin-bottom: 0.24rem;
+				position: relative;
+				box-sizing: border-box;
+				border-radius: 3px;
+				background: #F5F6FA;
+				.blue {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					border: 2px solid #336fff;
+					border-radius: 3px;
+					box-sizing: border-box;
+					.pr-box {
+						position: relative;
+						.sureImg {
+							position: absolute;
+							top: 0;
+							right: 0;
+							width: 0.68rem;
+							height: 0.68rem;
+						}
+					}
+				}
+			}
+			.bg {
+				height: 2.04rem;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				/*background: url(../../assets/images/member/coupon-bg.png) no-repeat;*/
+				background-size: cover;
+				img {
+					position: absolute;
+					top: -0.15rem;
+					right: -0.07rem;
+					width: 1.2rem;
+					height: 1.2rem;
+				}
+				.top {
+					flex: 1;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					padding: 0 0.40rem;
+					box-sizing: border-box;
+					.one {
+						display: flex;
+						.type-btn {
+							width: 0.88rem;
+							height: 0.32rem;
+							background: rgba(51, 111, 255, 1);
+							border-radius: 16px;
+							font-size: 0.22rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(255, 255, 255, 1);
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+						span:nth-child(2) {
+							font-size: 0.28rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(26, 38, 66, 1);
+							margin-left: 0.1rem;
+						}
+					}
+					p {
+						margin-top: 0.23rem;
+						font-size: 0.24rem;
+						font-family: PingFang-SC-Medium;
+						color: rgba(26, 38, 66, 1);
+					}
+					.money {
+						font-size: 0.24rem;
+						font-family: PingFang-SC-Bold;
+						color: rgba(51, 111, 255, 1);
+						span {
+							font-size: 0.68rem;
+							color: rgba(51, 111, 255, 1);
+						}
+						i {
+							font-size: 0.20rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(51, 111, 255, 1);
+						}
+					}
+				}
+			}
+			.bottom {
+				font-size: 0.22rem;
+				font-family: PingFang-SC-Medium;
+				color: rgba(144, 162, 199, 1);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0.18rem 0.40rem;
+				background: rgb(249, 250, 255);
+				box-sizing: border-box;
+				border-radius: 3px;
+				.shang {
+					display: inline-block;
+					width: 5.84rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					-webkit-line-clamp: 3;
+					-webkit-box-orient: vertical;
+				}
+				.xia {
+					display: inline-block;
+					width: 5.84rem;
+				}
+				img {
+					width: 0.19rem;
+					height: auto;
+				}
+			}
+			.show {
+				span {
+					white-space: pre-wrap!important;
+				}
+			}
+			.r180 {
+				transform: rotate(-180deg);
+			}
+		}
+	}
+	
 	.commodity_order_box {
 		padding-bottom: 1.80rem;
 		background-color: #F5F6FA;
@@ -143,6 +744,19 @@
 			height: 1.92rem;
 			padding: 0 0.20rem;
 			background-color: white;
+			position: relative;
+			.null_address {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				padding-right: 0.25rem;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(160, 160, 160, 1);
+				p:nth-child(2) {
+					color: rgba(51, 51, 51, 1)!important;
+				}
+			}
 			.left-img {
 				width: 0.32rem;
 				height: auto;
@@ -166,10 +780,15 @@
 				display: -webkit-box;
 				-webkit-line-clamp: 2;
 				-webkit-box-orient: vertical;
+				padding-right: 0.2rem;
 			}
 			.right-img {
 				width: 0.2rem;
 				margin-left: 0.50rem;
+				position: absolute;
+				top: 50%;
+				right: 0%;
+				transform: translate(-0.2rem, -50%);
 			}
 		}
 		.fenjiexian {

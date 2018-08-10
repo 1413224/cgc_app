@@ -28,8 +28,8 @@
 		<div class="pay-box" v-else>
 			<popup class="payMode-popup" height="100%" v-model="options.showPayMode" @on-hide="hide" @on-show="show">
 				<div class="pr-box">
-					<div class="bt" @click="options.showPayMode = !options.showPayMode">
-						<i class="iconfont icon-arrow-right"></i>
+					<div class="bt">
+						<i @click="close" class="iconfont icon-arrow-right"></i>
 						<p>支付收银台</p>
 					</div>
 					<div class="money_box">
@@ -101,8 +101,7 @@
 					}
 				],
 				payModeIndex: 0,
-				timeNum: [0, 6, 0, 0],
-				time: 360
+				timeNum: [0, 6, 0, 0]
 			}
 		},
 		components: {
@@ -115,7 +114,7 @@
 			if(this.timeNum[i] != 0) {
 				this.reduce(this.timeNum[i++])
 			}
-			this.countdown(this.time)
+			this.countdown(this.options.data.time)
 		},
 		props: {
 			options: {
@@ -126,13 +125,18 @@
 					toPay() {},
 					hide() {},
 					show() {},
+					close() {},
 					data: {
+						time: 900,
 						money: 0
 					}
 				}
 			}
 		},
 		methods: { //关闭弹窗
+			close() {
+				this.options.close()
+			},
 			hide() {
 				this.options.hide()
 			},

@@ -13,7 +13,7 @@
 		},
 		created() {
 			this.updateRouter()
-			
+
 			var url = localStorage['beforeLoginUrl'].split('?')[0]
 			this.url2 = url.split('?')[0]
 		},
@@ -36,7 +36,7 @@
 			},
 			updateRouter() {
 				var _this = this
-				
+
 				let openid = this.$route.query.openId
 				// let params = this.$route.query
 
@@ -70,30 +70,36 @@
 							if(res.data.status == "00000000") {
 								_this.$store.commit('UPDATE_USER_INFO', res.data.data)
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-								if(_this.url2 == '/share/instrumentCode' || _this.url2 == '/multi_user_mall') {
-									_this.$router.push({
-										path: localStorage['beforeLoginUrl']
-									})
-								} else {
-									_this.$router.push({
-										path: '/index'
-									})
-								}
+								_this.$router.push({
+									path: localStorage['beforeLoginUrl']
+								})
+								//								if(_this.url2 == '/share/instrumentCode' || _this.url2 == '/multi_user_mall') {
+								//									_this.$router.push({
+								//										path: localStorage['beforeLoginUrl']
+								//									})
+								//								} else {
+								//									_this.$router.push({
+								//										path: '/index'
+								//									})
+								//								}
 
 							}
 						})
-						
+
 					} else {
 						var url = localStorage['beforeLoginUrl'].split('?')[0]
-						if(url == '/share/instrumentCode' || url == '/multi_user_mall') {
-							_this.$router.push({
-								path: localStorage['beforeLoginUrl']
-							})
-						} else {
-							_this.$router.push({
-								path: '/index'
-							})
-						}
+						//						if(url == '/share/instrumentCode' || url == '/multi_user_mall') {
+						//							_this.$router.push({
+						//								path: localStorage['beforeLoginUrl']
+						//							})
+						//						} else {
+						//							_this.$router.push({
+						//								path: '/index'
+						//							})
+						//						}
+						_this.$router.push({
+							path: localStorage['beforeLoginUrl']
+						})
 					}
 
 				} else {

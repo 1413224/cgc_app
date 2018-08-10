@@ -434,6 +434,10 @@
 								_this.showFoot = true
 							}
 						})
+						this.scroll.on('scrollStart', (pos) => {
+							_this.showFoot = false
+						})
+						
 						this.scroll.on('scrollEnd', (pos) => {
 							_this.showFoot = true
 						})

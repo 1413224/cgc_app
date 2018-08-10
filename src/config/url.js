@@ -97,6 +97,7 @@ var url = {
 	},
 	goods: {
 		getGoodsInfo: uri4 + '/public/v1/goods/getGoodsInfo', //获取商品信息接口
+		buynow: uri3 + '/v1/order/buynow'
 	}
 
 }

@@ -7,10 +7,10 @@ import draw from '@/router/modules/draw'
 import lock from '@/router/modules/lock'
 import brand from '@/router/modules/brand'
 import business from '@/router/modules/business'
-
+import prcModule from '@/router/modules/prc'
 Vue.use(Router)
 
-var all = shopModule.concat(memberModule, share, draw, lock, brand,business)
+var all = shopModule.concat(memberModule, share, draw, lock, brand, business, prcModule)
 
 export default new Router({
 	// base:'/new/',
