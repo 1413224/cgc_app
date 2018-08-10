@@ -394,8 +394,8 @@
 		}
 		.tgm {
 			height: 100%;
-			background: url(../../../../static/qrcode/tgm-bg.png) no-repeat;
-			background-size: 100% 100%;
+			background: url(../../../../static/qrcode/tgm-bg-vi.png) no-repeat;
+			background-size: 100% 90%;
 			position: relative;
 			padding-bottom: 1rem;
 			.bw-box3 {

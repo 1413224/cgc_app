@@ -4,7 +4,7 @@
 		<settingHeader title="向商家付款"></settingHeader>
 		<div class="b-w">
 			<div class="shop_info_box">
-				<img class="shop_logo" :src="'./static/images/shopLogo.png'" />
+				<img class="shop_logo" src="'./static/images/shopLogo.png'" />
 				<p class="shop_name">付款给商户 <span>7-Eleven(番天2店)</span></p>
 			</div>
 			<div class="input_box">

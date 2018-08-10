@@ -185,7 +185,7 @@
 				iscity: '',
 				isdistrict: '',
 				areaId: '',
-				distance: 5,
+				distance: 100,
 				lat: '',
 				lng: '',
 				curPage: 1,
@@ -293,12 +293,14 @@
 				geolocation.getLocation(showPosition, showErr, options)
 
 				function showPosition(res) {
+					console.log(res)
 					_this.region = res.province + res.city
 					if(_this.$store.state.page.isWx == false) {
-						// _this.lat = res.latitude
-						_this.lat = 22.9377200000
-						// _this.lng = res.longitude
-						_this.lng = 113.3842400000
+
+						_this.lat = res.lat
+						// _this.lat = 22.9377200000
+						_this.lng = res.lng
+						// _this.lng = 113.3842400000
 						_this.checkQuery(_this.$route.query)
 						_this.hasDw = true
 						_this.getEnterpriseListInfo()

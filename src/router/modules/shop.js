@@ -27,7 +27,7 @@
 const shopModule = [
 	// 商城模块
 	{
-		path: '/shop', //首页
+		path: '/shop', //首页  temporarily(敬请期待)
 		name: 'shop',
 		component: resolve => require(['@/views/shop/temporarily'], resolve),
 		meta: {
