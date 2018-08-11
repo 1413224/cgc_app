@@ -178,6 +178,7 @@
 					unionid: sessionStorage['_openid_']
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
+//						sessionStorage.setItem('regFirst',true)
 						_this.$vux.toast.show({
 							width: '50%',
 							type: 'text',

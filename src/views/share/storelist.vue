@@ -83,7 +83,7 @@
 				<noMore v-if="showNoMore"></noMore>
 				<div style="margin-top: 3px;">
 					<noData v-if="!showShop" :status="2" :stateText="'暂无门店'"></noData>
-					<noData v-if="!showShop" :status="2" :stateText="'请允许获取您的当前位置'"></noData>
+					<noData v-if="list.length == 0" :status="2" :stateText="'努力加载中...'"></noData>
 				</div>
 			</div>
 		</div>

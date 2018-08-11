@@ -28,7 +28,7 @@
 					</ul>
 				</popup>
 
-				<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
+				<div :class="[{'h':!$store.state.page.isWx},{'b-white':goodsList.length == 0}]" class="wrapper" ref="wrapper">
 					<div class="content">
 						<div class="top2">
 							<div class="left">
@@ -86,6 +86,8 @@
 						<Loading v-if="showLoading"></Loading>
 						<noMore v-if="showNomore"></noMore>
 						<noData v-if="!showGoods" :status="2" stateText="暂无商品"></noData>
+						<noData v-if="goodsList.length == 0" :status="2" stateText="努力加载中..."></noData>
+
 					</div>
 				</div>
 			</div>
@@ -397,12 +399,12 @@
 		},
 		mounted() {},
 		methods: {
-			toGoodsDetails(goodsId){
+			toGoodsDetails(goodsId) {
 				var _this = this
 				_this.$router.push({
-					path:'/multi_user_mall/commodity_details',
-					query:{
-						goodsId:goodsId
+					path: '/multi_user_mall/commodity_details',
+					query: {
+						goodsId: goodsId
 					}
 				})
 			},
@@ -437,29 +439,26 @@
 						this.scroll.on('scrollStart', (pos) => {
 							_this.showFoot = false
 						})
-						
+
 						this.scroll.on('scrollEnd', (pos) => {
 							_this.showFoot = true
 						})
 					}
 				})
 			},
-			setServiceTime(serviceTime){
-				var time_str='';
-				if(serviceTime>=3600)
-				{
+			setServiceTime(serviceTime) {
+				var time_str = '';
+				if(serviceTime >= 3600) {
 					var hour = Math.floor(serviceTime / 3600);
 					time_str += hour + '时';
-					serviceTime -=hour*3600;
+					serviceTime -= hour * 3600;
 				}
-				if(serviceTime>=60)
-				{
+				if(serviceTime >= 60) {
 					var minute = Math.floor(serviceTime / 60);
 					time_str += minute + '分';
-					serviceTime -=minute*60;
+					serviceTime -= minute * 60;
 				}
-				if(serviceTime>0)
-				{
+				if(serviceTime > 0) {
 					time_str += serviceTime + '秒';
 				}
 				return time_str;
