@@ -443,7 +443,7 @@
 
 							// alert(_this.list.length)
 							// this.$refs.mySwiper.swiper.activeIndex
-							// 
+							 
 								if(_this.list.length == 0){
 									_this.$router.push({
 										path:'/shop/my_order2'
