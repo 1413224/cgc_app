@@ -20,7 +20,7 @@
 				<div>积分来源</div>
 				<div @click="$router.push({path:'/member/benefits/index'})">积分攻略<img :src="thao" alt="" /></div>
 			</div>
-			<div class="b-list">
+			<!--<div class="b-list">
 				<group :gutter='0'>
 					<cell class="item" primary="content" is-link @click.native="toCreditReward('信用积分',3)">
 						<div class="left">
@@ -68,6 +68,48 @@
 						</div>
 					</cell>
 				</group>
+			</div>-->
+			<div class="jl_list">
+				<div class="item_box" @click="toCreditReward('信用积分',3)">
+					<div class="left">
+						<img style="width:0.37rem;height: 0.28rem;" :src="'./static/member/jl_1.png'" />
+						<div>
+							<p>充值奖励</p>
+							<p>累计奖励：{{fundInfo.rechargePoints}}</p>
+						</div>
+					</div>
+					<img class="right_img" :src="'./static/images/b-right.png'" />
+				</div>
+				<div class="item_box"  @click="toCreditReward('信用积分',4)">
+					<div class="left">
+						<img style="width:0.37rem;height: 0.37rem;" :src="'./static/member/jl_2.png'" />
+						<div>
+							<p>购物奖励</p>
+							<p>累计奖励：{{fundInfo.cashbackPoints}}</p>
+						</div>
+					</div>
+					<img class="right_img" :src="'./static/images/b-right.png'" />
+				</div>
+				<div class="item_box"  @click="toCreditReward('信用积分',5)">
+					<div class="left">
+						<img style="width: 0.39rem;height: 0.37rem;" :src="'./static/member/jl_3.png'" />
+						<div>
+							<p>推荐用户</p>
+							<p>累计奖励：{{fundInfo.recommendPoints}}</p>
+						</div>
+					</div>
+					<img class="right_img" :src="'./static/images/b-right.png'" />
+				</div>
+				<div class="item_box"  @click="toCreditReward('信用积分',2)">
+					<div class="left">
+						<img style="width: 0.38rem;height: 0.36rem;" :src="'./static/member/jl_7.png'" />
+						<div>
+							<p>消费奖励</p>
+							<p>累计奖励：{{fundInfo.cashbackPoints}}</p>
+						</div>
+					</div>
+					<img class="right_img" :src="'./static/images/b-right.png'" />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -136,6 +178,58 @@
 			}
 			p:nth-child(2) {
 				font-size: 0.24rem;
+			}
+		}
+		.jl_list {
+			.item_box {
+				height: 1.80rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				background-color: white;
+				padding: 0 0.33rem;
+				box-sizing: border-box;
+				position: relative;
+				.left {
+					display: flex;
+					div {
+						margin-left: 0.38rem;
+						img{
+							margin-top: 0.06rem;
+						}
+						p:nth-child(1) {
+							font-size: 0.28rem;
+							font-family: MicrosoftYaHei;
+							color: rgba(26, 38, 66, 1);
+						}
+						p:nth-child(2) {
+							font-size: 0.24rem;
+							font-family: MicrosoftYaHei;
+							color: rgba(144, 162, 199, 1);
+							margin-top: 0.30rem;
+						}
+					}
+				}
+				.right_img {
+					width: 0.25rem;
+					height: auto;
+				}
+			}
+			.item_box:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #D8DFF0;
+				color: #D8DFF0;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
+				z-index: 800;
 			}
 		}
 		.bottom {

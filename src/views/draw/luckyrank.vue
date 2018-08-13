@@ -2,98 +2,44 @@
 	<section style="background-color: #E32921;height: 100%;">
 		<div class="luckyrank">
 			<settingHeader :title="title"></settingHeader>
-			<div style="height: 0.98rem;">
-				<tab active-color="#E32921" custom-bar-width="80px" default-color="#333">
-					<tab-item :selected="tabIndex == 0" @on-item-click="showNumber">中奖次数</tab-item>
-					<tab-item :selected="tabIndex == 1" @on-item-click="showMoney">中奖累计金额</tab-item>
-				</tab>
-			</div>
+			<tab class="tab_box" active-color="#E32921" custom-bar-width="80px" default-color="#333">
+				<tab-item :selected="tabIndex == 0" @on-item-click="showNumber">中奖次数</tab-item>
+				<tab-item :selected="tabIndex == 1" @on-item-click="showMoney">中奖累计金额</tab-item>
+			</tab>
 			<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
 				<div class="content">
-					<!-- 排行前3名 -->
-					<div class="former-three">
-						<div class="rank-top">
-							<li>
-								<div class="rank-pic" v-if="rankList.lists.length>1">
-									<img src="../../assets/images/draw/2.png" alt="">
-									<div class="pic-move">
-										<img :src="rankList.lists[1].thumb" alt="">
-									</div>
-									<div class="ranking">
-										<img src="../../assets/images/draw/two.png">
-									</div>
-								</div>
-							</li>
-
-							<li>
-								<div class="rank-pic" v-if="rankList.lists.length>0">
-									<img src="../../assets/images/draw/1.png" alt="">
-									<div class="pic-move">
-										<img :src="rankList.lists[0].thumb" alt="">
-									</div>
-									<div class="ranking">
-										<img src="../../assets/images/draw/one.png">
-									</div>
-								</div>
-							</li>
-
-							<li>
-								<div class="rank-pic" v-if="rankList.lists.length>2">
-									<img src="../../assets/images/draw/3.png" alt="">
-									<div class="pic-move">
-										<img :src="rankList.lists[2].thumb" alt="">
-									</div>
-									<div class="ranking">
-										<img src="../../assets/images/draw/three.png">
-									</div>
-								</div>
-							</li>
+					<div class="top">
+						<div class="one_box">
+							<span>奖励排名</span><span>奖励次数</span>
 						</div>
-
-						<div class="rank-content">
-							<div class="content-float" v-for="(item,index) in rankList.lists" :key="index" v-if="index<3">
-								<div class="rank-phone">{{ item.mobile}}</div>
-								<div class="rank-money" v-if="tab2 == true">{{ item.money}}</div>
-								<div class="rank-money" v-else>{{ item.number}}</div>
+						<div class="two_box">
+							<div class="left">
+								<img :src="'./static/images/mrtx.png'" alt="">
+								<div>
+									<p>排名：第99+</p>
+									<p>我</p>
+								</div>
 							</div>
-
+							<p class="pm">103</p>
 						</div>
 					</div>
-
-					<div class="rankData">
-						<!--数据列表 -->
-						<ul v-if="tab2 == true">
-							<group>
-								<cell v-for="(item,index) in rankList.lists" :key="index" v-if="index>2" class="item">
-									<div class="rankList">
-										<div class="rankList-left">{{ index+1 }}</div>
-										<div class="rankList-center">
-											<img :src="item.thumb" alt="">
-											<div>{{item.mobile}}</div>
-										</div>
-										<div class="pr">{{ item.money}}</div>
-									</div>
-								</cell>
-							</group>
-						</ul>
-						<ul v-else>
-							<group>
-								<cell v-for="(item,index) in rankList.lists" :key="index" v-if="index>2" class="item">
-									<div class="rankList">
-										<div class="rankList-left">{{ index+1 }}</div>
-										<div class="rankList-center">
-											<img :src="item.thumb" alt="">
-											<div>{{item.mobile}}</div>
-										</div>
-										<div class="rankList-right">{{ item.number}}</div>
-									</div>
-								</cell>
-							</group>
-						</ul>
-						<loading v-if="show"></loading>
-						<noMore v-if="showNomore"></noMore>
+					<div class="bottom">
+						<div class="item_box" v-for="(item,index) in rankList.lists">
+							<div class="left">
+								<div>
+									<img class="tx" :src="item.thumb" alt="">
+									<img class="pa_img" v-if="index == 0" :src="'./static/draw/diyi.png'" alt="">
+									<img class="pa_img" v-if="index == 1" :src="'./static/draw/dier.png'" alt="">
+									<img class="pa_img" v-if="index == 2" :src="'./static/draw/disan.png'" alt="">
+								</div>
+								<div>
+									<div class="diyi" :class="index<3 ? 'diyi'+Number(index+1) : ''">NO.{{ item.number}}</div>
+									<p>{{item.mobile}}</p>
+								</div>
+							</div>
+							<div class="right">{{item.money}}</div>
+						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -228,7 +174,6 @@
 						_this.numberList = response.data.result
 						_this.rankList = _this.numberList;
 					}
-					console.log('幸运排行接口数据', response);
 				}).catch(function(error) {
 					console.log(error);
 				});
@@ -253,7 +198,6 @@
 							_this.showNomore = false;
 						}
 					}
-					console.log('幸运排行累计金额数据', response);
 				}).catch(function(error) {
 					console.log(error);
 				});
@@ -262,231 +206,149 @@
 		}
 	}
 </script>
-
-<style lang="less" scoped>
-	.wrapper-top {
-		top: 1.85rem!important;
-	}
-	
-	.wrapper {
-		position: absolute;
-		top: 0.98rem;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		overflow: hidden;
-	}
-	
-	.luckyrank {
-		width: 94.7%;
-		background-color: #fff;
-		margin: 0 auto;
-		height: 100%;
-	}
-	
-	.top {
-		background-color: #FF5365;
-		padding-top: 0.8rem;
-		padding-bottom: 0.2rem;
-		.btn-large {
-			width: 90%;
-			height: 0.8rem;
-			margin: auto;
-		}
-	}
-	/* 排行前3名 */
-	
-	.former-three {
-		overflow: hidden;
-		background-color: #FFF;
-		padding-top: 0.5rem;
-		margin: 0 0.4rem;
-		padding-bottom: 0.4rem;
-		.rank-top {
-			display: flex;
-			justify-content: space-between;
-			width: 100%;
-		}
-		li:nth-child(1),
-		li:nth-child(3) {
-			list-style: none;
-			width: 1.60rem;
-			height: 1.60rem;
-		}
-		li:nth-child(2) {
-			list-style: none;
-			width: 2.05rem;
-			height: 2.05rem;
-		}
-		li:nth-child(2) .pic-move {
-			position: absolute;
-			top: 0.67rem;
-			left: 50%;
-			transform: translate(-50%, -0.6rem);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			img {
-				width: 1.93rem;
-				height: 1.93rem;
-			}
-		}
-		.rank-pic {
-			width: 100%;
-			position: relative;
-			img {
-				width: 100%;
-				z-index: 3;
-			}
-			.pic-move {
-				position: absolute;
-				top: 4.8%;
-				left: 4.3%;
-				img {
-					width: 1.47rem;
-					height: 1.47rem;
-					vertical-align: middle;
-					border-radius: 50%;
-				}
-			}
-			.ranking {
-				position: absolute;
-				top: 77%;
-				left: 35%;
-				img {
-					width: 55%;
-				}
-			}
-		}
-		.rank-content {
-			margin-top: 0.37rem;
-			width: 100%;
-			color: #333333;
-			text-align: center;
-			/*display: flex;*/
-			.content-float {
-				width: 25.4%;
-				padding-top: 0.45rem;
-				float: left;
-				display: inline-block;
-			}
-			.content-float:nth-child(1) {
-				float: none;
-			}
-			.content-float:nth-child(3) {
-				float: right;
-			}
-			.rank-phone {
-				font-size: 0.24rem;
-				margin-bottom: 0.2rem;
-			}
-			.rank-money {
-				font-size: 0.32rem;
-				color: #E32921;
-				font-weight: bold;
-			}
-		}
-	}
-	
-	.rankList {
-		width: 100%;
-		line-height: 1.2rem;
-		font-size: 0.32rem;
-		font-weight: bold;
-		color: #1A2642;
-		.rankList-left {
-			width: 20%;
-			float: left;
-			text-align: center;
-			font-size: 0.34rem;
-		}
-		.rankList-center {
-			width: 50%;
-			float: left;
-			margin: auto;
-			img {
-				width: 0.8rem;
-				height: 0.8rem;
-				float: left;
-				margin-top: 0.2rem;
-				margin-right: 0.4rem;
-				vertical-align: middle;
-				border-radius: 50%;
-			}
-			div {
-				line-height: 1.2rem;
-				color: #333333;
-				font-size: 0.26rem;
-			}
-		}
-		.rankList-right {
-			padding-right: 0.9rem;
-			text-align: right;
-			color: #E32921;
-			font-size: 0.32rem;
-		}
-		.pr {
-			padding-right: 0.28rem;
-			text-align: right;
-			color: #E32921;
-			font-size: 0.32rem;
-		}
-	}
-	
-	.item:nth-child(odd) {
-		background: #FFF5F5;
-	}
-	
-	.item:nth-child(even) {
-		background: #fff;
-	}
-</style>
-
 <style lang="less">
 	.luckyrank {
-		.vux-tab {
-			height: 0.98rem;
-		}
-		.vux-tab-warp {
-			padding-top: 0.98rem;
-		}
-		.vux-tab .vux-tab-item {
+		.tab_box .vux-tab .vux-tab-item {
 			font-size: 0.36rem;
-		}
-		.vux-tab-container {
-			height: 0.98rem;
-		}
-		.weui-cells:before {
-			border-top: none;
-		}
-		.weui-cell:before {
-			border-top: none !important;
+			font-family: PingFang-SC-Medium;
+			color: rgba(227, 41, 33, 1);
 		}
 	}
-	
-	.rankData {
-		width: 90%;
-		margin: 0px auto;
-		.weui-cells {
-			margin-top: 0;
-		}
-		.vux-no-group-title {
-			margin-top: 0;
-		}
-		.weui-cells:before {
-			border-top: none !important;
-		}
-		.weui-cell {
-			padding: 0;
-			padding-top: 0.15rem;
-			padding-bottom: 0.15rem;
-		}
-		.weui-cell__ft {
+</style>
+<style lang="less" scoped>
+	.luckyrank {
+		padding: 0 0.3rem;
+		box-sizing: border-box;
+		position: relative;
+		height: 100%;
+		.wrapper {
+			position: absolute;
+			top: 0.98rem;
+			left: 0;
+			bottom: 0;
 			width: 100%;
-			text-align: left;
+			padding: 0 0.30rem;
+			box-sizing: border-box;
+			overflow: hidden;
+			.content {
+				background: rgba(255, 245, 245, 1);
+				.top {
+					height: 2.27rem;
+					background-color: white;
+					padding: 0 0.20rem;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex-direction: column;
+					.one_box {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						font-size: 0.24rem;
+						font-family: PingFang-SC-Medium;
+						color: rgba(160, 160, 160, 1);
+					}
+					.two_box {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						margin-top: 0.30rem;
+						.left {
+							display: flex;
+							img {
+								width: 0.89rem;
+								height: 0.89rem;
+								margin-right: 0.30rem;
+								border-radius: 50%;
+							}
+							p:nth-child(1) {
+								font-size: 0.26rem;
+								font-family: PingFang-SC-Medium;
+								color: rgba(160, 160, 160, 1);
+							}
+							p:nth-child(2) {
+								font-size: 0.32rem;
+								font-family: PingFang-SC-Medium;
+								color: rgba(26, 38, 66, 1);
+							}
+						}
+						.pm {
+							font-size: 0.32rem;
+							font-family: GillSansMT;
+							color: rgba(227, 41, 33, 1);
+						}
+					}
+				}
+				.bottom {
+					margin-top: 0.20rem;
+					background-color: white;
+					padding: 0.1rem 0.30rem 0.1rem;
+					box-sizing: border-box;
+					.item_box {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						margin-bottom: 0.30rem;
+						.left {
+							display: flex;
+							align-items: center;
+							div:nth-child(1) {
+								display: flex;
+								align-items: center;
+								position: relative;
+								img {
+									width: 0.89rem;
+									height: 0.89rem;
+									border-radius: 50%;
+								}
+								.pa_img {
+									width: 0.42rem;
+									height: 0.37rem;
+									position: absolute;
+									top: -5%;
+									left: -19%;
+								}
+							}
+							div:nth-child(2) {
+								margin-left: 0.30rem;
+								.diyi {
+									width: 1.0rem;
+									height: 0.34rem;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+									font-size: 0.26rem;
+									font-family: DINOT-Medium;
+									color: rgba(255, 255, 255, 1);
+								}
+								.diyi1 {
+									background: url(../../../static/draw/diyi_bg.png) no-repeat;
+									background-size: 100% 100%;
+								}
+								.diyi2 {
+									background: url(../../../static/draw/dier_bg.png) no-repeat;
+									background-size: 100% 100%;
+								}
+								.diyi3 {
+									background: url(../../../static/draw/disan_bg.png) no-repeat;
+									background-size: 100% 100%;
+								}
+							}
+						}
+						.right {
+							font-size: 0.26rem;
+							font-family: PingFang-SC-Medium;
+							color: #E32921;
+						}
+					}
+				}
+			}
 		}
-		.weui-cells:after {
-			border-bottom: none;
+		.wrapper-top {
+			top: 1.8rem!important;
 		}
 	}
 </style>

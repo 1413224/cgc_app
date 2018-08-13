@@ -168,6 +168,7 @@
 							<p>可用：{{availableBalance}}</p>
 						</div>
 						<div class="input-div">
+							<p>¥</p>
 							<input type="number" v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
 						</div>
 						<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
@@ -288,15 +289,10 @@
 		mounted() {
 
 		},
-		computed: {
-			//			payMoney() {
-			//				//是否满足最低门槛
-			//				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
-			//					return(this.goodsInfo.minPrice * this.goodsInfo.goodsNum - this.denomination).toFixed(2)
-			//				} else {
-			//					return(this.goodsInfo.minPrice * this.goodsInfo.goodsNum).toFixed(2)
-			//				}
-			//			}
+		watch: {
+			'goodsInfo.goodsNum' () {
+				this.integralNumChange()
+			}
 		},
 		methods: {
 			select(addressItem) {
@@ -352,22 +348,22 @@
 				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
 					this.maxBalance = (this.goodsInfo.minPrice * this.goodsInfo.goodsNum) - this.denomination //选择优惠券减去的钱
 				}
-					
+
 				if(parseFloat(this.maxBalance) <= parseFloat(this.availableBalance)) {
 					if(parseFloat(inputNum) > parseFloat(this.maxBalance)) {
 						this.integralNum = parseFloat(this.maxBalance).toFixed(2)
 						inputNum = parseFloat(this.maxBalance).toFixed(2)
 					}
-					this.payMoney = (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) > 0 ? (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) : 0
+					this.payMoney = (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) > 0 ? (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) : 0.00
 				} else if(parseFloat(this.maxBalance) > parseFloat(this.availableBalance)) {
 					if(parseFloat(inputNum) > parseFloat(this.availableBalance)) {
 						this.integralNum = parseFloat(this.availableBalance).toFixed(2)
 						inputNum = parseFloat(this.availableBalance).toFixed(2)
 					}
-					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0
+					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0.00
 				}
-				
-//				console.log(parseFloat(this.payMoney))
+
+				//				console.log(parseFloat(this.payMoney))
 			},
 			// 获取收货地址列表
 			getShippingAddress() {
@@ -462,10 +458,19 @@
 			width: 100%;
 			height: 0.8rem;
 			margin-top: 0.15rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			p {
+				font-size: 0.36rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(53, 53, 53, 1);
+				margin-right: 0.20rem;
+			}
 			input {
-				width: 100%;
+				flex: 1;
 				height: 100%;
-				font-size: 0.30rem;
+				font-size: 0.50rem;
 			}
 		}
 	}
@@ -531,7 +536,7 @@
 		}
 		.gz {
 			text-align: right;
-			margin-top: 0.15rem;
+			margin-top: 0.20rem;
 			font-size: 0.24rem;
 			font-family: Adobe Heiti Std R;
 			color: rgba(46, 106, 255, 1);
