@@ -49,7 +49,7 @@
 		</div>
 		<div class="goods-information">
 			<div class="title">商品详情</div>
-			<div v-html="goodsDetails.detail">{{goodsDetails.detail}}</div>
+			<div>{{goodsDetails.detail}}</div>
 		</div>
 		<div class="btn-box">
 			<div class="left">

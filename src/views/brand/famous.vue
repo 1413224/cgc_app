@@ -35,7 +35,7 @@
 			</div>
 			<div class="swiper-inner">
 				<swiper :options="swiperOption" class="swiper">
-					<swiper-slide v-for="(i,index) in item.zstList" :key="index">
+					<swiper-slide v-for="(i,index) in item.zstList" :key="index" @click.native="toGoodsDetails(i.goodsId)">
 						<img :src="i.img" />
 						<div class="tip">
 							<p class="title">{{i.name}}</p>
@@ -50,7 +50,10 @@
 
 <script>
 	import settingHeader from '../../components/setting_header'
-	import { swiper, swiperSlide } from 'vue-awesome-swiper'
+	import {
+		swiper,
+		swiperSlide
+	} from 'vue-awesome-swiper'
 	export default {
 		components: {
 			settingHeader,
@@ -103,22 +106,26 @@
 					zstList: [{
 							name: 'DUO恶魔之眼项链时尚气质女短...',
 							money: '990',
-							img: './static/brand/hl_pr1.png'
+							img: './static/brand/hl_pr1.png',
+							goodsId: 'lxgoods9820180813297839726'
 						},
 						{
 							name: 'ICONIC SWAN项链 时尚黑天鹅...',
 							money: '880',
-							img: './static/brand/hl_pr2.png'
+							img: './static/brand/hl_pr2.png',
+							goodsId:'lxgoods9820180813169898400'
 						},
 						{
 							name: '白色仿水晶珍珠可变造型女士耳钉...',
 							money: '564',
-							img: './static/brand/hl_pr3.png'
+							img: './static/brand/hl_pr3.png',
+							goodsId:'lxgoods9820180813550956459'
 						},
 						{
-							name: '施华洛世奇Swarovski 银色...',
-							money: '384',
-							img: './static/brand/hl_pr4.png'
+							name: 'Swarovski施华洛世奇手链 玫瑰金...',
+							money: '598',
+							img: './static/brand/hl_pr4.jpg',
+							goodsId:'lxgoods9820180814221615770'
 						}
 					]
 				}, {
@@ -131,22 +138,26 @@
 					zstList: [{
 							name: '蔚蓝男士淡香水50ml清新古龙香...',
 							money: '558',
-							img: './static/brand/xne_pr1.png'
+							img: './static/brand/xne_pr1.png',
+							goodsId:'lxgoods9820180803976672974'
 						},
 						{
 							name: '邂逅柔情清新淡香水女士发香雾淡...',
 							money: '665',
-							img: './static/brand/xne_pr2.png'
+							img: './static/brand/xne_pr2.png',
+							goodsId:'lxgoods9820180803326878803'
 						},
 						{
 							name: '嘉柏丽尔香水花香调女士香氛50m...',
 							money: '859',
-							img: './static/brand/xne_pr3.png'
+							img: './static/brand/xne_pr3.png',
+							goodsId:'lxgoods9820180803779357838'
 						},
 						{
 							name: '可可小姐黑色女士香水50ml 100...',
 							money: '884',
-							img: './static/brand/xne_pr4.png'
+							img: './static/brand/xne_pr4.png',
+							goodsId:'lxgoods9820180803747529109'
 						}
 					]
 				}, {
@@ -159,22 +170,26 @@
 					zstList: [{
 							name: '小棕瓶眼霜 肌透修护眼部精华...',
 							money: '435',
-							img: './static/brand/ysld_pr1.png'
+							img: './static/brand/ysld_pr1.png',
+							goodsId:'lxgoods9820180814337581816'
 						},
 						{
 							name: 'dw持妆粉底液30ml 补水防晒 保...',
 							money: '390',
-							img: './static/brand/ysld_pr2.png'
+							img: './static/brand/ysld_pr2.png',
+							goodsId:'lxgoods9820180814494850039'
 						},
 						{
 							name: '小棕瓶面部精华特润修护肌透精华...',
 							money: '688',
-							img: './static/brand/ysld_pr3.png'
+							img: './static/brand/ysld_pr3.png',
+							goodsId:'lxgoods9820180801304655402'
 						},
 						{
 							name: '红石榴泡沫洁面乳125ml 深层清...',
 							money: '228',
-							img: './static/brand/ysld_pr4.png'
+							img: './static/brand/ysld_pr4.png',
+							goodsId:'lxgoods9820180814798382929'
 						}
 					]
 				}, {
@@ -187,22 +202,26 @@
 					zstList: [{
 							name: '钙片+维生素D柠檬酸150片成人...',
 							money: '128',
-							img: './static/brand/sw_pr1.png'
+							img: './static/brand/sw_pr1.png',
+							goodsId:'lxgoods9820180814844197636'
 						},
 						{
 							name: '高浓缩蔓越莓胶囊30粒高浓度PAC...',
 							money: '199',
-							img: './static/brand/sw_pr2.png'
+							img: './static/brand/sw_pr2.png',
+							goodsId:'lxgoods9820180814273614666'
 						},
 						{
 							name: '鱼油胶囊 澳洲进口深海鱼油胶囊...',
 							money: '283',
-							img: './static/brand/sw_pr3.png'
+							img: './static/brand/sw_pr3.png',
+							goodsId:'lxgoods9820180814865643230'
 						},
 						{
 							name: '大豆卵磷脂胶囊 澳洲进口卵磷...',
 							money: '265',
-							img: './static/brand/sw_pr4.png'
+							img: './static/brand/sw_pr4.png',
+							goodsId:'lxgoods9820180814867857421'
 						}
 					]
 				}]
@@ -211,7 +230,17 @@
 		mounted() {
 
 		},
-		methods: {}
+		methods: {
+			toGoodsDetails(goodsId) {
+				var _this = this
+				_this.$router.push({
+					path: '/multi_user_mall/commodity_details',
+					query: {
+						goodsId: goodsId
+					}
+				})
+			},
+		}
 	}
 </script>
 
