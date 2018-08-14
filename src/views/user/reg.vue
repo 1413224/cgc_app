@@ -26,7 +26,7 @@
 					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-if="isReg == 0">立即注册</x-button>
 					<x-button class="add-btn" @click.native="toPosReg" :show-loading="showLoading" v-if="posReg">立即激活</x-button>
 				</div>
-				<div class="login-re" v-if="isReg == 1 || posReg">
+				<div class="login-re" v-if="isReg == 1 || !posReg">
 					<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
 					<!--<router-link to=""><span>短信验证登录</span></router-link>-->
 				</div>

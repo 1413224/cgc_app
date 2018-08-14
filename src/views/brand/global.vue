@@ -88,11 +88,13 @@
 						pList: [{
 							name: 'COACH女士贝壳包',
 							text: ['时尚大牌', '方便百搭'],
-							img: './static/brand/bao.png'
+							img: './static/brand/bao.png',
+							goodsId:'lxgoods9820180803277677575'
 						}, {
 							name: 'JBL无线蓝牙音响',
 							text: ['人气商品', '畅销明星款'],
-							img: './static/brand/jbl.png'
+							img: './static/brand/jbl.png',
+							goodsId:'lxgoods9820180803356645461'
 						}]
 					},
 					{
@@ -101,47 +103,57 @@
 						pList: [{
 							name: '韩国馆',
 							text: ['韩流风暴', '席卷全球'],
-							img: './static/brand/hanguo.png'
+							img: './static/brand/hanguo.png',
+							
 						}, {
 							name: '美国馆',
 							text: ['玩转纽约时髦派'],
-							img: './static/brand/meiguo.png'
+							img: './static/brand/meiguo.png',
+							
 						}]
 					}
 				],
 				pList: [{
 						img: './static/brand/pr5.png',
 						title: 'Swarovski 施华洛世奇 女士Iconic Swan黑天鹅…',
-						money: '880.00'
+						money: '880.00',
+						goodsId:'lxgoods9820180813169898400',
 					}, {
 						img: './static/brand/pr6.png',
-						title: 'Daniel Wellington欧美女士简约风手表 DW时尚…',
-						money: '1520.00'
+						title: 'FILA斐乐手表男女情侣表时尚潮流运动大表盘腕表石英表162',
+						goodsId:'lxgoods9820180803440469796',
+						money: '669.00'
 					}, {
 						img: './static/brand/pr3.png',
 						title: 'ESTĒE LAUDER 雅诗兰黛 小棕瓶面部精华 特...',
+						goodsId:'lxgoods9820180801304655402',
 						money: '688.00'
 					}, {
 						img: './static/brand/pr4.png',
 						title: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米...',
+						goodsId:'lxgoods9820180814865643230',
 						money: '196.00'
 					}, {
 						img: './static/brand/pr1.png',
 						title: '三倍透气纸尿裤NB90【4包套装】',
+						goodsId:'lxgoods9820180803438651190',
 						money: '40.00',
 					}, {
 						img: './static/brand/pr2.png',
 						title: '爽肤水化妆水肌水乳润滋养露400ml',
+						goodsId:'lxgoods9820180803324074100',
 						money: '40.00'
 					},
 					{
 						img: './static/brand/pr7.png',
 						title: 'ESTĒE LAUDER 雅诗兰黛 小棕瓶面部精华 特...',
+						goodsId:'lxgoods9820180801304655402',
 						money: '688.00'
 					},
 					{
 						img: './static/brand/pr8.png',
 						title: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米...',
+						goodsId:'lxgoods9820180814865643230',
 						money: '196.00'
 					}
 				],

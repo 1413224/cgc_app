@@ -13,7 +13,7 @@
 		</div>
 		<div class="goods-tip-box">
 			<div class="top">
-				<p class="price">¥{{goodsDetails.minPrice}} <span>¥{{goodsDetails.minOriginPrice}}</span></p>
+				<p class="price">¥{{goodsDetails.minPrice}} <span v-if="Number(goodsDetails.minOriginPrice) > Number(goodsDetails.minPrice)">¥{{goodsDetails.minOriginPrice}}</span></p>
 				<div @click="changeGoodsConcern">
 					<img :src="goodsDetails.hasConcern == 1?'./static/images/aixin.png':'./static/shop/collection.png'" />
 					<p>{{goodsDetails.hasConcern == 1 ?'已关注':'关注'}}</p>
@@ -49,7 +49,7 @@
 		</div>
 		<div class="goods-information">
 			<div class="title">商品详情</div>
-			<div v-html="goodsDetails.detail">{{goodsDetails.detail}}</div>
+			<div>{{goodsDetails.detail}}</div>
 		</div>
 		<div class="btn-box">
 			<div class="left">
@@ -280,7 +280,7 @@
 		}
 	}
 </script>
-<style type="less">
+<style lang="less">
 	.number-box .weui-cell:before{ border-top: none; }
 </style>
 <style lang="less" scoped>

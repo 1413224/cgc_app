@@ -20,7 +20,8 @@
 									<p>我</p>
 								</div>
 							</div>
-							<p class="pm">103</p>
+							<p class="pm" v-if="$store.state.page.isLogin == 'true'">103</p>
+							<div v-else class="login_btn" @click="$router.push({path:'/user/reg'})">点击登录</div>
 						</div>
 					</div>
 					<div class="bottom">
@@ -33,7 +34,7 @@
 									<img class="pa_img" v-if="index == 2" :src="'./static/draw/disan.png'" alt="">
 								</div>
 								<div>
-									<div class="diyi" :class="index<3 ? 'diyi'+Number(index+1) : ''">NO.{{ item.number}}</div>
+									<div class="diyi" :class="index<3 ? 'diyi'+Number(index+1) : 'color'">NO.{{ item.number}}</div>
 									<p>{{item.mobile}}</p>
 								</div>
 							</div>
@@ -223,7 +224,7 @@
 		height: 100%;
 		.wrapper {
 			position: absolute;
-			top: 0.98rem;
+			top: 0.8rem;
 			left: 0;
 			bottom: 0;
 			width: 100%;
@@ -280,6 +281,18 @@
 							font-family: GillSansMT;
 							color: rgba(227, 41, 33, 1);
 						}
+						.login_btn {
+							width: 1.64rem;
+							height: 0.58rem;
+							line-height: 0.58rem;
+							text-align: center;
+							background: linear-gradient(0deg, rgba(255, 42, 75, 1), rgba(255, 92, 52, 1));
+							border-radius: 29px;
+							box-shadow: 0px 9px 33px 3px rgba(255, 53, 70, 0.4);
+							font-size: 0.24rem;
+							font-family: PingFang-SC-Regular;
+							color: rgba(255, 255, 255, 1);
+						}
 					}
 				}
 				.bottom {
@@ -303,13 +316,16 @@
 									width: 0.89rem;
 									height: 0.89rem;
 									border-radius: 50%;
+									position: relative;
+									z-index: 15;
 								}
 								.pa_img {
 									width: 0.42rem;
 									height: 0.37rem;
 									position: absolute;
-									top: -5%;
-									left: -19%;
+									top: -12%;
+									left: -15%;
+									z-index: 11;
 								}
 							}
 							div:nth-child(2) {
@@ -323,6 +339,7 @@
 									font-size: 0.26rem;
 									font-family: DINOT-Medium;
 									color: rgba(255, 255, 255, 1);
+									margin-bottom: 0.10rem;
 								}
 								.diyi1 {
 									background: url(../../../static/draw/diyi_bg.png) no-repeat;
@@ -336,6 +353,16 @@
 									background: url(../../../static/draw/disan_bg.png) no-repeat;
 									background-size: 100% 100%;
 								}
+								.color {
+									font-size: 0.26rem;
+									font-family: DINOT-Medium;
+									color: rgba(0, 0, 0, 1);
+								}
+								p {
+									font-size: 0.26rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(160, 160, 160, 1);
+								}
 							}
 						}
 						.right {
@@ -348,7 +375,7 @@
 			}
 		}
 		.wrapper-top {
-			top: 1.8rem!important;
+			top: 1.63rem!important;
 		}
 	}
 </style>
