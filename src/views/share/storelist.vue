@@ -11,29 +11,34 @@
 
 		<div class="nav1">
 			<div class="pr">
-				<div class="area" @click="onArea()">
-					<p class="areaDetail">{{region}}<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+				<div class="top" :class="onIndex == 2 ?'z0':'z1115'">
+					<div class="area" :class="{'blue':onIndex == 0}" @click="onArea(0)">
+						<p class="areaDetail">{{region}}<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+					</div>
+					<div class="price" :class="{'blue':onIndex == 1}" @click="onPrice(1)">
+						<p>{{priceType}}<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+					</div>
+					<div class="type" :class="{'blue':onIndex == 2}" @click="onScreening(2)">
+						<p>{{screening}}<img src="../../assets/images/shop/screen.png" alt=""></p>
+					</div>
 				</div>
-				<div class="price" @click="onPrice()">
-					<p>{{priceType}}<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
-				</div>
-				<div class="type" @click="onScreening()">
-					<p>{{screening}}<img src="../../assets/images/shop/screen.png" alt=""></p>
-				</div>
-				<div ref="address" class="address animated" :class="isActive? 'maskTive' : ''">
-					<ul ref="viewBox">
-						<li class="category">
-							<i class="iconfont">&#xe60b;</i>
-							<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
-							<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
-							<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
-						</li>
-						<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
-							<span>{{item.name}}</span>
-							<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
-						</li>
-					</ul>
-				</div>
+				<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
+					<div ref="address" style="animation-duration:0.3s" v-if="isActive" class="address animated" :class="isActive? 'maskTive' : ''">
+						<ul ref="viewBox">
+							<li class="category">
+								<i class="iconfont">&#xe60b;</i>
+								<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
+								<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
+								<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
+							</li>
+							<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
+								<span>{{item.name}}</span>
+								<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
+							</li>
+						</ul>
+					</div>
+				</transition>
+
 			</div>
 			<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
 				<div id="distanceType" v-if="priceShang" style="animation-duration:0.3s">
@@ -168,6 +173,7 @@
 						value: '智能推荐'
 					}
 				],
+				onIndex: 0,
 				show1: false,
 				logoTitle: '距离',
 				logolist: [5, 10, 20, 50, 100],
@@ -412,7 +418,7 @@
 			},
 			onArea() {
 				this.curPage = 1
-
+				this.onIndex = 0
 				//点击区域
 				if(this.areaShang) {
 					this.hide();
@@ -428,6 +434,7 @@
 				this.show1 = !this.show1
 
 				this.curPage = 1
+				this.onIndex = 2
 
 				if(this.show1) {
 					this.$nextTick(() => {
@@ -447,6 +454,7 @@
 			onPrice() {
 
 				this.curPage = 1
+				this.onIndex = 1
 
 				//点击价格
 				if(this.priceShang) {
@@ -743,6 +751,10 @@
 		font-size: 0.24rem!important;
 	}
 	
+	.opPrice .weui-check__label .weui-cell__ft .weui-icon-checked:before {
+		color: #336FFF!important;
+	}
+	
 	.input-div .distance .weui-cell__bd input {
 		font-size: 0.24rem;
 		text-align: center!important;
@@ -798,19 +810,30 @@
 	}
 	
 	.nav1 {
-		border-top: 1px solid #eee;
 		width: 100%;
 		height: .9rem;
-		border-bottom: 1px solid #D8DFF0;
 		position: relative;
 		.pr {
 			width: 100%;
 			height: 100%;
-			z-index: 15;
 			display: flex;
 			align-items: center;
 			position: relative;
 			background-color: white;
+		}
+		.top {
+			position: relative;
+			background-color: white;
+			height: 100%;
+			align-items: center;
+			width: 100%;
+			display: flex;
+		}
+		.z1115 {
+			z-index: 1115;
+		}
+		.z0 {
+			z-index: 0;
 		}
 		.areaDetail {
 			width: 2rem;
@@ -831,18 +854,25 @@
 			background: #fff;
 			z-index: 501;
 			overflow: auto;
-			ul>li {
-				position: relative;
-				overflow: hidden;
-				text-align: left;
-				font-size: 0.24rem;
-				line-height: 0.85rem;
-				height: 0.85rem;
+			border-top: 1px solid #D8DFF0;
+			ul {
+				padding-left: 15px;
 				box-sizing: border-box;
-				border-top: 1px solid #D8DFF0;
-				/*border-bottom: 1px solid #c8c7cc;*/
-				padding: 0 0.35rem;
-				list-style: none;
+				li {
+					position: relative;
+					overflow: hidden;
+					text-align: left;
+					font-size: 0.24rem;
+					line-height: 0.85rem;
+					height: 0.85rem;
+					/*border-bottom: 1px solid #c8c7cc;*/
+					padding: 0 0.35rem;
+					list-style: none;
+				}
+				li:not(:last-child) {
+					box-sizing: border-box;
+					border-bottom: 1px solid #D8DFF0;
+				}
 			}
 			.category {
 				i {
@@ -878,6 +908,11 @@
 					margin-left: 0.05rem;
 					vertical-align: middle;
 				}
+			}
+		}
+		.blue {
+			p {
+				color: #336FFF;
 			}
 		}
 	}
@@ -1061,7 +1096,7 @@
 		padding: 0.16rem 0.30rem;
 		border-top: 0.01rem solid #D8DFF0;
 		position: relative;
-		z-index: 15;
+		z-index: 1115;
 		box-sizing: border-box;
 		.search {
 			position: relative;
@@ -1100,6 +1135,23 @@
 			}
 		}
 	}
+	
+	.searchBox:after {
+		content: " ";
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		height: 1px;
+		border-top: 1px solid #D8DFF0;
+		color: #D8DFF0;
+		-webkit-transform-origin: 0 0;
+		transform-origin: 0 0;
+		-webkit-transform: scaleY(0.5);
+		transform: scaleY(0.5);
+		left: 0px;
+		z-index: 1115;
+	}
 </style>
 
 <style lang="less" scoped>
@@ -1116,7 +1168,7 @@
 	.screen {
 		height: 100%;
 		position: relative;
-		z-index: 800;
+		z-index: 1117;
 	}
 	
 	.screen .vux-popup-dialog {

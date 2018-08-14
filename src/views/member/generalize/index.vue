@@ -290,6 +290,9 @@
 		    height: 100%;
 		    padding-top: 0;
 		    position: relative;
+		    .no_data{
+		    	margin-top: 1rem;
+		    }
 		    .new{
 			    border-bottom: 1px solid #D8DFF0;
 			    padding-bottom: 0.2rem;

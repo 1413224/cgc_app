@@ -56,7 +56,7 @@
 
 				<div class="store-allbox" v-for="item in proList">
 					<div class="titlebox" v-if="item.title">{{item.title}}</div>
-					<div class="auto-img" @click="$router.push({path:'/brand/global'})">
+					<div class="auto-img" @click="$router.push({path:'/share/storelist'})">
 						<img :src="item.img" />
 					</div>
 					<div class="pro-box">
@@ -72,7 +72,7 @@
 				<div class="pro-allbox">
 					<div class="titlebox">优质好货</div>
 					<div class="item-box">
-						<div class="item" v-for="(item,index) in caiList" :key="index">
+						<div class="item" v-for="(item,index) in caiList" :key="index" @click="toGoodsDetails(item.goodsId)">
 							<div class="po-img">
 								<img v-if="item.dh" :src="'./static/index/xydh.png'" alt="">
 								<img v-if="item.gm" :src="'./static/index/xygm.png'" alt="">
@@ -85,7 +85,7 @@
 							</p>
 						</div>
 					</div>
-					<div class="shuaxin">下拉刷新</div>
+					<div class="shuaxin" @click="$router.push({path:'/share/storelist'})">查看更多</div>
 				</div>
 				<!--<div class="lottery">
 					<img class="auto-img" src="../assets/images/index/group.png" alt="">
@@ -384,6 +384,15 @@
 		},
 
 		methods: {
+			toGoodsDetails(goodsId) {
+				var _this = this
+				_this.$router.push({
+					path: '/multi_user_mall/commodity_details',
+					query: {
+						goodsId: goodsId
+					}
+				})
+			},
 			goUrl(url) {
 				window.location.href = url
 			},

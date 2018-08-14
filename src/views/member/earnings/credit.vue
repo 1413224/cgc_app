@@ -92,7 +92,7 @@
 				</div>
 				<div class="item_box"  @click="toCreditReward('信用积分',5)">
 					<div class="left">
-						<img style="width: 0.39rem;height: 0.37rem;" :src="'./static/member/jl_3.png'" />
+						<img style="width: 0.3rem;height: 0.45rem;" :src="'./static/member/jl_3.png'" />
 						<div>
 							<p>推荐用户</p>
 							<p>累计奖励：{{fundInfo.recommendPoints}}</p>

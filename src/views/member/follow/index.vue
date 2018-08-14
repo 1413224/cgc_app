@@ -19,7 +19,10 @@
 								<div @click="changelmStore()">
 									<check-icon v-if="storeShow2" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
-								<div class="img-box"><img v-if="item.logo" :src="item.logo.original" /></div>
+								<div class="img-box">
+									<img v-if="item.logo" :src="item.logo.original" />
+									<img v-else :src="'./static/shop/storeLogo.png'" />
+								</div>
 								<div class="pro-box">
 									<div>
 										<p>{{item.name}}</p>
@@ -78,7 +81,10 @@
 									<check-icon v-if="proShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
 								<div style="display: flex;" @click="toGoodsDetails(item.objectId)">
-									<div class="img-box"><img v-if="item.logo" :src="item.logo.original" /></div>
+									<div class="img-box">
+										<img v-if="item.logo" :src="item.logo.original" />
+										<img v-else :src="'./static/images/pr.png'" />
+									</div>
 									<div class="pro-box">
 										<p>{{item.name}}</p>
 										<p>￥{{item.minPrice}}</p>
@@ -733,7 +739,6 @@
 		.b-w {
 			background-color: white;
 			position: relative;
-			height: 50px;
 			.vux-tab-ink-bar {
 				bottom: 4px!important;
 			}
@@ -767,7 +772,7 @@
 			.wrapper2,
 			.wrapper3 {
 				position: absolute;
-				top: 50px;
+				top: 46px;
 				bottom: 0px;
 				overflow: hidden;
 				width: 100%;

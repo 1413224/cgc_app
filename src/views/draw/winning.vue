@@ -1,25 +1,42 @@
 <template>
 	<section class="win-box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="wrapper" ref="wrapper">
+		<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
 			<div class="content" v-if="recordList.length > 0">
 				<div class="record-item" v-for="(item,index) in recordList" :key="index">
 					<div class="top">
-						<p>{{item.form}}</p>
 						<div>{{item.periods}}</div>
+						<p>{{item.form}}</p>
 					</div>
-					<div class="bottom">
-						<div>
-							<p>开奖时间：{{item.time}}</p>
-							<p>参与人数：{{item.peopleNum}}人</p>
-							<p>奖金池：￥{{item.allMoney}}</p>
-							<p>中奖金额：<span>￥{{item.has}}</span></p>
+					<div class="middle">
+						<div class="left">
+							<p>中奖金额</p>
+							<p><i>￥</i>5000.00</p>
 						</div>
 						<div class="btn" :class="{'jz':!item.isReceive}" @click="toReceive(item.isReceive)">
 							{{item.isReceive?'已领取':'领奖'}}
 						</div>
 					</div>
-					<img class="zj-img" :src="item.isReceive?'./static/draw/ylq.png':'./static/draw/yzj.png'" />
+					<div class="bottom">
+						<div v-if="1>2">
+							<p>开奖时间：{{item.time}}</p>
+							<p>参与人数：{{item.peopleNum}}人</p>
+							<p>奖金池：￥{{item.allMoney}}</p>
+							<p>中奖金额：<span>￥{{item.has}}</span></p>
+						</div>
+						<ul>
+							<li>
+								<span>开奖时间</span><span>{{item.time}}</span>
+							</li>
+							<li class="bg_red">
+								<span>参与人数</span><span>{{item.peopleNum}} 人</span>
+							</li>
+							<li>
+								<span>奖金池</span><span>{{item.allMoney}}</span>
+							</li>
+						</ul>
+					</div>
+					<!--<img class="zj-img" :src="item.isReceive?'./static/draw/ylq.png':'./static/draw/yzj.png'" />-->
 				</div>
 
 				<loading v-if="showLoading"></loading>
@@ -51,8 +68,8 @@
 					<div class="bottom">
 						<p>奖金领取成功</p>
 						<img :src="'./static/draw/dian.png'" alt="" />
-						<p class="money"><span>5000</span>元</p>
-						<div @click="$router.push({path:'/draw/details'})">查看详情</div>
+						<p class="money">￥<span>5000</span></p>
+						<div @click="$router.push({path:'/member/purse/wallet'})">查看我的资产</div>
 					</div>
 				</div>
 				<div class="close" @click="showDialog=false"><img src="../../assets/images/draw/open.png"></div>
@@ -144,9 +161,9 @@
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-//							this.LoadData()
-//
-//							this.showLoading = true
+							//							this.LoadData()
+							//
+							//							this.showLoading = true
 
 							this.$nextTick(function() {
 								this.scroll.finishPullUp()
@@ -218,7 +235,7 @@
 					justify-content: space-between;
 					flex-direction: column;
 					padding: 0.75rem 0.37rem 0.92rem;
-					img{
+					img {
 						width: 3.16rem;
 						height: 0.04rem;
 					}
@@ -241,8 +258,9 @@
 						height: 0.79rem;
 						line-height: 0.79rem;
 						text-align: center;
-						background: linear-gradient(-121.4deg, #FF2A4B, #FF5C34);
-						border-radius: 5px;
+						background: linear-gradient(45deg, rgba(255, 92, 52, 1), rgba(255, 42, 75, 1));
+						border-radius: 40px;
+						box-shadow: 7px 9px 27px rgba(255, 53, 70, 0.4);
 						font-size: 0.28rem;
 						font-family: PingFang-SC-Medium;
 						color: rgba(255, 255, 255, 1);
@@ -261,6 +279,9 @@
 </style>
 <style lang="less" scoped>
 	.win-box {
+		.wrapper-top {
+			top: 6%!important;
+		}
 		.wrapper {
 			position: absolute;
 			top: 0;
@@ -269,23 +290,22 @@
 			height: 100%;
 			overflow: hidden;
 			background-color: #E32922;
-			padding:0 0.2rem;
+			padding: 0 0.2rem;
 			box-sizing: border-box;
 			.content {
 				padding: 0.2rem 0;
 				.record-item {
 					width: 7.10rem;
-					height: 3.32rem;
 					background: rgba(255, 255, 255, 1);
 					border-radius: 8px;
-					padding: 0 0.1rem;
-					box-sizing: border-box;
+					/*padding: 0 0.1rem;
+					box-sizing: border-box;*/
 					margin-bottom: 0.2rem;
 					position: relative;
 					overflow: hidden;
 					.zj-img {
 						position: absolute;
-						top: -13%;
+						top: -7%;
 						right: -0.05%;
 						width: 1.53rem;
 						height: 1.53rem;
@@ -300,6 +320,7 @@
 							font-size: 0.36rem;
 							font-family: PingFang-SC-Medium;
 							color: rgba(51, 51, 51, 1);
+							margin-left: 0.15rem;
 						}
 						div {
 							width: 0.97rem;
@@ -314,18 +335,26 @@
 							margin-left: 0.1rem;
 						}
 					}
-					.bottom {
-						padding: 0.30rem 0.43rem;
-						box-sizing: border-box;
+					.middle {
 						display: flex;
-						justify-content: space-between;
 						align-items: center;
-						p {
-							font-size: 0.26rem;
-							font-family: PingFang-SC-Medium;
-							color: rgba(102, 102, 102, 1);
-							span {
-								color: #E32921;
+						justify-content: space-between;
+						padding: 0.30rem 0.43rem;
+						border-bottom: 1px solid #F3F3F3;
+						.left {
+							p:nth-child(1) {
+								font-size: 0.26rem;
+								font-family: PingFang-SC-Medium;
+								color: rgba(160, 160, 160, 1);
+							}
+							p:nth-child(2) {
+								font-size: 0.72rem;
+								font-family: PingFang-SC-Medium;
+								color: rgba(227, 41, 33, 1);
+								margin-top: 0.45rem;
+								i {
+									font-size: 0.48rem;
+								}
 							}
 						}
 						.btn {
@@ -342,6 +371,45 @@
 						.jz {
 							box-shadow: 7px 9px 27px rgba(255, 53, 70, 0.4);
 							background: linear-gradient(-121.4deg, #FF5C34, #FF2A4B);
+						}
+					}
+					.bottom {
+						padding: 0.30rem 0rem;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						p {
+							font-size: 0.26rem;
+							font-family: PingFang-SC-Medium;
+							color: rgba(102, 102, 102, 1);
+							span {
+								color: #E32921;
+							}
+						}
+						ul {
+							width: 100%;
+							li {
+								height: 0.87rem;
+								display: flex;
+								align-items: center;
+								padding: 0 .43rem;
+								box-sizing: border-box;
+								span:nth-child(1) {
+									width: 1.2rem;
+									font-size: 0.26rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(160, 160, 160, 1);
+									display: inline-block;
+								}
+								span:nth-child(2) {
+									margin-left: 0.50rem;
+									color: #666666;
+									font-family: PingFang-SC-Medium;
+								}
+							}
+							.bg_red {
+								background: rgba(255, 245, 245, 1);
+							}
 						}
 					}
 				}
