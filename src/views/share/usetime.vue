@@ -1,7 +1,7 @@
 <template>
 	<div class="usetime">
 		<settingHeader :title="title"></settingHeader>
-		<div v-show="list.length>0">
+		<div v-show="listShow">
 			<div class="lunbo">
 				<p class="tip">（多台设备时，可左右切换）</p>
 				<swiper :options="swiperOption" ref="mySwiper">
@@ -51,7 +51,7 @@
 			</div>
 
 		</div>
-		<div v-show="list.length<=0" class="null-box">
+		<div v-show="!listShow" class="null-box">
 			<div class="null-img">
 				<img :src="'./static/share/null.png'" />
 				<p>暂无可用共享设备</p>
@@ -118,7 +118,9 @@
 
 				list: [],//所有订单列表  看看能不能初始化，解决页面显示问题
 				info: {},//订单列表整体数据
-				infoItem: {}//当前选中的订单数据
+				infoItem: {},//当前选中的订单数据
+
+				listShow:true
 
 			}
 
@@ -132,6 +134,10 @@
 			var	_this = this
 
 			_this.getMyEquipmentInfo()
+
+			this.listShow = this.list.length > 0 ? true : false
+
+
 			
 			/*var hiddenProperty = 'hidden' in document ? 'hidden' :
 				'webkitHidden' in document ? 'webkitHidden' :

@@ -1,7 +1,10 @@
 <template>
 	<div class="producte">
 		<settingHeader :title="title"></settingHeader>
-		<img src="../../assets/images/share/zhashang.png" alt="">
+		<div class="wap">
+			<img src="../../assets/images/share/jiameng.png" alt="">
+			<div class="hot" @click="gobottom"></div>
+		</div>
 	</div>
 </template>
 
@@ -29,7 +32,9 @@
 			
 		},
 		methods:{
-			 
+			 gobottom(){
+				window.scrollTo(0,document.body.scrollHeight);
+			 }
 			
 		}
 	}
@@ -39,11 +44,24 @@
 	@import url('../../../static/css/global');
 	.producte{
 		width: 100%;
-		img{
-			width: 100%;
-			display: block;
-			margin: 0;
-			padding: 0;
+		
+		.wap{
+			position: relative;
+			img{
+				width: 100%;
+				display: block;
+				margin: 0;
+				padding: 0;
+			}
+			.hot{
+				width: 2.2rem;
+				height: .5rem;
+				position: absolute;
+				top: 2.2rem;
+				left: 1.3rem;
+				z-index: 2;
+			}
 		}
+		
 	}
 </style>
