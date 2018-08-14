@@ -208,23 +208,27 @@
 						img: './static/index/index_pro3.png',
 						title: 'Swarovski 施华洛世奇 女士Iconic Swan黑天鹅',
 						money: '880.00',
+						goodsId:'lxgoods9820180813169898400',
 						zf: ''
 					}, {
-						img: './static/index/index_pro4.png',
-						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
-						money: '1520.00',
+						img: './static/brand/pr6.png',
+						title: 'FILA斐乐手表男女情侣表时尚潮流运动大表盘腕表石英表162',
+						goodsId:'lxgoods9820180803440469796',
+						money: '669.00',
 						zf: ''
 					},
 					{
 						img: './static/index/index_pro5.png',
 						title: 'ESTĒE LAUDER 雅诗兰黛 小棕瓶面部精华',
 						money: '688.00',
+						goodsId:'lxgoods9820180801304655402',
 						zf: ''
 					},
 					{
 						img: './static/index/index_pro6.png',
 						title: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米',
 						money: '196.00',
+						goodsId:'lxgoods9820180814865643230',
 						zf: ''
 					}
 				],
