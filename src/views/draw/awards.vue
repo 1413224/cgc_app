@@ -198,6 +198,20 @@
 					line-height: 0.3rem;
 				}
 			}
+			.list {
+				.list-item {
+					font-family: PingFangSC-Regular;
+					font-size: 0.28rem;
+					color: #1A2642;
+					letter-spacing: 0;
+					height: 1.07rem;
+					padding-top: 0!important;
+					padding-bottom: 0!important;
+					.weui-cell__ft {
+						color: rgba(26, 38, 66, 1);
+					}
+				}
+			}
 			.life-box {
 				display: flex;
 				flex-wrap: wrap;

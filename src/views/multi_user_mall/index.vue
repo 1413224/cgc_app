@@ -222,7 +222,7 @@
 							<p>店铺二维码</p>
 							<p class="code"><img src="../../assets/images/multi_user_mall/qrcode.png" alt=""><i class="iconfont icon-arrow-right"></i></p>
 						</div>
-						<div class="bottom" @click="$router.push({path: '/member/setting/preview'})">
+						<div class="bottom" @click="toAlbum">
 							<p>店铺图册</p>
 							<p class="code"><img src="../../assets/images/multi_user_mall/tuce.png" alt=""><i class="iconfont icon-arrow-right"></i></p>
 						</div>
@@ -385,12 +385,6 @@
 		},
 		created() {
 			this.getBasicInfo()
-			this.getThumbInfo()
-
-			//阻止页面的滑动默认事件
-			document.body.addEventListener("touchmove", function(event) {
-				event.preventDefault()
-			}, false)
 
 			this.navIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
 			this.showIndex = this.$route.query.oIndex ? this.$route.query.oIndex : 3
@@ -399,6 +393,14 @@
 		},
 		mounted() {},
 		methods: {
+			toAlbum() {
+				this.$router.push({
+					path: '/multi_user_mall/album',
+					query:{
+						enterpriseId: this.$route.query.id
+					}
+				})
+			},
 			toGoodsDetails(goodsId) {
 				var _this = this
 				_this.$router.push({
@@ -637,19 +639,6 @@
 					if(res.data.status == "00000000") {
 						_this.goodsList = res.data.data.list
 						_this.showGoods = res.data.data.list.length > 0 ? true : false
-					}
-				})
-			},
-			// 获取企业图册
-			getThumbInfo() {
-				var _this = this
-				_this.$http.get(_this.url.qy.getThumbInfo, {
-					params: {
-						enterpriseId: _this.$route.query.id
-					}
-				}).then((res) => {
-					if(res.data.status == "00000000") {
-
 					}
 				})
 			},

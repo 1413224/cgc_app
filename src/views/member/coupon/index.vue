@@ -906,19 +906,20 @@
 			}
 		}
 		.vux-radio-label {
-			color: #90A2C7;
+			color: #424242!important;
+			font-size: 0.24rem!important;
 		}
-		.weui-cell {
+		/*.weui-cell {
 			padding: 0.15rem 0.3rem 0 0.45rem;
-		}
+		}*/
 		.vux-radio-label {
 			font-size: 0.28rem;
 		}
 		.weui-check__label:active {
 			background: #fff;
 		}
-		.weui-cell:before {
+		/*.weui-cell:before {
 			border-top: none;
-		}
+		}*/
 	}
 </style>
