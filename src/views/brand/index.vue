@@ -27,7 +27,7 @@
 			</div>
 			<div class="swiper-inner">
 				<swiper :options="swiperOption" :id="index" class="swiper">
-					<swiper-slide v-for="(i,index) in item.zstList" :key="index">
+					<swiper-slide v-for="(i,index) in item.zstList" :key="index" @click.native="toGoodsDetails(i.goodsId)">
 						<img :src="i.img" />
 						<div class="tip">
 							<p class="title">{{i.name}}</p>
@@ -44,7 +44,7 @@
 		<div class="pro-allbox">
 			<div class="title-box">优质好货</div>
 			<div class="item-box">
-				<div class="item" v-for="(item,index) in pList" :key="index">
+				<div class="item" v-for="(item,index) in pList" :key="index" @click="toGoodsDetails(item.goodsId)">
 					<div class="da-box">
 						<img :src="item.img" alt="" />
 					</div>
@@ -947,7 +947,7 @@
 						goodsId:'lxgoods9820180813169898400'
 					},
 					{
-						img: './static/brand/pr6.png',
+						img: 'http://domain.cgc999.com:8080/group1/M00/00/4E/rBL0CFtj_OGACJ1kAABU2IA7fSM913.jpg',
 						title: 'FILA斐乐手表男女情侣表时尚潮流运动大表盘腕表石英表162',
 						money: '669.00',
 						goodsId:'lxgoods9820180803440469796'
@@ -1032,7 +1032,16 @@
 		methods: {
 			change(index) {
 				console.log(index)
-			}
+			},
+			toGoodsDetails(goodsId) {
+				var _this = this
+				_this.$router.push({
+					path: '/multi_user_mall/commodity_details',
+					query: {
+						goodsId: goodsId
+					}
+				})
+			},
 		}
 	}
 </script>

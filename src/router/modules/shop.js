@@ -231,6 +231,14 @@ const shopModule = [
 		}
 	},
 	{
+		path: '/multi_user_mall/album',//商品详情页
+		name: 'multi_album',
+		component: resolve => require(['@/views/multi_user_mall/album'], resolve),
+		meta: {
+			title:'店铺图册'
+		}
+	},
+	{
 		path: '/multi_user_mall/summary', //多用户商城首页
 		name: 'summary',
 		component: resolve => require(['@/views/multi_user_mall/summary'], resolve),

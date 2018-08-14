@@ -63,6 +63,8 @@
 						_this.storePhoto = res.data.data.storePhoto
 						_this.doorhead = res.data.data.doorhead
 						_this.thumb = res.data.data.thumb
+						
+						_this.photoList = _this.storePhoto
 					}
 				})
 			},
