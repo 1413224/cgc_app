@@ -54,7 +54,7 @@
 			</div>
 			<div class="swiper-inner">
 				<swiper :options="swiperOption" class="swiper">
-					<swiper-slide v-for="(i,index) in item.zstList" :key="index">
+					<swiper-slide v-for="(i,index) in item.zstList" :key="index" @click.native="toGoodsDetails(i.goodsId)">
 						<img :src="i.img" />
 						<div class="tip">
 							<p class="title">{{i.name}}</p>
@@ -239,7 +239,16 @@
 						'index': index
 					}
 				})
-			}
+			},
+			toGoodsDetails(goodsId) {
+				var _this = this
+				_this.$router.push({
+					path: '/multi_user_mall/commodity_details',
+					query: {
+						goodsId: goodsId
+					}
+				})
+			},
 		}
 	}
 </script>
