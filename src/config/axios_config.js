@@ -105,7 +105,7 @@ axios.interceptors.response.use(res => {
 				width: '50%'
 			})
 			localStorage.setItem('isLogin', false)
-		} else if((res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == 'apigw004' || res.data.status == 'user-0020') && URL !== '/user/v1/user/getBasicInfo') {
+		} else if((res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == 'apigw004' || res.data.status == 'user-0020') && URL !== '/user/param/v1/user/getBasicInfo') {
 			//重复登录   用户不存在 不是获取个人信息接口 返回登录页面
 			router.replace({
 				path: '/user/reg'
