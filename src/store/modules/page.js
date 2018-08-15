@@ -11,7 +11,6 @@ const page = {
 		back: false,
 		isLogin: isLogin,
 		includeList:['storeList'],
-		ispreview:false,
 		isWx:true,
 		userInfo:userInfo
 	},

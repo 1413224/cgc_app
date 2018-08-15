@@ -57,7 +57,7 @@
 				</div>
 				<div class="clear"></div>
 
-				<div class="winList" v-if="1>2">
+				<div class="winList">
 					<!-- 中奖人员 -->
 					<div class="win-person">
 						<div class="wz-period">中奖名单</div>
@@ -214,13 +214,22 @@
 				},
 
 				player: {},
-				playerStop: true
+				playerStop: true,
+
+				curPage: 1,
+				pageSize: 10,
+				list:[]
 			}
 		},
 		computed: {
 			player() {
 				return this.$refs.videoPlayer.player
 			}
+		},
+		created() {
+
+			this.getInfoById()
+			this.getAwardUserList()
 		},
 		mounted() {
 			this.InitScroll()
@@ -229,6 +238,36 @@
 			document.getElementsByClassName('dplayer-full-in-icon')[0].style.display = 'none'
 		},
 		methods: {
+			getInfoById() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getInfoById, {
+					params: {
+						lotteryId: _this.$route.query.lotteryId,
+						userId: _this.$store.state.user.userId,
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						console.log(res.data.data)
+					}
+				})
+			},
+			getAwardUserList() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getAwardUserList, {
+					params: {
+						lotteryId: _this.$route.query.lotteryId,
+						awardId: 1,
+						curPage: _this.curPage,
+						pageSize: _this.pageSize
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						console.log(res.data.data)
+					}
+				})
+			},
 			fs() {
 				this.player.fullScreen.request('browser')
 			},

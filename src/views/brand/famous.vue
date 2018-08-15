@@ -7,7 +7,7 @@
 		<div class="top-swiper">
 			<div class="swiper-inner1">
 				<swiper :options="swiperOption" class="swiper">
-					<swiper-slide v-for="(item,index) in mpList" :key="index">
+					<swiper-slide v-for="(item,index) in mpList" :key="index" @click.native="toStoreDetails(item.id)">
 						<img :src="item.img" />
 						<!--<div class="tip">{{item.name}}</div>-->
 					</swiper-slide>
@@ -17,7 +17,7 @@
 		<div class="title-box">精选品牌</div>
 		<div v-for="(item,index) in list" style="margin-bottom: 0.20rem;">
 			<div class="content-box" :style="{backgroundImage: 'url('+ item.bgImg +')',backgroundSize: 'cover',backgroundrRepeat: 'no-repeat'}">
-				<div class="middle">
+				<div class="middle" @click="toStoreDetails(item.id)">
 					<div class="left">
 						<img :src="item.logo" />
 						<div>
@@ -69,31 +69,38 @@
 				},
 				mpList: [{
 						name: 'WHOO后',
-						img: './static/brand/1.png'
+						img: './static/brand/1.png',
+						id: 'enterBasic584352416400000001'
 					},
 					{
 						name: 'Swisse',
-						img: './static/brand/2.png'
+						img: './static/brand/2.png',
+						id: 'enterBasic628084787600000001'
 					},
 					{
 						name: '花王',
-						img: './static/brand/3.png'
+						img: './static/brand/3.png',
+						id: 'enterBasic909312950800000001'
 					},
 					{
 						name: '施华洛世奇',
-						img: './static/brand/4.png'
+						img: './static/brand/4.png',
+						id: 'enterBasic628084787600000001'
 					},
 					{
 						name: '香奈儿',
-						img: './static/brand/5.png'
+						img: './static/brand/5.png',
+						id: 'enterBasic150521084500000001'
 					},
 					{
 						name: '雅诗兰黛',
-						img: './static/brand/6.png'
+						img: './static/brand/6.png',
+						id: 'enterBasic899471964700000001'
 					},
 					{
 						name: '资生堂',
-						img: './static/brand/7.png'
+						img: './static/brand/7.png',
+						id: 'enterBasic736959676300000001'
 					}
 				],
 				list: [{
@@ -103,6 +110,7 @@
 					text1: 'SWAROVSKI 施华洛世奇',
 					text2: '列支敦士登｜探索当季闪耀新品',
 					jgImg: './static/brand/dg.png',
+					id: 'enterBasic628084787600000001',
 					zstList: [{
 							name: 'DUO恶魔之眼项链时尚气质女短...',
 							money: '990',
@@ -113,19 +121,19 @@
 							name: 'ICONIC SWAN项链 时尚黑天鹅...',
 							money: '880',
 							img: './static/brand/hl_pr2.png',
-							goodsId:'lxgoods9820180813169898400'
+							goodsId: 'lxgoods9820180813169898400'
 						},
 						{
 							name: '白色仿水晶珍珠可变造型女士耳钉...',
 							money: '564',
 							img: './static/brand/hl_pr3.png',
-							goodsId:'lxgoods9820180813550956459'
+							goodsId: 'lxgoods9820180813550956459'
 						},
 						{
 							name: 'Swarovski施华洛世奇手链 玫瑰金...',
 							money: '598',
 							img: './static/brand/hl_pr4.jpg',
-							goodsId:'lxgoods9820180814221615770'
+							goodsId: 'lxgoods9820180814221615770'
 						}
 					]
 				}, {
@@ -135,29 +143,30 @@
 					text1: 'CHANEL 香奈儿',
 					text2: '法国｜独一无二精致工艺',
 					jgImg: './static/brand/fg.png',
+					id: 'enterBasic150521084500000001',
 					zstList: [{
 							name: '蔚蓝男士淡香水50ml清新古龙香...',
 							money: '558',
 							img: './static/brand/xne_pr1.png',
-							goodsId:'lxgoods9820180803976672974'
+							goodsId: 'lxgoods9820180803976672974'
 						},
 						{
 							name: '邂逅柔情清新淡香水女士发香雾淡...',
 							money: '665',
 							img: './static/brand/xne_pr2.png',
-							goodsId:'lxgoods9820180803326878803'
+							goodsId: 'lxgoods9820180803326878803'
 						},
 						{
 							name: '嘉柏丽尔香水花香调女士香氛50m...',
 							money: '859',
 							img: './static/brand/xne_pr3.png',
-							goodsId:'lxgoods9820180803779357838'
+							goodsId: 'lxgoods9820180803779357838'
 						},
 						{
 							name: '可可小姐黑色女士香水50ml 100...',
 							money: '884',
 							img: './static/brand/xne_pr4.png',
-							goodsId:'lxgoods9820180803747529109'
+							goodsId: 'lxgoods9820180803747529109'
 						}
 					]
 				}, {
@@ -167,29 +176,30 @@
 					text1: 'Estee Lauder 雅诗兰黛',
 					text2: '美国｜雅诗兰黛让每位女性皆...',
 					jgImg: './static/brand/mg.png',
+					id: 'enterBasic899471964700000001',
 					zstList: [{
 							name: '小棕瓶眼霜 肌透修护眼部精华...',
 							money: '435',
 							img: './static/brand/ysld_pr1.png',
-							goodsId:'lxgoods9820180814337581816'
+							goodsId: 'lxgoods9820180814337581816'
 						},
 						{
 							name: 'dw持妆粉底液30ml 补水防晒 保...',
 							money: '390',
 							img: './static/brand/ysld_pr2.png',
-							goodsId:'lxgoods9820180814494850039'
+							goodsId: 'lxgoods9820180814494850039'
 						},
 						{
 							name: '小棕瓶面部精华特润修护肌透精华...',
 							money: '688',
 							img: './static/brand/ysld_pr3.png',
-							goodsId:'lxgoods9820180801304655402'
+							goodsId: 'lxgoods9820180801304655402'
 						},
 						{
 							name: '红石榴泡沫洁面乳125ml 深层清...',
 							money: '228',
 							img: './static/brand/ysld_pr4.png',
-							goodsId:'lxgoods9820180814798382929'
+							goodsId: 'lxgoods9820180814798382929'
 						}
 					]
 				}, {
@@ -199,29 +209,30 @@
 					text1: 'Swisse',
 					text2: '澳大利亚｜宗旨是帮助人们生...',
 					jgImg: './static/brand/odly.png',
+					id: 'enterBasic628084787600000001',
 					zstList: [{
 							name: '钙片+维生素D柠檬酸150片成人...',
 							money: '128',
 							img: './static/brand/sw_pr1.png',
-							goodsId:'lxgoods9820180814844197636'
+							goodsId: 'lxgoods9820180814844197636'
 						},
 						{
 							name: '高浓缩蔓越莓胶囊30粒高浓度PAC...',
 							money: '199',
 							img: './static/brand/sw_pr2.png',
-							goodsId:'lxgoods9820180814273614666'
+							goodsId: 'lxgoods9820180814273614666'
 						},
 						{
 							name: '鱼油胶囊 澳洲进口深海鱼油胶囊...',
 							money: '283',
 							img: './static/brand/sw_pr3.png',
-							goodsId:'lxgoods9820180814865643230'
+							goodsId: 'lxgoods9820180814865643230'
 						},
 						{
 							name: '大豆卵磷脂胶囊 澳洲进口卵磷...',
 							money: '265',
 							img: './static/brand/sw_pr4.png',
-							goodsId:'lxgoods9820180814867857421'
+							goodsId: 'lxgoods9820180814867857421'
 						}
 					]
 				}]
@@ -237,6 +248,14 @@
 					path: '/multi_user_mall/commodity_details',
 					query: {
 						goodsId: goodsId
+					}
+				})
+			},
+			toStoreDetails(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
 					}
 				})
 			},

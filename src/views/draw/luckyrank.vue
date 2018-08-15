@@ -86,11 +86,25 @@
 		created: function() {
 			this.getLuckRankData()
 			this.tabIndex = this.$route.query.index || 0
+			this.getLotteryRankByNums()
 		},
 		mounted() {
 			this.InitScroll()
 		},
 		methods: {
+			getLotteryRankByNums() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getLotteryRankByNums, {
+					params: {
+						userId: _this.$store.state.user.userId,
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						console.log(res.data.data)
+					}
+				})
+			},
 			showNumber() {
 				this.tab1 = true;
 				this.tab2 = false;

@@ -14,20 +14,20 @@
 
 				<div class="drawList">
 					<p class="wonderful">往期回顾</p>
-					<ul class="commodity2">
-						<group v-for="(item,index) in reviewData.lists" :key="index">
+					<ul class="commodity2" v-if="historyLottery.length > 0">
+						<group v-for="(item,index) in historyLottery" :key="index">
 							<cell>
 								<li @click="$router.push({name: 'pastevents'})">
 									<div class="img">
-										<img :src="item.thumb" alt="">
+										<img v-if="item.thumb" :src="item.thumb.original" alt="">
 										<div class="arrow">
 											<img src="../../assets/images/draw/lottery_index8.png" alt="">
 										</div>
 									</div>
 									<div class="container flex">
 										<p class="lucky">{{ item.title}}</p>
-										<p class="num">参加人数:{{ item.user}}</p>
-										<p class="bonusPool">奖金池:<span>￥{{ item.bonusPool}}</span></p>
+										<p class="num">参加人数:{{ item.orderNum}}</p>
+										<p class="bonusPool">奖金池:<span>￥{{ item.bonus}}</span></p>
 									</div>
 								</li>
 							</cell>
@@ -35,6 +35,7 @@
 					</ul>
 					<loading v-if="show"></loading>
 					<noMore v-if="showNomore"></noMore>
+					<noData v-if="historyLottery.length == 0" :status="2" :stateText="'暂无往期回顾'"></noData>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -44,15 +45,17 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
+	import noData from '@/components/noData'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
-	import settingHeader from '../../components/setting_header'
-	import url from '../../config/url'
+	import settingHeader from '@/components/setting_header'
+	import url from '@/config/url'
 	export default {
 		components: {
 			Loading,
 			noMore,
+			noData,
 			swiper,
 			swiperSlide,
 			settingHeader
@@ -75,15 +78,35 @@
 					autoplay: true,
 					loop: true
 				},
-				page: 1
+				page: 1,
+
+				curPage: 1,
+				pageSize: 10,
+				historyLottery: []
 			}
 		},
 		create() {},
 		mounted() {
 			this.InitScroll()
-			this.getData()
+			this.getHistoryLottery()
 		},
 		methods: {
+			getHistoryLottery() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getHistoryLottery, {
+					params: {
+						curPage: _this.curPage,
+						pageSize: _this.pageSize
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.historyLottery = res.data.data.list
+						}
+					}
+				})
+			},
 			InitScroll() {
 				this.$nextTick(() => {
 					if(!this.scroll) {
@@ -170,8 +193,8 @@
 	.wrapper {
 		height: 100%;
 		overflow: hidden;
+		background-color: #E32921;
 		.content {
-			background: #E32921;
 			.banner-img {
 				width: 100%;
 				height: auto;
@@ -192,7 +215,7 @@
 	
 	.drawList {
 		margin: 0 0.2rem;
-		padding:0 0.02rem;
+		padding: 0 0.02rem;
 		background: #fff;
 		border-radius: 0.08rem;
 		padding-top: 0.36rem;

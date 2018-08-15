@@ -33,18 +33,19 @@
 										<p>{{tweenedNumber2}}</p>
 									</div>
 								</div>
-								<div class="bottom">
+								<div class="bottom" v-if="recommendMessage.length > 0">
 									<div class="swiper-inner">
 										<swiper :options="swiperOption" class="swiper">
-											<swiper-slide v-for="(item,index) in demoList" :key="index">
+											<swiper-slide v-for="(item,index) in info.recommendMessage" :key="index">
 												<div class="one">
-													<img class="tx" :src="item.img" />
-													<p class="hua">{{item.say}}</p>
+													<img v-if="item.logo.original" class="tx" :src="item.logo.original" />
+													<img v-else class="tx" :src="'./static/images/mrtx.png'" />
+													<p class="hua">{{item.message}}</p>
 													<div class="bt">
 														<div>
-															<img :src="'./static/draw/ren.png'" /> {{item.name}}
+															<img :src="'./static/draw/ren.png'" /> {{item.mobile}}
 														</div>
-														<p>5000元</p>
+														<p>{{item.bonus}}元</p>
 													</div>
 												</div>
 											</swiper-slide>
@@ -62,15 +63,15 @@
 							<ul class="ul-list">
 								<li @click="toLuckyrank(0)">
 									<p class="status">中奖次数</p>
-									<p class="money">5</p>
+									<p class="money">{{userLottery.lotteryNum}}</p>
 								</li>
 								<li>
 									<p class="status">待领奖金</p>
-									<p class="money">5000</p>
+									<p class="money">{{userLottery.lotteryWaitBonus}}</p>
 								</li>
 								<li @click="toLuckyrank(1)">
 									<p class="status">中奖总额</p>
-									<p class="money">25000</p>
+									<p class="money">{{userLottery.lotteryBonus}}</p>
 								</li>
 							</ul>
 
@@ -100,20 +101,20 @@
 							精彩推荐
 							<span @click="$router.push({path:'/draw/review'})">更多历史纪录<i class="icon iconfont icon-arrow-right "></i></span>
 						</p>
-						<ul class="commodity">
-							<group v-for="(item,index) in reviewData.lists" :key="index">
+						<ul class="commodity" v-if="recommendLottery.length > 0">
+							<group v-for="(item,index) in recommendLottery" :key="index">
 								<cell>
-									<li @click="$router.push({path: '/draw/pastevents'})">
+									<li @click="goPastevents(item.lotteryId)">
 										<div class="img">
-											<img :src="item.thumb" alt="">
+											<img v-if="item.thumb" :src="item.thumb.original" alt="">
 											<div class="arrow">
 												<img src="../../assets/images/draw/lottery_index8.png" alt="">
 											</div>
 										</div>
 										<div class="container flex">
 											<p class="lucky">{{ item.title}}</p>
-											<p class="num">参加人数:{{ item.user}}</p>
-											<p class="bonusPool">奖金池:<span>￥{{ item.bonusPool}}</span></p>
+											<p class="num">参加人数:{{ item.userNum}}</p>
+											<p class="bonusPool">奖金池:<span>￥{{ item.bonus}}</span></p>
 										</div>
 									</li>
 								</cell>
@@ -121,6 +122,7 @@
 						</ul>
 						<loading v-if="show"></loading>
 						<noMore v-if="showNomore"></noMore>
+						<noData v-if="recommendLottery.length == 0" :status="2" :stateText="'暂无精彩推荐'"></noData>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -132,16 +134,18 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
-	import settingHeader from '../../components/setting_header'
-	import url from '../../config/url'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
+	import noData from '@/components/noData'
+	import settingHeader from '@/components/setting_header'
+	import url from '@/config/url'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
-	import TweenMax from 'gsap';
+	import TweenMax from 'gsap'
 	export default {
 		components: {
 			Loading,
 			noMore,
+			noData,
 			settingHeader,
 			swiper,
 			swiperSlide
@@ -153,77 +157,27 @@
 				reviewData: {},
 				title: '幸运大抽奖',
 				page: 1,
-				demoList: [{
-						name: '徐先生',
-						say: '我在万舜银楼e消费中了5000元大奖，太感谢e消费了！',
-						img: './static/draw/rw1.png'
-					},
-					{
-						name: '朱先生',
-						say: '我是在云亭禾美生活超市e消费中大奖的！',
-						img: './static/draw/rw2.png'
-					},
-					{
-						name: '沈女士',
-						say: '我在虹桥路美的专卖店e消费中5000元大奖！',
-						img: './static/draw/rw3.png'
-					},
-					{
-						name: '陈先生',
-						say: '我刚注册在顾山欧特福超市买了188元就中了大奖！',
-						img: './static/draw/rw4.png'
-					},
-					{
-						name: '戴女士',
-						say: '我在红豆周庄店买一套男装没想到中了大奖！',
-						img: './static/draw/rw5.png'
-					},
-					{
-						name: '刘先生',
-						say: '我在元祖食品e消费中大奖了！之前就中过奖',
-						img: './static/draw/rw6.png'
-					},
-					{
-						name: '鲁女士',
-						say: '我在无锡王兴记店买小笼馒头中的大奖！我都难以置信',
-						img: './static/draw/rw7.png'
-					},
-					{
-						name: '杨先生',
-						say: '我在港下亿家福给宝宝买奶粉没想到第一次e消费就中了！',
-						img: './static/draw/rw8.png'
-					},
-					{
-						name: '梁先生',
-						say: '我在明云超市买香烟中了5000元大奖，很开心！',
-						img: './static/draw/rw9.png'
-					},
-					{
-						name: '谢先生',
-						say: '我在红星美凯龙e消费中5000元大奖了！下次还会选择！',
-						img: './static/draw/rw10.png'
-					},
-				],
 				swiperOption: {
 					slidesPerView: 'auto',
 					autoplay: false
 				},
-				num1: 764924,
+
+				info: {},
 				animatedNumber1: 0,
-				num2: 70054320,
-				animatedNumber2: 0
+				animatedNumber2: 0,
+				curPage: 1,
+				pageSize: 10,
+				userLottery: {},
+				recommendLottery: [],
+				recommendMessage: []
 			}
 		},
+		created() {
+			this.getStatInfo()
+			this.getRecommendLottery()
+		},
 		mounted() {
-			this.getData()
 			this.InitScroll()
-
-			TweenMax.to(this.$data, 1.5, {
-				animatedNumber1: this.num1
-			})
-			TweenMax.to(this.$data, 1.5, {
-				animatedNumber2: this.num2
-			})
 		},
 		computed: {
 			tweenedNumber1: function() {
@@ -234,7 +188,46 @@
 			}
 		},
 		methods: {
+			getStatInfo() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getStatInfo, {
+					params: {
+						userId: _this.$store.state.user.userId,
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.info = res.data.data
+						_this.userLottery = _this.info.userLottery
+						_this.recommendMessage = _this.info.recommendMessage
+						//数字动画
+						TweenMax.to(_this.$data, 1.5, {
+							animatedNumber1: _this.info.totalNums //累计中奖人数
+						})
+						TweenMax.to(_this.$data, 1.5, {
+							animatedNumber2: _this.info.totalBonus //累计奖金金额
+						})
+					}
+				})
+			},
+			getRecommendLottery() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getRecommendLottery, {
+					params: {
+						curPage: _this.curPage,
+						pageSize: _this.pageSize
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.recommendLottery = res.data.data.list
+						}
+					}
+				})
+			},
 			InitScroll() {
+				var _this = this
 				this.$nextTick(() => {
 					if(!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
@@ -245,7 +238,9 @@
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							this.LoadData()
+							if(_this.recommendLottery.length > 0) {
+								this.LoadData()
+							}
 							this.$nextTick(function() {
 								this.scroll.finishPullUp();
 								this.scroll.refresh();
@@ -257,41 +252,37 @@
 				})
 
 			},
-			goPastevents() {
-				this.$router.push({
-					path: '/draw/pastevents'
-				})
-			},
 			LoadData() {
-				this.page++;
 				var _this = this
-				_this.show = true
-				if(_this.showNomore) {
-					_this.show = false;
-				} else {
-					setTimeout(function() {
-						_this.show = false;
-						let len = _this.reviewData.lists.length;
-						let par = new URLSearchParams()
-						par.append('page', _this.page)
-						_this.$http.post(url.draw.getReviewLists, par).then(function(response) {
-							if(response.status == 200 && response.data != null && response.data.result.page == _this.page) {
-								_this.reviewData.lists = _this.reviewData.lists.concat(response.data.result.lists)
+
+				_this.curPage++
+
+					_this.$http.get(_this.url.lottery.getRecommendLottery, {
+						params: {
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.show = true
+								_this.showNomore = false
+								_this.recommendLottery = _this.recommendLottery.concat(res.data.data.list)
+							} else {
+								_this.show = false
+								_this.showNomore = true
 							}
-							if(len == _this.reviewData.lists.length) {
-								_this.showNomore = true;
-							}
-						}).catch(function(error) {})
-					}, 3000)
-				}
+						}
+					})
 			},
-			getData() {
-				let _this = this;
-				this.$http.post(url.draw.getReviewLists, {}).then(function(response) {
-					if(response.status == 200 && response.data != null) {
-						_this.reviewData = response.data.result
+			goPastevents(lotteryId) {
+				this.$router.push({
+					path: '/draw/pastevents',
+					query:{
+						'lotteryId':lotteryId
 					}
-				}).catch(function(error) {});
+				})
 			},
 			toLuckyrank(index) {
 				var _this = this
@@ -405,6 +396,7 @@
 								-webkit-box-orient: vertical;
 								word-break: break-all;
 								overflow: hidden;
+								height: 1rem;
 							}
 							.bt {
 								width: 100%;

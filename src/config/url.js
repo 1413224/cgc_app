@@ -1,7 +1,8 @@
 var uri1 = '/user',
 	uri2 = '/datacenter',
 	uri3 = '/order',
-	uri4 = '/goods'
+	uri4 = '/goods',
+	uri5 = '/lottery'
 
 var url = {
 	platformId: 2018050800000002, //平台ID
@@ -13,7 +14,7 @@ var url = {
 		getBasicInfo: uri1 + '/param/v1/user/getBasicInfo', //基本信息
 		getMyTeam: uri1 + '/param/v1/user/getMyTeam', //获取我的团队
 		getUserInfo: uri1 + '/param/v1/user/getUserInfo', //个人资料
-		changeUserInfo: uri1 + ' /body/v1/user/changeUserInfo', //修改个人资料
+		changeUserInfo: uri1 + '/body/v1/user/changeUserInfo', //修改个人资料
 		fileuploadImage: uri2 + '/v1/fileupload/image', //上传图片
 		login: uri2 + '/public/v1/login', //云中心登录
 		userLogin: uri1 + '/public/v1/user/login', //用户登录
@@ -98,6 +99,18 @@ var url = {
 	goods: {
 		getGoodsInfo: uri4 + '/public/v1/goods/getGoodsInfo', //获取商品信息接口
 		buynow: uri3 + '/bodyIds/v1/order/buynow'
+	},
+	lottery: {
+		getStatInfo: uri5 + '/public/v1/lottery/getStatInfo', //获取抽奖首页接口
+		getRecommendLottery: uri5 + '/public/v1/lottery/getRecommendLottery', //2.3.获取精彩推荐的抽奖列表接口
+		getHistoryLottery: uri5 + '/public/v1/lottery/getHistoryLottery', //2.2.获取往期抽奖列表接口
+		getInfoById: uri5 + '/public/v1/lottery/getInfoById', //2.8.获取抽奖详情信息接口
+		getLotteryRankByNums: uri5 + '/public/v1/lottery/getLotteryRankByNums', //2.6.获取中奖次数排行榜信息接口
+		getLotteryRankByBonus: uri5 + '/public/v1/lottery/getLotteryRankByBonus', //2.6.获取中奖次数排行榜信息接口
+		getAwardUserList: uri5 + '/public/v1/lottery/getAwardUserList', //2.9.获取抽奖中奖人员列表信息接口
+		getUserLotteryRecord: uri5 + '/uparam/v1/lottery/getUserLotteryRecord', //2.10获取会员中奖记录列表接口
+		getBonus: uri5 + '/uparam/v1/lottery/getBonus', //2.11.会员领奖接口
+		getMessage: uri5 + '/uparam /v1/lottery/getMessage',//2.13.获取会员中奖感言接口
 	}
 
 }

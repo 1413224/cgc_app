@@ -7,8 +7,6 @@
 				<router-view></router-view>
 			</keep-alive>
 		</transition>
-		<!--图片预览插件-->
-		<lg-preview v-if="$store.state.page.ispreview"></lg-preview>
 		<settingFooter v-if="$route.meta.navShow"></settingFooter>
 		<div v-transfer-dom class="dia">
 			<x-dialog v-model="orientation" class="dialog-demo" hide-on-blur>

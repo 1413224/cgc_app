@@ -3,36 +3,36 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
 			<div class="content" v-if="recordList.length > 0">
-				<div class="record-item" v-for="(item,index) in recordList" :key="index">
+				<div class="record-item" v-for="(item,index) in list" :key="index">
 					<div class="top">
-						<div>{{item.periods}}</div>
-						<p>{{item.form}}</p>
+						<div>{{item.number}}</div>
+						<p>{{item.title}}</p>
 					</div>
 					<div class="middle">
 						<div class="left">
 							<p>中奖金额</p>
-							<p><i>￥</i>5000.00</p>
+							<p><i>￥</i>{{item.userBonus}}</p>
 						</div>
-						<div class="btn" :class="{'jz':!item.isReceive}" @click="toReceive(item.isReceive)">
-							{{item.isReceive?'已领取':'领奖'}}
+						<div class="btn" :class="{'jz':item.status == 60}" @click="toReceive(item.status)">
+							<p v-if="item.status == 10">未领奖</p>
+							<p v-if="item.status == 20">待审核</p>
+							<p v-if="item.status == 30">审核成功</p>
+							<p v-if="item.status == 40">审核失败</p>
+							<p v-if="item.status == 50">待线下领奖</p>
+							<p v-if="item.status == 60">已领奖</p>
+							<p v-if="item.status == 70">已过期</p>
 						</div>
 					</div>
 					<div class="bottom">
-						<div v-if="1>2">
-							<p>开奖时间：{{item.time}}</p>
-							<p>参与人数：{{item.peopleNum}}人</p>
-							<p>奖金池：￥{{item.allMoney}}</p>
-							<p>中奖金额：<span>￥{{item.has}}</span></p>
-						</div>
 						<ul>
 							<li>
 								<span>开奖时间</span><span>{{item.time}}</span>
 							</li>
 							<li class="bg_red">
-								<span>参与人数</span><span>{{item.peopleNum}} 人</span>
+								<span>参与人数</span><span>{{item.orderNum}} 人</span>
 							</li>
 							<li>
-								<span>奖金池</span><span>{{item.allMoney}}</span>
+								<span>奖金池</span><span>{{item.bonus}}</span>
 							</li>
 						</ul>
 					</div>
@@ -135,8 +135,15 @@
 						has: '2000.00',
 						isReceive: false
 					},
-				]
+				],
+
+				curPage: 1,
+				pageSize: 10,
+				list: []
 			}
+		},
+		created() {
+			this.getUserLotteryRecord()
 		},
 		mounted() {
 			if(this.recordList.length > 0) {
@@ -144,11 +151,39 @@
 			}
 		},
 		methods: {
+			getUserLotteryRecord() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getUserLotteryRecord, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						curPage: _this.curPage,
+						pageSize: _this.pageSize
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.list = res.data.data.list
+						}
+					}
+				})
+			},
 			//领奖
 			toReceive(Boolean) {
 				if(!Boolean) {
 					this.showDialog = true
 				}
+
+				var _this = this
+
+				_this.$http.post(_this.url.lottery.getBonus, {
+					userId: _this.$store.state.user.userId,
+					id: 1
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						console.log(res.data.data)
+					}
+				})
 			},
 			InitScroll() {
 				this.$nextTick(() => {

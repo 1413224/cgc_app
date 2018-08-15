@@ -107,7 +107,7 @@
 								<!--已完成-->
 								<div class="btn" v-if="item.status == 70">
 									<div @click="deleteOrder(item.orderSn)">删除订单</div>
-									
+
 									<div>查看发票</div>
 									<!--<div>评价晒单</div>-->
 								</div>
@@ -129,7 +129,7 @@
 					</div>
 					<Loading v-if="showLoading"></Loading>
 					<noMore v-if="showNo"></noMore>
-					<noData v-if="!showList" :status="2" stateText="暂无订单"></noData>
+					<noData v-if="!showList" :status="2" :stateText="tipText"></noData>
 				</div>
 			</div>
 		</div>
@@ -208,7 +208,8 @@
 				timeOut: '',
 				move: true,
 				huan: false,
-				showList:true
+				showList: true,
+				tipText:'暂无订单',
 			}
 		},
 		components: {
@@ -337,9 +338,9 @@
 				_this.curPage = 1
 
 				_this.showList = true
-				
+
 				_this.showLoading = false
-				
+
 				_this.showNo = false
 
 				_this.getOrderList()
@@ -350,6 +351,18 @@
 						'status': index
 					})
 				})
+				
+				if(index == 0){
+					this.tipText = '暂无订单'
+				}else if(index == 1){
+					this.tipText = '暂无待处理订单'
+				}else if(index == 2){
+					this.tipText = '暂无进行中订单'
+				}else if(index == 3){
+					this.tipText = '暂无已完成订单'
+				}else if(index == 4){
+					this.tipText = '暂无已取消订单'
+				}
 			},
 			showS() {
 				this.show = !this.show
@@ -473,7 +486,7 @@
 					confirm() {
 						_this.$http.post(_this.url.order.cancelOrderByOrderSn, {
 							userId: _this.$store.state.user.userId,
-//							userId: 'userDev01',
+							//							userId: 'userDev01',
 							orderSn: orderSn,
 						}).then((res) => {
 							if(res.data.status == "00000000") {
@@ -551,7 +564,7 @@
 
 						//滚动开始
 						_this.scroll.on('scroll', (pos) => {
-							if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight >_this.scroll.wrapperHeight) {
+							if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight > _this.scroll.wrapperHeight) {
 								if(pos.y > -30 && pos.y <= 80) {
 									if(_this.move) {
 										_this.showLoading2 = true
@@ -578,14 +591,19 @@
 						//手指离开
 						_this.scroll.on('touchEnd', (pos) => {
 							_this.move = false
-							if(pos.y >= 20) {
-								_this.changeTip = '加载中...'
-								if(_this.orderList.length > 0) {
-									_this.getOrderList(_this.orderList[0].createTime)
+							if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight > _this.scroll.wrapperHeight) {
+								if(pos.y >= 20) {
+									_this.changeTip = '加载中...'
+									if(_this.orderList.length > 0) {
+										_this.getOrderList(_this.orderList[0].createTime)
+									}
+								} else {
+									_this.showLoading2 = false
 								}
-							} else {
-								_this.showLoading2 = false
+							} else if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight < _this.scroll.wrapperHeight){
+								_this.getOrderList(_this.orderList[0].createTime)
 							}
+
 						})
 
 					} else {

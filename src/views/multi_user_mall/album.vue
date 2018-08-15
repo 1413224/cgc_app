@@ -8,22 +8,24 @@
 				<tab-item @on-item-click="onItemClick">宣传图册</tab-item>
 			</tab>
 		</div>
-		<ul class="photo_list">
-			<li v-for="(item,index) in photoList">
-				<img :src="item.original" alt="" />
-			</li>
-		</ul>
+		<div class="photo_list">
+			<img class="img" :src="item.src" v-for="(item,index) in photoList" @click="show(index)" alt="" />
+		</div>
+		<div v-transfer-dom>
+			<previewer :list="photoList" ref="previewer" :options="options" @on-index-change="logIndexChange"></previewer>
+		</div>
 	</section>
 </template>
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Tab, TabItem } from 'vux'
+	import { Tab, TabItem, Previewer } from 'vux'
 	export default {
 		components: {
 			settingHeader,
 			Tab,
-			TabItem
+			TabItem,
+			Previewer
 		},
 		data() {
 			return {
@@ -32,6 +34,8 @@
 				storePhoto: [],
 				doorhead: [],
 				thumb: [],
+				options: {},
+				list: []
 			}
 		},
 		created() {
@@ -39,17 +43,31 @@
 		},
 		mounted() {},
 		methods: {
+			show(index) {
+				this.$refs.previewer.show(index)
+			},
+			logIndexChange(arg) {
+				console.log(arg)
+			},
 			onItemClick(val) {
 
+				var _this = this
+
+				_this.photoList = []
+
 				if(val == 0) {
-					this.photoList = this.storePhoto
+					_this.list = _this.storePhoto
 				} else if(val == 1) {
-					this.photoList = this.doorhead
+					_this.list = _this.doorhead
 				} else {
-					this.photoList = this.thumb
+					_this.list = _this.thumb
 				}
 
-				console.log(this.photoList)
+				_this.list.forEach((value) => {
+					var item = {}
+					item.src = value.original
+					_this.photoList.push(item)
+				})
 			},
 			// 获取企业图册
 			getThumbInfo() {
@@ -63,8 +81,14 @@
 						_this.storePhoto = res.data.data.storePhoto
 						_this.doorhead = res.data.data.doorhead
 						_this.thumb = res.data.data.thumb
-						
-						_this.photoList = _this.storePhoto
+
+						_this.list = _this.storePhoto
+
+						_this.list.forEach((value) => {
+							var item = {}
+							item.src = value.original
+							_this.photoList.push(item)
+						})
 					}
 				})
 			},
@@ -88,13 +112,13 @@
 			-webkit-column-count: 2;
 			/* Safari 和 Chrome */
 			column-count: 2;
-			li {
+			.img {
 				width: 3.39rem;
+				height: auto;
 				background: rgba(229, 229, 229, 1);
 				border-radius: 6px;
 				margin-bottom: 0.24rem;
 				overflow: hidden;
-				border: 1px solid #E5E5E5;
 				box-sizing: border-box;
 				display: flex;
 				align-items: center;
@@ -102,13 +126,9 @@
 				-moz-page-break-inside: avoid;
 				-webkit-column-break-inside: avoid;
 				break-inside: avoid;
-				img {
-					width: 100%;
-					height: auto;
-				}
 			}
-			li:not(:nth-child(2n)) {
-				margin-right: ;
+			.img:not(:nth-child(2n)) {
+				margin-right: 0;
 			}
 		}
 	}
