@@ -3,7 +3,7 @@
 		<!--动画  页面缓存-->
 		<transition :name="viewTransition" :css="!!direction">
 			<!-- includeList -->
-			<keep-alive :include="includeList">
+			<keep-alive :include="storeList">
 				<router-view></router-view>
 			</keep-alive>
 		</transition>

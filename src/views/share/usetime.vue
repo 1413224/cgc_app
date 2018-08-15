@@ -24,7 +24,7 @@
 					<img src="../../assets/images/share/button0.png" alt="" class="btn0">
 					<img src="../../assets/images/share/sh_btn0.png" alt="" class="sh_btn0">
 					<div class="nr">
-						<p>{{infoItem.itemId}}</p>
+						<!-- <p>{{infoItem.itemId}}</p> -->
 						<p class="tit">启动</p>
 						<p class="text">开启后开始计时</p>
 						<p class="time">{{remainTime}}</p>
@@ -135,20 +135,19 @@
 
 			_this.getMyEquipmentInfo()
 			
-			/*var hiddenProperty = 'hidden' in document ? 'hidden' :
+			var hiddenProperty = 'hidden' in document ? 'hidden' :
 				'webkitHidden' in document ? 'webkitHidden' :
 				'mozHidden' in document ? 'mozHidden' :
 				null;
 			var visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
 			var onVisibilityChange = function() {
 				if(!document[hiddenProperty]) {
-					_this.useend()
-					_this.getMyEquipmentInfo()
+					window.location.reload();
+					return;
 				}
 			}
-			document.addEventListener(visibilityChangeEvent, onVisibilityChange);*/
+			document.addEventListener(visibilityChangeEvent, onVisibilityChange);
 			
-			// console.log(this.$refs.mySwiper.swiper)
 		},
 		mounted() {
 		
@@ -167,38 +166,36 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
-						_this.info = res.data.data
-						_this.list = res.data.data.list
-						_this.infoItem = res.data.data.list[0]
-						
 						_this.listShow = res.data.data.list.length > 0 ? true : false
 
+						if(res.data.data.list.length > 0){
+							_this.info = res.data.data
+							_this.list = res.data.data.list
+							_this.infoItem = res.data.data.list[0]
 
-						for(var i=0;i<_this.list.length;i++){
-							if(i==0){
-								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
-									_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+							for(var i=0;i<_this.list.length;i++){
+								if(i==0){
+									if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
+										_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
 
-									_this.outTime(_this.list[i],i) //设备剩余时间
+										_this.outTime(_this.list[i],i) //设备剩余时间
+									}else{
+										_this.remainTime = _this.setTime(res.data.data.list[0].canUseTime)
+									}
 								}else{
-									_this.remainTime = _this.setTime(res.data.data.list[0].canUseTime)
-								}
-							}else{
-								if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
-									//_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
+									if(res.data.data.list[i].status == 1 || res.data.data.list[i].status == 2){
+										//_this.countDown(_this.list[i].canUseTime)  //当前设备倒计时
 
-									_this.outTime(_this.list[i],i) //设备剩余时间
+										_this.outTime(_this.list[i],i) //设备剩余时间
+									}
 								}
 							}
 						}
-						
-
 
 					}
 				})
 			},
 			startEquipment(id, status) { //开启设备
-
 
 				var _this = this,
 					id = id,
@@ -244,9 +241,6 @@
 					if(res.data.status == "00000000") {
 
 						var i = _this.$refs.mySwiper.swiper.activeIndex
-					
-						
-						// console.log(res.data)
 
 						var datas = res.data
 
@@ -287,7 +281,6 @@
 							
 						}
 	
-						
 					}else if(res.data.status == "goods-00003"){
 						_this.$vux.toast.show({
 							width: '50%',
@@ -312,7 +305,6 @@
 					} 
 				})
 				
-			
 			},
 			outTime(info,i) { //计算所有设备的剩余时间
 				var _this = this
@@ -329,21 +321,18 @@
 							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 						},500)*/
 
-						if(_this.list.length ==0 ){
+						/*if(_this.list.length ==0 ){
 							_this.$router.push({
-								paht:'/shop/my_order2'
+								path:'/shop/my_order2'
 							})
-						}
-
+						}*/
 						return;
-						
 					}
 				}, 998);
 			},
 			countDown(overtime) { //当前设备的倒计时
 
 				var _this = this;
-
 
 				_this.remainTime = _this.setTime(overtime);
 
@@ -353,7 +342,15 @@
 
 						_this.useend();
 
-						_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
+						_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1);
+
+						if(_this.list.length==0){
+							// alert("jinru")
+							_this.$router.push({
+								path:'/shop/my_order2'
+							})
+							return;
+						}
 
 						setTimeout(() => {
 
@@ -365,17 +362,7 @@
 								_this.remainTime = _this.setTime(_this.infoItem.canUseTime);
 
 							}
-
-							// alert(_this.$refs.mySwiper.swiper.activeIndex)
-
-							// console.log(_this.infoItem)
-
-							if(_this.list.length==0){
-								_this.$router.push({
-									paht:'/shop/my_order2'
-								})
-								
-							}
+							
 						},500)
 
 						return;
@@ -402,7 +389,6 @@
 			},
 			endOfUse(id) { //结束订单
 
-
 				var id = id,
 					_this = this;
 
@@ -422,7 +408,6 @@
 				
 			},
 			goEndOfuse(id){
-
 
 				var _this = this
 				_this.$http.post(_this.url.share.finishEquipmentOrder, {
@@ -445,32 +430,28 @@
 							
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
-							// alert(_this.list.length)
-							// this.$refs.mySwiper.swiper.activeIndex
+							alert(_this.list.length)
 							 
-								if(_this.list.length == 0){
-									_this.$router.push({
-										path:'/shop/my_order2'
-									})
-									return;
-								}
+							if(_this.list.length == 0){
+								_this.$router.push({
+									path:'/shop/my_order2'
+								})
+								// _this.listShow = false
+								return;
+							}
+						
+							_this.useend();
 							
-								_this.useend();
-								
-								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 
-								// console.log(_this.infoItem)
-
-								if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
-									// alert(0)
-									// _this.useend();
-									_this.countDown(_this.infoItem.canUseTime);
-								}else{
-									// alert(1)
-									_this.remainTime = _this.setTime(_this.infoItem.canUseTime);
-								}
-
-							
+							if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
+								// alert(0)
+								// _this.useend();
+								_this.countDown(_this.infoItem.canUseTime);
+							}else{
+								// alert(1)
+								_this.remainTime = _this.setTime(_this.infoItem.canUseTime);
+							}
 							
 						}else{
 							// alert("没有了")

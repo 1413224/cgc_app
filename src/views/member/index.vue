@@ -7,7 +7,7 @@
 					<router-link to="/member/setting/index"><img class="setting-img" :src="'./static/member/shezi.png'" /></router-link>
 					<div class="avatar">
 						<img v-if="userInfo.avatar" :src="userInfo.avatar.original" @click="$router.push({path:'/member/info/index'})" alt="" />
-						<img v-else :src="'./static/images/mrtx.png'" alt="">
+						<img v-else :src="'./static/images/mrtx.png'" @click="$router.push({path:'/member/info/index'})" alt="">
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:userInfo.mobile}}</p>
 						<!--<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>-->
 						<p class="bj" @click="$router.push({path:'/member/info/data'})">编辑个人资料 <i class="icon iconfont icon-arrow-right"></i></p>
