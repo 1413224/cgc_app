@@ -106,7 +106,7 @@ var url = {
 		getHistoryLottery: uri5 + '/public/v1/lottery/getHistoryLottery', //2.2.获取往期抽奖列表接口
 		getInfoById: uri5 + '/public/v1/lottery/getInfoById', //2.8.获取抽奖详情信息接口
 		getLotteryRankByNums: uri5 + '/public/v1/lottery/getLotteryRankByNums', //2.6.获取中奖次数排行榜信息接口
-		getLotteryRankByBonus: uri5 + '/public/v1/lottery/getLotteryRankByBonus', //2.6.获取中奖次数排行榜信息接口
+		getLotteryRankByBonus: uri5 + '/public/v1/lottery/getLotteryRankByBonus', //2.7.获取中奖金额排行榜信息接口
 		getAwardUserList: uri5 + '/public/v1/lottery/getAwardUserList', //2.9.获取抽奖中奖人员列表信息接口
 		getUserLotteryRecord: uri5 + '/uparam/v1/lottery/getUserLotteryRecord', //2.10获取会员中奖记录列表接口
 		getBonus: uri5 + '/uparam/v1/lottery/getBonus', //2.11.会员领奖接口

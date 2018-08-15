@@ -25,16 +25,16 @@
 						</div>
 					</div>
 					<div class="bottom">
-						<div class="item_box" v-for="(item,index) in rankList.lists">
+						<div class="item_box" v-for="(item,index) in numberList">
 							<div class="left">
 								<div>
-									<img class="tx" :src="item.thumb" alt="">
+									<img class="tx" :src="item.thumb.original" alt="">
 									<img class="pa_img" v-if="index == 0" :src="'./static/draw/diyi.png'" alt="">
 									<img class="pa_img" v-if="index == 1" :src="'./static/draw/dier.png'" alt="">
 									<img class="pa_img" v-if="index == 2" :src="'./static/draw/disan.png'" alt="">
 								</div>
 								<div>
-									<div class="diyi" :class="index<3 ? 'diyi'+Number(index+1) : 'color'">NO.{{ item.number}}</div>
+									<div class="diyi" :class="index<3 ? 'diyi'+Number(index+1) : 'color'">NO.{{ item.ranking}}</div>
 									<p>{{item.mobile}}</p>
 								</div>
 							</div>
@@ -70,7 +70,7 @@
 				moneyList: {},
 				numberList: {},
 				page: 1,
-				tabIndex: 0
+				tabIndex: 0,
 			}
 		},
 		components: {
@@ -80,13 +80,10 @@
 			noMore,
 			settingHeader
 		},
-		beforeCreate: function() {
-			// this.getLuckRankData()
-		},
-		created: function() {
-			this.getLuckRankData()
+		created() {
 			this.tabIndex = this.$route.query.index || 0
 			this.getLotteryRankByNums()
+			this.getLotteryRankByBonus()
 		},
 		mounted() {
 			this.InitScroll()
@@ -101,23 +98,25 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
+						_this.numberList = res.data.data.rankList
+						_this.userRank = res.data.data.userRank
 					}
 				})
 			},
-			showNumber() {
-				this.tab1 = true;
-				this.tab2 = false;
-				this.rankList = this.numberList;
-				this.show = false;
-				this.showNomore = false;
-			},
-			showMoney() {
-				this.tab1 = false;
-				this.tab2 = true;
-				this.rankList = this.moneyList;
-				this.show = false;
-				this.showNomore = false;
+			getLotteryRankByBonus() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getLotteryRankByBonus, {
+					params: {
+						userId: _this.$store.state.user.userId,
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						console.log(res.data.data)
+						_this.numberList = res.data.data.rankList
+						_this.userRank = res.data.data.userRank
+					}
+				})
 			},
 			InitScroll() {
 				this.$nextTick(() => {
@@ -141,83 +140,7 @@
 					}
 				})
 
-			},
-			LoadData() {
-				this.page++;
-				var _this = this
-				_this.show = true
-				let len = _this.rankList.lists.length;
-				let parJson = {
-					pagesize: 10
-				}
-				let a;
-				if(_this.showNomore) {
-					_this.show = false;
-					return
-				}
-				if(this.tab1) {
-					a = Qs.stringify(parJson)
-				} else {
-					parJson.sort = 1;
-					a = Qs.stringify(parJson)
-				}
-				setTimeout(function() {
-					_this.show = false;
-
-					_this.$http.post(url.draw.getLuckRankLists, a).then(function(response) {
-						if(response.status == 200 && response.data != null && response.data.result.page == _this.page) {
-							_this.rankList.lists = _this.rankList.lists.concat(response.data.result.lists)
-						}
-						console.log(_this.rankList);
-						if(len == _this.rankList.lists.length) {
-							_this.showNomore = true;
-						}
-					}).catch(function(error) {
-						console.log(error);
-					});
-				}, 1000)
-			},
-			getLuckRankData() {
-				let _this = this;
-				let parJson = {
-					pagesize: 10
-				}
-				let a = Qs.stringify(parJson)
-				// let baseUrl = 'http://www.cgc999.com'
-				this.$http.post(url.draw.getLuckRankLists, a).then(function(response) {
-					if(response.status == 200 && response.data != null) {
-						_this.numberList = response.data.result
-						_this.rankList = _this.numberList;
-					}
-				}).catch(function(error) {
-					console.log(error);
-				});
-
-				parJson.sort = 1;
-				let b = Qs.stringify(parJson);
-
-				this.$http.post(url.draw.getLuckRankLists, b).then(function(response) {
-					if(response.status == 200 && response.data != null) {
-						_this.moneyList = response.data.result
-						if(_this.tabIndex == 0) {
-							_this.tab1 = true;
-							_this.tab2 = false;
-							_this.rankList = _this.numberList;
-							_this.show = false;
-							_this.showNomore = false;
-						} else {
-							_this.tab1 = false;
-							_this.tab2 = true;
-							_this.rankList = _this.moneyList;
-							_this.show = false;
-							_this.showNomore = false;
-						}
-					}
-				}).catch(function(error) {
-					console.log(error);
-				});
-
-			},
+			}
 		}
 	}
 </script>
