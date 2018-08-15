@@ -10,7 +10,7 @@ const page = {
 		isLoading: false,
 		back: false,
 		isLogin: isLogin,
-		includeList:['storeList'],
+		includeList:[],
 		isWx:true,
 		userInfo:userInfo
 	},
