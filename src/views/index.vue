@@ -192,15 +192,17 @@
 					loop: true
 				},
 				caiList: [{
-						img: './static/index/index_pro1.png',
-						title: '桂林漓江三日五星三人奢华之旅',
-						money: '',
+						img: './static/index/index_pro1.jpg',
+						title: '宝树行 轩尼诗xo700mL Hennessy',
+						money: '480.00',
+						goodsId:'lxgoods9820180801104043382',
 						zf: '588.00',
-						dh: true
+						dh: true,
 					}, {
-						img: './static/index/index_pro2.png',
-						title: 'Daniel Wellington欧美女士简约风手表 DW时尚',
+						img: './static/index/index_pro2.jpg',
+						title: '法国原瓶进口红酒 拉菲古堡 法国1855列级名庄 大拉菲 1982年份 正牌 RP100',
 						money: '52.00',
+						goodsId:'lxgoods9820180801551017806',
 						zf: '1888.00',
 						gm: true
 					},
