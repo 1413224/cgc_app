@@ -200,7 +200,7 @@
 					confirmText: '确定',
 					cancelText: '取消',
 					clearText: '请选择日期',
-					minYear: '1970',
+					minYear: '1900',
 					endDate: _this.maxDate,
 					onConfirm(val) {
 						_this.birthday = val
