@@ -2,7 +2,11 @@
 	<div id="app" ref="fBox" v-cloak>
 		<!--动画  页面缓存-->
 		<transition :name="viewTransition" :css="!!direction">
+<<<<<<< HEAD
 			<!-- includeList storeList-->
+=======
+			<!-- includeList -->
+>>>>>>> 014ed725987822f2305e01d0686cd27eaf76343a
 			<keep-alive :include="includeList">
 				<router-view></router-view>
 			</keep-alive>
@@ -194,6 +198,8 @@
 		watch: {
 			'$route' (to, from, next) {
 				var _this = this
+				
+				console.log(_this.includeList)
 
 				console.log(this.includeList)
 
