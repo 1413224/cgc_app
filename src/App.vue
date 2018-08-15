@@ -3,7 +3,7 @@
 		<!--动画  页面缓存-->
 		<transition :name="viewTransition" :css="!!direction">
 			<!-- includeList -->
-			<keep-alive :include="storeList">
+			<keep-alive :include="includeList">
 				<router-view></router-view>
 			</keep-alive>
 		</transition>
@@ -194,6 +194,8 @@
 		watch: {
 			'$route' (to, from, next) {
 				var _this = this
+				
+				console.log(_this.includeList)
 
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
