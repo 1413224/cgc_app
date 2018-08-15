@@ -213,7 +213,7 @@
 						goodsId:'lxgoods9820180813169898400',
 						zf: ''
 					}, {
-						img: './static/brand/pr6.png',
+						img: 'http://domain.cgc999.com:8080/group1/M00/00/4E/rBL0CFtj_OGACJ1kAABU2IA7fSM913.jpg',
 						title: 'FILA斐乐手表男女情侣表时尚潮流运动大表盘腕表石英表162',
 						goodsId:'lxgoods9820180803440469796',
 						money: '669.00',

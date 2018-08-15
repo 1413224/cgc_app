@@ -337,6 +337,10 @@
 				_this.curPage = 1
 
 				_this.showList = true
+				
+				_this.showLoading = false
+				
+				_this.showNo = false
 
 				_this.getOrderList()
 

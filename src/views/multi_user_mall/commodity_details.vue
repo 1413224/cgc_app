@@ -47,9 +47,9 @@
 				<img :src="'./static/images/b-right.png'" />
 			</div>
 		</div>
-		<div class="goods-information">
+		<div class="goods-information" ref="goodsDetails">
 			<div class="title">商品详情</div>
-			<div>{{goodsDetails.detail}}</div>
+			<div v-html="goodsDetails.detail">{{goodsDetails.detail}}</div>
 		</div>
 		<div class="btn-box">
 			<div class="left">
@@ -149,7 +149,14 @@
 			this.goodsId = this.$route.query.goodsId
 			this.getGoodsInfo()
 		},
-		mounted() {},
+		mounted() {
+			var el = document.getElementsByClassName('goods-information')[0]
+			var imgs = el.getElementsByTagName('img')
+			console.log(imgs)
+			for(var i = 0; i < imgs.length; i++) {
+				console.log(imgs[i])
+			}
+		},
 		computed: {},
 		methods: {
 			changeGoodsConcern() {
@@ -281,7 +288,15 @@
 	}
 </script>
 <style lang="less">
-	.number-box .weui-cell:before{ border-top: none; }
+	.number-box .weui-cell:before {
+		border-top: none;
+	}
+	
+	.goods-information {
+		img {
+			width: 100%;
+		}
+	}
 </style>
 <style lang="less" scoped>
 	.goods-popup {
@@ -600,6 +615,7 @@
 			}
 		}
 		.goods-information {
+			width: 100%;
 			.title {
 				height: 1.08rem;
 				line-height: 1.08rem;
@@ -608,6 +624,9 @@
 				font-family: PingFangSC-Regular;
 				color: rgba(53, 53, 53, 1);
 				background-color: white;
+			}
+			img {
+				width: 100%;
 			}
 		}
 		.btn-box {

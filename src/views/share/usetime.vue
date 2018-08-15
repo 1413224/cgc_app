@@ -134,10 +134,6 @@
 			var	_this = this
 
 			_this.getMyEquipmentInfo()
-
-			this.listShow = this.list.length > 0 ? true : false
-
-
 			
 			/*var hiddenProperty = 'hidden' in document ? 'hidden' :
 				'webkitHidden' in document ? 'webkitHidden' :
@@ -174,6 +170,8 @@
 						_this.info = res.data.data
 						_this.list = res.data.data.list
 						_this.infoItem = res.data.data.list[0]
+						
+						_this.listShow = res.data.data.list.length > 0 ? true : false
 
 
 						for(var i=0;i<_this.list.length;i++){
