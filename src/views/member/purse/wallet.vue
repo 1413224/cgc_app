@@ -1,7 +1,27 @@
 <template>
 	<div class="wallet-box">
 		<settingHeader class="wallet-header" :title="title"></settingHeader>
-		<group :gutter='0' class="bno">
+		<div class="w_bg">
+			<div class="top-item">
+				<div class="left">
+					<img class="tx" slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
+					<div class="one" @click="$router.push({path:'/member/earnings/profit'})">
+						<p>{{fundInfo.nickname?fundInfo.nickname:'未设置'}}</p>
+						<div class="shouyi_box">
+							<img :src="'./static/member/shouyi.png'" />
+							<p>累计收益 {{fundInfo.income}}</p>
+							<!--<i class="icon iconfont icon-arrow-right "></i>-->
+						</div>
+					</div>
+					<div class="use" @click="$router.push({path:'/shop'})">
+						<div class="use_btn">使用积分
+							<i class="icon iconfont icon-arrow-right"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<group :gutter='0' class="bno" v-if="1>2">
 			<cell class="top-item" primary="content" is-link>
 				<div class="left">
 					<img class="tx" slot="icon" :src="userImg?userImg:'./static/images/mrtx.png'">
@@ -25,7 +45,7 @@
 				<p>{{fundInfo.income}}</p>
 			</cell>
 		</group>-->
-		<div class="tip-box">
+		<div class="tip-box b_r">
 			<div class="top">
 				<div class="one-item">
 					<div style="display: flex;align-items: center;">
@@ -104,9 +124,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="nomore1">
+		<!--<div class="nomore1">
 			<load-more :show-loading="false" tip="到底了" background-color="#F5F8F9"></load-more>
-		</div>
+		</div>-->
 		<!--<router-link to='/draw'>
 			<img style="display: block;width: 100%;height: auto;" :src="'./static/images/integral-bg.png'" alt="" />
 		</router-link>-->
@@ -195,6 +215,15 @@
 <style lang="less">
 	.wallet-box {
 		font-family: PingFangSC-Medium;
+		padding-bottom:0.20rem ;
+		.w_bg {
+			height: 2.50rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: url(../../../../static/member/w_bg.png) no-repeat;
+			background-size: cover;
+		}
 		.nomore1 {
 			display: flex;
 			background: rgba(245, 248, 249, 1);
@@ -225,8 +254,11 @@
 		.bno .vux-no-group-title:before {
 			border-top: none!important;
 		}
+		.b_r {
+			border-radius: 13px 13px 0 0;
+		}
 		.tip-box {
-			margin-top: 0.2rem;
+			margin-top: -0.25rem;
 			background-color: white;
 			.bottom {
 				display: flex;
@@ -329,9 +361,10 @@
 			border-bottom: none!important;
 		}
 		.top-item {
-			height: 1.6rem;
+			width: 100%;
 			font-size: 0.34rem;
 			color: rgba(26, 38, 66, 1);
+			padding-left: 0.27rem;
 			box-sizing: border-box;
 			.shouyi_box {
 				display: flex;
@@ -354,8 +387,8 @@
 			.left {
 				display: flex;
 				.tx {
-					width: 0.75rem;
-					height: 0.75rem;
+					width: 0.98rem;
+					height: 0.98rem;
 					margin-right: 0.3rem;
 				}
 				.one {
@@ -366,11 +399,13 @@
 					padding: 0.05rem 0;
 					p:nth-child(1) {
 						font-size: 0.34rem;
-						color: rgba(26, 38, 66, 1);
+						font-family: PingFang-SC-Medium;
+						color: rgba(254, 254, 254, 1);
 					}
 					P:nth-child(2) {
 						font-size: 0.22rem;
-						color: rgba(115, 134, 173, 1);
+						font-family: PingFang-SC-Medium;
+						color: rgba(255, 255, 255, 1);
 					}
 				}
 				.use {
@@ -378,9 +413,24 @@
 					display: flex;
 					align-items: center;
 					justify-content: flex-end;
-					font-size: 0.32rem;
+					font-size: 0.24rem;
 					font-family: PingFang-SC-Medium;
-					color: rgba(51, 111, 255, 1);
+					color: rgba(255, 255, 255, 1);
+					.use_btn {
+						width: 1.87rem;
+						height: 0.60rem;
+						line-height: 0.60rem;
+						text-align: center;
+						background: rgba(255, 255, 255, 0.3);
+						border-radius: 20px 0 0 20px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						i {
+							font-size: 0.35rem;
+							margin-left: .10rem;
+						}
+					}
 				}
 			}
 		}
