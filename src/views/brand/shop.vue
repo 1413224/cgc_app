@@ -36,7 +36,7 @@
 		<div class="title-box">精品推荐</div>
 		<div v-for="(item,index) in sList">
 			<div class="content-box" :style="{backgroundImage: 'url('+ item.bgImg +')',backgroundSize: 'cover',backgroundrRepeat: 'no-repeat'}">
-				<div class="middle">
+				<div class="middle" @click="toStoreDetails(item.enterpriseId)">
 					<div class="left">
 						<img :src="item.logo" />
 						<div>
@@ -106,6 +106,7 @@
 					text1: 'SWAROVSKI 施华洛世奇',
 					text2: '列支敦士登｜探索当季闪耀新品',
 					jgImg: './static/brand/dg.png',
+					enterpriseId:'enterBasic628084787600000001',
 					zstList: [{
 							name: 'DUO恶魔之眼项链时尚气质女短...',
 							money: '990',
@@ -139,6 +140,7 @@
 					text1: 'CHANEL 香奈儿',
 					text2: '法国｜独一无二精致工艺',
 					jgImg: './static/brand/fg.png',
+					enterpriseId:'enterBasic150521084500000001',
 					zstList: [{
 							name: '蔚蓝男士淡香水50ml清新古龙香...',
 							money: '558',
@@ -171,6 +173,7 @@
 					text1: 'Estee Lauder 雅诗兰黛',
 					text2: '美国｜雅诗兰黛让每位女性皆...',
 					jgImg: './static/brand/mg.png',
+					enterpriseId:'enterBasic899471964700000001',
 					zstList: [{
 							name: '小棕瓶眼霜 肌透修护眼部精华...',
 							money: '435',
@@ -203,6 +206,7 @@
 					text1: 'Swisse',
 					text2: '澳大利亚｜宗旨是帮助人们生...',
 					jgImg: './static/brand/odly.png',
+					enterpriseId:'enterBasic170343000700000001',
 					zstList: [{
 							name: '钙片+维生素D柠檬酸150片成人...',
 							money: '128',
@@ -246,6 +250,14 @@
 					path: '/multi_user_mall/commodity_details',
 					query: {
 						goodsId: goodsId
+					}
+				})
+			},
+			toStoreDetails(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
 					}
 				})
 			},

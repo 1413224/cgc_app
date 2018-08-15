@@ -11,7 +11,7 @@
 		<div class="title-box">优质品牌</div>
 		<div v-for="(item,index) in list">
 			<div class="content-box" :style="{backgroundImage: 'url('+ item.bgImg +')',backgroundSize: 'cover',backgroundrRepeat: 'no-repeat'}">
-				<div class="middle">
+				<div class="middle" @click="toStoreDetails(item.enterpriseId)">
 					<div class="left">
 						<img :src="item.logo" />
 						<div>
@@ -172,6 +172,7 @@
 					logo: './static/brand/hg.png',
 					text1: 'WHOO 后',
 					text2: '“皇后”的秘诀',
+					enterpriseId:'enterBasic584352416400000001',
 					zstList: [{
 							name: 'WHOO后天气丹花献光彩紧颜系列礼盒7件套(333ml)',
 							money: '1,540.00',
@@ -203,6 +204,7 @@
 					logo: './static/brand/lz.png',
 					text1: 'LANEIGE兰芝',
 					text2: '唤醒肌肤闪耀之美',
+					enterpriseId:'enterBasic465572524800000001',
 					zstList: [{
 							name: 'Laneige兰芝雪纱防晒隔离霜妆前乳 美白裸妆提亮肤色30ml',
 							money: '245.00 ',
@@ -234,6 +236,7 @@
 					logo: './static/brand/ys.jpg',
 					text1: 'its skin伊思',
 					text2: '蜗牛霜创始者',
+					enterpriseId:'enterBasic618179786300000003',
 					zstList: [{
 							name: '韩国正品its skin伊思红参蜗牛BB霜50ml 保湿隔离提亮美白遮瑕',
 							money: '118.00',
@@ -1039,6 +1042,14 @@
 					path: '/multi_user_mall/commodity_details',
 					query: {
 						goodsId: goodsId
+					}
+				})
+			},
+			toStoreDetails(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
 					}
 				})
 			},

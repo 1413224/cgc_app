@@ -93,9 +93,9 @@ axios.interceptors.response.use(res => {
 		}
 	})
 	if(res.data.status != '00000000' && res.data.status != 1) {
-		if(res.data.status == '401' && URL != '/user/v1/user/getBasicInfo') {
+		if(res.data.status == '401' && URL != '/user/param/v1/user/getBasicInfo') {
 			//未登录状态  返回登录页面
-			router.push({
+			router.replace({
 				path: '/user/reg'
 			})
 			Vue.$vux.toast.show({
@@ -107,7 +107,7 @@ axios.interceptors.response.use(res => {
 			localStorage.setItem('isLogin', false)
 		} else if((res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == 'apigw004' || res.data.status == 'user-0020') && URL !== '/user/v1/user/getBasicInfo') {
 			//重复登录   用户不存在 不是获取个人信息接口 返回登录页面
-			router.push({
+			router.replace({
 				path: '/user/reg'
 			})
 			
@@ -124,7 +124,7 @@ axios.interceptors.response.use(res => {
 				width: '60%'
 			})
 			localStorage.setItem('isLogin', false)
-		} else if(res.data.status == 'user-0020' && URL == '/user/v1/user/getBasicInfo') {
+		} else if(res.data.status == 'user-0020' && URL == '/user/param/v1/user/getBasicInfo') {
 			//用户不存在 获取个人信息接口 不返回登录页面
 			Vue.$vux.toast.show({
 				text: '用户不存在，请重新注册',
@@ -133,10 +133,10 @@ axios.interceptors.response.use(res => {
 				width: '60%'
 			})
 			localStorage.setItem('isLogin', false)
-		} else if((res.data.status == 'utils007' || res.data.status == 'utils010') && URL == '/user/v1/user/getBasicInfo') {
+		} else if((res.data.status == 'utils007' || res.data.status == 'utils010') && URL == '/user/param/v1/user/getBasicInfo') {
 			//重复登录 获取个人信息接口 改变登录状态
 			localStorage.setItem('isLogin', false)
-		} else if(URL != '/user/v1/user/getBasicInfo') {
+		} else if(URL != '/user/param/v1/user/getBasicInfo') {
 			//其他接口 提示
 			Vue.$vux.toast.show({
 				text: res.data.message,
