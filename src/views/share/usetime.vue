@@ -430,7 +430,7 @@
 							
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
-							alert(_this.list.length)
+							// alert(_this.list.length)
 							 
 							if(_this.list.length == 0){
 								_this.$router.push({

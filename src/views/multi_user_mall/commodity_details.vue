@@ -49,7 +49,7 @@
 		</div>
 		<div class="goods-information" ref="goodsDetails">
 			<div class="title">商品详情</div>
-			<div v-html="goodsDetails.detail">{{goodsDetails.detail}}</div>
+			<div v-html="goodsDetails.detail" class="detail">{{goodsDetails.detail}}</div>
 		</div>
 		<div class="btn-box">
 			<div class="left">
@@ -150,12 +150,7 @@
 			this.getGoodsInfo()
 		},
 		mounted() {
-			var el = document.getElementsByClassName('goods-information')[0]
-			var imgs = el.getElementsByTagName('img')
-			console.log(imgs)
-			for(var i = 0; i < imgs.length; i++) {
-				console.log(imgs[i])
-			}
+			
 		},
 		computed: {},
 		methods: {
@@ -293,12 +288,27 @@
 	}
 	
 	.goods-information {
-		img {
+		.detail{
+			/*background: #333;*/
 			width: 100%;
+			.content{
+				width: 100%;
+				table{
+					width: 100% !important;
+					img{
+						width: 100%;
+					}
+				}
+			}
 		}
+		/*img {
+			width: 100%;
+		}*/
 	}
 </style>
 <style lang="less" scoped>
+	
+	
 	.goods-popup {
 		background-color: white;
 		padding: 0 0.20rem;
