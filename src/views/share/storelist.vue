@@ -13,13 +13,19 @@
 			<div class="pr">
 				<div class="top" :class="onIndex == 2 ?'z0':'z1115'">
 					<div class="area" :class="{'blue':onIndex == 0}" @click="onArea(0)">
-						<p class="areaDetail">{{region}}<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+						<p class="areaDetail">{{region}}
+							<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i>
+						</p>
 					</div>
 					<div class="price" :class="{'blue':onIndex == 1}" @click="onPrice(1)">
-						<p>{{priceType}}<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i></p>
+						<p>{{priceType}}
+							<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i>
+						</p>
 					</div>
 					<div class="type" :class="{'blue':onIndex == 2}" @click="onScreening(2)">
-						<p>{{screening}}<img src="../../assets/images/shop/screen.png" alt=""></p>
+						<p>{{screening}}
+							<img src="../../assets/images/shop/screen.png" alt="">
+						</p>
 					</div>
 				</div>
 				<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
@@ -33,7 +39,9 @@
 							</li>
 							<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
 								<span>{{item.name}}</span>
-								<i class="fr"><i class="icon iconfont icon-arrow-right"></i></i>
+								<i class="fr">
+									<i class="icon iconfont icon-arrow-right"></i>
+								</i>
 							</li>
 						</ul>
 					</div>
@@ -73,8 +81,10 @@
 							<div>
 								<p class="name">{{item.name}}</p>
 								<p class="type" v-if="item.domainCateid1">{{item.domainCateid1}} l {{item.domainCateid2}}</p>
-								<p class="address"><span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
-									<span>{{item.distance}}km</span></p>
+								<p class="address">
+									<span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
+									<span>{{item.distance}}km</span>
+								</p>
 								<p class="sf">
 									<span class="lm" v-if="item.isAlliance == 1">联盟企业</span>
 									<span class="ly" v-if="item.isChains == 1">联营企业</span>
@@ -135,9 +145,15 @@
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
 	import noData from '../../components/noData'
-	import { swiper, swiperSlide } from 'vue-awesome-swiper'
+	import {
+		swiper,
+		swiperSlide
+	} from 'vue-awesome-swiper'
 
-	import { Group, XInput } from 'vux'
+	import {
+		Group,
+		XInput
+	} from 'vux'
 	export default {
 		name: 'storelist',
 		data() {
@@ -245,7 +261,7 @@
 				var _this = this
 				var k = []
 				var v = []
-				for(var i in obj) {
+				for (var i in obj) {
 					k.push(i)
 					v.push(obj[i])
 				}
@@ -261,7 +277,7 @@
 				var uri = window.location.href.split('#')[0] //截取#前面的路径
 
 				_this.$http.post(_this.url.zf.wxScan, {
-					appid: 'wx7a4933a7a3c33ec8',
+					mchId: '1388332102',
 					url: uri
 				}).then((res) => {
 					wx.config({
@@ -273,9 +289,9 @@
 						jsApiList: ['checkJsApi', 'scanQRCode', 'getLocation']
 					})
 
-					wx.ready(function() {
+					wx.ready(function () {
 						wx.getLocation({
-							success: function(res) {
+							success: function (res) {
 								_this.lat = res.latitude
 								_this.lng = res.longitude
 								_this.checkQuery(_this.$route.query)
@@ -301,7 +317,7 @@
 				function showPosition(res) {
 					console.log(res)
 					_this.region = res.province + res.city
-					if(_this.$store.state.page.isWx == false) {
+					if (_this.$store.state.page.isWx == false) {
 
 						_this.lat = res.lat
 						// _this.lat = 22.9377200000
@@ -329,20 +345,20 @@
 					pageSize: _this.pageSize,
 					islist: _this.islist
 				}
-				if(_this.provinceId != '') {
+				if (_this.provinceId != '') {
 					data.provinceId = _this.provinceId
 				}
-				if(_this.cityId != '') {
+				if (_this.cityId != '') {
 					data.cityId = _this.cityId
 				}
-				if(_this.areaId != '') {
+				if (_this.areaId != '') {
 					data.areaId = _this.areaId
 				}
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: data
 				}).then((res) => {
-					if(res.data.status == "00000000") {
-						if(res.data.data) {
+					if (res.data.status == "00000000") {
+						if (res.data.data) {
 							_this.list = res.data.data.list
 							_this.showShop = _this.list.length > 0 ? true : false
 						}
@@ -351,7 +367,7 @@
 			},
 			InitScroll() {
 				this.$nextTick(() => {
-					if(!this.scroll) {
+					if (!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
 							click: true,
 							scrollY: true,
@@ -361,7 +377,7 @@
 						})
 						this.scroll.on('pullingUp', (pos) => {
 							this.onLoadData()
-							this.$nextTick(function() {
+							this.$nextTick(function () {
 								this.scroll.finishPullUp();
 								this.scroll.refresh();
 							});
@@ -384,21 +400,21 @@
 						pageSize: _this.pageSize,
 						islist: true
 					}
-				if(_this.provinceId != '') {
+				if (_this.provinceId != '') {
 					data.provinceI = _this.provinceId
 				}
-				if(_this.cityId != '') {
+				if (_this.cityId != '') {
 					data.cityId = _this.cityId
 				}
-				if(_this.areaId != '') {
+				if (_this.areaId != '') {
 					data.areaId = _this.areaId
 				}
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: data
 				}).then((res) => {
-					if(res.data.status == "00000000") {
-						if(res.data.data) {
-							if(res.data.data.list.length > 0) {
+					if (res.data.status == "00000000") {
+						if (res.data.data) {
+							if (res.data.data.list.length > 0) {
 								_this.list = _this.list.concat(res.data.data.list)
 								_this.showLoading = true
 								_this.showNoMore = false
@@ -420,7 +436,7 @@
 				this.curPage = 1
 				this.onIndex = 0
 				//点击区域
-				if(this.areaShang) {
+				if (this.areaShang) {
 					this.hide();
 				} else {
 					this.hide();
@@ -436,7 +452,7 @@
 				this.curPage = 1
 				this.onIndex = 2
 
-				if(this.show1) {
+				if (this.show1) {
 					this.$nextTick(() => {
 						this.scroll2 = new BScroll(this.$refs.wrapper2, {
 							click: true,
@@ -457,7 +473,7 @@
 				this.onIndex = 1
 
 				//点击价格
-				if(this.priceShang) {
+				if (this.priceShang) {
 					this.hide();
 				} else {
 					this.hide();
@@ -479,7 +495,7 @@
 					})
 				})
 
-				setTimeout(function() {
+				setTimeout(function () {
 					_this.priceType = label
 					_this.priceShang = false
 				}, 50)
@@ -488,7 +504,7 @@
 			},
 			changeType(value, label) { //改变类型
 				var _this = this;
-				setTimeout(function() {
+				setTimeout(function () {
 					_this.indType = label;
 					_this.typeShang = false;
 
@@ -501,7 +517,7 @@
 			},
 
 			// 切换样式
-			changeCss: function(index, kilometre) {
+			changeCss: function (index, kilometre) {
 
 				var _this = this
 
@@ -549,8 +565,8 @@
 
 				_this.distance = _this.jl
 
-				for(var i = 0; i < _this.logolist.length; i++) {
-					if(_this.logolist[i] == _this.jl) {
+				for (var i = 0; i < _this.logolist.length; i++) {
+					if (_this.logolist[i] == _this.jl) {
 						_this.distanceIndex = i
 						return false
 					} else {
@@ -558,13 +574,13 @@
 					}
 				}
 			},
-			selectCss: function(e) {
-				if(e.target.className.indexOf("li-selected") == -1) {
+			selectCss: function (e) {
+				if (e.target.className.indexOf("li-selected") == -1) {
 					e.target.className = "item li-selected"; //切换按钮样式
 					var obox = e.target.parentNode;
 					var lis = obox.children;
-					for(var i = 1; i < lis.length; i++) {
-						if(lis[i] != e.target) {
+					for (var i = 1; i < lis.length; i++) {
+						if (lis[i] != e.target) {
 							lis[i].className = "item"
 						}
 					}
@@ -602,7 +618,7 @@
 				var _this = this
 				_this.list = []
 
-				if(_this.addressKey == 3) {
+				if (_this.addressKey == 3) {
 					_this.areaShang = false
 					_this.isActive = false
 					_this.maskActive = false
@@ -621,7 +637,7 @@
 						})
 					})
 					return
-				} else if(this.addressKey == 1) {
+				} else if (this.addressKey == 1) {
 
 					_this.isprovince = name
 
@@ -636,7 +652,7 @@
 							'region': _this.isprovince
 						})
 					})
-				} else if(_this.addressKey == 2) {
+				} else if (_this.addressKey == 2) {
 
 					_this.iscity = name
 					_this.region = _this.isprovince + _this.iscity
@@ -659,9 +675,9 @@
 				}).then(resp => {
 					_this.items = resp.data.data;
 					_this.addressKey++;
-					if(_this.addressKey == 2) {
+					if (_this.addressKey == 2) {
 						_this.cityItem = _this.items;
-					} else if(_this.addressKey == 3) {
+					} else if (_this.addressKey == 3) {
 						_this.districtItem = _this.items;
 						_this.addressDetail = name;
 					}
@@ -687,7 +703,7 @@
 			city() {
 				var _this = this
 
-				if(_this.cityItem) {
+				if (_this.cityItem) {
 					_this.items = _this.cityItem
 					_this.addressKey = 2
 				}
@@ -702,7 +718,7 @@
 				_this.$refs.address.scrollTop = 0
 			},
 			district() {
-				if(this.districtItem) {
+				if (this.districtItem) {
 					this.items = this.districtItem
 					this.addressKey = 3
 				}
@@ -722,18 +738,18 @@
 	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
 	}
-	
+
 	.aa .vux-radio-label {
 		color: #336FFF !important;
 	}
-	
+
 	.aa .vux-no-group-title {
 		margin-top: 0;
 	}
 	/*
 	 *   类型推荐
 	*/
-	
+
 	#distanceType {
 		width: 100%;
 		position: absolute;
@@ -742,19 +758,19 @@
 		max-height: 500%;
 		z-index: 600;
 	}
-	
+
 	.nav1 .vux-no-group-title {
 		margin-top: 0!important;
 	}
-	
+
 	.opPrice .vux-radio-label {
 		font-size: 0.24rem!important;
 	}
-	
+
 	.opPrice .weui-check__label .weui-cell__ft .weui-icon-checked:before {
 		color: #336FFF!important;
 	}
-	
+
 	.input-div .distance .weui-cell__bd input {
 		font-size: 0.24rem;
 		text-align: center!important;
@@ -762,7 +778,7 @@
 </style>
 <style lang="less" scoped>
 	/*banner轮播*/
-	
+
 	.swiper {
 		img {
 			width: 100%;
@@ -783,15 +799,15 @@
 			border-radius: 50%;
 		}
 	}
-	
+
 	.storelistMask {
 		top: 3rem!important;
 	}
-	
+
 	.h {
 		top: 2.75rem!important;
 	}
-	
+
 	.wrapper {
 		position: absolute;
 		width: 100%;
@@ -799,16 +815,16 @@
 		top: 1.79rem;
 		overflow: hidden;
 	}
-	
+
 	.storelist {
 		background: #fff;
 		height: 100%;
 	}
-	
+
 	.header {
 		/*position:relative !important;*/
 	}
-	
+
 	.nav1 {
 		width: 100%;
 		height: .9rem;
@@ -916,7 +932,7 @@
 			}
 		}
 	}
-	
+
 	.wrapper .content {
 		h2 {
 			padding-left: 3%;
@@ -1015,7 +1031,7 @@
 			}
 		}
 	}
-	
+
 	.mask {
 		display: none;
 		position: fixed;
@@ -1028,17 +1044,17 @@
 		z-index: 11;
 		transition: opacity 800ms;
 	}
-	
+
 	.maskTive {
 		display: block!important;
 		opacity: 1!important;
 	}
 	/*地址遮罩*/
-	
+
 	.storelist .vux-popup-dialog {
 		background: #fff;
 	}
-	
+
 	.change_area {
 		padding-top: .28rem;
 		.title {
@@ -1084,11 +1100,11 @@
 			}
 		}
 	}
-	
+
 	.storelist .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
 	}
-	
+
 	.searchBox {
 		width: 100%;
 		height: 0.89rem;
@@ -1135,7 +1151,7 @@
 			}
 		}
 	}
-	
+
 	.searchBox:after {
 		content: " ";
 		position: absolute;
@@ -1164,17 +1180,17 @@
 			padding-bottom: 0.7rem;
 		}
 	}
-	
+
 	.screen {
 		height: 100%;
 		position: relative;
 		z-index: 1117;
 	}
-	
+
 	.screen .vux-popup-dialog {
 		background: #fff;
 	}
-	
+
 	.screening {
 		width: 6.6rem;
 		font-family: PingFangSC-Regular;
@@ -1247,7 +1263,7 @@
 			}
 		}
 	}
-	
+
 	.screen .bottom {
 		position: fixed;
 		bottom: 1rem;
@@ -1292,12 +1308,12 @@
 			color: #90A2C7;
 		}
 	}
-	
+
 	.screen .vux-popup-dialog {
 		min-height: 100%;
 		height: 100%;
 	}
-	
+
 	.screen .vux-popup-dialog.vux-popup-right {
 		height: 100%;
 	}
