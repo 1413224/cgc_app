@@ -21,7 +21,8 @@
 				<cell class="list-item user-address" title="地址管理" is-link link="/member/address/index"></cell>
 			</group>
 			<group>
-				<cell class="list-item" title="实名认证" :value="auth?auth:'未认证'" is-link link='/member/setting/real'></cell>
+			<!-- is-link link='/member/setting/real' -->
+				<cell class="list-item" title="实名认证" :value="auth?auth:'未认证'" is-link @click.native="getocr()"></cell>
 				<cell class="list-item" title="个人档案" is-link link='/member/info/data' primary="content">完整度{{userInfo.percentage?userInfo.percentage:0}}%</cell>
 			</group>
 		</div>
@@ -136,6 +137,19 @@
 						text:'推广码'
 					}
 				})
+			},
+			getocr(){
+				var _this = this
+				
+				_this.$http.get(_this.url.ocr.getOCR,{
+					params:{
+						userId:_this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						window.location.href = res.data.data
+					}
+				});
 			}
 		},
 		components: {

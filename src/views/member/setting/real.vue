@@ -1,5 +1,5 @@
 <template>
-	<div class="real-box">
+	<!-- <div class="real-box">
 		<scoreheader :title="title"></scoreheader>
 		<group gutter="0">
 			<x-input class="input-item" v-model="name" placeholder="输入真实姓名" type="text" :required="true"></x-input>
@@ -46,11 +46,51 @@
 		<div v-transfer-dom>
 			<loading :show="showDialogStyle" :text="text1"></loading>
 		</div>
+	</div> -->
+	<!-- <scoreheader :title="title"></scoreheader> -->
+	<div class="ocrwrap">
+		<x-header :left-options="{showBack: false}">实名验证</x-header>
+		<div class="headwrap" v-if="suc">
+			<img src="../../../assets/images/user/success.png" alt="">
+			<p class="cont">认证成功</p>
+		</div>
+		<div class="headwrap faile" v-if="!suc">
+			<img src="../../../assets/images/user/faile.png" alt="">
+			<p class="cont">认证失败</p>
+			<div class="btnswrap clearfix">
+				<p class="back fl" @click="backrz">返回</p>
+				<p class="again fr">重新认证</p>
+			</div>
+			<div class="tip">
+				<p class="tit">小提示：</p>
+				<p>1.请将脸放在指定范围内</p>
+				<p>2.请保持正对手机，光线充足</p>
+				<p>3.请按系统提示进行操作</p>
+				<p>4.请保持良好的网络环境</p>
+			</div>
+		</div>
+		<div class="suc" v-if="suc">
+			<div class="xian"></div>
+			<div class="xinxi">
+				<group>
+				<!-- is-link link='/member/setting/real' -->
+					<cell class="list-item" title="证件类型">身份证</cell>
+					<cell class="list-item" title="真实姓名">{{infom.name}}</cell>
+					<cell class="list-item" title="身份证号码">{{infom.idCard}}</cell>
+					<cell class="list-item" title="有效期限">{{infom.dateEnd}}</cell>
+				</group>
+			</div>
+			<div class="btnwrap">
+				<p class="back" @click="backrz">返回</p>
+			</div>
+		</div>
 	</div>
+
 </template>
 
 <script>
-	import { XInput, Group, XButton, Cell, Loading, XCircle, Range, Icon, XDialog } from 'vux'
+// Loading, XCircle, Range, Icon, XDialog,XButton,XInput,
+	import {  Group,  Cell, XHeader, XInput, XButton, XCircle, Icon, XDialog, Loading} from 'vux'
 	import scoreheader from '../../../components/setting_header'
 	export default {
 		components: {
@@ -77,13 +117,17 @@
 				justImages: '',
 				backImages: '',
 				userImages: '',
+
+				suc:false,
+				infom:''
 			}
 		},
 		mounted() {
 			var _this = this
+			_this.getOCRResult()
 		},
 		methods: {
-			just(e) {
+			/*just(e) {
 				var _this = this
 				_this.justImages = ''
 				_this.justPr = 0
@@ -171,6 +215,32 @@
 				this.userImages = ''
 				this.idNum = ''
 				this.name = ''
+			},*/
+			getOCRResult(){
+				var _this = this
+				
+				_this.$http.get(_this.url.ocr.getOCRResult,{
+					params:{
+						userId:_this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						console.log(res.data.data)
+						_this.suc = true
+						_this.infom = res.data.data
+					}else if(res.data.status == "use-OCR-0001"){
+						/*_this.$router.push({
+							path:"/user/reg"
+						});*/
+					}else{
+
+					}
+				});
+			},
+			backrz(){
+				this.$router.push({
+					path:"/member/info/index"
+				});
 			}
 		},
 		watch: {
@@ -200,7 +270,7 @@
 </script>
 
 <style lang="less" scoped>
-	.real-box {
+	/* .real-box {
 		height: 100%;
 		background-color: white;
 		.input-item {
@@ -312,5 +382,105 @@
 				}
 			}
 		}
+	} */
+</style>
+
+<style lang="less" scoped>
+.ocrwrap{
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	.headwrap{
+		text-align: center;
+		background: #fff;
+		padding-top: .6rem;
+		padding-bottom:.6rem;
+		color: #1A2642;
+		font-size: .36rem;
+		img{
+			width: 2.1rem;
+			height: 1.9rem;
+		}
 	}
+	.faile{
+		img{
+			width: 1.82rem;
+			height: 2rem;
+		}
+		.tip{
+			border-top:1px solid #D8DFF0;
+			position: fixed;
+			width: 100%;
+			bottom: .6rem;
+			padding-left: .6rem;
+			padding-top:.5rem;
+			.tit{
+				font-size: .3rem;
+			}
+			p{
+				text-align: left;
+				color: #90A2C7;
+				font-size: .28rem;
+				margin-bottom:.1rem;
+			}
+		}
+	}
+	.xian{
+		width: 100%;
+		height: .3rem;
+		background: #F5F6FA;
+	}
+	.btnwrap{
+		width: 6.18rem;
+		height: .88rem;
+		font-size: .32rem;
+		color: #fff;
+		background: #336FFF;
+		border-radius:.1rem;
+		text-align: center;
+		margin:.6rem auto;
+		line-height: .88rem;
+	}
+	.btnswrap{
+		width: 5.4rem;
+		/*border:1px solid #333;*/
+		margin:1rem auto;
+		font-size: .32rem;
+		.back{
+			width: 2.4rem;
+			height: .7rem;
+			line-height: .7rem;
+			background: #fff;
+			color: #1A2642;
+			margin-left:.4rem;
+			border:1px solid #D8DFF0;
+			border-radius: .1rem;
+		}
+		.again{
+			width: 2.4rem;
+			height: .7rem;
+			line-height: .7rem;
+			background: #336FFF;
+			color: #fff;
+			border-radius: 1px solid #336FFF;
+			border-radius: .1rem;
+		}
+	}
+}
+</style>
+<style lang="less">
+.ocrwrap{
+	.vux-header{
+		background-color:#fff;
+		.vux-header-title{
+			color: #1A2642 !important; 
+		}
+	}
+	.weui-cells{
+		font-size: .3rem;
+	}
+	.weui-cell__ft{
+		color: #90a2c7 !important
+	}
+}
 </style>

@@ -42,10 +42,10 @@
 													<img v-else class="tx" :src="'./static/images/mrtx.png'" />
 													<p class="hua">{{item.message}}</p>
 													<div class="bt">
+													<p>{{item.bonus}}元</p>
 														<div>
 															<img :src="'./static/draw/ren.png'" /> {{item.mobile}}
 														</div>
-														<p>{{item.bonus}}元</p>
 													</div>
 												</div>
 											</swiper-slide>
@@ -175,16 +175,19 @@
 		created() {
 			this.getStatInfo()
 			this.getRecommendLottery()
+			console.log(this.formatMoney(12345,0))
 		},
 		mounted() {
 			this.InitScroll()
 		},
 		computed: {
 			tweenedNumber1: function() {
-				return this.animatedNumber1.toFixed(0);
+				// return this.animatedNumber1.toFixed(0);
+				return this.formatMoney(this.animatedNumber1,0)
 			},
 			tweenedNumber2: function() {
-				return this.animatedNumber2.toFixed(0);
+				// return this.animatedNumber2.toFixed(0);
+				return this.formatMoney(this.animatedNumber2,0)
 			}
 		},
 		methods: {
@@ -200,6 +203,8 @@
 						_this.info = res.data.data
 						_this.userLottery = _this.info.userLottery
 						_this.recommendMessage = _this.info.recommendMessage
+
+						var totalBonus;
 						//数字动画
 						TweenMax.to(_this.$data, 1.5, {
 							animatedNumber1: _this.info.totalNums //累计中奖人数
@@ -292,6 +297,26 @@
 						index: index
 					}
 				})
+			},
+			formatMoney(s,type){
+				if (/[^0-9\.]/.test(s)) 
+				return "0"; 
+				if (s == null || s == "") 
+				return "0"; 
+				s = s.toString().replace(/^(\d*)$/, "$1."); 
+				s = (s + "00").replace(/(\d*\.\d\d)\d*/, "$1"); 
+				s = s.replace(".", ","); 
+				var re = /(\d)(\d{3},)/; 
+				while (re.test(s)) 
+				s = s.replace(re, "$1,$2"); 
+				s = s.replace(/,(\d\d)$/, ".$1"); 
+				if (type == 0) {// 不带小数位(默认是有小数位) 
+					var a = s.split("."); 
+				if (a[1] == "00") { 
+					s = a[0]; 
+					} 
+				} 
+				return s; 
 			}
 		}
 	}
@@ -400,10 +425,10 @@
 							}
 							.bt {
 								width: 100%;
-								display: flex;
+								/* display: flex;
 								align-items: center;
-								justify-content: space-between;
-								margin-top: 0.36rem;
+								justify-content: space-between; */
+								margin-top: 0.15rem;
 								div {
 									font-size: 0.22rem;
 									font-family: PingFangSC-Regular;
@@ -420,6 +445,7 @@
 									font-size: 0.22rem;
 									font-family: PingFangSC-Semibold;
 									color: rgba(242, 48, 48, 1);
+									padding-bottom: .1rem;
 								}
 							}
 						}

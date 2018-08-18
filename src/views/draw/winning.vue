@@ -2,7 +2,7 @@
 	<section class="win-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
-			<div class="content" v-if="recordList.length > 0">
+			<div class="content" v-if="list.length>0">
 				<div class="record-item" v-for="(item,index) in list" :key="index">
 					<div class="top">
 						<div>{{item.number}}</div>
@@ -456,8 +456,9 @@
 				padding: 0.2rem;
 				box-sizing: border-box;
 				.bw-box {
-					width: 7.10rem;
+					/*width: 7.10rem;*/
 					height: 8.07rem;
+					margin-top: .5rem;
 					background: rgba(255, 255, 255, 1);
 					border-radius: 4px;
 					padding: 0.6rem;

@@ -293,13 +293,22 @@
 			width: 100%;
 			.content{
 				width: 100%;
+				img{
+					width: 100% !important;
+				}
 				table{
 					width: 100% !important;
 					img{
 						width: 100%;
 					}
 				}
+				p{
+					img{
+						width: 100%;
+					}
+				}
 			}
+
 		}
 		/*img {
 			width: 100%;

@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="order_item">
 			<div class="order_top">
-				<div class="left">
+				<div class="left" @click="goshop(orderDetail.enterpriseId)">
 					<img :src="'./static/images/shopLogo.png'" alt="" />
 					<p>{{orderDetail.shopName}}</p>
 					<i class="icon iconfont icon-arrow-right"></i>
@@ -202,6 +202,15 @@
 					}
 				})
 			},
+			goshop(id){
+				this.$router.push({
+					path:'/multi_user_mall',
+					query:{
+						id:id,
+						// oIndex:3
+					}
+				})
+			}
 		}
 	}
 </script>

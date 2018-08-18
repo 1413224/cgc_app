@@ -60,13 +60,14 @@ axios.interceptors.request.use(config => {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
 	} else {
-		if(config.url == '/datacenter/v1/fileupload/image') { // 自定义图片上传头部
+		if(config.url == '/datacenter/v1/fileupload/image') { // 自定义图片上传头部  ?type=user&name=user
 			let type = 'Content-Type: multipart/form-data'
 			let form = new FormData()
 			for(let key in config.data) {
 				form.append(key, config.data[key])
 			}
 			config.data = form
+			config.url = '/datacenter/v1/fileupload/image?name=2&type=user'
 		} else {
 			let type = 'application/json;charset=utf-8'
 		}
