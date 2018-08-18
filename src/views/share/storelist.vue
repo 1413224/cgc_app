@@ -139,7 +139,7 @@
 
 	import { Group, XInput } from 'vux'
 	export default {
-		name: 'storeList',
+		name: 'storelist',
 		data() {
 			return {
 				title: '门店列表',

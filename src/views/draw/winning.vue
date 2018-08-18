@@ -13,10 +13,10 @@
 							<p>中奖金额</p>
 							<p><i>￥</i>{{item.userBonus}}</p>
 						</div>
-						<div class="btn" :class="{'jz':item.status == 60}" @click="toReceive(item.status)">
-							<p v-if="item.status == 10">未领奖</p>
+						<div class="btn" :class="{'jz':item.status != 60 && item.status != 70}" @click="toReceive(item.id,item.status)">
+							<p v-if="item.status == 10">领奖</p>
 							<p v-if="item.status == 20">待审核</p>
-							<p v-if="item.status == 30">审核成功</p>
+							<p v-if="item.status == 30">立即领取</p>
 							<p v-if="item.status == 40">审核失败</p>
 							<p v-if="item.status == 50">待线下领奖</p>
 							<p v-if="item.status == 60">已领奖</p>
@@ -26,7 +26,7 @@
 					<div class="bottom">
 						<ul>
 							<li>
-								<span>开奖时间</span><span>{{item.time}}</span>
+								<span>开奖时间</span><span>{{item.orderCreateTime}}</span>
 							</li>
 							<li class="bg_red">
 								<span>参与人数</span><span>{{item.orderNum}} 人</span>
@@ -99,43 +99,7 @@
 				showLoading: false,
 				showNomore: false,
 				showDialog: false,
-				recordList: [{
-						form: '国美番禺店大抽奖',
-						periods: '1235期',
-						time: '2018-03-12 20',
-						peopleNum: '600',
-						allMoney: '80000.00',
-						has: '2000.00',
-						isReceive: false
-					},
-					{
-						form: '国美番禺店大抽奖',
-						periods: '1236期',
-						time: '2018-03-12 20',
-						peopleNum: '600',
-						allMoney: '80000.00',
-						has: '2000.00',
-						isReceive: true
-					},
-					{
-						form: '国美番禺店大抽奖',
-						periods: '1237期',
-						time: '2018-03-12 20',
-						peopleNum: '600',
-						allMoney: '80000.00',
-						has: '2000.00',
-						isReceive: false
-					},
-					{
-						form: '国美番禺店大抽奖',
-						periods: '1238期',
-						time: '2018-03-12 20',
-						peopleNum: '600',
-						allMoney: '80000.00',
-						has: '2000.00',
-						isReceive: false
-					},
-				],
+				recordList: [],
 
 				curPage: 1,
 				pageSize: 10,
@@ -169,21 +133,55 @@
 				})
 			},
 			//领奖
-			toReceive(Boolean) {
-				if(!Boolean) {
-					this.showDialog = true
-				}
+			toReceive(id, status) {
+				//				if(!Boolean) {
+				//					this.showDialog = true
+				//				}
 
 				var _this = this
 
-				_this.$http.post(_this.url.lottery.getBonus, {
-					userId: _this.$store.state.user.userId,
-					id: 1
-				}).then((res) => {
-					if(res.data.status == "00000000") {
-						console.log(res.data.data)
-					}
-				})
+				if(status == 10 || status == 30) {
+					_this.$http.post(_this.url.lottery.getBonus, {
+						userId: _this.$store.state.user.userId,
+						id: 2
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							var message = ''
+							var buttons = []
+							if(res.data.data.status == 10) {
+								message = '您仍尚未实名认证'
+								buttons =  ['马上认证', '取消']
+							}else if(res.data.data.status == 20){
+								message = '您仍需完善资料'
+								buttons =  ['前去完善', '取消']
+							}else if(res.data.data.status == 30){
+								message = '您仍需绑定银行卡'
+								buttons =  ['马上绑定', '取消']
+							}else if(res.data.data.status == 50){
+								message = '审核中'
+							}else if(res.data.data.status == 60){
+								message = '您需要线下领奖'
+							}else if(res.data.data.status == 70){
+								message = '已经过了领取截止时间'
+							}else if(res.data.data.status == 80){
+								message = '领取成功'
+							}
+
+							_this.$dialog.show({
+								type: 'warning',
+								headMessage: '提示',
+								message:message,
+								buttons:buttons,
+								canel() {
+
+								},
+								confirm() {
+
+								}
+							})
+						}
+					})
+				}
 			},
 			InitScroll() {
 				this.$nextTick(() => {

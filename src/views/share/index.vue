@@ -130,7 +130,7 @@
 				var uri = window.location.href.split('#')[0] //截取#前面的路径
 
 				_this.$http.post(_this.url.zf.wxScan, {
-					appid: 'wx7a4933a7a3c33ec8',
+					mchId: '1388332102',
 					url: uri
 				}).then((res) => {
 					wx.config({

@@ -138,7 +138,7 @@
 				var uri = window.location.href.split('#')[0] //截取#前面的路径
 
 				_this.$http.post(_this.url.zf.wxScan, {
-					appid: 'wx7a4933a7a3c33ec8',
+					mchId: '1388332102',
 					url: uri
 				}).then((res) => {
 					wx.config({
@@ -156,7 +156,7 @@
 							needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 							scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 							success: function(res) {
-								
+
 							},
 							fail: function(res) {
 								_this.$vux.toast.show({

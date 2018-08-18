@@ -90,7 +90,7 @@
 						</div>-->
 						<div class="number-box pr">
 							<p>购买数量</p>
-							<x-number v-model="num" @on-change="numChange" :min="0" width="50px" button-style="round"></x-number>
+							<x-number v-model="num" @on-change="numChange" :min="1" width="50px" button-style="round"></x-number>
 						</div>
 					</div>
 					<img class="gb-btn" @click="showGoodsSpec = false" :src="'./static/images/gb3.png'">

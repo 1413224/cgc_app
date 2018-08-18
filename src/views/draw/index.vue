@@ -40,13 +40,9 @@
 												<div class="one">
 													<img v-if="item.logo.original" class="tx" :src="item.logo.original" />
 													<img v-else class="tx" :src="'./static/images/mrtx.png'" />
+													<div class="user"><img :src="'./static/draw/ren.png'" /> {{item.mobile}}</div>
 													<p class="hua">{{item.message}}</p>
-													<div class="bt">
-														<div>
-															<img :src="'./static/draw/ren.png'" /> {{item.mobile}}
-														</div>
-														<p>{{item.bonus}}元</p>
-													</div>
+													<div class="bt">{{item.bonus}}元</div>
 												</div>
 											</swiper-slide>
 										</swiper>
@@ -279,8 +275,8 @@
 			goPastevents(lotteryId) {
 				this.$router.push({
 					path: '/draw/pastevents',
-					query:{
-						'lotteryId':lotteryId
+					query: {
+						'lotteryId': lotteryId
 					}
 				})
 			},
@@ -383,7 +379,6 @@
 							.tx {
 								width: 1rem;
 								height: 1rem;
-								margin-bottom: 0.2rem;
 								border-radius: 50%;
 							}
 							.hua {
@@ -398,29 +393,27 @@
 								overflow: hidden;
 								height: 1rem;
 							}
+							.user {
+								font-size: 0.22rem;
+								font-family: PingFangSC-Regular;
+								color: rgba(103, 103, 103, 1);
+								display: flex;
+								align-items: center;
+								margin: 0.15rem 0;
+								img {
+									width: 0.24rem;
+									height: 0.24rem;
+									margin-right: 0.07rem;
+								}
+							}
 							.bt {
 								width: 100%;
 								display: flex;
 								align-items: center;
-								justify-content: space-between;
-								margin-top: 0.36rem;
-								div {
-									font-size: 0.22rem;
-									font-family: PingFangSC-Regular;
-									color: rgba(103, 103, 103, 1);
-									display: flex;
-									align-items: center;
-									img {
-										width: 0.24rem;
-										height: 0.24rem;
-										margin-right: 0.07rem;
-									}
-								}
-								p {
-									font-size: 0.22rem;
+								justify-content: center;
+								font-size: 0.22rem;
 									font-family: PingFangSC-Semibold;
 									color: rgba(242, 48, 48, 1);
-								}
 							}
 						}
 					}

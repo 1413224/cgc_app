@@ -247,12 +247,12 @@
 				//当选择了优惠券  类型不为打折券时：
 				if(this.info.payPrice > 0 && (this.type == 0 || this.type == 20 || this.type == 50)) {
 					let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
-					this.info.payPrice = Math.ceil(money).toFixed(2)
+					this.info.payPrice = parseFloat(money).toFixed(2)
 				} else if(this.info.payPrice > 0 && this.type == 30) {
 					//当选择了优惠券  类型为打折券且满足使用门槛时：
 					if(this.info.payPrice > 0 && this.info.payPrice >= this.condition) {
 						let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
-						this.info.payPrice = Math.ceil(money).toFixed(2)
+						this.info.payPrice = parseFloat(money).toFixed(2)
 					}
 				}
 			},

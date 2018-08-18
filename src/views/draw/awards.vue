@@ -6,7 +6,7 @@
 			<span class="receiveMoney">张三先生恭喜您获得一等奖五千元</span>
 		</div>
 
-		<div class="awards-main">
+		<div class="awards-main" v-if="1>2">
 			<div class="photos" style="margin-bottom: 0.3rem;">
 				<div class="awards-title clear">
 					<div class="border left"></div>

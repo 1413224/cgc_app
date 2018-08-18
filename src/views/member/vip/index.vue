@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class="btn-box">
-				<div class="left" @click="$router.push({path:'/user/reg'})">
+				<div v-if="$store.state.page.isLogin == 'false'" class="left" @click="$router.push({path:'/user/reg'})">
 					<img :src="'./static/vip/reg-img.png'" /> 立即注册
 				</div>
 				<div class="right">
@@ -391,7 +391,7 @@
 				font-size: 0.28rem;
 				font-family: PingFangSC-Medium;
 				.left {
-					width: 2.85rem;
+					flex: 1;
 					height: 0.9rem;
 					border-radius: 45px;
 					border: 1px solid rgba(242, 48, 48, 1);
@@ -400,6 +400,7 @@
 					justify-content: center;
 					color: rgba(245, 64, 46, 1);
 					box-sizing: border-box;
+					margin-right:0.30rem;
 					img {
 						width: 0.4rem;
 						height: 0.4rem;
@@ -407,7 +408,7 @@
 					}
 				}
 				.right {
-					width: 2.85rem;
+					flex: 1;
 					height: 0.9rem;
 					border-radius: 45px;
 					background: rgba(245, 64, 46, 1);

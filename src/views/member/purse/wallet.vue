@@ -54,11 +54,11 @@
 							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
 						</div>
 					</div>
-					<p>{{fundInfo.isshowFund?fundInfo.balance:'****'}}</p>
+					<p>{{fundInfo.isshowFund?fundInfo.balance:'******'}}</p>
 				</div>
 				<div class="one-item" @click="toCurrencyReward('通用积分',3)">
 					<p>累计充值</p>
-					<p>{{fundInfo.isshowFund?fundInfo.recharge:'****'}}</p>
+					<p>{{fundInfo.isshowFund?fundInfo.recharge:'******'}}</p>
 				</div>
 			</div>
 			<div class="bottom">
@@ -94,7 +94,7 @@
 							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
 						</div>
 					</div>
-					<p>{{fundInfo.isshowFund?fundInfo.availablePoints:'****'}}</p>
+					<p>{{fundInfo.isshowFund?fundInfo.availablePoints:'******'}}</p>
 				</div>
 			</div>
 			<div class="bottom">
@@ -215,7 +215,8 @@
 <style lang="less">
 	.wallet-box {
 		font-family: PingFangSC-Medium;
-		padding-bottom:0.20rem ;
+		padding-bottom: 0.20rem;
+		background-color: #F5F6FA;
 		.w_bg {
 			height: 2.50rem;
 			display: flex;
@@ -256,10 +257,11 @@
 		}
 		.b_r {
 			border-radius: 13px 13px 0 0;
+			margin-top: -0.25rem!important;
 		}
 		.tip-box {
-			margin-top: -0.25rem;
 			background-color: white;
+			margin-top: 0.20rem;
 			.bottom {
 				display: flex;
 				flex-wrap: wrap;

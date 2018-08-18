@@ -3,24 +3,25 @@
 		<div class="luckyrank">
 			<settingHeader :title="title"></settingHeader>
 			<tab class="tab_box" active-color="#E32921" custom-bar-width="80px" default-color="#333">
-				<tab-item :selected="tabIndex == 0" @on-item-click="showNumber">中奖次数</tab-item>
-				<tab-item :selected="tabIndex == 1" @on-item-click="showMoney">中奖累计金额</tab-item>
+				<tab-item :selected="tabIndex == 0" @on-item-click="showTab">中奖次数</tab-item>
+				<tab-item :selected="tabIndex == 1" @on-item-click="showTab">中奖累计金额</tab-item>
 			</tab>
 			<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
 				<div class="content">
 					<div class="top">
 						<div class="one_box">
-							<span>奖励排名</span><span>奖励次数</span>
+							<span>奖励排名</span><span>{{tabIndex == 0 ?'奖励次数':'奖励金额(元)'}}</span>
 						</div>
 						<div class="two_box">
 							<div class="left">
-								<img :src="'./static/images/mrtx.png'" alt="">
+								<img v-if="userRank.thumb" :src="userRank.thumb.original" />
+								<img v-else :src="'./static/images/mrtx.png'" alt="">
 								<div>
-									<p>排名：第99+</p>
+									<p>排名：第{{userRank.ranking}}</p>
 									<p>我</p>
 								</div>
 							</div>
-							<p class="pm" v-if="$store.state.page.isLogin == 'true'">103</p>
+							<p class="pm" v-if="$store.state.page.isLogin == 'true'">{{userRank.number}}</p>
 							<div v-else class="login_btn" @click="$router.push({path:'/user/reg'})">点击登录</div>
 						</div>
 					</div>
@@ -38,7 +39,7 @@
 									<p>{{item.mobile}}</p>
 								</div>
 							</div>
-							<div class="right">{{item.money}}</div>
+							<div class="right">{{tabIndex == 0 ?item.number : item.lotteryBonus}}</div>
 						</div>
 					</div>
 				</div>
@@ -69,6 +70,7 @@
 				showNomore: false,
 				moneyList: {},
 				numberList: {},
+				userRank: {},
 				page: 1,
 				tabIndex: 0,
 			}
@@ -83,12 +85,23 @@
 		created() {
 			this.tabIndex = this.$route.query.index || 0
 			this.getLotteryRankByNums()
-			this.getLotteryRankByBonus()
 		},
 		mounted() {
 			this.InitScroll()
 		},
+		watch: {
+			tabIndex() {
+				if(this.tabIndex == 0) {
+					this.getLotteryRankByNums()
+				} else {
+					this.getLotteryRankByBonus()
+				}
+			}
+		},
 		methods: {
+			showTab(val) {
+				this.tabIndex = val
+			},
 			getLotteryRankByNums() {
 				var _this = this
 
@@ -112,7 +125,6 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						_this.numberList = res.data.data.rankList
 						_this.userRank = res.data.data.userRank
 					}
@@ -127,13 +139,6 @@
 							pullUpLoad: {
 								threshold: -30, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 							}
-						})
-						this.scroll.on('pullingUp', (pos) => {
-							this.LoadData()
-							this.$nextTick(function() {
-								this.scroll.finishPullUp();
-								this.scroll.refresh();
-							});
 						})
 					} else {
 						this.scroll.refresh()

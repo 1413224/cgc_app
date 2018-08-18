@@ -31,10 +31,11 @@
 			</div>
 			<div class="order_middle">
 				<div class="left">
-					<img :src="goodsInfo.logo?logo:'./static/images/pr.png'" />
+					<img v-if="goodsInfo.goodsLogo" :src="goodsInfo.goodsLogo" />
+					<img v-else :src="'./static/images/pr.png'" />
 				</div>
 				<div class="middle">
-					<p class="name">{{goodsInfo.name}}</p>
+					<p class="name">{{goodsInfo.goodsName}}</p>
 					<p class="pinfo">{{goodsInfo.skuName}}</p>
 					<!--<p class="tip">信用积分最多可抵40元</p>-->
 				</div>
@@ -237,8 +238,6 @@
 				'skuId': this.$route.query.skuId
 			}
 
-			this.payMoney = (Number(this.$route.query.minPrice) * Number(this.$route.query.goodsNum)).toFixed(2)
-
 			this.payOptions = {
 				showPayMode: false,
 				data: {
@@ -410,6 +409,10 @@
 						}
 						_this.availableCoupon = res.data.data.availableCoupon
 						_this.availableBalance = res.data.data.availableBalance
+
+						this.integralNum = this.availableBalance > this.goodsInfo.minPrice ? this.goodsInfo.minPrice : this.availableBalance
+
+						this.payMoney = (Number(this.$route.query.minPrice) * Number(this.$route.query.goodsNum) - Number(this.integralNum)).toFixed(2)
 					}
 				})
 			},

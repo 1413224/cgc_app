@@ -19,10 +19,10 @@
 								<cell>
 									<div class="title">
 										<div class="wz1">
-											<div>国美白云店第1期(已揭晓)</div>
-											<div class="period">1564期</div>
+											<div>{{info.title}}</div>
+											<div class="period">{{info.number}}期</div>
 										</div>
-										<div class="money">奖金池共 : <span>￥800,000</span></div>
+										<div class="money">奖金池共 : <span>￥{{info.bonus}}</span></div>
 									</div>
 								</cell>
 							</group>
@@ -30,12 +30,12 @@
 						<div class="award-set">
 							<div class="set-title">奖品设置</div>
 							<ul class="ul-set">
-								<li v-for="i in 4" :key="i">
+								<li v-for="i in info.awardList" :key="i">
 									<div class="flex">
-										<div style="flex: 1">一等奖</div>
-										<div>5000<span class="small">元</span></div>
+										<div style="flex: 1">{{i.awardName}}</div>
+										<div>{{i.bonus}}<span class="small">元</span></div>
 									</div>
-									<div class="left num">30名</div>
+									<div class="left num">{{i.number}}名</div>
 								</li>
 							</ul>
 						</div>
@@ -44,10 +44,10 @@
 							<div class="wz-period">抽奖期数</div>
 
 							<div class="period">
-								<swiper :options="swiperOption1">
+								<swiper :options="swiperOption1" ref="mySwiper">
 									<swiper-slide v-for="(item,index) in data3" :key="index" :class="{'btn-active':act3==index}">
-										<div class="btn0" @click="periodActive(index)">
-											{{item}}
+										<div class="btn0" @click="periodActive(index,item.lotteryId)">
+											{{item.number}}
 										</div>
 									</swiper-slide>
 								</swiper>
@@ -63,8 +63,8 @@
 						<div class="wz-period">中奖名单</div>
 						<div style="padding: 0 0.4rem;box-sizing: border-box;">
 							<swiper :options="swiperOption2">
-								<swiper-slide v-for="(item,index) in data1" :key="index">
-									<div class="wz-award" :class="{'wz-award-active':act1==index}" @click="actice(index)">{{item}}</div>
+								<swiper-slide v-for="(item,index) in info.awardList" :key="index">
+									<div class="wz-award" :class="{'wz-award-active':act1==index}" @click="actice(index,item.awardId)">{{item.awardName}}</div>
 								</swiper-slide>
 							</swiper>
 						</div>
@@ -79,16 +79,18 @@
 							</div>
 							<div class="right">
 								<div>
-									<p>手机用户</p>
-									<p><span>{{item.bonus}}</span>元</p>
+									<p>{{item.mobile}}</p>
+									<p><span>{{item.orderActualPrice}}</span>元</p>
 								</div>
-								<p class="num">{{item.phoneNum}}</p>
-								<p class="tip">{{item.speech}}</p>
+								<p class="num">{{item.mobile}}</p>
+								<p class="tip">{{item.message}}</p>
 							</div>
 						</div>
 						<loading v-if="show"></loading>
 						<noMore v-if="showNomore"></noMore>
+						<noData v-if="personList.length == 0" :status="2" :stateText="'暂无中奖名单'"></noData>
 					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -99,9 +101,10 @@
 	import videojs from 'video.js'
 	import BScroll from 'better-scroll'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
-	import settingHeader from '../../components/setting_header'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
+	import settingHeader from '@/components/setting_header'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
+	import noData from '@/components/noData'
 
 	import VueDPlayer from 'vue-dplayer'
 	import 'vue-dplayer/dist/vue-dplayer.css'
@@ -112,6 +115,7 @@
 			settingHeader,
 			Loading,
 			noMore,
+			noData,
 			'd-player': VueDPlayer
 		},
 		data() {
@@ -169,44 +173,9 @@
 				},
 				act1: 0,
 				data1: ['一等奖', '二等奖', '三等奖', '四等奖', '特等奖', '幸运奖'],
-				data3: [1234, 1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243],
+				data3: [],
 				act3: 0,
-				personList: [{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					},
-					{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					},
-					{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					},
-					{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					},
-					{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					},
-					{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					},
-					{
-						bonus: '5000',
-						phoneNum: '130****0124',
-						speech: '第一次抽奖就中了一等奖，好高兴啊！'
-					}
-				],
+				personList: [],
 				swiperOption2: {
 					autoHeight: true,
 					slidesPerView: 'auto',
@@ -218,18 +187,21 @@
 
 				curPage: 1,
 				pageSize: 10,
-				list:[]
+				list: [],
+				info: {},
+				awardId:'',
 			}
 		},
 		computed: {
 			player() {
 				return this.$refs.videoPlayer.player
+			},
+			swiper() {
+				return this.$refs.mySwiper.swiper
 			}
 		},
 		created() {
-
 			this.getInfoById()
-			this.getAwardUserList()
 		},
 		mounted() {
 			this.InitScroll()
@@ -248,23 +220,29 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
-					}
-				})
-			},
-			getAwardUserList() {
-				var _this = this
+						_this.info = res.data.data
 
-				_this.$http.get(_this.url.lottery.getAwardUserList, {
-					params: {
-						lotteryId: _this.$route.query.lotteryId,
-						awardId: 1,
-						curPage: _this.curPage,
-						pageSize: _this.pageSize
-					}
-				}).then((res) => {
-					if(res.data.status == "00000000") {
-						console.log(res.data.data)
+						_this.options.video.url = _this.info.videoUrl
+						_this.options.video.pic = _this.info.thumb.original
+
+						var indexLottery = [{
+							'lotteryId': _this.$route.query.lotteryId,
+							'number': _this.info.number
+						}]
+
+						_this.data3 = _this.info.beforeLottery.concat(indexLottery)
+						_this.data3 = _this.data3.concat(_this.info.afterLottery)
+
+						_this.data3.forEach((value, index, Array) => {
+							if(value.number == _this.info.number) {
+								_this.act3 = index
+								this.$refs.mySwiper.swiper.slideTo(_this.act3, 1000, false)
+							}
+						})
+
+						if(_this.info.awardList.length <= 1) {
+							_this.actice(0, _this.info.awardList[0].awardId)
+						}
 					}
 				})
 			},
@@ -278,13 +256,39 @@
 			stop() {
 				this.playerStop = true
 			},
-			periodActive(index) {
-				console.log('[][', index)
-				this.act3 = index
+			periodActive(index, id) {
+				var _this = this
+				
+				_this.act3 = index
+				
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'lotteryId': id
+					})
+				})
+				_this.getInfoById()
 			},
 			//中奖人员 一等奖
-			actice(index) {
-				this.act1 = index
+			actice(index, id) {
+				var _this = this
+
+				_this.act1 = index
+				_this.awardId = id
+
+				_this.$http.get(_this.url.lottery.getAwardUserList, {
+					params: {
+						lotteryId: _this.$route.query.lotteryId,
+						awardId: id,
+						curPage: _this.curPage,
+						pageSize: _this.pageSize
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.personList = res.data.data.list
+						}
+					}
+				})
 			},
 			InitScroll() {
 				this.$nextTick(() => {
@@ -311,15 +315,27 @@
 			},
 			LoadData() {
 				var _this = this
-				if(_this.showNomore) {
-					_this.show = false;
-					return
-				}
-				_this.show = true;
-				setTimeout(function() {
-					_this.show = false;
-					_this.showNomore = true;
-				}, 3000)
+				_this.curPage++
+
+					_this.$http.get(_this.url.lottery.getAwardUserList, {
+						params: {
+							lotteryId: _this.$route.query.lotteryId,
+							awardId: _this.awardId,
+							curPage: _this.curPage,
+							pageSize: _this.pageSize
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.show = true
+								_this.showNomore = false
+								_this.personList = _this.personList.concat(res.data.data.list)
+							} else {
+								_this.show = fasle
+								_this.showNomore = true
+							}
+						}
+					})
 			}
 		}
 	}
