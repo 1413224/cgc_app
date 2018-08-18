@@ -31,6 +31,12 @@
 				<div class="swiper-pagination"></div>
 			</div>
 		</div>
+
+		<!-- <div class="face">
+			<button @click="faceid">人脸测试</button>
+		</div> -->
+
+
 		<div class="middle">
 			<div class="all">
 				<div class="left" @click="$router.push('/share/pintroduce')">
@@ -80,6 +86,7 @@
 	import { Scroller, XButton } from 'vux'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import settingHeader from '../../components/setting_header'
+	import Qs from 'qs'
 
 	export default {
 		data() {
@@ -163,6 +170,17 @@
 							}
 						})
 					})
+				})
+			},
+			faceid(){
+				var params={
+					api_key:'7HgROj7yzjaYsf4kyCyDOL24is5vljyo',
+					api_secret:'GZEyEYObEn9bjIa7GhYOIy_Y0N60jABs',
+				}
+				let cont = Qs.stringify(params)
+
+				this.$http.post('https://api.megvii.com/faceid/lite/get_token',cont).then((res) => {
+					console.log(res)
 				})
 			}
 		}

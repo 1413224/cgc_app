@@ -111,6 +111,10 @@ var url = {
 		getUserLotteryRecord: uri5 + '/uparam/v1/lottery/getUserLotteryRecord', //2.10获取会员中奖记录列表接口
 		getBonus: uri5 + '/ubody/v1/lottery/getBonus', //2.11.会员领奖接口
 		getMessage: uri5 + '/uparam/v1/lottery/getMessage',//2.13.获取会员中奖感言接口
+	},
+	ocr:{
+		getOCR: uri1 + '/param/v1/user/getOCR',
+		getOCRResult: uri1 + '/param/v1/user/getOCRResult'
 	}
 
 }

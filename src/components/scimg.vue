@@ -120,11 +120,12 @@
 
 				//上传图片
 				var data = {
-					type: 'user',
-					name: 'user',
+					/*type: 'user',
+					name: 'user',*/
 					file: b
 				}
 				_this.$http.post(_this.url2.user.fileuploadImage, data).then((res) => {
+					// +'?'+'type'+'='+'user'+'&'+'name'+'='+'user'
 					if(res.data.status == '00000000') {
 						_this.$http.post(_this.url2.user.changeAvatar, {
 							userId: _this.vm.$store.state.user.userId,

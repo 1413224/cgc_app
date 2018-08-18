@@ -427,10 +427,12 @@
 						}
 
 						if(_this.list.length > 0){
+
+							_this.useend();
 							
 							_this.list.splice(_this.$refs.mySwiper.swiper.activeIndex,1) 
 
-							alert(_this.list.length)
+							// alert(_this.list.length)
 							 
 							if(_this.list.length == 0){
 								_this.$router.push({
@@ -440,18 +442,18 @@
 								return;
 							}
 						
-							_this.useend();
-							
-							_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
+							setTimeout(() => {
+								_this.infoItem = _this.list[_this.$refs.mySwiper.swiper.activeIndex]
 
-							if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
-								// alert(0)
-								// _this.useend();
-								_this.countDown(_this.infoItem.canUseTime);
-							}else{
-								// alert(1)
-								_this.remainTime = _this.setTime(_this.infoItem.canUseTime);
-							}
+								if(_this.infoItem.status == 1 || _this.infoItem.status == 2){
+								
+									_this.countDown(_this.infoItem.canUseTime);
+								}else{
+									// alert(1)
+									_this.remainTime = _this.setTime(_this.infoItem.canUseTime);
+								}
+							},500)
+						
 							
 						}else{
 							// alert("没有了")
