@@ -59,7 +59,7 @@
 			<p class="cont">认证失败</p>
 			<div class="btnswrap clearfix">
 				<p class="back fl" @click="backrz">返回</p>
-				<p class="again fr">重新认证</p>
+				<p class="again fr" @click="getocr">重新认证</p>
 			</div>
 			<div class="tip">
 				<p class="tit">小提示：</p>
@@ -240,6 +240,19 @@
 			backrz(){
 				this.$router.push({
 					path:"/member/info/index"
+				});
+			},
+			getocr(){
+				var _this = this
+				
+				_this.$http.get(_this.url.ocr.getOCR,{
+					params:{
+						userId:_this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						window.location.href = res.data.data
+					}
 				});
 			}
 		},
