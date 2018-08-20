@@ -2,7 +2,7 @@
 	<section class="win-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
-			<div class="content" v-if="list.length>0">
+			<div class="content" v-if="showList">
 				<div class="record-item" v-for="(item,index) in list" :key="index">
 					<div class="top">
 						<div>{{item.number}}</div>
@@ -11,7 +11,8 @@
 					<div class="middle">
 						<div class="left">
 							<p>中奖金额</p>
-							<p><i>￥</i>{{item.userBonus}}</p>
+							<p>
+								<i>￥</i>{{item.userBonus}}</p>
 						</div>
 						<div class="btn" :class="{'jz':item.status != 60 && item.status != 70}" @click="toReceive(item.id,item.status)">
 							<p v-if="item.status == 10">领奖</p>
@@ -26,13 +27,16 @@
 					<div class="bottom">
 						<ul>
 							<li>
-								<span>开奖时间</span><span>{{item.orderCreateTime}}</span>
+								<span>开奖时间</span>
+								<span>{{item.orderCreateTime | getDate}}</span>
 							</li>
 							<li class="bg_red">
-								<span>参与人数</span><span>{{item.orderNum}} 人</span>
+								<span>参与人数</span>
+								<span>{{item.orderNum}} 人</span>
 							</li>
 							<li>
-								<span>奖金池</span><span>{{item.bonus}}</span>
+								<span>奖金池</span>
+								<span>{{item.bonus}}</span>
 							</li>
 						</ul>
 					</div>
@@ -42,7 +46,7 @@
 				<loading v-if="showLoading"></loading>
 				<noMore v-if="showNomore"></noMore>
 			</div>
-			<div class="no_data_box" v-else>
+			<div class="no_data_box" v-if="!showList">
 				<div class="bw-box">
 					<div>
 						<img :src="'./static/draw/no-data-img.png'" alt="" />
@@ -68,18 +72,26 @@
 					<div class="bottom">
 						<p>奖金领取成功</p>
 						<img :src="'./static/draw/dian.png'" alt="" />
-						<p class="money">￥<span>5000</span></p>
+						<p class="money">￥
+							<span>5000</span>
+						</p>
 						<div @click="$router.push({path:'/member/purse/wallet'})">查看我的资产</div>
 					</div>
 				</div>
-				<div class="close" @click="showDialog=false"><img src="../../assets/images/draw/open.png"></div>
+				<div class="close" @click="showDialog=false">
+					<img src="../../assets/images/draw/open.png">
+				</div>
 			</x-dialog>
 		</div>
 	</section>
 </template>
 
 <script>
-	import { ButtonTab, ButtonTabItem, XDialog } from 'vux'
+	import {
+		ButtonTab,
+		ButtonTabItem,
+		XDialog
+	} from 'vux'
 	import BScroll from 'better-scroll'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
@@ -99,8 +111,7 @@
 				showLoading: false,
 				showNomore: false,
 				showDialog: false,
-				recordList: [],
-
+				showList: true,
 				curPage: 1,
 				pageSize: 10,
 				list: []
@@ -110,9 +121,7 @@
 			this.getUserLotteryRecord()
 		},
 		mounted() {
-			if(this.recordList.length > 0) {
-				this.InitScroll()
-			}
+			this.InitScroll()
 		},
 		methods: {
 			getUserLotteryRecord() {
@@ -125,8 +134,11 @@
 						pageSize: _this.pageSize
 					}
 				}).then((res) => {
-					if(res.data.status == "00000000") {
-						if(res.data.data.list.length > 0) {
+					if (res.data.status == "00000000") {
+
+						_this.showList = res.data.data.list.length > 0 ? true : false
+
+						if (res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
 						}
 					}
@@ -134,44 +146,39 @@
 			},
 			//领奖
 			toReceive(id, status) {
-				//				if(!Boolean) {
-				//					this.showDialog = true
-				//				}
-
 				var _this = this
-
-				if(status == 10 || status == 30) {
+				if (status == 10 || status == 30) {
 					_this.$http.post(_this.url.lottery.getBonus, {
 						userId: _this.$store.state.user.userId,
-						id: 2
+						id: id
 					}).then((res) => {
-						if(res.data.status == "00000000") {
+						if (res.data.status == "00000000") {
 							var message = ''
 							var buttons = []
-							if(res.data.data.status == 10) {
+							if (res.data.data.status == 10) {
 								message = '您仍尚未实名认证'
-								buttons =  ['马上认证', '取消']
-							}else if(res.data.data.status == 20){
+								buttons = ['马上认证', '取消']
+							} else if (res.data.data.status == 20) {
 								message = '您仍需完善资料'
-								buttons =  ['前去完善', '取消']
-							}else if(res.data.data.status == 30){
+								buttons = ['前去完善', '取消']
+							} else if (res.data.data.status == 30) {
 								message = '您仍需绑定银行卡'
-								buttons =  ['马上绑定', '取消']
-							}else if(res.data.data.status == 50){
+								buttons = ['马上绑定', '取消']
+							} else if (res.data.data.status == 50) {
 								message = '审核中'
-							}else if(res.data.data.status == 60){
+							} else if (res.data.data.status == 60) {
 								message = '您需要线下领奖'
-							}else if(res.data.data.status == 70){
+							} else if (res.data.data.status == 70) {
 								message = '已经过了领取截止时间'
-							}else if(res.data.data.status == 80){
+							} else if (res.data.data.status == 80) {
 								message = '领取成功'
 							}
 
 							_this.$dialog.show({
 								type: 'warning',
 								headMessage: '提示',
-								message:message,
-								buttons:buttons,
+								message: message,
+								buttons: buttons,
 								canel() {
 
 								},
@@ -185,7 +192,7 @@
 			},
 			InitScroll() {
 				this.$nextTick(() => {
-					if(!this.scroll) {
+					if (!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
 							click: true,
 							scrollY: true,
@@ -194,11 +201,8 @@
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							//							this.LoadData()
-							//
-							//							this.showLoading = true
-
-							this.$nextTick(function() {
+							this.LoadData()
+							this.$nextTick(function () {
 								this.scroll.finishPullUp()
 								this.scroll.refresh()
 							})
@@ -206,7 +210,6 @@
 
 					} else {
 						this.scroll.refresh()
-						this.scroll2.refresh()
 					}
 				})
 
@@ -214,18 +217,27 @@
 			LoadData() {
 				var _this = this
 
-				_this.recordList = _this.recordList.concat({
-					form: '国美番禺店大抽奖',
-					periods: '1238期',
-					time: '2018-03-12 20',
-					peopleNum: '600',
-					allMoney: '80000.00',
-					has: '2000.00',
-					isReceive: false
-				})
-				setTimeout(function() {
-					_this.showLoading = false
-				}, 1000)
+				_this.curPage++
+
+					_this.$http.get(_this.url.lottery.getUserLotteryRecord, {
+						params: {
+							userId: _this.$store.state.user.userId,
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
+						}
+					}).then((res) => {
+						if (res.data.status == "00000000") {
+							if (res.data.data.list.length > 0) {
+								_this.list = _this.list.concat(res.data.data.list)
+								_this.showLoading = true
+								_this.showNomore = false
+							} else {
+								_this.showLoading = false
+								_this.showNomore = true
+							}
+						}
+					})
 			}
 		}
 

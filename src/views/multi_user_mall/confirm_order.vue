@@ -48,7 +48,7 @@
 		</div>
 		<div class="number-box pr">
 			<p>购买数量</p>
-			<x-number v-model="goodsInfo.goodsNum" :min="1" width="50px" button-style="round"></x-number>
+			<x-number v-model="goodsInfo.goodsNum" :min="1" width="50px" button-style="round" @on-change="numC"></x-number>
 		</div>
 		<div class="goods-spec pr">
 			<div>优惠券</div>
@@ -137,13 +137,8 @@
 										<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
 									</div>
 									<div class="money">
-										<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50">
+										<div>
 											<span>{{item.denomination}}</span>元
-											<br />
-											<i>满{{item.condition}}元可用</i>
-										</div>
-										<div v-if="item.type == 30">
-											<span>{{item.denomination}}</span>折
 											<br />
 											<i>满{{item.condition}}元可用</i>
 										</div>
@@ -288,12 +283,45 @@
 		mounted() {
 
 		},
-		watch: {
-			'goodsInfo.goodsNum' () {
-				this.integralNumChange()
-			}
-		},
 		methods: {
+			numC() {
+
+				var _this = this
+
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'goodsNum': _this.goodsInfo.goodsNum
+					})
+				})
+
+				var inputNum = this.integralNum == '' ? 0 : this.integralNum
+
+				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
+					this.maxBalance = (this.goodsInfo.minPrice * this.goodsInfo.goodsNum) - this.denomination //选择优惠券减去的钱
+				}
+
+				
+				if(parseFloat(this.maxBalance) <= parseFloat(this.availableBalance)) {
+					this.integralNum = parseFloat(this.maxBalance).toFixed(2)
+					inputNum = parseFloat(this.maxBalance).toFixed(2)
+					if(parseFloat(inputNum) > parseFloat(this.maxBalance)) {
+						this.integralNum = parseFloat(this.maxBalance).toFixed(2)
+						inputNum = parseFloat(this.maxBalance).toFixed(2)
+					}
+					this.payMoney = (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) > 0 ? (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) : 0.00
+				} else if(parseFloat(this.maxBalance) > parseFloat(this.availableBalance)) {
+					this.integralNum = parseFloat(this.availableBalance).toFixed(2)
+					inputNum = parseFloat(this.availableBalance).toFixed(2)
+					if(parseFloat(inputNum) > parseFloat(this.availableBalance)) {
+						this.integralNum = parseFloat(this.availableBalance).toFixed(2)
+						inputNum = parseFloat(this.availableBalance).toFixed(2)
+					}
+					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0.00
+				}
+				this.payMoney = Number(this.payMoney).toFixed(2)
+				
+				console.log(this.payMoney)
+			},
 			select(addressItem) {
 				this.address = addressItem
 				this.addressId = addressItem.addressId
@@ -361,8 +389,6 @@
 					}
 					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0.00
 				}
-
-				//				console.log(parseFloat(this.payMoney))
 			},
 			// 获取收货地址列表
 			getShippingAddress() {
@@ -410,7 +436,7 @@
 						_this.availableCoupon = res.data.data.availableCoupon
 						_this.availableBalance = res.data.data.availableBalance
 
-						this.integralNum = this.availableBalance > this.goodsInfo.minPrice ? this.goodsInfo.minPrice : this.availableBalance
+						this.integralNum = this.availableBalance > this.goodsInfo.minPrice ? this.goodsInfo.minPrice * Number(this.$route.query.goodsNum) : this.availableBalance
 
 						this.payMoney = (Number(this.$route.query.minPrice) * Number(this.$route.query.goodsNum) - Number(this.integralNum)).toFixed(2)
 					}

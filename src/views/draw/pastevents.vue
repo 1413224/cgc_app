@@ -172,7 +172,7 @@
 					spaceBetween: 10
 				},
 				act1: 0,
-				data1: ['一等奖', '二等奖', '三等奖', '四等奖', '特等奖', '幸运奖'],
+				data1: [],
 				data3: [],
 				act3: 0,
 				personList: [],
