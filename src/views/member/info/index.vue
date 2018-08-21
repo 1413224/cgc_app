@@ -42,7 +42,8 @@
 				images: '', //图片数组
 				userInfo: {},
 				auth: '',
-				isC: true
+				isC: true,
+				data:''
 			}
 		},
 		created() {
@@ -140,14 +141,43 @@
 			},
 			getocr(){
 				var _this = this
-				
+
 				_this.$http.get(_this.url.ocr.getOCR,{
 					params:{
 						userId:_this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
-						window.location.href = res.data.data
+						_this.data = res.data.data
+						if(_this.data.status == 0){
+							window.location.href = res.data.data.url
+						}else if(_this.data.status == 1){
+							
+							_this.$router.push({
+								// path:'/member/setting/real',
+								name:"real",
+								params:{
+									suc:true
+								}
+							})
+						}else if(_this.data.status == 3){
+							_this.$router.push({
+								name:"real",
+								params:{
+									suc:false
+								}
+							})
+						}else if(_this.data.status == 4){
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'top',
+								text: '超过当日认证次数上限'
+							})
+						}else{
+							alert("sha")
+						}
+						
 					}
 				});
 			}

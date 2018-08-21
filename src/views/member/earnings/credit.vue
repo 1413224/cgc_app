@@ -75,7 +75,7 @@
 						<img style="width:0.37rem;height: 0.28rem;" :src="'./static/member/jl_1.png'" />
 						<div>
 							<p>充值奖励</p>
-							<p>累计奖励：{{fundInfo.rechargePoints}}</p>
+							<p>{{fundInfo.rechargePoints}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -85,7 +85,7 @@
 						<img style="width:0.37rem;height: 0.37rem;" :src="'./static/member/jl_2.png'" />
 						<div>
 							<p>购物奖励</p>
-							<p>累计奖励：{{fundInfo.cashbackPoints}}</p>
+							<p>{{fundInfo.cashbackPoints}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -95,7 +95,7 @@
 						<img style="width: 0.3rem;height: 0.45rem;" :src="'./static/member/jl_3.png'" />
 						<div>
 							<p>推荐用户</p>
-							<p>累计奖励：{{fundInfo.recommendPoints}}</p>
+							<p>{{fundInfo.recommendPoints}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -105,7 +105,7 @@
 						<img style="width: 0.38rem;height: 0.36rem;" :src="'./static/member/jl_7.png'" />
 						<div>
 							<p>消费奖励</p>
-							<p>累计奖励：{{fundInfo.cashbackPoints}}</p>
+							<p>{{fundInfo.cashbackPoints}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -206,7 +206,7 @@
 							font-size: 0.24rem;
 							font-family: PingFangSC-Medium;
 							color: rgba(144, 162, 199, 1);
-							margin-top: 0.30rem;
+							margin-top: 0.10rem;
 						}
 					}
 				}

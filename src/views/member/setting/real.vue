@@ -77,7 +77,7 @@
 					<cell class="list-item" title="证件类型">身份证</cell>
 					<cell class="list-item" title="真实姓名">{{infom.name}}</cell>
 					<cell class="list-item" title="身份证号码">{{infom.idCard}}</cell>
-					<cell class="list-item" title="有效期限">{{infom.dateEnd}}</cell>
+					<cell class="list-item" title="有效期限至">{{dateEnd | getDate2}}</cell>
 				</group>
 			</div>
 			<div class="btnwrap">
@@ -92,6 +92,7 @@
 // Loading, XCircle, Range, Icon, XDialog,XButton,XInput,
 	import {  Group,  Cell, XHeader, XInput, XButton, XCircle, Icon, XDialog, Loading} from 'vux'
 	import scoreheader from '../../../components/setting_header'
+	// import '../../../global/global.js'
 	export default {
 		components: {
 			scoreheader,
@@ -119,7 +120,9 @@
 				userImages: '',
 
 				suc:false,
-				infom:''
+				infom:'',
+				dateEnd:'',
+				dateStart:''
 			}
 		},
 		mounted() {
@@ -218,24 +221,33 @@
 			},*/
 			getOCRResult(){
 				var _this = this
-				
+
+				// alert(_this.$route.query.suc)
+				_this.suc = _this.$route.params.suc
+
 				_this.$http.get(_this.url.ocr.getOCRResult,{
 					params:{
 						userId:_this.$store.state.user.userId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
+
 						console.log(res.data.data)
-						_this.suc = true
-						_this.infom = res.data.data
-					}else if(res.data.status == "use-OCR-0001"){
-						/*_this.$router.push({
-							path:"/user/reg"
-						});*/
-					}else{
+
+						if(res.data.data.status == 1){
+							_this.infom = res.data.data
+							_this.suc = true
+							_this.dateEnd = _this.infom.dateEnd
+							_this.dateStart = _this.infom.dateStart
+						}else if(res.data.data.status == 2 || res.data.data.status == 3){
+							_this.suc = false
+						}
+						
 
 					}
 				});
+				
+
 			},
 			backrz(){
 				this.$router.push({
@@ -251,7 +263,7 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
-						window.location.href = res.data.data
+						window.location.href = res.data.data.url
 					}
 				});
 			}
