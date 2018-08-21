@@ -73,7 +73,7 @@
 						<img style="height: 0.28rem;" :src="'./static/member/jl_1.png'" />
 						<div>
 							<p>累计充值</p>
-							<p>累计奖励：{{fundInfo.recharge}}</p>
+							<p>{{fundInfo.recharge}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -83,7 +83,7 @@
 						<img style="height: 0.37rem;" :src="'./static/member/jl_2.png'" />
 						<div>
 							<p>购物奖励</p>
-							<p>累计奖励：{{fundInfo.cashback}}</p>
+							<p>{{fundInfo.cashback}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -93,7 +93,7 @@
 						<img style="width: 0.30rem;height: 0.45rem;" :src="'./static/member/jl_3.png'" />
 						<div>
 							<p>分红奖励</p>
-							<p>累计奖励：{{fundInfo.commission}}</p>
+							<p>{{fundInfo.commission}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -103,7 +103,7 @@
 						<img style="height: 0.37rem;" :src="'./static/member/jl_4.png'" />
 						<div>
 							<p>任务奖励</p>
-							<p>累计奖励：{{fundInfo.taskBalance}}</p>
+							<p>{{fundInfo.taskBalance}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -113,7 +113,7 @@
 						<img style="height: 0.39rem;" :src="'./static/member/jl_5.png'" />
 						<div>
 							<p>累计抽奖</p>
-							<p>累计奖励：{{fundInfo.lottery}}</p>
+							<p{{fundInfo.lottery}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
@@ -239,7 +239,7 @@
 							font-size: 0.24rem;
 							font-family: MicrosoftYaHei;
 							color: rgba(144, 162, 199, 1);
-							margin-top: 0.30rem;
+							margin-top: 0.10rem;
 						}
 					}
 				}
