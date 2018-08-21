@@ -180,10 +180,10 @@
 								message: message,
 								buttons: buttons,
 								canel() {
-
+console.log(1)
 								},
 								confirm() {
-
+									console.log(123)
 								}
 							})
 						}
