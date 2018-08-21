@@ -58,17 +58,11 @@
 										<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
 									</div>
 									<div class="money">
-										<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50">
+										<div>
 											<span>{{item.denomination}}</span>元
 											<br />
 											<i>满{{item.condition}}元可用</i>
 										</div>
-										<div v-if="item.type == 30">
-											<span>{{item.denomination}}</span>折
-											<br />
-											<i>满{{item.condition}}元可用</i>
-										</div>
-
 									</div>
 								</div>
 								<img :src="'./static/member/used.png'" v-if="item.status == 2">

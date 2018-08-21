@@ -199,12 +199,12 @@
 						}
 						p:nth-child(1) {
 							font-size: 0.28rem;
-							font-family: MicrosoftYaHei;
+							font-family: PingFangSC-Medium;
 							color: rgba(26, 38, 66, 1);
 						}
 						p:nth-child(2) {
 							font-size: 0.24rem;
-							font-family: MicrosoftYaHei;
+							font-family: PingFangSC-Medium;
 							color: rgba(144, 162, 199, 1);
 							margin-top: 0.10rem;
 						}

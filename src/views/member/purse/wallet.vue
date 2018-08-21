@@ -50,7 +50,7 @@
 				<div class="one-item">
 					<div style="display: flex;align-items: center;">
 						<span>通用积分</span>
-						<div style="height: 100%;padding: 0 0.05rem;">
+						<div style="padding: 0 0.05rem;">
 							<img @click="changeFundShow" :src="fundInfo.isshowFund == 1?'./static/member/openeyes.png':'./static/member/closedeyes.png'" alt="" />
 						</div>
 					</div>
@@ -135,7 +135,11 @@
 </template>
 
 <script>
-	import { Card, Cell, Group, } from 'vux'
+	import {
+		Card,
+		Cell,
+		Group,
+	} from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -307,7 +311,6 @@
 			}
 			.top {
 				display: flex;
-				height: 1.56rem;
 				padding: 0.31rem 0.28rem;
 				box-sizing: border-box;
 				.one-item {
@@ -329,6 +332,7 @@
 					p {
 						color: rgba(26, 38, 66, 1);
 						font-size: 0.48rem;
+						margin-top: 0.10rem
 					}
 				}
 				.one-item:nth-child(2) {
@@ -340,6 +344,7 @@
 					p:nth-child(2) {
 						font-size: 0.48rem;
 						color: rgba(115, 134, 173, 1);
+						margin-top: 0.10rem
 					}
 				}
 			}
@@ -392,6 +397,7 @@
 					width: 0.98rem;
 					height: 0.98rem;
 					margin-right: 0.3rem;
+					border-radius: 50%;
 				}
 				.one {
 					text-align: left;

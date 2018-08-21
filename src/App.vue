@@ -194,8 +194,6 @@
 			'$route' (to, from, next) {
 				var _this = this
 
-				console.log(this.includeList)
-
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
 

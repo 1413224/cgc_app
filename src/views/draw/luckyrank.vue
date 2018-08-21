@@ -21,7 +21,7 @@
 									<p>我</p>
 								</div>
 							</div>
-							<p class="pm" v-if="$store.state.page.isLogin == 'true'">{{userRank.number}}</p>
+							<p class="pm" v-if="$store.state.page.isLogin == 'true'">{{tabIndex == 0 ?userRank.number:userRank.lotteryBonus}}</p>
 							<div v-else class="login_btn" @click="$router.push({path:'/user/reg'})">点击登录</div>
 						</div>
 					</div>
@@ -29,7 +29,8 @@
 						<div class="item_box" v-for="(item,index) in numberList">
 							<div class="left">
 								<div>
-									<img class="tx" :src="item.thumb.original" alt="">
+									<img v-if="item.thumb" class="tx" :src="item.thumb.original" alt="">
+									<img v-else class="tx" :src="'./static/images/mrtx.png'" alt="">
 									<img class="pa_img" v-if="index == 0" :src="'./static/draw/diyi.png'" alt="">
 									<img class="pa_img" v-if="index == 1" :src="'./static/draw/dier.png'" alt="">
 									<img class="pa_img" v-if="index == 2" :src="'./static/draw/disan.png'" alt="">
