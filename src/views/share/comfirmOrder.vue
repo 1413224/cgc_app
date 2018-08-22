@@ -58,7 +58,7 @@
 					</div>
 				</div>
 				<div class="couponlist-box">
-					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item.name,item.denomination,item.type,item.condition)">
+					<div v-for="(item,index) in info.availableCoupon" :key="index" class="bs" @click="sure(index,item)">
 						<div class="blue" v-if="sureIndex == index && item.show">
 							<div class="pr-box">
 								<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
@@ -79,13 +79,8 @@
 									<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
 								</div>
 								<div class="money">
-									<div v-if="item.type == 0 || item.type == 10 || item.type == 20 || item.type == 50">
+									<div>
 										<span>{{item.denomination}}</span>元
-										<br />
-										<i>满{{item.condition}}元可用</i>
-									</div>
-									<div v-if="item.type == 30">
-										<span>{{item.denomination}}</span>折
 										<br />
 										<i>满{{item.condition}}元可用</i>
 									</div>
@@ -125,8 +120,9 @@
 				payOptions: {},
 				couponName: '',
 				denomination: 0,
-				type: 0,
+				couponType: 0,
 				condition: 0,
+				discount: 0,
 				recommendBalance: 0
 			}
 		},
@@ -173,12 +169,10 @@
 			value() {
 				//false时重置商品所需金额
 				if(!this.value) {
-					console.log(this.info.price - this.denomination)
+
 					return this.info.payPrice = this.info.price - this.denomination
-				} else {
-					//true时计算 输入的积分 和 所选优惠券  金额
-					this.inputChange()
 				}
+				this.inputChange()
 			}
 		},
 		methods: {
@@ -221,39 +215,48 @@
 			},
 			inputChange() {
 
-				if(this.info.recommendBalance >= (this.info.price - this.denomination)) {
-					this.info.recommendBalance = this.info.price - this.denomination
+				var recommendBalance = this.info.recommendBalance == '' ? 0 : this.info.recommendBalance
+				
+				if(this.couponType == 20) { //满减券
+					if(Number(this.info.price) >= Number(this.condition)) {
+						this.info.payPrice = Number(this.info.price) - Number(this.denomination)
+					}
+				} else if(this.couponType == 30) { //折扣券
+					if(Number(this.info.price) >= Number(this.condition)) {
+						var minMoney = Number(this.info.price) - (Number(this.info.price) * (1 - Number(this.discount)))
+						if(minMoney < Number(this.condition)){
+							this.info.payPrice =  this.info.payPrice - minMoney
+						}else{
+							this.info.payPrice =  this.info.payPrice -Number(this.condition)
+						}
+					}
+				} else if(this.couponType == 50) { //现金券
+					this.info.payPrice = Number(this.info.price) - Number(this.denomination)
+				}else{
+					this.info.payPrice = Number(this.info.price)
+				}
+				
+				var minAllMoney = Number(this.info.payPrice).toFixed(2)
+
+				//可用通用积分大于商品价格
+				if(Number(this.info.availableBalance) >= Number(minAllMoney)) {
+					if(Number(this.info.recommendBalance) > Number(minAllMoney)) {
+						this.info.recommendBalance = minAllMoney
+						recommendBalance = minAllMoney
+					}
+
+					this.info.payPrice = (Number(minAllMoney) - Number(recommendBalance)).toFixed(2)
 				}
 
-				//当拥有积分大于等于商品所需支付金额  输入积分不能大于商品所需支付金额
-				if(Number(this.max) >= Number(this.info.price)) {
-					if(Number(this.info.recommendBalance) <= Number(this.info.price)) {
-						this.info.payPrice = this.info.price - this.info.recommendBalance
-					} else {
-						this.info.recommendBalance = this.info.price
-						this.info.payPrice = this.maxPayPrice
+				//可用通用积分小于商品价格
+				if(Number(this.info.availableBalance) < Number(minAllMoney)) {
+					if(Number(this.info.recommendBalance) > Number(this.info.availableBalance)) {
+						this.info.recommendBalance = this.info.availableBalance
+						recommendBalance = this.info.availableBalance
 					}
-				}
-				//当拥有积分小于等于商品所需支付金额  输入积分不能大于拥有积分
-				if(Number(this.max) <= Number(this.info.price)) {
-					if(Number(this.info.recommendBalance) <= Number(this.max)) {
-						this.info.payPrice = this.info.price - this.info.recommendBalance
-					} else {
-						this.info.recommendBalance = this.max
-						this.info.payPrice = this.maxPayPrice
-					}
-				}
-
-				//当选择了优惠券  类型不为打折券时：
-				if(this.info.payPrice > 0 && (this.type == 0 || this.type == 20 || this.type == 50)) {
-					let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
-					this.info.payPrice = parseFloat(money).toFixed(2)
-				} else if(this.info.payPrice > 0 && this.type == 30) {
-					//当选择了优惠券  类型为打折券且满足使用门槛时：
-					if(this.info.payPrice > 0 && this.info.payPrice >= this.condition) {
-						let money = (this.info.payPrice - this.denomination) > 0 ? this.info.payPrice - this.denomination : 0
-						this.info.payPrice = parseFloat(money).toFixed(2)
-					}
+					console.log(Number(minAllMoney))
+                    console.log(Number(recommendBalance))
+					this.info.payPrice = (Number(minAllMoney) - Number(recommendBalance)).toFixed(2)
 				}
 			},
 			getEquipmentOrderConfirmInfo(id, num) {
@@ -278,7 +281,9 @@
 						}
 
 						_this.info = res.data.data
-
+						this.info.payPrice = this.info.price
+						
+						this.inputChange()
 					}
 				})
 			},
@@ -314,7 +319,8 @@
 				_this.show = true
 			},
 			//  优惠券  下标 名字 减去金额 类型  使用门槛 
-			sure(index, name, denomination, type, condition) {
+			sure(index, item) {
+
 				this.sureIndex = index
 
 				let sureCouponList = []
@@ -338,32 +344,22 @@
 				}
 
 				if(sureCouponList.length > 0) {
-					this.couponName = name
-					this.denomination = denomination
-					this.type = type
-					this.condition = condition
-					if(this.value) {
-						this.info.recommendBalance = (this.info.price - this.denomination) < this.info.availableBalance ? this.info.price - this.denomination : this.info.availableBalance
-					} else {
-						this.info.payPrice = this.info.price - this.denomination
-					}
+					this.discount = item.discount
+					this.couponType = item.type
+					this.couponName = item.name //优惠券标题
+					this.denomination = item.denomination //优惠券减去金额
+					this.condition = item.condition //优惠券满足门槛
 				} else {
+					this.couponType = ''
 					this.userCouponId = ''
 					this.couponName = ''
 					this.denomination = 0
-					this.type = 0
 					this.condition = 0
-					if(this.value) {
-						this.info.recommendBalance = this.recommendBalance
-					} else {
-						this.info.payPrice = this.info.price - this.denomination
-					}
 				}
-				console.log(this.denomination)
 
-				if(this.value) {
-					this.inputChange()
-				}
+				this.info.payPrice = this.info.price //重置需要支付金额
+
+				this.inputChange()
 			},
 			toDetail(id) {
 				this.$router.push({
