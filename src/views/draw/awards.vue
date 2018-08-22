@@ -6,14 +6,14 @@
 			<span class="receiveMoney">张三先生恭喜您获得一等奖五千元</span>
 		</div>
 
-		<div class="awards-main" v-if="1>2">
-			<div class="photos" style="margin-bottom: 0.3rem;">
+		<div class="awards-main">
+			<div class="photos" style="margin-bottom: 0.3rem;" v-if="1>2">
 				<div class="awards-title clear">
 					<div class="border left"></div>
 					<h4 class="left">上传生活照</h4>
 				</div>
 
-				<div class="life-box">
+				<div class="life-box" >
 					<div class="tc" v-for="(item,index) in imgList" :key="index">
 						<div class="life" @click="cindex(index)">
 							<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png" />
@@ -38,7 +38,7 @@
 					<h4 class="left">中奖感言</h4>
 				</div>
 				<group style="margin-top: 0.3rem;">
-					<x-textarea :max="200" :min="20" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
+					<x-textarea :value="info.message" :max="200" :min="20" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
 				</group>
 			</div>
 		</div>
@@ -48,9 +48,9 @@
 			</check-icon>
 
 		</div>-->
-		<div class="foot" @click="showToast">
+		<div class="foot">
 			<p>点击下方按钮即同意 <span>《易消费中奖协议》</span></p>
-			<div class="btn">立即提交</div>
+			<div class="btn" @click="submit">立即提交</div>
 		</div>
 
 		<!-- 弹出框 -->
@@ -91,11 +91,46 @@
 				pindex: 0,
 				headMessage: '请您耐心等待审核',
 				imgSrc: './static/draw/wait.png',
-				demo1: false
+				demo1: false,
+				
+				info:{}
 			}
 		},
-		mounted: function() {},
+		mounted: function() {
+			this.getMessage()
+		},
 		methods: {
+			getMessage() {
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.getMessage, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						id:_this.$route.query.id
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.info = res.data.data
+					}
+				})
+			},
+			submit(){
+				
+				var _this = this
+
+				_this.$http.get(_this.url.lottery.writeMessage, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						id:_this.$route.query.id,
+						message:_this.info.message
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						
+					}
+				})
+			},
+			
 			test: function(e) {
 				var _this = this
 				var file = e.target.files;

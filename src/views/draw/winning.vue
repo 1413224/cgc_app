@@ -134,11 +134,11 @@
 						pageSize: _this.pageSize
 					}
 				}).then((res) => {
-					if (res.data.status == "00000000") {
+					if(res.data.status == "00000000") {
 
 						_this.showList = res.data.data.list.length > 0 ? true : false
 
-						if (res.data.data.list.length > 0) {
+						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
 						}
 					}
@@ -147,32 +147,35 @@
 			//领奖
 			toReceive(id, status) {
 				var _this = this
-				if (status == 10 || status == 30) {
+				if(status == 10 || status == 30) {
 					_this.$http.post(_this.url.lottery.getBonus, {
 						userId: _this.$store.state.user.userId,
 						id: id
 					}).then((res) => {
-						if (res.data.status == "00000000") {
+						if(res.data.status == "00000000") {
 							var message = ''
 							var buttons = []
-							if (res.data.data.status == 10) {
+							if(res.data.data.status == 10) {
 								message = '您仍尚未实名认证'
 								buttons = ['马上认证', '取消']
-							} else if (res.data.data.status == 20) {
+							} else if(res.data.data.status == 20) {
 								message = '您仍需完善资料'
 								buttons = ['前去完善', '取消']
-							} else if (res.data.data.status == 30) {
-								message = '您仍需绑定银行卡'
-								buttons = ['马上绑定', '取消']
-							} else if (res.data.data.status == 50) {
+							}else if(res.data.data.status == 50) {
 								message = '审核中'
-							} else if (res.data.data.status == 60) {
-								message = '您需要线下领奖'
-							} else if (res.data.data.status == 70) {
-								message = '已经过了领取截止时间'
-							} else if (res.data.data.status == 80) {
-								message = '领取成功'
-							}
+								buttons = ['取消']
+							}else if(res.data.data.status == 40) {
+								_this.$router.push({
+									path: '/draw/awards',
+									query:{
+										id:id
+									}
+								})
+							} 
+//							else if(res.data.data.status == 30) {
+//								message = '您仍需绑定银行卡'
+//								buttons = ['马上绑定', '取消']
+//							} 
 
 							_this.$dialog.show({
 								type: 'warning',
@@ -180,10 +183,57 @@
 								message: message,
 								buttons: buttons,
 								canel() {
-console.log(1)
+
 								},
 								confirm() {
-									console.log(123)
+
+									if(res.data.data.status == 10) {
+										_this.$http.get(_this.url.ocr.getOCR, {
+											params: {
+												userId: _this.$store.state.user.userId
+											}
+										}).then((res) => {
+											if(res.data.status == "00000000") {
+												_this.data = res.data.data
+												if(_this.data.status == 0) {
+													window.location.href = res.data.data.url
+												} else if(_this.data.status == 1) {
+
+													_this.$router.push({
+														// path:'/member/setting/real',
+														name: "real",
+														params: {
+															suc: true
+														}
+													})
+												} else if(_this.data.status == 3) {
+													_this.$router.push({
+														name: "real",
+														params: {
+															suc: false
+														}
+													})
+												} else if(_this.data.status == 4) {
+													_this.$vux.toast.show({
+														width: '50%',
+														type: 'text',
+														position: 'top',
+														text: '超过当日认证次数上限'
+													})
+												} else {
+													alert("sha")
+												}
+											}
+										})
+									} else if(res.data.data.status == 20) {
+										_this.$router.push({
+											path: '/member/info/data'
+										})
+									}
+//									else if(res.data.data.status == 30) {
+//										message = '您仍需绑定银行卡'
+//										buttons = ['马上绑定', '取消']
+//									} 
 								}
 							})
 						}
@@ -192,7 +242,7 @@ console.log(1)
 			},
 			InitScroll() {
 				this.$nextTick(() => {
-					if (!this.scroll) {
+					if(!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
 							click: true,
 							scrollY: true,
@@ -202,7 +252,7 @@ console.log(1)
 						})
 						this.scroll.on('pullingUp', (pos) => {
 							this.LoadData()
-							this.$nextTick(function () {
+							this.$nextTick(function() {
 								this.scroll.finishPullUp()
 								this.scroll.refresh()
 							})
@@ -227,8 +277,8 @@ console.log(1)
 							islist: true
 						}
 					}).then((res) => {
-						if (res.data.status == "00000000") {
-							if (res.data.data.list.length > 0) {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
 								_this.list = _this.list.concat(res.data.data.list)
 								_this.showLoading = true
 								_this.showNomore = false
