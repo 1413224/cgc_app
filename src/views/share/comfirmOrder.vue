@@ -223,11 +223,11 @@
 					}
 				} else if(this.couponType == 30) { //折扣券
 					if(Number(this.info.price) >= Number(this.condition)) {
-						var minMoney = Number(this.info.price) - (Number(this.info.price) * (1 - Number(this.discount)))
-						if(minMoney < Number(this.condition)){
+						var minMoney = Number(this.info.price) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)){
 							this.info.payPrice =  this.info.payPrice - minMoney
 						}else{
-							this.info.payPrice =  this.info.payPrice -Number(this.condition)
+							this.info.payPrice =  this.info.payPrice -Number(this.denomination)
 						}
 					}
 				} else if(this.couponType == 50) { //现金券

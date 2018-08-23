@@ -309,11 +309,11 @@
 					}
 				} else if(this.couponType == 30) { //折扣券
 					if(Number(this.allMoney) >= Number(this.condition)) {
-						var minMoney = Number(this.allMoney) - (Number(this.allMoney) * (1 - Number(this.discount)))
-						if(minMoney < Number(this.condition)) {
+						var minMoney = Number(this.allMoney) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)) {
 							this.payMoney = Number(this.allMoney) - minMoney
 						} else {
-							this.payMoney = Number(this.allMoney) - Number(this.condition)
+							this.payMoney = Number(this.allMoney) - Number(this.denomination)
 						}
 
 					}
@@ -407,11 +407,11 @@
 					}
 				} else if(this.couponType == 30) { //折扣券
 					if(Number(this.allMoney) >= Number(this.condition)) {
-						var minMoney = Number(this.allMoney) - (Number(this.allMoney) * (1 - Number(this.discount)))
-						if(minMoney < Number(this.condition)) {
+						var minMoney = Number(this.allMoney) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)) {
 							this.payMoney = Number(this.allMoney) - minMoney
 						} else {
-							this.payMoney = Number(this.allMoney) - Number(this.condition)
+							this.payMoney = Number(this.allMoney) - Number(this.denomination)
 						}
 					}
 				} else if(this.couponType == 50) { //现金券

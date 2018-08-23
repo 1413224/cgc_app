@@ -195,8 +195,6 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
-
-	// alert(openid)
 	
 //	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
 //
