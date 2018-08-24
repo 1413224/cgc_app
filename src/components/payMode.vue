@@ -12,7 +12,7 @@
 							<li v-for="(item,index) in payList" :key="index" @click="changePayMode(index)">
 								<div class="left">
 									<div class="img-box">
-										<img :src="item.logo" alt="" />
+										<img v-if="item.logo" :src="item.logo" alt="" />
 									</div>
 									<p>{{item.title}}</p>
 								</div>
@@ -28,15 +28,15 @@
 		<div class="pay-box" v-else>
 			<popup class="payMode-popup" height="100%" v-model="options.showPayMode" @on-hide="hide" @on-show="show">
 				<div class="pr-box">
-					<div class="bt">
-						<i @click="close" class="iconfont icon-arrow-right"></i>
+					<div class="bt" @click="options.showPayMode = !options.showPayMode">
+						<i class="iconfont icon-arrow-right"></i>
 						<p>支付收银台</p>
 					</div>
 					<div class="money_box">
 						<p>需支付</p>
-						<p>{{options.data.money}}元</p>
+						<p>{{Number(options.data.money).toFixed(2)}}元</p>
 					</div>
-					<div class="time_box">
+					<div class="time_box" v-if="1>2">
 						<p>支付剩余时间</p>
 						<div class="num-box">
 							<ul>
@@ -50,20 +50,20 @@
 					</div>
 					<div class="pay-list">
 						<ul>
-							<li v-for="(item,index) in payList" :key="index" @click="changePayMode(index)">
+							<li v-for="(item,index) in payList" :key="index" @click="changePayMode(index,item.payType)">
 								<div class="left">
 									<div class="img-box">
-										<img :src="item.logo" alt="" />
+										<img :src="item.logo.original" alt="" />
 									</div>
-									<p>{{item.title}}</p>
+									<p>{{item.payTypeName}}</p>
 								</div>
 								<check-icon :value.sync="item.isChoice"></check-icon>
 							</li>
 						</ul>
 					</div>
-					<div class="sure-btn" @click="options.toPay(payModeIndex)">
+					<div class="sure-btn" @click="options.toPay(payModeType)">
 						<p>确认支付</p>
-						<p>{{options.data.money}}元</p>
+						<p>{{Number(options.data.money).toFixed(2)}}元</p>
 					</div>
 				</div>
 			</popup>
@@ -76,32 +76,35 @@
 	export default {
 		data() {
 			return {
-				payList: [{
-						logo: './static/images/zfbPay.png',
-						title: '支付宝支付',
-						isChoice: true
-					},
-					{
-						logo: './static/images/wxPay.png',
-						title: '微信支付',
-						isChoice: false
-					}, {
-						logo: './static/images/qqPay.png',
-						title: 'QQ钱包支付',
-						isChoice: true
-					}, {
-						logo: './static/images/jdPay.png',
-						title: '京东支付',
-						isChoice: true
-					},
-					{
-						logo: './static/images/ylPay.png',
-						title: '银联支付',
-						isChoice: false
-					}
+				payList: [
+					//				{
+					//						logo: './static/images/zfbPay.png',
+					//						title: '支付宝支付',
+					//						isChoice: true
+					//					},
+					//					{
+					//						logo: './static/images/wxPay.png',
+					//						title: '微信支付',
+					//						isChoice: false
+					//					}, {
+					//						logo: './static/images/qqPay.png',
+					//						title: 'QQ钱包支付',
+					//						isChoice: false
+					//					}, {
+					//						logo: './static/images/jdPay.png',
+					//						title: '京东支付',
+					//						isChoice: false
+					//					},
+					//					{
+					//						logo: './static/images/ylPay.png',
+					//						title: '银联支付',
+					//						isChoice: false
+					//					}
 				],
 				payModeIndex: 0,
-				timeNum: [0, 6, 0, 0]
+				payModeType: 0,
+				timeNum: [0, 6, 0, 0],
+				time: 360
 			}
 		},
 		components: {
@@ -110,11 +113,19 @@
 			Countup
 		},
 		created() {
+			var _this = this
+
 			var i = 0
-			if(this.timeNum[i] != 0) {
-				this.reduce(this.timeNum[i++])
+			if(_this.timeNum[i] != 0) {
+				_this.reduce(_this.timeNum[i++])
 			}
-			this.countdown(this.options.data.time)
+			_this.countdown(_this.time)
+
+			this.getPaymentList()
+
+		},
+		mounted() {
+
 		},
 		props: {
 			options: {
@@ -125,18 +136,35 @@
 					toPay() {},
 					hide() {},
 					show() {},
-					close() {},
 					data: {
-						time: 900,
 						money: 0
 					}
 				}
 			}
 		},
-		methods: { //关闭弹窗
-			close() {
-				this.options.close()
+		methods: {
+			//获取支付渠道
+			getPaymentList() {
+				var _this = this
+				_this.$http.get(_this.url.user.getPaymentList, {
+					params: {
+						platformId: _this.url.platformId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+
+						//重置默认值
+						_this.payList = res.data.data.lists
+
+						_this.payList.forEach(function(index, value, array) {
+							_this.payList[value].isChoice = false
+							_this.payList[0].isChoice = true
+							_this.payModeType = _this.payList[0].payType
+						})
+					}
+				})
 			},
+			//关闭弹窗
 			hide() {
 				this.options.hide()
 			},
@@ -145,20 +173,30 @@
 				var _this = this
 				_this.options.show()
 				//重置默认值
+				
 				_this.payList.forEach(function(index, value, array) {
 					_this.payList[value].isChoice = false
 					_this.payList[0].isChoice = true
 				})
 			},
 			//支付方式改变时
-			changePayMode(i) {
+			changePayMode(i, type) {
 				var _this = this
-				_this.payModeIndex = i
-				_this.options.changePay(i)
+				
 				_this.payList.forEach(function(index, value, array) {
 					_this.payList[value].isChoice = false
 					_this.payList[i].isChoice = true
 				})
+				
+				this.$forceUpdate()
+				
+				_this.payModeType = type
+
+				_this.payModeIndex = i
+				
+				_this.options.changePay(type)
+
+				
 			},
 			//倒计时
 			countdown(item) {

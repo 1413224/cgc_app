@@ -170,6 +170,9 @@
 						text: '保存成功'
 					})
 					_this.$router.go(-1)
+					if(_this.$route.query.select){
+						sessionStorage.setItem('selectAddressId',resp.data.data)
+					}
 				})
 			},
 			getShippingAddressById(addressId) { // 获取地址选项

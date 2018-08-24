@@ -51,6 +51,7 @@ var url = {
 		getMyPointDetail: uri1 + '/param/v1/user/getMyPointDetail', //获取信用积分详情
 		getUserCouponList: uri1 + '/param/v1/user/getUserCouponList', //获取优惠券列表
 		getRechargeList: uri1 + '/param/v1/user/getRechargeList', //获取平台充值套餐列表信息接口
+		getPaymentList:uri1 + '/param/v1/user/getPaymentList',//获取支付渠道接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息

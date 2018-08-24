@@ -165,7 +165,7 @@
 						</div>
 						<div class="input-div">
 							<p>¥</p>
-							<input type="number" v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
+							<input type="number"  v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
 						</div>
 						<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
 					</div>
@@ -282,7 +282,6 @@
 
 			this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
 
-			this.getShippingAddress()
 			this.getEquipmentOrderConfirmInfo()
 		},
 		mounted() {
@@ -352,8 +351,14 @@
 				console.log(this.payMoney)
 			},
 			select(addressItem) {
-				this.address = addressItem
-				this.addressId = addressItem.addressId
+				if(addressItem) {
+					this.address = addressItem
+					this.addressId = addressItem.addressId
+				} else {
+					this.address = {}
+					this.addressId = ''
+				}
+
 			},
 			addAddress() {
 				this.$router.push({
@@ -398,6 +403,10 @@
 				})
 			},
 			integralNumChange(e) {
+				
+				if(Number(this.integralNum) < 0){
+					this.integralNum = 0
+				}
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
 				//优先减去优惠券满足金额
@@ -443,33 +452,6 @@
 
 				this.payMoney = Number(this.payMoney).toFixed(2)
 			},
-			// 获取收货地址列表
-			getShippingAddress() {
-				let _this = this
-				let param = {
-					'userId': _this.$store.state.user.userId,
-					'pageSize': 20,
-					'curPage': 1
-				}
-				_this.$http.get(_this.url.user.getShippingAddress, {
-					params: param
-				}).then(res => {
-					if(res.data.status === '00000000') {
-						if(res.data.data.list.length > 0) {
-							res.data.data.list.forEach(function(value) {
-								if(value.isDefault == 1) {
-									_this.address = value
-									_this.addressId = value.addressId
-									return false;
-								}
-							})
-						} else {
-							_this.address = ''
-						}
-					}
-				})
-
-			},
 			//获取优惠券列表
 			getEquipmentOrderConfirmInfo(id, num) {
 				var _this = this
@@ -489,7 +471,7 @@
 						_this.availableCoupon = res.data.data.availableCoupon
 						_this.availableBalance = res.data.data.availableBalance
 
-						this.integralNum = this.availableBalance > this.goodsInfo.minPrice ? this.goodsInfo.minPrice * Number(this.$route.query.goodsNum) : this.availableBalance
+						this.integralNum = Number(this.availableBalance) > Number(this.goodsInfo.minPrice) ? Number(this.goodsInfo.minPrice) * Number(this.$route.query.goodsNum) : Number(this.availableBalance)
 
 						this.payMoney = (Number(this.$route.query.minPrice) * Number(this.$route.query.goodsNum) - Number(this.integralNum)).toFixed(2)
 					}

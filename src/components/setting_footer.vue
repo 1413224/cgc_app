@@ -123,7 +123,7 @@
 			top: 0;
 			right: 0;
 			height: 1px;
-			border-top: 1px solid #979797;
+			border-top: 1px solid #d8dff0;
 			color: #D9D9D9;
 			-webkit-transform-origin: 0 0;
 			transform-origin: 0 0;

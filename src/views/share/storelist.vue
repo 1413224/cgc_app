@@ -196,7 +196,7 @@
 				showContent: true,
 				showLoading: false,
 				showNoMore: false,
-				distanceIndex: 0,
+				distanceIndex: 4,
 				jl: '',
 
 				listType: '1',
@@ -435,6 +435,7 @@
 			onArea() {
 				this.curPage = 1
 				this.onIndex = 0
+				this.showLoading= false
 				//点击区域
 				if (this.areaShang) {
 					this.hide();
@@ -451,6 +452,7 @@
 
 				this.curPage = 1
 				this.onIndex = 2
+				this.showLoading= false
 
 				if (this.show1) {
 					this.$nextTick(() => {
@@ -471,6 +473,7 @@
 
 				this.curPage = 1
 				this.onIndex = 1
+				this.showLoading= false
 
 				//点击价格
 				if (this.priceShang) {

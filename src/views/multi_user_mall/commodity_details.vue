@@ -57,7 +57,7 @@
 					<img src="../../assets/images/shop/customer.png">
 					<p>客服</p>
 				</div>
-				<div class="card">
+				<div class="card" @click="toStoreDetails(goodsDetails.enterpriseId)">
 					<img :src="'./static/images/store-logo.png'">
 					<p>店铺</p>
 				</div>
@@ -137,7 +137,7 @@
 				goodsDetails: {},
 				showGoodsSpec: false,
 				colorIndex: 1115,
-				colorList: ['粉色尊贵版粉色尊贵版粉色尊贵版粉色尊贵版', '粉色尊贵版', '粉色尊贵版', '粉色尊贵版', '粉色尊贵版'],
+				colorList: [],
 				sizeIndex: 1115,
 				sizeList: ['1', '2', '3', '4', '5556'],
 				specItem: {},
@@ -181,7 +181,7 @@
 
 			},
 			numChange(val) {
-				console.log(val);
+				
 			},
 			submit() {
 				if(JSON.stringify(this.specItem) === '{}') {

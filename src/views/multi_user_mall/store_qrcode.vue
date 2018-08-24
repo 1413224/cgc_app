@@ -9,7 +9,7 @@
 					<div class="mt">
 						<qrcode :value="storeUrl" :size="250" type="img"></qrcode>
 					</div>
-					<div class="btn">扫码二维码进入店铺</div>
+					<div class="btn">扫码二维码</div>
 				</div>
 			</div>
 		</div>

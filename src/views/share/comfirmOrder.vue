@@ -80,7 +80,7 @@
 								</div>
 								<div class="money">
 									<div>
-										<span>{{item.denomination}}</span>元
+										<span>{{Number(item.denomination).toFixed(0)}}</span>元
 										<br />
 										<i>满{{item.condition}}元可用</i>
 									</div>
@@ -214,6 +214,10 @@
 				})
 			},
 			inputChange() {
+				
+				if(Number(this.info.recommendBalance)<0){
+					this.info.recommendBalance= 0
+				}
 
 				var recommendBalance = this.info.recommendBalance == '' ? 0 : this.info.recommendBalance
 				
@@ -254,8 +258,7 @@
 						this.info.recommendBalance = this.info.availableBalance
 						recommendBalance = this.info.availableBalance
 					}
-					console.log(Number(minAllMoney))
-                    console.log(Number(recommendBalance))
+					
 					this.info.payPrice = (Number(minAllMoney) - Number(recommendBalance)).toFixed(2)
 				}
 			},
@@ -281,9 +284,9 @@
 						}
 
 						_this.info = res.data.data
-						this.info.payPrice = this.info.price
+						_this.info.payPrice = Number(_this.info.price)
 						
-						this.inputChange()
+						_this.inputChange()
 					}
 				})
 			},
