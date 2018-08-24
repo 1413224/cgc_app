@@ -236,7 +236,7 @@
 						_this.data3.forEach((value, index, Array) => {
 							if(value.number == _this.info.number) {
 								_this.act3 = index
-								this.$refs.mySwiper.swiper.slideTo(_this.act3, 1000, false)
+								this.$refs.mySwiper.swiper.slideTo(_this.act3, 10, false)
 							}
 						})
 
@@ -314,7 +314,8 @@
 
 			},
 			LoadData() {
-				var _this = this
+				if(this.personList > 0){
+					var _this = this
 				_this.curPage++
 
 					_this.$http.get(_this.url.lottery.getAwardUserList, {
@@ -336,6 +337,7 @@
 							}
 						}
 					})
+				}
 			}
 		}
 	}

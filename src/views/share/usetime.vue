@@ -549,6 +549,7 @@
 					top: .6rem;
 					left: 0.02rem;
 					height: .34rem;
+					line-height: .36rem;
 					font-size: .2rem;
 					color: #fff;
 					padding: 0 5px;

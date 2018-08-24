@@ -118,7 +118,7 @@
 						el: '.swiper-pagination',
 					}
 				},
-				swiperList: ['./static/share/lb1.jpg', './static/share/lb1.jpg', './static/share/lb1.jpg'],
+				swiperList: ['./static/share/lb1.png', './static/share/lb1.png', './static/share/lb1.png'],
 			}
 		},
 		components: {
