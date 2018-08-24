@@ -64,7 +64,9 @@
 							<p>{{i.name}}</p>
 							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
 							<span class="img-box">
-								<img :src="i.img" alt="" />
+
+								<img :src="i.img" v-if="i.wbu">
+								<img v-else :src="i.img" alt="" />
 							</span>
 						</div>
 					</div>
@@ -241,6 +243,11 @@
 					//						wbu: true
 					//					},
 					{
+						img: './static/index/index_banner0.png',
+						url: 'http://www.zhscjyw.net/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=diypage&id=19',
+						wbu:true
+					},				
+					{
 						img: './static/index/index_banner1.png',
 						url: '/member/vip/right'
 					},
@@ -349,12 +356,21 @@
 							color: 'blue',
 							url: '/brand/shop'
 						},
-						{
+						/*{
 							name: '国际品牌',
 							tip: 'JAYJUN补水面膜',
 							img: './static/index/mianmo.png',
 							color: 'red',
-							url: '/brand/famous'
+							url: '/brand/famous',
+							
+						},*/
+						{
+							name: '中华水产',
+							tip: '天天生鲜全国配送',
+							img: './static/index/shui1.png',
+							color: 'red',
+							url: 'http://www.zhscjyw.net/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=diypage&id=19',
+							wbu:true
 						}
 					]
 				}, {
@@ -400,7 +416,8 @@
 				})
 			},
 			goUrl(url) {
-				window.location.href = url
+				alert(url)
+				// window.location.href = url
 			},
 			goPay() {
 				this.$router.push({
@@ -436,9 +453,19 @@
 				window.location.href = uri;
 			},
 			toUrl(url) {
-				this.$router.push({
+				// alert(url)
+				var inurl = url.indexOf('http')
+				
+				if(inurl){
+					this.$router.push({
+						path: url
+					})
+				}else{
+					window.location.href = url;
+				}
+				/*this.$router.push({
 					path: url
-				})
+				})*/
 			}
 		},
 		components: {
