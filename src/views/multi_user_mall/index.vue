@@ -8,12 +8,12 @@
 			</div>
 			<div class="two" v-if="showIndex==1">
 				<popup v-model="isW" :show-mask="false" position="top">
-					<div class="searchBox">
+					<!-- <div class="searchBox">
 						<div class="search">
 							<img :src="'./static/images/ss.png'" />
 							<input type="text" placeholder="搜索商品" @click="goSearch">
 						</div>
-					</div>
+					</div> -->
 					<ul class="pr-nav2" ref="paNav2">
 						<li class="li" v-for="(item,index) in prList" :key="index" :class="[{'blue':prNavIndex == index || (index == 3 && ishasStock)}]" @click="prNavClick(index)">
 							{{item.title}}
@@ -47,12 +47,12 @@
 								<p>{{info.allianceConcern}}人关注</p>
 							</div>
 						</div>
-						<div class="searchBox">
+						<!-- <div class="searchBox">
 							<div class="search">
 								<img :src="'./static/images/ss.png'" />
 								<input type="text" placeholder="搜索商品" @click="goSearch">
 							</div>
-						</div>
+						</div> -->
 
 						<ul class="pr-nav" ref="paNav">
 							<li class="li" v-for="(item,index) in prList" :key="index" :class="[{'blue':prNavIndex == index || (index == 3 && ishasStock)}]" @click="prNavClick(index)">

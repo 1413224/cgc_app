@@ -50,11 +50,15 @@
 	<!-- <scoreheader :title="title"></scoreheader> -->
 	<div class="ocrwrap">
 		<x-header :left-options="{showBack: false}">实名验证</x-header>
-		<div class="headwrap" v-if="suc">
+		<div class="headwrap" v-if="suc == 1">
 			<img src="../../../assets/images/user/success.png" alt="">
 			<p class="cont">认证成功</p>
 		</div>
-		<div class="headwrap faile" v-if="!suc">
+		<div class="headwrap" v-if="suc == 0">
+			<img src="../../../assets/images/user/shenghe.png" alt="">
+			<p class="cont">认证中...</p>
+		</div>
+		<div class="headwrap faile" v-if="suc == 2">
 			<img src="../../../assets/images/user/faile.png" alt="">
 			<p class="cont">认证失败</p>
 			<div class="btnswrap clearfix">
@@ -69,7 +73,7 @@
 				<p>4.请保持良好的网络环境</p>
 			</div>
 		</div>
-		<div class="suc" v-if="suc">
+		<div class="suc" v-if="suc == 1">
 			<div class="xian"></div>
 			<div class="xinxi">
 				<group>
@@ -119,7 +123,7 @@
 				backImages: '',
 				userImages: '',
 
-				suc:false,
+				suc:0,
 				infom:'',
 				dateEnd:'',
 				dateStart:''
@@ -236,11 +240,11 @@
 
 						if(res.data.data.status == 1){
 							_this.infom = res.data.data
-							_this.suc = true
+							_this.suc = 1
 							_this.dateEnd = _this.infom.dateEnd
 							_this.dateStart = _this.infom.dateStart
 						}else if(res.data.data.status == 2 || res.data.data.status == 3){
-							_this.suc = false
+							_this.suc = 2
 						}
 						
 

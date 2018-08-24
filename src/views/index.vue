@@ -14,12 +14,12 @@
 						</swiper-slide>
 						<div class="swiper-pagination" slot="pagination"></div>
 					</swiper>
-					<div class="swiperTop" @click="$router.push({path:'/multi_user_mall/search'})">
+					<!-- <div class="swiperTop" @click="$router.push({path:'/multi_user_mall/search'})">
 						<div>
 							<img :src="'./static/images/ss2.png'" />
 							<input type="text" readonly="readonly" placeholder="搜索你想要的" />
 						</div>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="notice">

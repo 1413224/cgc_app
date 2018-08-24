@@ -6,7 +6,7 @@
 				<div class="record-item" v-for="(item,index) in list" :key="index">
 					<div class="top">
 						<div>第{{item.number}}期</div>
-						<p>{{item.title}}</p>
+						<p class="ellipsis">{{item.title}}</p>
 					</div>
 					<div class="middle">
 						<div class="left">
@@ -416,6 +416,7 @@
 							font-family: PingFang-SC-Medium;
 							color: rgba(51, 51, 51, 1);
 							margin-left: 0.15rem;
+							width: 5rem;
 						}
 						div {
 							width: 0.97rem;

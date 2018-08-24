@@ -157,14 +157,14 @@
 								// path:'/member/setting/real',
 								name:"real",
 								params:{
-									suc:true
+									suc:1
 								}
 							})
 						}else if(_this.data.status == 3){
 							_this.$router.push({
 								name:"real",
 								params:{
-									suc:false
+									suc:2
 								}
 							})
 						}else if(_this.data.status == 4){
