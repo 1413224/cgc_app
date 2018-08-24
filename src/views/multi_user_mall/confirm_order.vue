@@ -116,7 +116,7 @@
 						</div>
 					</div>
 					<div class="couponlist-box">
-						<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item.name,item.denomination,item.type,item.condition)">
+						<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item)">
 							<div class="blue" v-if="sureIndex == index && item.show">
 								<div class="pr-box">
 									<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
@@ -217,6 +217,9 @@
 				availableBalance: 0,
 				maxBalance: 0,
 				payMoney: 0,
+				allMoney: 0,
+				discount: 0,
+				couponType: 0,
 			}
 		},
 		created() {
@@ -277,6 +280,8 @@
 				}
 			}
 
+			this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
+
 			this.getShippingAddress()
 			this.getEquipmentOrderConfirmInfo()
 		},
@@ -294,32 +299,56 @@
 					})
 				})
 
+				this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
+
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
+				//优先减去优惠券满足金额
+				if(this.couponType == 20) { //满减券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						this.payMoney = Number(this.allMoney) - Number(this.denomination) //选择优惠券减去的钱
+					}
+				} else if(this.couponType == 30) { //折扣券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						var minMoney = Number(this.allMoney) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)) {
+							this.payMoney = Number(this.allMoney) - minMoney
+						} else {
+							this.payMoney = Number(this.allMoney) - Number(this.denomination)
+						}
 
-				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
-					this.maxBalance = (this.goodsInfo.minPrice * this.goodsInfo.goodsNum) - this.denomination //选择优惠券减去的钱
+					}
+				} else if(this.couponType == 50) { //现金券
+					this.payMoney = Number(this.allMoney) - Number(this.denomination)
+				} else {
+					this.payMoney = Number(this.allMoney)
 				}
 
-				
-				if(parseFloat(this.maxBalance) <= parseFloat(this.availableBalance)) {
-					this.integralNum = parseFloat(this.maxBalance).toFixed(2)
-					inputNum = parseFloat(this.maxBalance).toFixed(2)
-					if(parseFloat(inputNum) > parseFloat(this.maxBalance)) {
-						this.integralNum = parseFloat(this.maxBalance).toFixed(2)
-						inputNum = parseFloat(this.maxBalance).toFixed(2)
+				var minAllMoney = Number(this.payMoney).toFixed(2)
+
+				//再减去通用积分
+				if(Number(minAllMoney) <= Number(this.availableBalance)) {
+					this.integralNum = Number(minAllMoney)
+					inputNum = Number(minAllMoney)
+					if(Number(this.integralNum) > Number(minAllMoney)) {
+						this.integralNum = Number(minAllMoney)
+						inputNum = Number(minAllMoney)
 					}
-					this.payMoney = (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) > 0 ? (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) : 0.00
-				} else if(parseFloat(this.maxBalance) > parseFloat(this.availableBalance)) {
-					this.integralNum = parseFloat(this.availableBalance).toFixed(2)
-					inputNum = parseFloat(this.availableBalance).toFixed(2)
-					if(parseFloat(inputNum) > parseFloat(this.availableBalance)) {
-						this.integralNum = parseFloat(this.availableBalance).toFixed(2)
-						inputNum = parseFloat(this.availableBalance).toFixed(2)
-					}
-					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0.00
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
 				}
+
+				if(Number(minAllMoney) > Number(this.availableBalance)) {
+					this.integralNum = Number(this.availableBalance)
+					inputNum = Number(this.availableBalance)
+					if(Number(this.integralNum) > Number(this.availableBalance)) {
+						this.integralNum = Number(this.availableBalance)
+						inputNum = Number(this.availableBalance)
+					}
+
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
+				}
+
 				this.payMoney = Number(this.payMoney).toFixed(2)
-				
+
 				console.log(this.payMoney)
 			},
 			select(addressItem) {
@@ -371,24 +400,48 @@
 			integralNumChange(e) {
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
-
-				if((this.goodsInfo.minPrice * this.goodsInfo.goodsNum) >= this.condition) {
-					this.maxBalance = (this.goodsInfo.minPrice * this.goodsInfo.goodsNum) - this.denomination //选择优惠券减去的钱
+				//优先减去优惠券满足金额
+				if(this.couponType == 20) { //满减券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						this.payMoney = Number(this.allMoney) - Number(this.denomination) //选择优惠券减去的钱
+					}
+				} else if(this.couponType == 30) { //折扣券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						var minMoney = Number(this.allMoney) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)) {
+							this.payMoney = Number(this.allMoney) - minMoney
+						} else {
+							this.payMoney = Number(this.allMoney) - Number(this.denomination)
+						}
+					}
+				} else if(this.couponType == 50) { //现金券
+					this.payMoney = Number(this.allMoney) - Number(this.denomination) //选择优惠券减去的钱
+				} else {
+					this.payMoney = Number(this.allMoney)
 				}
 
-				if(parseFloat(this.maxBalance) <= parseFloat(this.availableBalance)) {
-					if(parseFloat(inputNum) > parseFloat(this.maxBalance)) {
-						this.integralNum = parseFloat(this.maxBalance).toFixed(2)
-						inputNum = parseFloat(this.maxBalance).toFixed(2)
+				var minAllMoney = Number(this.payMoney).toFixed(2)
+
+				//再减去通用积分
+				if(Number(minAllMoney) <= Number(this.availableBalance)) {
+					if(Number(this.integralNum) > Number(minAllMoney)) {
+						this.integralNum = Number(minAllMoney)
+						inputNum = Number(minAllMoney)
 					}
-					this.payMoney = (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) > 0 ? (parseFloat(this.maxBalance) - parseFloat(inputNum)).toFixed(2) : 0.00
-				} else if(parseFloat(this.maxBalance) > parseFloat(this.availableBalance)) {
-					if(parseFloat(inputNum) > parseFloat(this.availableBalance)) {
-						this.integralNum = parseFloat(this.availableBalance).toFixed(2)
-						inputNum = parseFloat(this.availableBalance).toFixed(2)
-					}
-					this.payMoney = parseFloat(this.maxBalance) - parseFloat(inputNum) > 0 ? parseFloat(this.maxBalance) - parseFloat(inputNum) : 0.00
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
 				}
+
+				if(Number(minAllMoney) > Number(this.availableBalance)) {
+
+					if(Number(this.integralNum) > Number(this.availableBalance)) {
+						this.integralNum = Number(this.availableBalance)
+						inputNum = Number(this.availableBalance)
+					}
+
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
+				}
+
+				this.payMoney = Number(this.payMoney).toFixed(2)
 			},
 			// 获取收货地址列表
 			getShippingAddress() {
@@ -443,7 +496,7 @@
 				})
 			},
 			//  优惠券  下标 名字 减去金额 类型  使用门槛 
-			sure(index, name, denomination, type, condition) {
+			sure(index, item) {
 				this.sureIndex = index
 
 				let sureCouponList = []
@@ -466,15 +519,20 @@
 				}
 
 				if(sureCouponList.length > 0) {
-					this.couponName = name
-					this.denomination = denomination
-					this.condition = condition
+					this.couponType = item.type //获取优惠券类型
+					this.couponName = item.name //获取优惠券标题
+					this.denomination = item.denomination //获取优惠券减去金额
+					this.condition = item.condition //获取优惠券门槛金额
+					this.discount = item.discount //获取优惠券折扣
 				} else {
 					this.userCouponIds = []
 					this.couponName = ''
 					this.denomination = 0
 					this.condition = 0
+					this.discount = 0
 				}
+
+				this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
 
 				this.integralNumChange()
 			}

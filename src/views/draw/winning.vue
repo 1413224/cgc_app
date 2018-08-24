@@ -5,7 +5,7 @@
 			<div class="content" v-if="showList">
 				<div class="record-item" v-for="(item,index) in list" :key="index">
 					<div class="top">
-						<div>{{item.number}}</div>
+						<div>第{{item.number}}期</div>
 						<p>{{item.title}}</p>
 					</div>
 					<div class="middle">

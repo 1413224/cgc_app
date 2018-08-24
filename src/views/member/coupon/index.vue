@@ -40,86 +40,40 @@
 		<div class="couponList">
 			<div class="wrapper" :class="{'top46':!$store.state.page.isWx}" ref="wrapper">
 				<div class="content">
-
-					<div class="couponlist-box" v-if="couponList.length>0">
-						<div v-for="(item,index) in couponList" :key="index" class="bs" :class="{'no':item.status == 2 || item.status == 3}">
-							<div class="bg">
-								<div class="top">
-									<div>
-										<div class="one">
-											<div class="type-btn" v-if="item.type == 0">满减券</div>
-											<div class="type-btn" v-if="item.type == 10">体验券</div>
-											<div class="type-btn" v-if="item.type == 20">满减券</div>
-											<div class="type-btn" v-if="item.type == 30">折扣券</div>
-											<div class="type-btn" v-if="item.type == 40">运费券</div>
-											<div class="type-btn" v-if="item.type == 50">现金券</div>
-											<span>{{item.name}}</span>
-										</div>
-										<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
-									</div>
-									<div class="money">
-										<div>
-											<span>{{item.denomination}}</span>元
-											<br />
-											<i>满{{item.condition}}元可用</i>
-										</div>
-									</div>
-								</div>
-								<img :src="'./static/member/used.png'" v-if="item.status == 2">
-								<img :src="'./static/member/expired.png'" v-if="item.status == 3">
-							</div>
-							<div class="bottom" :class="{'show':item.showAll}" @click="view(index)">
-								<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
-								<img :class="{'r180':item.showAll}" :src="'./static/images/xia.png'" alt="" />
-							</div>
-						</div>
-						<Loading v-if="show"> </Loading>
-						<Nomore v-if="showNo"></Nomore>
-					</div>
-
-					<!--<div v-if="couponList.length>0">
-						<div v-for="(item,index) in couponList" :key="index" :style="[!item.show?mb:'']" class="roll">
-							<div class="rollOne">
-								<div class="right">
-									<div class="top" :class="{'textColor': item.status != 1}">
-										<span>{{item.name}}</span>
-										<span>仅可购买服饰类/护肤类/彩妆类的部分商品</span>
-									</div>
-									<div class="middle">
-										<div>
-											<span>满{{item.condition}}元减{{item.denomination}}元</span><br>
-											<span>{{item.startTime | getDate2}} - {{item.endTime | getDate2}}</span>
-										</div>
-										<div class="bottom" @click="view(index)">查看详情 <img :class="{'noshow':!item.show}" :src="iconImg"></div>
-									</div>
-
-								</div>
+					<div class="list_box" v-if="couponList.length>0">
+						<div class="mb20" v-for="(item,index) in couponList" :key="index">
+							<div class="item" :class="[{'red_bg':item.type == 0 || item.type == 20 || item.type == 30 || item.type == 50},{'blue_bg':item.type == 10},{'yellow_bg':item.type == 40},{'gray_bg':item.status == 2 || item.status == 3}]">
 								<div class="left">
-									<div class="img" :class="[{'red':item.status == 1 && item.type !=10 && item.type !=40},{'blue':item.status == 1 && item.type !=20 && item.type !=30 && item.type !=50},{'gq':item.status != 1}]"></div>
-
-									<div v-if="item.type !=10 && item.type !=40">
-										<p v-if="item.type != 30"><i>￥</i>{{item.denomination}}</p>
-										<p v-else>{{item.discount}}<i>折</i></p>
+									<div class="top">
+										<p class="type" v-if="item.type == 0">全部</p>
+										<p class="type" v-if="item.type == 10">体验券</p>
+										<p class="type" v-if="item.type == 20">满减券</p>
+										<p class="type" v-if="item.type == 30">折扣券</p>
+										<p class="type" v-if="item.type == 40">运费券</p>
+										<p class="type" v-if="item.type == 50">现金券</p>
+										<p class="mk">满<i>{{item.condition}}</i>元可用</p>
 									</div>
-									<div v-if="item.type !=20 && item.type !=30 && item.type !=50" class="typeImg">
-										<img src="../../../../static/member/type3.png" style="width:100%;" v-if="item.type == 10">
-										<img src="../../../../static/member/type4.png" style="width:100%;" v-else>
-									</div>
-
-									<div class="useBtn" v-if="item.status == 1">去使用</div>
-
-									<div v-if="item.status != 1" class="statusImg">
-										<img src="../../../../static/member/expired.png" width="100%" v-if="item.status == 3">
-										<img src="../../../../static/member/used.png" width="100%" v-else>
+									<div class="bottom" @click="view(index)">
+										<span class="time">{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</span>
+										<span class="look_detail_btn">查看详情<img :class="{'r180':item.showAll}" :src="'./static/images/xia.png'" alt="" /></span>
 									</div>
 								</div>
+								<div class="right">
+									<p><i>￥</i>{{item.denomination}}</p>
+									<div class="use" v-if="item.status == 1">立即使用</div>
+									<img v-if="item.status == 2" :src="'./static/member/yishiyong.png'" />
+									<img v-if="item.status == 3" :src="'./static/member/yiguoqi.png'" />
+								</div>
 							</div>
-							<div class="detail" v-if="item.show">
-								{{item.content}}详情
+							<!--<transition name="custom-classes-transition" enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">-->
+							<div class="b" v-if="item.showAll">
+								{{item.content?item.content:'暂无详细说明'}}
 							</div>
+							<!--</transition>-->
 						</div>
-						
-					</div>-->
+					</div>
+					<Loading v-if="show"></Loading>
+					<Nomore v-if="showNo"></Nomore>
 				</div>
 			</div>
 		</div>
@@ -136,10 +90,10 @@
 <script>
 	import BScroll from 'better-scroll'
 	import { Tab, TabItem, Masker, Drawer, Spinner, XHeader } from 'vux'
-	import settingHeader from '../../../components/setting_header'
-	import Loading from '../../../components/loading'
-	import Nomore from '../../../components/noMore'
-	import noData from '../../../components/noData'
+	import settingHeader from '@/components/setting_header'
+	import Loading from '@/components/loading'
+	import Nomore from '@/components/noMore'
+	import noData from '@/components/noData'
 	export default {
 		data() {
 			return {
@@ -541,6 +495,140 @@
 				width: 100%;
 				padding: 0rem 0.21rem;
 				box-sizing: border-box;
+				.list_box {
+					padding: 0.20rem 0;
+					.red_bg {
+						background: url(../../../../static/member/coupon_bg.png) no-repeat;
+						background-size: cover;
+					}
+					.blue_bg {
+						background: url(../../../../static/member/blue_bg.png) no-repeat;
+						background-size: cover;
+					}
+					.yellow_bg {
+						background: url(../../../../static/member/yellow_bg.png) no-repeat;
+						background-size: cover;
+					}
+					.gray_bg {
+						background: url(../../../../static/member/gray_bg.png) no-repeat;
+						background-size: cover;
+						.type,
+						.mk,
+						.time,
+						.look_detail_btn,
+						i,.right p {
+							color: #90A2C7!important;
+						}
+					}
+					.mb20 {
+						margin-bottom: 0.20rem;
+					}
+					.b {
+						width: 100%;
+						padding: 0.25rem 0.44rem;
+						box-sizing: border-box;
+						background: rgba(255, 255, 255, 1);
+						font-size: 0.24rem;
+						font-family: PingFang-SC-Medium;
+						color: rgba(66, 88, 132, 1);
+						border-top: 1px solid #E0E9FD;
+						position: relative;
+						z-index: 11;
+					}
+					.item {
+						width: 7.04rem;
+						height: 1.98rem;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						position: relative;
+						background-color: white;
+						z-index: 15;
+						.left {
+							flex: 1;
+							height: 100%;
+							display: flex;
+							flex-direction: column;
+							justify-content: space-between;
+							padding: 0.23rem 0.25rem 0.23rem 0.45rem;
+							box-sizing: border-box;
+							.top {
+								flex: 1;
+								display: flex;
+								flex-direction: column;
+								justify-content: center;
+								.type {
+									font-size: 0.30rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(255, 83, 101, 1);
+								}
+								.mk {
+									font-size: 0.24rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(255, 83, 101, 1);
+									i {
+										font-size: 0.28rem;
+										font-family: PingFang SC;
+										color: #FF5365;
+									}
+								}
+							}
+							.bottom {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+								.time {
+									font-size: 0.24rem;
+									font-family: DINOT-Regular;
+									color: rgba(26, 38, 66, 1);
+								}
+								.look_detail_btn {
+									font-size: 0.18rem;
+									font-family: PingFang-SC-Medium;
+									color: rgba(26, 38, 66, 1);
+									img {
+										width: 0.15rem;
+										margin-left: 0.05rem;
+									}
+									.r180 {
+										transform: rotate(-180deg);
+									}
+								}
+							}
+						}
+						.right {
+							width: 2.50rem;
+							height: 100%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							flex-direction: column;
+							p {
+								font-size: 0.7rem;
+								font-family: DINOT-Bold;
+								color: rgba(255, 255, 255, 1);
+								i {
+									font-size: 0.39rem;
+								}
+							}
+							div {
+								width: 1.21rem;
+								height: 0.45rem;
+								line-height: 0.45rem;
+								text-align: center;
+								border: 1px solid white;
+								border-radius: 23px;
+								font-size: 0.22rem;
+								font-family: PingFang-SC-Medium;
+								color: rgba(255, 255, 255, 1);
+							}
+							img {
+								width: 1.30rem;
+								height: 0.49rem;
+							}
+						}
+					}
+				}
 				.couponlist-box {
 					padding: 0.35rem 0;
 					.bs {
@@ -618,7 +706,8 @@
 						}
 						.money {
 							color: rgba(144, 162, 199, 1)!important;
-							span,i {
+							span,
+							i {
 								color: rgba(144, 162, 199, 1)!important;
 							}
 						}
@@ -666,7 +755,7 @@
 				}
 			}
 			.top46 {
-				top: 11%!important;
+				top: 14%!important;
 			}
 			.bgImgThree {
 				/*background: url(../../../assets/images/user/rollBg4.png) no-repeat;*/

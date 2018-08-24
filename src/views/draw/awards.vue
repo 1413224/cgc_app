@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="head">
 			<span class="receiveText">中奖信息</span>
-			<span class="receiveMoney">张三先生恭喜您获得一等奖五千元</span>
+			<span class="receiveMoney">{{info.title}}</span>
 		</div>
 
 		<div class="awards-main">
@@ -13,7 +13,7 @@
 					<h4 class="left">上传生活照</h4>
 				</div>
 
-				<div class="life-box" >
+				<div class="life-box">
 					<div class="tc" v-for="(item,index) in imgList" :key="index">
 						<div class="life" @click="cindex(index)">
 							<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png" />
@@ -92,8 +92,8 @@
 				headMessage: '请您耐心等待审核',
 				imgSrc: './static/draw/wait.png',
 				demo1: false,
-				
-				info:{}
+
+				info: {}
 			}
 		},
 		mounted: function() {
@@ -106,7 +106,7 @@
 				_this.$http.get(_this.url.lottery.getMessage, {
 					params: {
 						userId: _this.$store.state.user.userId,
-						id:_this.$route.query.id
+						id: _this.$route.query.id
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -114,23 +114,33 @@
 					}
 				})
 			},
-			submit(){
-				
+			submit() {
+
 				var _this = this
 
 				_this.$http.get(_this.url.lottery.writeMessage, {
 					params: {
 						userId: _this.$store.state.user.userId,
-						id:_this.$route.query.id,
-						message:_this.info.message
+						id: _this.$route.query.id,
+						message: _this.info.message
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						
+						//0 已领奖成功，无需重新提交 1提交成功，请等待审核 2提交失败，请重新提交 3已过了领奖期，无法提交中奖感言
+						_this.showDialog = true
+						if(res.data.data.status == 0) {
+							_this.headMessage = '已领奖成功，无需重新提交'
+						} else if(res.data.data.status == 1) {
+							_this.headMessage = '提交成功，请等待审核'
+						} else if(res.data.data.status == 2) {
+							_this.headMessage = '提交失败，请重新提交'
+						} else if(res.data.data.status == 3) {
+							_this.headMessage = '已过了领奖期，无法提交中奖感言'
+						}
 					}
 				})
 			},
-			
+
 			test: function(e) {
 				var _this = this
 				var file = e.target.files;
@@ -150,14 +160,13 @@
 				this.imgList.splice(index, 1);
 			},
 			showToast() {
-				var that = this;
-				if(this.showDialog) {
-					that.showDialog = false
-					that.$router.push({
-						path: '/draw/winning'
-					})
-				}
-				this.showDialog = true
+				var _this = this
+
+				_this.$router.push({
+					path: '/draw/winning'
+				})
+
+				this.showDialog = false
 			},
 			cone(e, i) {
 				var _this = this
@@ -207,6 +216,12 @@
 			font-family: PingFang-SC-Medium;
 			color: rgba(160, 160, 160, 1);
 			text-align: right;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			-webkit-line-clamp: 1;
+			-webkit-box-orient: vertical;
+			margin-left: 0.15rem;
 		}
 	}
 	
