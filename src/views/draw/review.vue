@@ -17,7 +17,7 @@
 					<ul class="commodity2" v-if="historyLottery.length > 0">
 						<group v-for="(item,index) in historyLottery" :key="index">
 							<cell>
-								<li @click="$router.push({name: 'pastevents'})">
+								<li @click="goPastevents(item.lotteryId)">
 									<div class="img">
 										<img v-if="item.thumb" :src="item.thumb.original" alt="">
 										<div class="arrow">
@@ -91,6 +91,14 @@
 			this.getHistoryLottery()
 		},
 		methods: {
+			goPastevents(lotteryId) {
+				this.$router.push({
+					path: '/draw/pastevents',
+					query: {
+						'lotteryId': lotteryId
+					}
+				})
+			},
 			getHistoryLottery() {
 				var _this = this
 
@@ -131,47 +139,29 @@
 
 			},
 			LoadData() {
-				this.page++;
 				var _this = this
-				_this.show = true
-				if(_this.showNomore) {
-					_this.show = false;
-					return
-				}
-				setTimeout(function() {
-					_this.show = false;
-					let len = _this.reviewData.lists.length;
-					let par = new URLSearchParams()
-					par.append('page', _this.page)
-					_this.$http.post(url.draw.getReviewLists, par).then(function(response) {
-						if(response.status == 200 && response.data != null && response.data.result.page == _this.page) {
-							_this.reviewData.lists = _this.reviewData.lists.concat(response.data.result.lists)
+
+				_this.curPage++
+
+					_this.$http.get(_this.url.lottery.getHistoryLottery, {
+						params: {
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist:true
 						}
-						console.log(_this.reviewData);
-						if(len == _this.reviewData.lists.length) {
-							_this.showNomore = true;
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list.length > 0) {
+								_this.historyLottery = _this.historyLottery.concat(res.data.data.list)
+								_this.showNomore = false
+								_this.show = true
+							} else {
+								_this.showNomore = true
+								_this.show = false
+							}
 						}
-					}).catch(function(error) {
-						console.log(error);
-					});
-				}, 1000)
+					})
 			},
-			goPastevents() {
-				this.$router.push({
-					path: '/draw/pastevents'
-				})
-			},
-			getData() {
-				let _this = this;
-				this.$http.post(url.draw.getReviewLists, {}).then(function(response) {
-					if(response.status == 200 && response.data != null) {
-						_this.reviewData = response.data.result
-					}
-					console.log(_this.reviewData);
-				}).catch(function(error) {
-					console.log(error);
-				});
-			}
 		}
 	}
 </script>

@@ -125,7 +125,6 @@ Vue.component('radio', Radio)
 Vue.component('x-dialog', XDialog)
 Vue.component('swipeout', Swipeout)
 Vue.component('swipeout-item', SwipeoutItem)
-Vue.component('swipeout-button', SwipeoutButton)
 
 Vue.config.productionTip = false
 
@@ -196,17 +195,17 @@ router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
 	
-//	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
-//
-//		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
-//		let ua = window.navigator.userAgent.toLowerCase()
-//		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-//			next({
-//				path: '/member/oriza'
-//			})
-//			return false
-//		}
-//	}
+	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
+
+		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
+		let ua = window.navigator.userAgent.toLowerCase()
+		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+			next({
+				path: '/member/oriza'
+			})
+			return false
+		}
+	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []

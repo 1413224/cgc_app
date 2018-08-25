@@ -299,8 +299,28 @@
 				})
 
 				this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
+				
+				if(Number(this.integralNum) < 0){
+					this.integralNum = 0
+				}
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
+				
+				//强制保留两位小数点
+				var regStrs = [
+					['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
+					['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
+					['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
+					['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
+				]
+				
+				var num = this.integralNum.toString()
+				
+				for(var i = 0; i < num.length; i++) {
+					var reg = new RegExp(regStrs[i][0])
+					this.integralNum =  num.replace(reg, regStrs[i][1])
+				}
+				
 				//优先减去优惠券满足金额
 				if(this.couponType == 20) { //满减券
 					if(Number(this.allMoney) >= Number(this.condition)) {
@@ -409,6 +429,23 @@
 				}
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
+				
+				//强制保留两位小数点
+				var regStrs = [
+					['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
+					['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
+					['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
+					['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
+				]
+				
+				var num = this.integralNum.toString()
+				
+				for(var i = 0; i < num.length; i++) {
+					console.log(regStrs[i][0])
+					var reg = new RegExp(regStrs[i][0])
+					this.integralNum =  num.replace(reg, regStrs[i][1])
+				}
+				
 				//优先减去优惠券满足金额
 				if(this.couponType == 20) { //满减券
 					if(Number(this.allMoney) >= Number(this.condition)) {

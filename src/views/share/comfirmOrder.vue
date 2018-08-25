@@ -218,6 +218,21 @@
 				if(Number(this.info.recommendBalance)<0){
 					this.info.recommendBalance= 0
 				}
+				
+				//强制保留两位小数点
+				var regStrs = [
+					['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
+					['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
+					['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
+					['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
+				]
+				
+				var num = this.info.recommendBalance.toString()
+				
+				for(var i = 0; i < num.length; i++) {
+					var reg = new RegExp(regStrs[i][0])
+					this.info.recommendBalance =  num.replace(reg, regStrs[i][1])
+				}
 
 				var recommendBalance = this.info.recommendBalance == '' ? 0 : this.info.recommendBalance
 				

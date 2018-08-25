@@ -808,14 +808,14 @@
 	}
 
 	.h {
-		top: 2rem!important;
+		top: 1.8rem!important;
 	}
 
 	.wrapper {
 		position: absolute;
 		width: 100%;
 		bottom: 0.5rem;
-		top: 1.79rem;
+		top: 1rem;
 		overflow: hidden;
 	}
 
