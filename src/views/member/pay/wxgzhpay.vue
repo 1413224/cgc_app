@@ -89,16 +89,18 @@
 						"paySign":data.paySign // 微信签名
 					},
 					function(res){
-						console.log(res);
-						alert(JSON.stringify(res));
+						//alert(JSON.stringify(res));
 						if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-							alert('cgc支付成功');
+							//支付成功
+							
 						}else if(res.err_msg == "get_brand_wcpay_request:cancel") {
-							alert('cgc支付过程中用户取消');
+							//取消支付
+							
 						}else if(res.err_msg == "get_brand_wcpay_request:fail") {
-							alert('cgc支付失败');
+							//支付失败
+							
 						}else {
-							alert('cgc未知异常');
+							//未知异常
 						}
 					}
 				); 

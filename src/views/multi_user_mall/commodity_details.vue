@@ -296,6 +296,7 @@
 			width: 100%;
 			img {
 				width: 100% !important;
+				display: block;
 			}
 			table {
 				width: 100% !important;

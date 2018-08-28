@@ -254,7 +254,7 @@
 							name: "wxpay",
 							params: {
 								outTotalFee: _this.payParmars.payPrice, //金额
-								parentOrderSn: _this.payParmars.orderId, //订单号
+								parentOrderSn: _this.payParmars.parentOrderSn, //订单号
 								ip: _this.payParmars.ip,
 								body: _this.payParmars.body
 							}
@@ -406,7 +406,7 @@
 							})
 							setTimeout(function() {
 								_this.$router.push({
-									path: '/shop/o_success'
+									path: '/shop/my_order2'
 								})
 							}, 1000)
 						} else if(res.data.data.status == 2) {
@@ -415,7 +415,7 @@
 							_this.payParmars.payPrice = res.data.data.payPrice
 							_this.payParmars.body = res.data.data.body
 							_this.payParmars.ip = res.data.data.ip
-							_this.payParmars.orderSn = res.data.data.orderSn
+							_this.payParmars.parentOrderSn = res.data.data.orderSn
 						}
 					}
 				})

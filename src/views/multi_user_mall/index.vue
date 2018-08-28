@@ -1643,6 +1643,7 @@
 			justify-content: space-between;
 			padding: 0 0.40rem;
 			box-sizing: border-box;
+			background:rgba(249,250,255,1);
 			p {
 				font-size: 0.42rem;
 				font-family: PingFangSC-Medium;
