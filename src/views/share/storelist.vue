@@ -98,7 +98,7 @@
 				<noMore v-if="showNoMore"></noMore>
 				<div style="margin-top: 3px;">
 					<noData v-if="!showShop" :status="2" :stateText="'暂无门店'"></noData>
-					<noData v-if="list.length == 0" :status="2" :stateText="'努力加载中...'"></noData>
+					<noData v-if="list.length == 0 && inloading" :status="2" :stateText="'努力加载中...'"></noData>
 				</div>
 			</div>
 		</div>
@@ -227,7 +227,8 @@
 				demoList: [{
 					img: './static/share/banner1.png',
 					url: '/member/vip/right'
-				}]
+				}],
+				inloading:true
 			}
 		},
 		components: {
@@ -315,7 +316,6 @@
 				geolocation.getLocation(showPosition, showErr, options)
 
 				function showPosition(res) {
-					console.log(res)
 					_this.region = res.province + res.city
 					if(_this.$store.state.page.isWx == false) {
 
@@ -330,7 +330,6 @@
 				}
 
 				function showErr(position) {
-					console.log(position)
 				}
 			},
 			getEnterpriseListInfo() {
@@ -361,6 +360,7 @@
 						if(res.data.data) {
 							_this.list = res.data.data.list
 							_this.showShop = _this.list.length > 0 ? true : false
+							_this.inloading = false
 						}
 					}
 				})

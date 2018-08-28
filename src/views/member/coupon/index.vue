@@ -43,7 +43,7 @@
 		<div class="couponList">
 			<div class="wrapper" :class="{'top46':!$store.state.page.isWx}" ref="wrapper">
 				<div class="content">
-					<div class="list_box" v-if="couponList.length>0">
+					<div class="list_box" v-if="showCoupon">
 						<div class="mb20" v-for="(item,index) in couponList" :key="index">
 							<div class="item" :class="[{'red_bg':item.type == 0 || item.type == 20 || item.type == 30 || item.type == 50},{'blue_bg':item.type == 10},{'yellow_bg':item.type == 40},{'gray_bg':item.status == 2 || item.status == 3}]">
 								<div class="left">
@@ -81,10 +81,16 @@
 			</div>
 		</div>
 
-		<section class="no_data" v-if="couponList.length == 0">
+		<section class="no_data" v-if="!showCoupon">
 			<div class="none-data">
 				<img :src="imgSrc" alt="">
 				<p>暂无优惠券</p>
+			</div>
+		</section>
+		<section class="no_data" v-if="couponList.length == 0 && inloading">
+			<div class="none-data">
+				<img :src="imgSrc" alt="">
+				<p>努力加载中...</p>
 			</div>
 		</section>
 	</div>
@@ -182,7 +188,8 @@
 				curPage: 1,
 
 				showAll: false,
-
+				showCoupon:false,
+				inloading:true
 			}
 		},
 		created() {
@@ -375,6 +382,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.couponList = res.data.data.list
+						
+						_this.showCoupon = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
 
 						for(var i = 0; i < _this.couponList.length; i++) {
 							_this.couponList[i].showAll = false
