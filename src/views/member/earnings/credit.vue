@@ -100,12 +100,22 @@
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />
 				</div>
-				<div class="item_box"  @click="toCreditReward('信用积分',2)">
+				<div class="item_box"  @click="toCreditReward('信用积分',6)">
 					<div class="left">
 						<img style="width: 0.38rem;height: 0.36rem;" :src="'./static/member/jl_7.png'" />
 						<div>
-							<p>消费奖励</p>
-							<p>{{fundInfo.cashbackPoints}}</p>
+							<p>中奖奖励</p>
+							<p>{{fundInfo.lotteryPoints}}</p>
+						</div>
+					</div>
+					<img class="right_img" :src="'./static/images/b-right.png'" />
+				</div>
+				<div class="item_box"  @click="toCreditReward('信用积分',7)">
+					<div class="left">
+						<img style="width: 0.38rem;height: 0.36rem;" :src="'./static/member/jl_7.png'" />
+						<div>
+							<p>任务奖励</p>
+							<p>{{fundInfo.taskPoints}}</p>
 						</div>
 					</div>
 					<img class="right_img" :src="'./static/images/b-right.png'" />

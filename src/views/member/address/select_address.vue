@@ -122,6 +122,8 @@
 								}
 
 							})
+						}else{
+							_this.$emit('watch', false)
 						}
 					}
 				})

@@ -272,7 +272,8 @@
 									type: 'text',
 									position: 'top',
 									text: '设备开启异常'
-								})
+								});
+								return;
 							}
 						}else{
 							if(datas.data == -1){

@@ -15,24 +15,27 @@
 			</div>
 			<!--筛选菜单栏-->
 			<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
-				<div class="po popupTop" v-if="typeShang" style="animation-duration:0.3s">
-					<!-- 类型 -->
-					<group>
-						<radio title="title" v-model="par.type" :options="opType" @on-change="changeType" :selected-label-style="{color: '#336FFF'}"></radio>
-					</group>
+				<div @click="submit">
+					<div class="po popupTop" v-if="typeShang" style="animation-duration:0.3s">
+						<!-- 类型 -->
+						<group>
+							<radio title="title" v-model="par.type" :options="opType" @on-change="changeType" :selected-label-style="{color: '#336FFF'}"></radio>
+						</group>
+					</div>
+					<div class="po popupTop" v-if="statusShang" style="animation-duration:0.3s">
+						<!-- 状态 -->
+						<group>
+							<radio title="title" v-model="par.status" :options="opStatus" @on-change="changeStatus" :selected-label-style="{color: '#336FFF'}"></radio>
+						</group>
+					</div>
+					<div class="po popupTop" v-if="dateShang" style="animation-duration:0.3s">
+						<!-- 领取时间 -->
+						<group>
+							<radio title="title" v-model="par.timeType" :options="opDate" @on-change="changeDate" :selected-label-style="{color: '#336FFF'}"></radio>
+						</group>
+					</div>
 				</div>
-				<div class="po popupTop" v-if="statusShang" style="animation-duration:0.3s">
-					<!-- 状态 -->
-					<group>
-						<radio title="title" v-model="par.status" :options="opStatus" @on-change="changeStatus" :selected-label-style="{color: '#336FFF'}"></radio>
-					</group>
-				</div>
-				<div class="po popupTop" v-if="dateShang" style="animation-duration:0.3s">
-					<!-- 领取时间 -->
-					<group>
-						<radio title="title" v-model="par.timeType" :options="opDate" @on-change="changeDate" :selected-label-style="{color: '#336FFF'}"></radio>
-					</group>
-				</div>
+
 			</transition>
 			<div class="mask animated" :class="[{'maskTive':typeShang},{'maskTive':statusShang},{'maskTive':dateShang}]" @click="hide"></div>
 		</div>
@@ -240,8 +243,7 @@
 				setTimeout(function() {
 					_this.par.type = parseInt(value)
 					_this.changeRouter(_this.par)
-					_this.getCouponList(_this.par)
-					_this.typeShang = false
+					
 				}, 50)
 			},
 			onStatus(index) {
@@ -272,9 +274,8 @@
 
 				setTimeout(function() {
 					_this.par.status = parseInt(value)
-					_this.getCouponList(_this.par)
 					_this.changeRouter(_this.par)
-					_this.statusShang = false
+					
 				}, 50)
 			},
 			onDate(index) {
@@ -300,10 +301,9 @@
 				}
 
 				setTimeout(function() {
-					_this.par.timeType = parseInt(value);
-					_this.getCouponList(_this.par)
+					_this.par.timeType = parseInt(value)
 					_this.changeRouter(_this.par)
-					_this.dateShang = false;
+					
 				}, 50);
 			},
 			InitScroll() {
@@ -388,9 +388,22 @@
 				obj.showAll = !this.couponList[i].showAll
 				this.$set(this.couponList, i, obj)
 			},
+			submit() {
+				var _this = this
+				setTimeout(function() {
+					if(_this.navIndex == 0){
+						_this.typeShang = !_this.typeShang
+					}else if(_this.navIndex == 1){
+						_this.statusShang = !_this.statusShang
+					}else{
+						_this.dateShang = !_this.dateShang
+					}
+					_this.getCouponList(_this.par)
+				}, 10)
+			},
 			//修改路由
 			changeRouter(par) {
-				let _this = this;
+				let _this = this
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'type': _this.par.type,
@@ -516,7 +529,8 @@
 						.mk,
 						.time,
 						.look_detail_btn,
-						i,.right p {
+						i,
+						.right p {
 							color: #90A2C7!important;
 						}
 					}

@@ -169,9 +169,9 @@
 				images: '',
 				infoList: [{
 						img: './static/member/m-index1.png',
-						text: '我的卡包',
+						text: '企业通用积分',
 						url: '/member/card/index',
-						tip: '5张快过期'
+						tip: ''
 					},
 					{
 						img: './static/member/m-index2.png',
