@@ -255,7 +255,7 @@
 			},
 			backrz(){
 				this.$router.push({
-					path:"/member/info/index"
+					path:"/member/index"
 				});
 			},
 			getocr(){
