@@ -112,7 +112,7 @@
 					<div class="left">
 						<img style="height: 0.39rem;" :src="'./static/member/jl_5.png'" />
 						<div>
-							<p>累计抽奖</p>
+							<p>中奖奖励</p>
 							<p{{fundInfo.lottery}}</p>
 						</div>
 					</div>

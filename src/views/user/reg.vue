@@ -26,7 +26,7 @@
 					<x-button class="add-btn" @click.native="reg" :show-loading="showLoading" v-if="isReg == 0">立即注册</x-button>
 					<x-button class="add-btn" @click.native="toPosReg" :show-loading="showLoading" v-if="posReg">立即激活</x-button>
 				</div>
-				<div class="login-re" v-if="isReg == 1 || !posReg">
+				<div class="login-re" v-if="isReg == 1 && !posReg">
 					<router-link to="/user/changeLoginPassword"><span class="left">忘记密码?</span></router-link>
 					<!--<router-link to=""><span>短信验证登录</span></router-link>-->
 				</div>
@@ -178,16 +178,25 @@
 					unionid: sessionStorage['_openid_']
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
-						//						sessionStorage.setItem('regFirst',true)
+						//sessionStorage.setItem('regFirst',true)
 						_this.$vux.toast.show({
 							width: '50%',
 							type: 'text',
 							position: 'middle',
-							text: '注册成功',
-							onHide() {
-								_this.login()
-							}
+							text: '注册成功'
 						})
+
+						setTimeout(function() {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '正在登录...',
+								onHide() {
+									_this.login()
+								}
+							})
+						}, 500)
 					}
 				})
 			},
@@ -200,28 +209,14 @@
 					}).then(res => {
 						if(res.data.status == "00000000") {
 							if(res.data.data == '0') {
-								//未注册
-								//								_this.$dialog.show({
-								//									type: 'warning',
-								//									headMessage: '提示',
-								//									message: '该账户不存在,是否立即注册?',
-								//									buttons: ['确定', '取消'],
-								//									canel() {
-								//										_this.$dialog.hide()
-								//									},
-								//									confirm() {
-								//										_this.$dialog.hide()
-								//										_this.isReg = false
-								//									}
-								//								})
 								_this.isReg = 0
 								_this.isCp = false
 								_this.posReg = false
 								_this.$vux.toast.show({
-									width: '50%',
+									width: '60%',
 									type: 'text',
 									position: 'middle',
-									text: '该账户未注册'
+									text: '该账户未注册,请先完成注册'
 								})
 
 							} else if(res.data.data == '1') {
@@ -234,7 +229,6 @@
 								//pos用户
 								_this.isReg = 3
 								_this.posReg = true
-								console.log(_this.posReg)
 							}
 						}
 					})
@@ -352,7 +346,7 @@
 
 				if(val.length == 11) {
 					_this.$refs.phone.blur()
-					//					_this.$refs.password.focus()
+					//_this.$refs.password.focus()
 
 					if(_this.mobile.length != 11) {
 						_this.$vux.toast.show({
@@ -380,28 +374,14 @@
 						}).then(res => {
 							if(res.data.status == "00000000") {
 								if(res.data.data == '0') {
-									//未注册
-									//									_this.$dialog.show({
-									//										type: 'warning',
-									//										headMessage: '提示',
-									//										message: '该账户没有注册,是否立即注册?',
-									//										buttons: ['确定', '取消'],
-									//										canel() {
-									//											_this.$dialog.hide()
-									//										},
-									//										confirm() {
-									//											_this.$dialog.hide()
-									//											_this.isReg = false
-									//										}
-									//									})
 									_this.isReg = 0
 									_this.isCp = true
 									_this.posReg = false
 									_this.$vux.toast.show({
-										width: '50%',
+										width: '60%',
 										type: 'text',
 										position: 'middle',
-										text: '该账户未注册'
+										text: '该账户未注册,请先完成注册'
 									})
 								} else if(res.data.data == '1') {
 									//已注册

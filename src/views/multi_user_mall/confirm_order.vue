@@ -1,7 +1,7 @@
 <template>
 	<section class="commodity_order_box">
 		<settingHeader :title="title"></settingHeader>
-		<div v-if="address != ''" class="address-box" @click="selectAddress">
+		<div v-if="address" class="address-box" @click="selectAddress">
 			<img class="left-img" :src="'./static/images/dibiao.png'">
 			<div>
 				<p class="user-tip"><span>{{address.name}}</span><span>{{address.mobile}}</span></p>
@@ -365,14 +365,15 @@
 				console.log(this.payMoney)
 			},
 			select(addressItem) {
+				
 				if(addressItem) {
 					this.address = addressItem
 					this.addressId = addressItem.addressId
 				} else {
-					this.address = {}
+					this.address = false
 					this.addressId = ''
 				}
-
+				
 			},
 			addAddress() {
 				this.$router.push({

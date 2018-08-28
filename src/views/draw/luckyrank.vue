@@ -17,7 +17,7 @@
 								<img v-if="userRank.thumb" :src="userRank.thumb.original" />
 								<img v-else :src="'./static/images/mrtx.png'" alt="">
 								<div>
-									<p>排名：第{{userRank.ranking}}</p>
+									<p>排名：{{$store.state.page.isLogin == 'true'?'第'+userRank.ranking:'暂无排名'}}</p>
 									<p>我</p>
 								</div>
 							</div>

@@ -1,13 +1,15 @@
 <template>
 	<section class="album_box">
 		<settingHeader title="店铺相册"></settingHeader>
-		<div class="tab_box">
-			<tab line-width="2" custom-bar-width="1.34rem">
-				<tab-item selected @on-item-click="onItemClick">店内照</tab-item>
-				<tab-item @on-item-click="onItemClick">门头照</tab-item>
-				<tab-item @on-item-click="onItemClick">宣传图册</tab-item>
-			</tab>
-		</div>
+		<sticky>
+			<div class="tab_box">
+				<tab line-width="2" custom-bar-width="1.34rem">
+					<tab-item selected @on-item-click="onItemClick">店内照</tab-item>
+					<tab-item @on-item-click="onItemClick">门头照</tab-item>
+					<tab-item @on-item-click="onItemClick">宣传图册</tab-item>
+				</tab>
+			</div>
+		</sticky>
 		<div class="photo_list">
 			<img class="img" :src="item.src" v-for="(item,index) in photoList" @click="show(index)" alt="" />
 		</div>
@@ -19,13 +21,14 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Tab, TabItem, Previewer } from 'vux'
+	import { Tab, TabItem, Previewer, Sticky } from 'vux'
 	export default {
 		components: {
 			settingHeader,
 			Tab,
 			TabItem,
-			Previewer
+			Previewer,
+			Sticky
 		},
 		data() {
 			return {

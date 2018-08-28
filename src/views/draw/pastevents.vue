@@ -5,7 +5,7 @@
 				<settingHeader :title="title"></settingHeader>
 
 				<div class="item">
-					<div class="periodVideo">{{ periodVideo}}</div>
+					<div class="periodVideo">第{{ info.number}}期 抽奖视频</div>
 					<div class="player">
 						<d-player ref="player" @fullscreen="fs" @pause="stop" @play="playerStop = false" :options="options"></d-player>
 						<img @click="bf" v-if="playerStop" :src="'./static/draw/kongzhi.png'" alt="" />
@@ -120,7 +120,6 @@
 		},
 		data() {
 			return {
-				periodVideo: '第1235期 抽奖视频',
 				options: {
 					autoplay: false, //自动播放
 					theme: '#FADFA3', //主体颜色
@@ -145,27 +144,7 @@
 				},
 				title: '往期回顾',
 				showContent: false,
-				list: [{
-						bonus: '5000元',
-						award: '一等奖',
-						number: '共40名'
-					},
-					{
-						bonus: '1000元',
-						award: '二等奖',
-						number: '共800名'
-					},
-					{
-						bonus: '200元',
-						award: '三等奖',
-						number: '共4000名'
-					},
-					{
-						bonus: '200元',
-						award: '三等奖',
-						number: '共4000名'
-					}
-				],
+				list: [],
 				swiperOption1: {
 					autoHeight: true,
 					slidesPerView: 'auto',

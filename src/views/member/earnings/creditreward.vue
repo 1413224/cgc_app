@@ -85,9 +85,6 @@
 				}, {
 					title: '任务奖励',
 					type: 7
-				}, {
-					title: '消费',
-					type: 2
 				}],
 				list: [],
 				curPage: 1,

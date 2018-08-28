@@ -15,7 +15,7 @@
 				</ul>
 				<Loading v-if="showLoading"></Loading>
 				<Nomore v-if="showNomore"></Nomore>
-				<noData v-if="cardList.length == 0" :status="0" stateText="暂无企业通用卡"></noData>
+				<noData v-if="cardList.length == 0" :status="0" stateText="您还没有相关卡券"></noData>
 			</div>
 		</div>
 	</div>

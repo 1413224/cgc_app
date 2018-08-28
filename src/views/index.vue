@@ -419,8 +419,7 @@
 				})
 			},
 			goUrl(url) {
-				alert(url)
-				// window.location.href = url
+				window.location.href = url
 			},
 			goPay() {
 				this.$router.push({
