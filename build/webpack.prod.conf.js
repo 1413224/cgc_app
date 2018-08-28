@@ -13,6 +13,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const Version = new Date().getTime();
 
+
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
