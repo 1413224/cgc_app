@@ -32,7 +32,7 @@
 
 			<div class="wrapper" ref="wrapper">
 				<div class="content">
-					<div v-if="list.length >0">
+					<div v-if="showList">
 						<div class="list-box">
 							<ul>
 								<li v-for="(item,index) in list" @click="toDetail(item.balanceId)" :key="index">
@@ -47,7 +47,8 @@
 						<Loading v-if="show"></Loading>
 						<Nomore v-if="showNo"></Nomore>
 					</div>
-					<noData v-if="list.length == 0" :status="2" stateText="暂无记录"></noData>
+					<noData v-if="!showList" :status="2" stateText="暂无记录"></noData>
+					<noData v-if="!showList && inloading" :status="2" stateText="努力加载中..."></noData>
 				</div>
 			</div>
 		</div>
@@ -98,7 +99,9 @@
 				lastCreateTime: 0,
 				pageSize: 20,
 				balanceInfo: {},
-				type: 1
+				type: 1,
+				inloading: true,
+				showList: false
 			}
 		},
 		created() {
@@ -148,6 +151,10 @@
 						_this.balanceInfo = res.data.data
 						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
+
+							_this.showList = res.data.data.list.length > 0 ? true : false
+							_this.inloading = false
+
 							var length = res.data.data.list.length - 1
 							_this.lastCreateTime = res.data.data.list[length].createTime
 						}

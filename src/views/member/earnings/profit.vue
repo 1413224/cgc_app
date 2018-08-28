@@ -7,7 +7,7 @@
 		</div>
 		<div class="wrapper" ref="wrapper" :class="{'h':isWx == false}">
 			<div class="content">
-				<div class="log-list" v-if="list.length>0">
+				<div class="log-list" v-if="showList">
 					<ul>
 						<li v-for="item in list">
 							<p>{{item.dayTime | getDate}}</p>
@@ -17,7 +17,8 @@
 				</div>
 				<Loading v-if="show"></Loading>
 				<Nomore v-if="showNo"></Nomore>
-				<noData v-if="list.length == 0" :status="2" stateText="暂无收益记录"></noData>
+				<noData v-if="!showList" :status="2" stateText="暂无收益记录"></noData>
+				<noData v-if="list.length == 0 && inloading" :status="2" stateText="努力加载中..."></noData>
 			</div>
 		</div>
 	</div>
@@ -71,6 +72,8 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.list = res.data.data.list
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
 					}
 				})
 			},
