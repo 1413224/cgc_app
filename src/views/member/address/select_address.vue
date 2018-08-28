@@ -140,7 +140,7 @@
 		background-color: #F5F6FA;
 		height: 100%;
 		.add_btn {
-			position: absolute;
+			position: fixed;
 			bottom: 0;
 			left: 0;
 			width: 100%;

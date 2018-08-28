@@ -80,7 +80,7 @@
 								<div @click="changePr()">
 									<check-icon v-if="proShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
-								<div style="display: flex;" @click="toGoodsDetails(item.objectId)">
+								<div style="display: flex;width: 100%;" @click="toGoodsDetails(item.objectId)">
 									<div class="img-box">
 										<img v-if="item.logo" :src="item.logo.original" />
 										<img v-else :src="'./static/images/pr.png'" />
@@ -249,6 +249,14 @@
 			},
 			deleteConcern() {
 				var _this = this
+				
+				this.showNo1 = false
+				this.showNo2 = false
+				this.showNo3 = false
+				this.show1 = false
+				this.show2 = false
+				this.show3 = false
+				this.curPage = 1
 
 				var concernIds = ''
 
@@ -312,7 +320,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -30, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								threshold: 10, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
@@ -328,7 +336,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -30,
+								threshold: 10,
 							}
 						})
 						this.scroll2.on('pullingUp', (pos) => {
@@ -344,7 +352,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -30,
+								threshold: 10,
 							}
 						})
 						this.scroll3.on('pullingUp', (pos) => {
@@ -386,12 +394,6 @@
 							} else {
 								_this.show3 = false
 								_this.showNo3 = true
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '已经到底了'
-								})
 							}
 
 						}
@@ -420,12 +422,6 @@
 							} else {
 								_this.show2 = false
 								_this.showNo2 = true
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '已经到底了'
-								})
 							}
 
 						}
@@ -454,12 +450,6 @@
 							} else {
 								_this.show1 = false
 								_this.showNo1 = true
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '已经到底了'
-								})
 							}
 
 						}
@@ -525,10 +515,17 @@
 				this.proidList = []
 				this.lyidList = []
 				this.lmidList = []
+				this.showNo1 = false
+				this.showNo2 = false
+				this.showNo3 = false
+				this.show1 = false
+				this.show2 = false
+				this.show3 = false
 
 				if(index == 1) {
 					_this.type = 3
-				} else if(index == 0) {
+				} else
+				if(index == 0) {
 					_this.type = 2
 				} else if(index == 2) {
 					_this.type = 1

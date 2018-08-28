@@ -165,7 +165,7 @@
 						</div>
 						<div class="input-div">
 							<p>¥</p>
-							<input type="number"  v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
+							<input type="number" v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
 						</div>
 						<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
 					</div>
@@ -220,6 +220,7 @@
 				allMoney: 0,
 				discount: 0,
 				couponType: 0,
+				payParmars: {}
 			}
 		},
 		created() {
@@ -245,10 +246,18 @@
 				changePay(index) {
 					console.log(index)
 				},
-				toPay(index) {
-					if(index == 1) {
+				toPay(type) {
+					//微信支付
+					if(type == 1) {
+						console.log(_this.payParmars)
 						_this.$router.push({
-							path: '/member/pay/wxgzhpay'
+							name: "wxpay",
+							params: {
+								outTotalFee: _this.payParmars.payPrice, //金额
+								parentOrderSn: _this.payParmars.orderId, //订单号
+								ip: _this.payParmars.ip,
+								body: _this.payParmars.body
+							}
 						})
 					}
 				},
@@ -299,28 +308,13 @@
 				})
 
 				this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
-				
-				if(Number(this.integralNum) < 0){
+
+				if(Number(this.integralNum) < 0) {
 					this.integralNum = 0
 				}
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
-				
-				//强制保留两位小数点
-				var regStrs = [
-					['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
-					['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
-					['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
-					['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
-				]
-				
-				var num = this.integralNum.toString()
-				
-				for(var i = 0; i < num.length; i++) {
-					var reg = new RegExp(regStrs[i][0])
-					this.integralNum =  num.replace(reg, regStrs[i][1])
-				}
-				
+
 				//优先减去优惠券满足金额
 				if(this.couponType == 20) { //满减券
 					if(Number(this.allMoney) >= Number(this.condition)) {
@@ -418,34 +412,22 @@
 						} else if(res.data.data.status == 2) {
 							_this.payOptions.showPayMode = true
 							_this.payOptions.data.money = res.data.data.payPrice
+							_this.payParmars.payPrice = res.data.data.payPrice
+							_this.payParmars.body = res.data.data.body
+							_this.payParmars.ip = res.data.data.ip
+							_this.payParmars.orderSn = res.data.data.orderSn
 						}
 					}
 				})
 			},
 			integralNumChange(e) {
-				
-				if(Number(this.integralNum) < 0){
+
+				if(Number(this.integralNum) < 0) {
 					this.integralNum = 0
 				}
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
-				
-				//强制保留两位小数点
-				var regStrs = [
-					['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
-					['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
-					['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
-					['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
-				]
-				
-				var num = this.integralNum.toString()
-				
-				for(var i = 0; i < num.length; i++) {
-					console.log(regStrs[i][0])
-					var reg = new RegExp(regStrs[i][0])
-					this.integralNum =  num.replace(reg, regStrs[i][1])
-				}
-				
+
 				//优先减去优惠券满足金额
 				if(this.couponType == 20) { //满减券
 					if(Number(this.allMoney) >= Number(this.condition)) {
@@ -519,6 +501,7 @@
 				this.sureIndex = index
 
 				let sureCouponList = []
+				this.userCouponIds = []
 
 				for(var i = 0; i < this.availableCoupon.length; i++) {
 					if(i != index) {

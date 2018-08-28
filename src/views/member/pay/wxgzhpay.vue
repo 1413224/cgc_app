@@ -11,9 +11,6 @@
 			}
 		},
 		created() {
-
-
-
 			if (typeof WeixinJSBridge == "undefined"){
 			   if( document.addEventListener ){
 			       document.addEventListener('WeixinJSBridgeReady', this.wxPay, false);
@@ -22,19 +19,16 @@
 			       document.attachEvent('onWeixinJSBridgeReady', this.wxPay);
 			   }
 			}else{
-			   // onBridgeReady();
-			   this.wxPay();
+			   this.wxPay()
 			}
 			
-			// this.getUserIP(function(ip){
-			// 	this.ip = ip;
-			// });
+			console.log(this.$route.params)
 		},
 
 		methods: {
 			wxPay(){
 				var _this = this;
-				console.log(window.location.href.split('#')[0])
+				// console.log(window.location.href.split('#')[0])
 				var oid = sessionStorage['_openid_'];
 				// alert(oid);
 
@@ -42,10 +36,10 @@
 					_this.ip = ip;
 				});
 
+				let openid = sessionStorage['_openid_']
 
-
-				this.$http.post('/pay/v1/wechat/pay',{
-					"appid": "wx7a4933a7a3c33ec8",
+				this.$http.post('/pay/body/v1/wechat/pay',{
+					/*"appid": "wx7a4933a7a3c33ec8",
 				    "attach": "",
 				    "body": "cgc-wechatpaytest",
 				    "detail": "",
@@ -67,10 +61,21 @@
 				    "timeStart": "",
 				    "totalFee": 1,//金额
 				    "tradeType": "JSAPI",
-				    // "requestUrl":window.location.href
+				    // "requestUrl":window.location.href*/
+				    id:'200001',
+				    subMchId:'1511640641',
+				    body:_this.$route.params.body,
+				    feeType:'CNY',
+				    outTotalFee:_this.$route.params.outTotalFee,
+				    // transformTotalFee:0.02,  '192.168.3.142'
+				    spbillCreateIp:_this.$route.params.ip,
+				    tradeType:'JSAPI',
+				    openId:openid,
+				    parentOrderSn:_this.$route.params.parentOrderSn, 
+				    attach:'成高成'
 				}).then((res)=>{
 					console.log(res)
-					var data=res.data.data
+					var data = res.data.data
 					console.log(data)
 
 

@@ -218,21 +218,6 @@
 				if(Number(this.info.recommendBalance)<0){
 					this.info.recommendBalance= 0
 				}
-				
-				//强制保留两位小数点
-				var regStrs = [
-					['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
-					['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
-					['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
-					['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
-				]
-				
-				var num = this.info.recommendBalance.toString()
-				
-				for(var i = 0; i < num.length; i++) {
-					var reg = new RegExp(regStrs[i][0])
-					this.info.recommendBalance =  num.replace(reg, regStrs[i][1])
-				}
 
 				var recommendBalance = this.info.recommendBalance == '' ? 0 : this.info.recommendBalance
 				
@@ -289,7 +274,7 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						res.data.data.serviceTime = _this.getTime(res.data.data.serviceTime)
+						res.data.data.serviceTime = _this.setServiceTime(res.data.data.serviceTime)
 						_this.max = res.data.data.availableBalance
 						_this.maxPayPrice = res.data.data.payPrice
 						_this.recommendBalance = res.data.data.recommendBalance
@@ -305,32 +290,25 @@
 					}
 				})
 			},
-			getTime(value) {
-				var secondTime = parseInt(value); // 秒
-				var minuteTime = 0; // 分
-				var hourTime = 0; // 小时
-				if(secondTime > 60) { //如果秒数大于60，将秒数转换成整数
-					//获取分钟，除以60取整数，得到整数分钟
-					minuteTime = parseInt(secondTime / 60);
-					//获取秒数，秒数取佘，得到整数秒数
-					secondTime = parseInt(secondTime % 60);
-					//如果分钟大于60，将分钟转换成小时
-					if(minuteTime > 60) {
-						//获取小时，获取分钟除以60，得到整数小时
-						hourTime = parseInt(minuteTime / 60);
-						//获取小时后取佘的分，获取分钟除以60取佘的分
-						minuteTime = parseInt(minuteTime % 60);
-					}
+			setServiceTime(serviceTime){
+				var time_str='';
+				if(serviceTime>=3600)
+				{
+					var hour = Math.floor(serviceTime / 3600);
+					time_str += hour + '小时';
+					serviceTime -=hour*3600;
 				}
-				var result = "" + parseInt(secondTime) + "秒";
-
-				if(minuteTime > 0) {
-					result = "" + parseInt(minuteTime) + "分钟";
+				if(serviceTime>=60)
+				{
+					var minute = Math.floor(serviceTime / 60);
+					time_str += minute + '分钟';
+					serviceTime -=minute*60;
 				}
-				if(hourTime > 0) {
-					result = "" + parseInt(hourTime) + "小时";
+				if(serviceTime>0)
+				{
+					time_str += serviceTime + '秒';
 				}
-				return result;
+				return time_str;
 			},
 			showCouponList() {
 				var _this = this
@@ -342,6 +320,7 @@
 				this.sureIndex = index
 
 				let sureCouponList = []
+				this.userCouponId = ''
 
 				for(var i = 0; i < this.info.availableCoupon.length; i++) {
 					if(i != index) {

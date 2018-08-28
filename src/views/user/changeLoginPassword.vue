@@ -3,7 +3,7 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="content">
 			<group gutter="0" class="input-div">
-				<x-input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" :disabled="$route.query.isLogin" type="number" :max="11" @on-change="phoneChange"></x-input>
+				<x-input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" :disabled="$route.query.isLogin" type="tel" :max="11" @on-change="phoneChange"></x-input>
 				<x-input class="input-item" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
 					<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
 				</x-input>

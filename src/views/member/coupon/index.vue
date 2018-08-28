@@ -313,7 +313,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -30
+								threshold: 10
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {

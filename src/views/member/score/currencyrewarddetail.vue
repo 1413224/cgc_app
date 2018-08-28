@@ -4,7 +4,7 @@
 		<div class="scoreDetail-box">
 			<div class="purse-box1">
 				<div class="box-h">
-					<div class="top" :class="balanceDetail.type != 4 && balanceDetail.type != 1?'':'h100'">
+					<div class="top" :class="balanceDetail.type != 5?'h100':''">
 						<div>
 							<p>{{balanceDetail.directType==1?'+':'-'}} {{balanceDetail.balance}}</p>
 							<p>{{balanceDetail.remark}}</p>
@@ -76,7 +76,6 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						console.log(res.data.data)
 						_this.balanceDetail = res.data.data
 						if(res.data.data.avatar) {
 							_this.images = res.data.data.avatar.original
@@ -158,7 +157,7 @@
 			position: relative;
 			.box-h {
 				width: 100%;
-				/*height: 2.8rem;*/
+				height: 2.8rem;
 				background: url(../../../assets/images/member/index-bg.png) no-repeat;
 				background-size: 100%;
 				.top {

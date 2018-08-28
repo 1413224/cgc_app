@@ -13,7 +13,7 @@
 		</div>
 		<div class="content bounceInRight animated" v-if="isRemember == 0">
 			<group gutter="0" class="input-div">
-				<x-input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" type="number" disabled :max="11" @on-change="phoneChange"></x-input>
+				<x-input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" type="tel" disabled :max="11" @on-change="phoneChange"></x-input>
 				<x-input class="input-item" type="number" ref="code" v-model="code" :max="4" placeholder="验证码" @on-change="codeChange">
 					<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
 				</x-input>

@@ -68,7 +68,7 @@
 							<img :src="item.img">
 						</router-link>
 					</swiper-slide>
-					<div class="swiper-pagination" slot="pagination"></div>
+					<div v-if="demoList.length>=2" class="swiper-pagination" slot="pagination"></div>
 				</swiper>
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
 				<div v-if="showShop" class="pd_box">
@@ -80,7 +80,7 @@
 							</div>
 							<div>
 								<p class="name">{{item.name}}</p>
-								<p class="type" v-if="item.domainCateid1">{{item.domainCateid1}} l {{item.domainCateid2}}</p>
+								<p class="type" v-if="item.domainCate1Name">{{item.domainCate1Name}} l {{item.domainCate2Name}}</p>
 								<p class="address">
 									<span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
 									<span>{{item.distance}}km</span>
@@ -261,7 +261,7 @@
 				var _this = this
 				var k = []
 				var v = []
-				for (var i in obj) {
+				for(var i in obj) {
 					k.push(i)
 					v.push(obj[i])
 				}
@@ -289,9 +289,9 @@
 						jsApiList: ['checkJsApi', 'scanQRCode', 'getLocation']
 					})
 
-					wx.ready(function () {
+					wx.ready(function() {
 						wx.getLocation({
-							success: function (res) {
+							success: function(res) {
 								_this.lat = res.latitude
 								_this.lng = res.longitude
 								_this.checkQuery(_this.$route.query)
@@ -317,7 +317,7 @@
 				function showPosition(res) {
 					console.log(res)
 					_this.region = res.province + res.city
-					if (_this.$store.state.page.isWx == false) {
+					if(_this.$store.state.page.isWx == false) {
 
 						_this.lat = res.lat
 						// _this.lat = 22.9377200000
@@ -345,20 +345,20 @@
 					pageSize: _this.pageSize,
 					islist: _this.islist
 				}
-				if (_this.provinceId != '') {
+				if(_this.provinceId != '') {
 					data.provinceId = _this.provinceId
 				}
-				if (_this.cityId != '') {
+				if(_this.cityId != '') {
 					data.cityId = _this.cityId
 				}
-				if (_this.areaId != '') {
+				if(_this.areaId != '') {
 					data.areaId = _this.areaId
 				}
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: data
 				}).then((res) => {
-					if (res.data.status == "00000000") {
-						if (res.data.data) {
+					if(res.data.status == "00000000") {
+						if(res.data.data) {
 							_this.list = res.data.data.list
 							_this.showShop = _this.list.length > 0 ? true : false
 						}
@@ -366,24 +366,26 @@
 				})
 			},
 			InitScroll() {
-				this.$nextTick(() => {
-					if (!this.scroll) {
-						this.scroll = new BScroll(this.$refs.wrapper, {
+				var _this = this
+				_this.$nextTick(() => {
+					if(!_this.scroll) {
+						_this.scroll = new BScroll(_this.$refs.wrapper, {
 							click: true,
 							scrollY: true,
+							momentum: true,
 							pullUpLoad: {
-								threshold: -30
+								threshold: 10
 							}
 						})
-						this.scroll.on('pullingUp', (pos) => {
-							this.onLoadData()
-							this.$nextTick(function () {
-								this.scroll.finishPullUp();
-								this.scroll.refresh();
-							});
+						_this.scroll.on('pullingUp', (pos) => {
+							_this.onLoadData()
+							_this.$nextTick(() => {
+								_this.scroll.finishPullUp()
+								_this.scroll.refresh()
+							})
 						})
 					} else {
-						this.scroll.refresh()
+						_this.scroll.refresh()
 					}
 				})
 			},
@@ -400,21 +402,21 @@
 						pageSize: _this.pageSize,
 						islist: true
 					}
-				if (_this.provinceId != '') {
+				if(_this.provinceId != '') {
 					data.provinceI = _this.provinceId
 				}
-				if (_this.cityId != '') {
+				if(_this.cityId != '') {
 					data.cityId = _this.cityId
 				}
-				if (_this.areaId != '') {
+				if(_this.areaId != '') {
 					data.areaId = _this.areaId
 				}
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: data
 				}).then((res) => {
-					if (res.data.status == "00000000") {
-						if (res.data.data) {
-							if (res.data.data.list.length > 0) {
+					if(res.data.status == "00000000") {
+						if(res.data.data) {
+							if(res.data.data.list.length > 0) {
 								_this.list = _this.list.concat(res.data.data.list)
 								_this.showLoading = true
 								_this.showNoMore = false
@@ -422,12 +424,6 @@
 						} else {
 							_this.showLoading = false
 							_this.showNoMore = true
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '已经到底了'
-							})
 						}
 					}
 				})
@@ -435,9 +431,9 @@
 			onArea() {
 				this.curPage = 1
 				this.onIndex = 0
-				this.showLoading= false
+				this.showLoading = false
 				//点击区域
-				if (this.areaShang) {
+				if(this.areaShang) {
 					this.hide();
 				} else {
 					this.hide();
@@ -452,9 +448,9 @@
 
 				this.curPage = 1
 				this.onIndex = 2
-				this.showLoading= false
+				this.showLoading = false
 
-				if (this.show1) {
+				if(this.show1) {
 					this.$nextTick(() => {
 						this.scroll2 = new BScroll(this.$refs.wrapper2, {
 							click: true,
@@ -473,10 +469,10 @@
 
 				this.curPage = 1
 				this.onIndex = 1
-				this.showLoading= false
+				this.showLoading = false
 
 				//点击价格
-				if (this.priceShang) {
+				if(this.priceShang) {
 					this.hide();
 				} else {
 					this.hide();
@@ -498,7 +494,7 @@
 					})
 				})
 
-				setTimeout(function () {
+				setTimeout(function() {
 					_this.priceType = label
 					_this.priceShang = false
 				}, 50)
@@ -507,7 +503,7 @@
 			},
 			changeType(value, label) { //改变类型
 				var _this = this;
-				setTimeout(function () {
+				setTimeout(function() {
 					_this.indType = label;
 					_this.typeShang = false;
 
@@ -520,7 +516,7 @@
 			},
 
 			// 切换样式
-			changeCss: function (index, kilometre) {
+			changeCss: function(index, kilometre) {
 
 				var _this = this
 
@@ -568,8 +564,8 @@
 
 				_this.distance = _this.jl
 
-				for (var i = 0; i < _this.logolist.length; i++) {
-					if (_this.logolist[i] == _this.jl) {
+				for(var i = 0; i < _this.logolist.length; i++) {
+					if(_this.logolist[i] == _this.jl) {
 						_this.distanceIndex = i
 						return false
 					} else {
@@ -577,13 +573,13 @@
 					}
 				}
 			},
-			selectCss: function (e) {
-				if (e.target.className.indexOf("li-selected") == -1) {
+			selectCss: function(e) {
+				if(e.target.className.indexOf("li-selected") == -1) {
 					e.target.className = "item li-selected"; //切换按钮样式
 					var obox = e.target.parentNode;
 					var lis = obox.children;
-					for (var i = 1; i < lis.length; i++) {
-						if (lis[i] != e.target) {
+					for(var i = 1; i < lis.length; i++) {
+						if(lis[i] != e.target) {
 							lis[i].className = "item"
 						}
 					}
@@ -621,7 +617,7 @@
 				var _this = this
 				_this.list = []
 
-				if (_this.addressKey == 3) {
+				if(_this.addressKey == 3) {
 					_this.areaShang = false
 					_this.isActive = false
 					_this.maskActive = false
@@ -640,7 +636,7 @@
 						})
 					})
 					return
-				} else if (this.addressKey == 1) {
+				} else if(this.addressKey == 1) {
 
 					_this.isprovince = name
 
@@ -655,7 +651,7 @@
 							'region': _this.isprovince
 						})
 					})
-				} else if (_this.addressKey == 2) {
+				} else if(_this.addressKey == 2) {
 
 					_this.iscity = name
 					_this.region = _this.isprovince + _this.iscity
@@ -678,9 +674,9 @@
 				}).then(resp => {
 					_this.items = resp.data.data;
 					_this.addressKey++;
-					if (_this.addressKey == 2) {
+					if(_this.addressKey == 2) {
 						_this.cityItem = _this.items;
-					} else if (_this.addressKey == 3) {
+					} else if(_this.addressKey == 3) {
 						_this.districtItem = _this.items;
 						_this.addressDetail = name;
 					}
@@ -706,7 +702,7 @@
 			city() {
 				var _this = this
 
-				if (_this.cityItem) {
+				if(_this.cityItem) {
 					_this.items = _this.cityItem
 					_this.addressKey = 2
 				}
@@ -721,7 +717,7 @@
 				_this.$refs.address.scrollTop = 0
 			},
 			district() {
-				if (this.districtItem) {
+				if(this.districtItem) {
 					this.items = this.districtItem
 					this.addressKey = 3
 				}
@@ -741,18 +737,18 @@
 	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
 	}
-
+	
 	.aa .vux-radio-label {
 		color: #336FFF !important;
 	}
-
+	
 	.aa .vux-no-group-title {
 		margin-top: 0;
 	}
 	/*
 	 *   类型推荐
 	*/
-
+	
 	#distanceType {
 		width: 100%;
 		position: absolute;
@@ -761,19 +757,19 @@
 		max-height: 500%;
 		z-index: 600;
 	}
-
+	
 	.nav1 .vux-no-group-title {
 		margin-top: 0!important;
 	}
-
+	
 	.opPrice .vux-radio-label {
 		font-size: 0.24rem!important;
 	}
-
+	
 	.opPrice .weui-check__label .weui-cell__ft .weui-icon-checked:before {
 		color: #336FFF!important;
 	}
-
+	
 	.input-div .distance .weui-cell__bd input {
 		font-size: 0.24rem;
 		text-align: center!important;
@@ -781,7 +777,7 @@
 </style>
 <style lang="less" scoped>
 	/*banner轮播*/
-
+	
 	.swiper {
 		img {
 			width: 100%;
@@ -802,32 +798,32 @@
 			border-radius: 50%;
 		}
 	}
-
+	
 	.storelistMask {
 		top: 3rem!important;
 	}
-
+	
 	.h {
 		top: 1.8rem!important;
 	}
-
+	
 	.wrapper {
 		position: absolute;
 		width: 100%;
-		bottom: 0.5rem;
+		bottom: 1rem;
 		top: 1rem;
 		overflow: hidden;
 	}
-
+	
 	.storelist {
 		background: #fff;
 		height: 100%;
 	}
-
+	
 	.header {
 		/*position:relative !important;*/
 	}
-
+	
 	.nav1 {
 		width: 100%;
 		height: .9rem;
@@ -935,7 +931,7 @@
 			}
 		}
 	}
-
+	
 	.wrapper .content {
 		h2 {
 			padding-left: 3%;
@@ -955,11 +951,13 @@
 		.pd_box {
 			padding: 0 0.19rem;
 			box-sizing: border-box;
+			.list:not(:last-child) {
+				border-bottom: 1px solid rgba(216, 223, 240, 1);
+			}
 		}
 		.list {
 			padding: 0.30rem 0;
 			box-sizing: border-box;
-			border-bottom: 1px solid rgba(216, 223, 240, 1);
 			.item {
 				display: flex;
 				.logo {
@@ -1034,7 +1032,7 @@
 			}
 		}
 	}
-
+	
 	.mask {
 		display: none;
 		position: fixed;
@@ -1047,17 +1045,17 @@
 		z-index: 11;
 		transition: opacity 800ms;
 	}
-
+	
 	.maskTive {
 		display: block!important;
 		opacity: 1!important;
 	}
 	/*地址遮罩*/
-
+	
 	.storelist .vux-popup-dialog {
 		background: #fff;
 	}
-
+	
 	.change_area {
 		padding-top: .28rem;
 		.title {
@@ -1103,11 +1101,11 @@
 			}
 		}
 	}
-
+	
 	.storelist .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
 		color: #336FFF !important;
 	}
-
+	
 	.searchBox {
 		width: 100%;
 		height: 0.89rem;
@@ -1154,7 +1152,7 @@
 			}
 		}
 	}
-
+	
 	.searchBox:after {
 		content: " ";
 		position: absolute;
@@ -1183,17 +1181,17 @@
 			padding-bottom: 0.7rem;
 		}
 	}
-
+	
 	.screen {
 		height: 100%;
 		position: relative;
 		z-index: 1117;
 	}
-
+	
 	.screen .vux-popup-dialog {
 		background: #fff;
 	}
-
+	
 	.screening {
 		width: 6.6rem;
 		font-family: PingFangSC-Regular;
@@ -1266,7 +1264,7 @@
 			}
 		}
 	}
-
+	
 	.screen .bottom {
 		position: fixed;
 		bottom: 1rem;
@@ -1311,12 +1309,12 @@
 			color: #90A2C7;
 		}
 	}
-
+	
 	.screen .vux-popup-dialog {
 		min-height: 100%;
 		height: 100%;
 	}
-
+	
 	.screen .vux-popup-dialog.vux-popup-right {
 		height: 100%;
 	}

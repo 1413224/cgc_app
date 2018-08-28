@@ -150,7 +150,7 @@
 			this.getGoodsInfo()
 		},
 		mounted() {
-			
+
 		},
 		computed: {},
 		methods: {
@@ -181,7 +181,7 @@
 
 			},
 			numChange(val) {
-				
+
 			},
 			submit() {
 				if(JSON.stringify(this.specItem) === '{}') {
@@ -240,6 +240,9 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.goodsDetails = res.data.data
+
+						_this.goodsTcList = []
+
 						_this.goodsTcList.push(res.data.data.logo.original)
 
 						_this.goodsDetails.skuList.forEach(function(value) {
@@ -288,27 +291,35 @@
 	}
 	
 	.goods-information {
-		.detail{
+		.detail {
 			/*background: #333;*/
 			width: 100%;
-			.content{
+			img {
+				width: 100% !important;
+			}
+			table {
+				width: 100% !important;
+				img {
+					width: 100%;
+				}
+			}
+			.content {
 				width: 100%;
-				img{
+				img {
 					width: 100% !important;
 				}
-				table{
+				table {
 					width: 100% !important;
-					img{
+					img {
 						width: 100%;
 					}
 				}
-				p{
-					img{
+				p {
+					img {
 						width: 100%;
 					}
 				}
 			}
-
 		}
 		/*img {
 			width: 100%;
@@ -316,8 +327,6 @@
 	}
 </style>
 <style lang="less" scoped>
-	
-	
 	.goods-popup {
 		background-color: white;
 		padding: 0 0.20rem;
@@ -598,7 +607,7 @@
 					height: 1.0rem;
 					margin-right: 0.10rem;
 					border-radius: 2px;
-					border: 1px solid rgba(225, 225, 225, 1);
+					border: 1px solid #f5f6fa;
 				}
 				.name {
 					font-size: 0.28rem;

@@ -527,7 +527,7 @@
 							scrollY: true,
 							useTransform: true,
 							pullUpLoad: {
-								threshold: -50
+								threshold: 50
 							},
 							pullDownRefresh: {
 								threshold: 30, // 下拉距离超过30px触发pullingDown事件

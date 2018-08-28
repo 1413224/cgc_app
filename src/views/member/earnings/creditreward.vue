@@ -198,7 +198,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -50
+								threshold: 10
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
@@ -238,12 +238,6 @@
 							} else {
 								_this.show = false
 								_this.showNo = true
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '已经到底了'
-								})
 							}
 						}
 					})

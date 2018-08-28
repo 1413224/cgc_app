@@ -36,7 +36,7 @@
 						</div>
 					</div>
 					<div class="bottom">
-						<span>需付款</span><span class="red">¥ {{orderDetail.actualPrice}}</span>
+						<span>需付款</span><span class="red">¥ {{orderDetail.payPrice}}</span>
 					</div>
 				</div>
 			</div>

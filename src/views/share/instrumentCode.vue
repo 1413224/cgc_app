@@ -153,13 +153,13 @@
 				if(serviceTime>=3600)
 				{
 					var hour = Math.floor(serviceTime / 3600);
-					time_str += hour + '时';
+					time_str += hour + '小时';
 					serviceTime -=hour*3600;
 				}
 				if(serviceTime>=60)
 				{
 					var minute = Math.floor(serviceTime / 60);
-					time_str += minute + '分';
+					time_str += minute + '分钟';
 					serviceTime -=minute*60;
 				}
 				if(serviceTime>0)

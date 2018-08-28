@@ -87,12 +87,11 @@
 						<noMore v-if="showNomore"></noMore>
 						<noData v-if="!showGoods" :status="2" stateText="暂无商品"></noData>
 						<noData v-if="goodsList.length == 0" :status="2" stateText="努力加载中..."></noData>
-
 					</div>
 				</div>
 			</div>
 			<!-- 服务开始 -->
-			<div class="three" v-if="showIndex==2">
+			<div class="three" :class="{'b_whtie':fuwuData.length == 0}" v-if="showIndex==2">
 				<div class="top2">
 					<div class="left">
 						<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
@@ -110,8 +109,8 @@
 						<p>{{info.chainsConcern}}人关注</p>
 					</div>
 				</div>
-				<div class="item" v-for="(item,index) in fuwuData" :key="index">
-					<div class="tops">
+				<div class="item" v-for="(item,index) in fuwuData" :key="index" v-if="fuwuData.length > 0">
+					<div class="tops" v-if="item.skuList.length > 0">
 						<div class="left clearfix">
 							<div class="logo fl"><img src="../../assets/images/share/wfg.png" alt=""></div>
 							<p class="title fl">{{item.goodsName}}</p>
@@ -145,24 +144,24 @@
 							</div>
 						</div>
 					</div>
-
-					<popup v-model="show" class="popwrap">
-						<p class="tit">选择设备</p>
-						<div class="ov-box">
-							<div class="list equipment" v-for="(item,index) in equipList" :key="index" @click="activeEq(index,item.num)">
-								<div class="item">
-									<p><i>设备编号:</i>{{item.num}}</p>
-									<check-icon :value.sync="item.show"></check-icon>
-								</div>
+				</div>
+				<popup v-model="show" class="popwrap">
+					<p class="tit">选择设备</p>
+					<div class="ov-box">
+						<div class="list equipment" v-for="(item,index) in equipList" :key="index" @click="activeEq(index,item.num)">
+							<div class="item">
+								<p><i>设备编号:</i>{{item.num}}</p>
+								<check-icon :value.sync="item.show"></check-icon>
 							</div>
 						</div>
+					</div>
 
-						<div class="bottom">
-							<p class="btn btncancel" @click="hidePopup">取消</p>
-							<p class="btn btndet" @click="purchase">确定</p>
-						</div>
-					</popup>
-				</div>
+					<div class="bottom">
+						<p class="btn btncancel" @click="hidePopup">取消</p>
+						<p class="btn btndet" @click="purchase">确定</p>
+					</div>
+				</popup>
+				<noData v-if="fuwuData.length == 0" :status="2" stateText="暂无企业服务"></noData>
 			</div>
 			<!-- 服务结束 -->
 
@@ -396,7 +395,7 @@
 			toAlbum() {
 				this.$router.push({
 					path: '/multi_user_mall/album',
-					query:{
+					query: {
 						enterpriseId: this.$route.query.id
 					}
 				})
@@ -418,7 +417,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -30
+								threshold: 10
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
@@ -432,19 +431,19 @@
 
 							_this.isW = pos.y <= -180 ? true : false
 
-							if(pos.y > this.scroll.maxScrollY) {
-								_this.showFoot = false
-							} else {
-								_this.showFoot = true
-							}
+//							if(pos.y > this.scroll.maxScrollY) {
+//								_this.showFoot = false
+//							} else {
+//								_this.showFoot = true
+//							}
 						})
-						this.scroll.on('scrollStart', (pos) => {
-							_this.showFoot = false
-						})
-
-						this.scroll.on('scrollEnd', (pos) => {
-							_this.showFoot = true
-						})
+//						this.scroll.on('scrollStart', (pos) => {
+//							_this.showFoot = false
+//						})
+//
+//						this.scroll.on('scrollEnd', (pos) => {
+//							_this.showFoot = true
+//						})
 					}
 				})
 			},
@@ -452,12 +451,12 @@
 				var time_str = '';
 				if(serviceTime >= 3600) {
 					var hour = Math.floor(serviceTime / 3600);
-					time_str += hour + '时';
+					time_str += hour + '小时';
 					serviceTime -= hour * 3600;
 				}
 				if(serviceTime >= 60) {
 					var minute = Math.floor(serviceTime / 60);
-					time_str += minute + '分';
+					time_str += minute + '分钟';
 					serviceTime -= minute * 60;
 				}
 				if(serviceTime > 0) {
@@ -766,9 +765,10 @@
 					path: '/share/pintroduce'
 				})
 			},
-			buyEquiment(equipList, skuId) {
+			buyEquiment(equipList, skuId,length) {
+				
 				var _this = this
-				this.show = true
+				
 				_this.equipList = []
 				equipList.forEach(function(value) {
 					var data = {}
@@ -778,6 +778,13 @@
 				})
 
 				this.skuId = skuId
+				
+				if(equipList.length == 1){
+					this.equipNumber = equipList[0]
+					this.purchase()
+				}else{
+					this.show = true
+				}
 			},
 			hidePopup() {
 				this.show = false
@@ -810,7 +817,11 @@
 	}
 </script>
 <style lang="less" scoped>
+	.b_whtie{
+		background-color: white;
+	}
 	.multi_user_mall_box .three {
+		padding-bottom: 1.20rem;
 		.top2 {
 			height: 2rem;
 			background-color: white;
@@ -1496,6 +1507,7 @@
 		margin-top: 0.20rem;
 		.left {
 			margin: 0.55rem 0.2rem 0rem 0.41rem;
+			width: 5.5rem;
 			.logo {
 				width: 1.5rem;
 				height: 1.5rem;

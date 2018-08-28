@@ -8,7 +8,7 @@
 				</div>
 				<group gutter="0" class="input-div">
 					<!--<cell class="input-item" title="国家" value="中国" is-link value-align="right"></cell>-->
-					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="请输入手机号码" type="number" :max="11" @on-change="nameChange"></x-input>
+					<x-input class="input-item" ref="phone" v-model="mobile" placeholder="请输入手机号码" type="tel" :max="11" @on-change="nameChange"></x-input>
 					<x-input class="input-item" ref="password" v-model="password" :max="25" :placeholder="isReg == 0 || isReg == 3?'请输入6~25位数的登录密码':'请输入登录密码'" type="password"></x-input>
 					<x-input v-if="isReg == 0 || posReg" class="input-item fadeInDown animated" type="number" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
 						<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
@@ -308,9 +308,9 @@
 							if(window.sessionStorage.length > 2) {
 								if(_this.frompath) {
 									if(_this.frompath != '/user/changeLoginPassword2') {
-										//	_this.$router.replace({
-										//		path: _this.frompath
-										//	})
+										//_this.$router.replace({
+										//  path: _this.frompath
+										//})
 										_this.$router.go(-1)
 									} else {
 										_this.$router.replace({

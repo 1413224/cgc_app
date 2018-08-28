@@ -60,7 +60,7 @@
 						<img :src="item.img" />
 					</div>
 					<div class="pro-box">
-						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro" @click="toUrl(i.url)">
+						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro" @click="toStoreDetails(i.id)">
 							<p>{{i.name}}</p>
 							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
 							<span class="img-box">
@@ -197,14 +197,14 @@
 						img: './static/index/index_pro1.jpg',
 						title: '宝树行 轩尼诗xo700mL Hennessy',
 						money: '480.00',
-						goodsId:'lxgoods9820180801104043382',
+						goodsId: 'lxgoods9820180801104043382',
 						zf: '588.00',
 						dh: true,
 					}, {
 						img: './static/index/index_pro2.jpg',
 						title: '法国原瓶进口红酒 拉菲古堡 法国1855列级名庄 大拉菲 1982年份 正牌 RP100',
 						money: '52.00',
-						goodsId:'lxgoods9820180801551017806',
+						goodsId: 'lxgoods9820180801551017806',
 						zf: '1888.00',
 						gm: true
 					},
@@ -212,12 +212,12 @@
 						img: './static/index/index_pro3.png',
 						title: 'Swarovski 施华洛世奇 女士Iconic Swan黑天鹅',
 						money: '880.00',
-						goodsId:'lxgoods9820180813169898400',
+						goodsId: 'lxgoods9820180813169898400',
 						zf: ''
 					}, {
 						img: 'http://domain.cgc999.com:8080/group1/M00/00/4E/rBL0CFtj_OGACJ1kAABU2IA7fSM913.jpg',
 						title: 'FILA斐乐手表男女情侣表时尚潮流运动大表盘腕表石英表162',
-						goodsId:'lxgoods9820180803440469796',
+						goodsId: 'lxgoods9820180803440469796',
 						money: '669.00',
 						zf: ''
 					},
@@ -225,14 +225,14 @@
 						img: './static/index/index_pro5.png',
 						title: 'ESTĒE LAUDER 雅诗兰黛 小棕瓶面部精华',
 						money: '688.00',
-						goodsId:'lxgoods9820180801304655402',
+						goodsId: 'lxgoods9820180801304655402',
 						zf: ''
 					},
 					{
 						img: './static/index/index_pro6.png',
 						title: 'Blackmores 深海鱼油软胶囊400粒澳佳宝欧米',
 						money: '196.00',
-						goodsId:'lxgoods9820180814865643230',
+						goodsId: 'lxgoods9820180814865643230',
 						zf: ''
 					}
 				],
@@ -245,8 +245,8 @@
 					{
 						img: './static/index/index_banner0.png',
 						url: 'http://www.zhscjyw.net/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=diypage&id=19',
-						wbu:true
-					},				
+						wbu: true
+					},
 					{
 						img: './static/index/index_banner1.png',
 						url: '/member/vip/right'
@@ -370,7 +370,7 @@
 							img: './static/index/shui1.png',
 							color: 'red',
 							url: 'http://www.zhscjyw.net/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=diypage&id=19',
-							wbu:true
+							wbu: true
 						}
 					]
 				}, {
@@ -379,17 +379,20 @@
 					pro: [{
 							name: '国美',
 							tip: '享生活 尚国美',
-							img: './static/index/guomei.png'
+							img: './static/index/guomei.png',
+							id: 'enterBasic2018071600000564'
 						},
 						{
 							name: '红星美凯龙',
 							tip: '全球家居生活广场',
-							img: './static/index/hxmkl2.png'
+							img: './static/index/hxmkl2.png',
+							id: 'enterBasic2018071600000565'
 						},
 						{
 							name: '魅族',
 							tip: '百台手机疯狂送',
-							img: './static/index/meizu.png'
+							img: './static/index/meizu.png',
+							id: ''
 						}
 					]
 				}],
@@ -452,21 +455,14 @@
 			goArticleDetail(uri) {
 				window.location.href = uri;
 			},
-			toUrl(url) {
-				// alert(url)
-				var inurl = url.indexOf('http')
-				
-				if(inurl){
-					this.$router.push({
-						path: url
-					})
-				}else{
-					window.location.href = url;
-				}
-				/*this.$router.push({
-					path: url
-				})*/
-			}
+			toStoreDetails(id) {
+				this.$router.push({
+					path: '/multi_user_mall',
+					query: {
+						id: id
+					}
+				})
+			},
 		},
 		components: {
 			swiper,
