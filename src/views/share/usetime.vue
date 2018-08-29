@@ -266,6 +266,14 @@
 									position: 'top',
 									text: '设备使用中'
 								})
+							}else if(datas.data == 5){
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '设备开启异常'
+								});
+								return;
 							}
 						}else{
 							if(datas.data == -1){
@@ -422,6 +430,14 @@
 								type: 'text',
 								position: 'top',
 								text: '请求超时'
+							})
+							return;
+						}else if(res.data.data == 4){
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'top',
+								text: '设备关闭异常'
 							})
 							return;
 						}

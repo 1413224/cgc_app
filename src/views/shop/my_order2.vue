@@ -93,7 +93,7 @@
 								<!--待使用-->
 								<div class="btn" v-if="item.status == 40">
 									<div>联系商家</div>
-									<div>立即使用</div>
+									<div @click=gousetime()>立即使用</div>
 								</div>
 								<!--设备挂单-->
 								<div class="btn" v-if="item.status == 50">
@@ -513,6 +513,13 @@
 					query: {
 						orderSn: orderSn
 					}
+				})
+			},
+			//立即使用
+			gousetime(){
+				this.$router.push({
+					path: '/share/usetime',
+					
 				})
 			},
 			InitScroll() {
