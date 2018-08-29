@@ -57,7 +57,7 @@
 				</div>
 				<div class="clear"></div>
 
-				<div class="winList">
+				<div class="winList" v-if="info.awardList.length > 0">
 					<!-- 中奖人员 -->
 					<div class="win-person">
 						<div class="wz-period">中奖名单</div>
@@ -218,10 +218,8 @@
 								this.$refs.mySwiper.swiper.slideTo(_this.act3, 10, false)
 							}
 						})
-
-						if(_this.info.awardList.length <= 1) {
-							_this.actice(0, _this.info.awardList[0].awardId)
-						}
+						
+						_this.actice(0, _this.info.awardList[0].awardId)
 					}
 				})
 			},

@@ -97,8 +97,8 @@
 				<Loading v-if="showLoading"></Loading>
 				<noMore v-if="showNoMore"></noMore>
 				<div style="margin-top: 3px;">
-					<noData v-if="!showShop" :status="2" :stateText="'暂无门店'"></noData>
-					<noData v-if="list.length == 0 && inloading" :status="2" :stateText="'努力加载中...'"></noData>
+					<noData v-if="!showShop && !inloading" :status="2" :stateText="'暂无门店'"></noData>
+					<noData v-if="!showShop && inloading" :status="2" :stateText="'努力加载中...'"></noData>
 				</div>
 			</div>
 		</div>
@@ -176,7 +176,7 @@
 				priceShang: false, //价格箭头
 				active: 1, //列表选中样式（地址）
 				items: null, //三级联动地址
-				showShop: true,
+				showShop: false,
 				opPrice: [
 					/*'离我最近',
 					'价格最低'*/
@@ -228,7 +228,7 @@
 					img: './static/share/banner1.png',
 					url: '/member/vip/right'
 				}],
-				inloading:true
+				inloading: true
 			}
 		},
 		components: {
@@ -329,8 +329,7 @@
 					}
 				}
 
-				function showErr(position) {
-				}
+				function showErr(position) {}
 			},
 			getEnterpriseListInfo() {
 				var _this = this
@@ -357,10 +356,12 @@
 					params: data
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+
+						_this.showShop = _this.list.length > 0 ? true : false
+						_this.inloading = false
+
 						if(res.data.data) {
 							_this.list = res.data.data.list
-							_this.showShop = _this.list.length > 0 ? true : false
-							_this.inloading = false
 						}
 					}
 				})
@@ -480,9 +481,14 @@
 					this.maskActive = true;
 				}
 			},
-			changePrice(value, label) { //改变价格，距离
+			changePrice(value, label) {
 
+				//改变价格，距离
 				var _this = this
+
+				//重置加载中
+				_this.showShop = false
+				_this.inloading = true
 
 				_this.listType = value
 				this.list = []
@@ -549,6 +555,11 @@
 			// 完成
 			complete() {
 				var _this = this
+
+				//重置加载中
+				_this.showShop = false
+				_this.inloading = true
+
 				this.show1 = false
 				this.list = []
 				this.getEnterpriseListInfo()
@@ -615,6 +626,11 @@
 			next(id, name) {
 
 				var _this = this
+
+				//重置加载中
+				_this.showShop = false
+				_this.inloading = true
+
 				_this.list = []
 
 				if(_this.addressKey == 3) {
@@ -666,6 +682,7 @@
 						})
 					})
 				}
+
 				let param = {
 					'parentId': id
 				}

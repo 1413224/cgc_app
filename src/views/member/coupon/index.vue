@@ -81,7 +81,7 @@
 			</div>
 		</div>
 
-		<section class="no_data" v-if="!showCoupon">
+		<section class="no_data" v-if="!showCoupon && !inloading">
 			<div class="none-data">
 				<img :src="imgSrc" alt="">
 				<p>暂无优惠券</p>
@@ -377,7 +377,8 @@
 						status: obj.status,
 						timeType: obj.timeType,
 						curPage: 1,
-						pageSize: 20
+						pageSize: 20,
+						islist:true
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {

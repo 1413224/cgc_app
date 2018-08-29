@@ -69,17 +69,38 @@
 					platformId: _this.url.platformId
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						_this.$router.replace({
-							path: '/user/reg',
-							query: {
-								mobile: _this.mobile
+						var params = {
+							audience: _this.url.client,
+							userId: _this.$store.state.user.userId,
+							platformId: _this.url.platformId
+						}
+
+						var unionid = sessionStorage['_openid_']
+
+						if(unionid) {
+							params.unionid = unionid
+							params.type = 1
+						}
+
+						_this.$http.post(_this.url.user.logout, params).then((res) => {
+							if(res.data.status == '00000000') {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'middle',
+									text: '密码保存成功'
+								})
+								_this.$router.replace({
+									path: '/user/reg',
+									query: {
+										mobile: _this.mobile
+									}
+								})
+								localStorage.removeItem('userInfo')
+								localStorage.setItem('isLogin', false)
+								_this.$store.state.page.isLogin = false
+								localStorage.removeItem('_HASH_')
 							}
-						})
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '密码保存成功'
 						})
 					}
 				})

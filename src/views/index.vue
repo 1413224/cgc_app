@@ -54,13 +54,13 @@
 					</div>
 				</section>
 
-				<div class="store-allbox" v-for="item in proList">
+				<div class="store-allbox" v-for="(item,index) in proList" :key="index">
 					<div class="titlebox" v-if="item.title">{{item.title}}</div>
 					<div class="auto-img" @click="$router.push({path:'/share/storelist'})">
 						<img :src="item.img" />
 					</div>
 					<div class="pro-box">
-						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index) in item.pro" @click="toStoreDetails(i.id)">
+						<div :class="{'vux-1px-r':index != 2}" v-for="(i,index2) in item.pro" :key="index2" @click="toStoreDetails(index,i,index2)">
 							<p>{{i.name}}</p>
 							<p :class="[{'red':i.color == 'red'},{'yollow':i.color == 'yollow'},{'blue':i.color == 'blue'}]">{{i.tip}}</p>
 							<span class="img-box">
@@ -454,13 +454,24 @@
 			goArticleDetail(uri) {
 				window.location.href = uri;
 			},
-			toStoreDetails(id) {
-				this.$router.push({
-					path: '/multi_user_mall',
-					query: {
-						id: id
+			toStoreDetails(index, item,index2) {
+				console.log(index2)
+				if(index == 0) {
+					if(index2!=2) {
+						this.$router.push({
+							path: item.url,
+						})
+					}else{
+						window.location.href = item.url
 					}
-				})
+				} else {
+					this.$router.push({
+						path: '/multi_user_mall',
+						query: {
+							id: item.id
+						}
+					})
+				}
 			},
 		},
 		components: {

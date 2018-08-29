@@ -83,7 +83,7 @@
 							click: true,
 							scrollY: true,
 							pullUpLoad: {
-								threshold: -50, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								threshold: 10, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
@@ -169,9 +169,11 @@
 		padding: 0 0.1rem;
 		background: #fff;
 		.wrapper {
-			height: 91.8%;
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			width: 100%;
 			overflow: hidden;
-			/*padding-bottom: 1rem;*/
 		}
 		.alerts-tob{
 		    position: relative;

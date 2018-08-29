@@ -129,7 +129,7 @@
 					</div>
 					<Loading v-if="showLoading"></Loading>
 					<noMore v-if="showNo"></noMore>
-					<noData v-if="!showList" :status="2" :stateText="tipText"></noData>
+					<noData v-if="!showList && !inloading" :status="2" :stateText="tipText"></noData>
 					<noData v-if="orderList.length == 0 && inloading" :status="2" stateText="努力加载中..."></noData>
 				</div>
 			</div>
@@ -335,17 +335,11 @@
 				var _this = this
 
 				_this.tabIndex = index
-
 				_this.status = index
-
 				_this.curPage = 1
-
 				_this.showList = true
-
 				_this.showLoading = false
-
 				_this.showNo = false
-
 				_this.getOrderList()
 
 				_this.$router.replace({

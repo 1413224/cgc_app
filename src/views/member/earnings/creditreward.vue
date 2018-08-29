@@ -46,7 +46,7 @@
 						<Loading v-if="show"></Loading>
 						<Nomore v-if="showNo"></Nomore>
 					</div>
-					<noData v-if="!showList" :status="2" stateText="暂无记录"></noData>
+					<noData v-if="!showList && !inloading" :status="2" stateText="暂无记录"></noData>
 					<noData v-if="!showList && inloading" :status="2" stateText="努力加载中..."></noData>
 				</div>
 			</div>
@@ -94,8 +94,8 @@
 				balanceInfo: {},
 				type: 1,
 				typeTitle: '',
-				showList:false,
-				inloading:true
+				showList: false,
+				inloading: true
 			}
 		},
 		created() {
@@ -119,7 +119,7 @@
 			} else if(this.$route.query.type == 1) {
 				this.twoIndex = 0
 				this.typeTitle = '全部列表'
-			}else if(this.$route.query.type == 2) {
+			} else if(this.$route.query.type == 2) {
 				this.twoIndex = 6
 				this.typeTitle = '消费'
 			}
@@ -144,12 +144,13 @@
 				}).then((res) => {
 					if(res.data.status == '00000000') {
 						_this.balanceInfo = res.data.data
+
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+
 						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
-							
-							_this.showList = res.data.data.list.length > 0 ? true : false
-							_this.inloading = false
-							
+
 							var length = res.data.data.list.length - 1
 							_this.lastCreateTime = res.data.data.list[length].createTime
 						}

@@ -431,19 +431,19 @@
 
 							_this.isW = pos.y <= -180 ? true : false
 
-//							if(pos.y > this.scroll.maxScrollY) {
-//								_this.showFoot = false
-//							} else {
-//								_this.showFoot = true
-//							}
+							//							if(pos.y > this.scroll.maxScrollY) {
+							//								_this.showFoot = false
+							//							} else {
+							//								_this.showFoot = true
+							//							}
 						})
-//						this.scroll.on('scrollStart', (pos) => {
-//							_this.showFoot = false
-//						})
-//
-//						this.scroll.on('scrollEnd', (pos) => {
-//							_this.showFoot = true
-//						})
+						//						this.scroll.on('scrollStart', (pos) => {
+						//							_this.showFoot = false
+						//						})
+						//
+						//						this.scroll.on('scrollEnd', (pos) => {
+						//							_this.showFoot = true
+						//						})
 					}
 				})
 			},
@@ -765,10 +765,10 @@
 					path: '/share/pintroduce'
 				})
 			},
-			buyEquiment(equipList, skuId,length) {
-				
+			buyEquiment(equipList, skuId, length) {
+
 				var _this = this
-				
+
 				_this.equipList = []
 				equipList.forEach(function(value) {
 					var data = {}
@@ -778,11 +778,11 @@
 				})
 
 				this.skuId = skuId
-				
-				if(equipList.length == 1){
+
+				if(equipList.length == 1) {
 					this.equipNumber = equipList[0]
 					this.purchase()
-				}else{
+				} else {
 					this.show = true
 				}
 			},
@@ -817,11 +817,16 @@
 	}
 </script>
 <style lang="less" scoped>
-	.b_whtie{
+	.multi_user_mall_box .four {
+		padding-bottom: 1.50rem;
+	}
+	
+	.b_whtie {
 		background-color: white;
 	}
+	
 	.multi_user_mall_box .three {
-		padding-bottom: 1.20rem;
+		padding-bottom: 1.50rem;
 		.top2 {
 			height: 2rem;
 			background-color: white;
@@ -1643,7 +1648,7 @@
 			justify-content: space-between;
 			padding: 0 0.40rem;
 			box-sizing: border-box;
-			background:rgba(249,250,255,1);
+			background: rgba(249, 250, 255, 1);
 			p {
 				font-size: 0.42rem;
 				font-family: PingFangSC-Medium;

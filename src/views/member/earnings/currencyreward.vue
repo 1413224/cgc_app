@@ -47,7 +47,7 @@
 						<Loading v-if="show"></Loading>
 						<Nomore v-if="showNo"></Nomore>
 					</div>
-					<noData v-if="!showList" :status="2" stateText="暂无记录"></noData>
+					<noData v-if="!showList && !inloading" :status="2" stateText="暂无记录"></noData>
 					<noData v-if="!showList && inloading" :status="2" stateText="努力加载中..."></noData>
 				</div>
 			</div>
@@ -149,11 +149,14 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.balanceInfo = res.data.data
+
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+
+						console.log(_this.showList)
+
 						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
-
-							_this.showList = res.data.data.list.length > 0 ? true : false
-							_this.inloading = false
 
 							var length = res.data.data.list.length - 1
 							_this.lastCreateTime = res.data.data.list[length].createTime
