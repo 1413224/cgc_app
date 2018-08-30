@@ -196,7 +196,7 @@
 			showDate() {
 				var _this = this
 				_this.$vux.datetime.show({
-					value: '',
+					value: _this.birthday,
 					confirmText: '确定',
 					cancelText: '取消',
 					clearText: '请选择日期',

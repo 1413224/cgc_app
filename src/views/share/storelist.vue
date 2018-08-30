@@ -357,12 +357,12 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
-						_this.showShop = _this.list.length > 0 ? true : false
-						_this.inloading = false
-
 						if(res.data.data) {
 							_this.list = res.data.data.list
 						}
+
+						_this.showShop = _this.list.length > 0 ? true : false
+						_this.inloading = false
 					}
 				})
 			},
@@ -703,18 +703,20 @@
 			provice() {
 				var _this = this
 
-				_this.items = _this.proviceItem
-				_this.addressKey = 1
+				if(_this.$route.query.region) {
+					_this.items = _this.proviceItem
+					_this.addressKey = 1
 
-				_this.region = _this.isprovince
-				_this.$router.replace({
-					query: _this.merge(_this.$route.query, {
-						'cityId': _this.cityId,
-						'region': _this.isprovince
+					_this.region = _this.isprovince
+					_this.$router.replace({
+						query: _this.merge(_this.$route.query, {
+							'cityId': _this.cityId,
+							'region': _this.isprovince
+						})
 					})
-				})
 
-				_this.$refs.address.scrollTop = 0
+					_this.$refs.address.scrollTop = 0
+				}
 			},
 			city() {
 				var _this = this

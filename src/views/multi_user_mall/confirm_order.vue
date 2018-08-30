@@ -226,22 +226,22 @@
 		created() {
 			var _this = this
 			//商品信息
-			this.goodsInfo = {
-				'enterpriseName': this.$route.query.enterpriseName,
-				'goodsLogo': this.$route.query.goodsLogo,
-				'goodsName': this.$route.query.goodsName,
-				'skuName': this.$route.query.skuName,
-				'minPrice': this.$route.query.minPrice,
-				'minOriginPrice': this.$route.query.minOriginPrice,
-				'goodsNum': this.$route.query.goodsNum,
-				'skuId': this.$route.query.skuId
+			_this.goodsInfo = {
+				'enterpriseName': _this.$route.query.enterpriseName,
+				'goodsLogo': _this.$route.query.goodsLogo,
+				'goodsName': _this.$route.query.goodsName,
+				'skuName': _this.$route.query.skuName,
+				'minPrice': _this.$route.query.minPrice,
+				'minOriginPrice': _this.$route.query.minOriginPrice,
+				'goodsNum': _this.$route.query.goodsNum,
+				'skuId': _this.$route.query.skuId
 			}
 
-			this.payOptions = {
+			_this.payOptions = {
 				showPayMode: false,
 				data: {
 					time: 900,
-					money: this.payMoney,
+					money: _this.payMoney,
 				},
 				changePay(index) {
 					console.log(index)
@@ -249,7 +249,8 @@
 				toPay(type) {
 					//微信支付
 					if(type == 1) {
-						console.log(_this.payParmars)
+						_this.pay(_this.payParmars)
+						return false;
 						_this.$router.push({
 							name: "wxpay",
 							params: {
@@ -365,7 +366,7 @@
 				console.log(this.payMoney)
 			},
 			select(addressItem) {
-				
+
 				if(addressItem) {
 					this.address = addressItem
 					this.addressId = addressItem.addressId
@@ -373,7 +374,7 @@
 					this.address = false
 					this.addressId = ''
 				}
-				
+
 			},
 			addAddress() {
 				this.$router.push({
@@ -385,6 +386,16 @@
 			},
 			payNow() {
 				var _this = this
+
+				if(_this.addressId == null || _this.addressId == undefined || _this.addressId == '') {
+					_this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'middle',
+						text: '请添加收货地址'
+					})
+					return false;
+				}
 
 				_this.$http.post(_this.url.goods.buynow, {
 					userId: _this.$store.state.user.userId,
@@ -417,6 +428,7 @@
 							_this.payParmars.body = res.data.data.body
 							_this.payParmars.ip = res.data.data.ip
 							_this.payParmars.parentOrderSn = res.data.data.orderSn
+							_this.payParmars.enterpriseName = _this.goodsInfo.enterpriseName
 						}
 					}
 				})

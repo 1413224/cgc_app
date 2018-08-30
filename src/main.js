@@ -47,6 +47,74 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.merge = merge
 
 Vue.prototype.mainApp = mainApp
+
+//全局支付方法
+Vue.prototype.pay = function(params) {
+	
+	var oid = sessionStorage['_openid_']
+	let openid = sessionStorage['_openid_']
+	console.log(params)
+	axios.post(url.zf.pay, {
+		id: '200001',
+		subMchId: '1511640641',
+		body: params.body,
+		feeType: 'CNY',
+		outTotalFee: params.payPrice,
+		spbillCreateIp: params.ip,
+		tradeType: 'JSAPI',
+		openId: openid,
+		parentOrderSn: params.parentOrderSn,
+		attach: params.enterpriseName
+	}).then((res) => {
+		var data = res.data.data
+		wx.config({
+			debug: false,
+			appId: data.appId,
+			timestamp: data.timeStamp,
+			nonceStr: data.nonceStr,
+			signature: data.signature,
+			jsApiList: [
+				'checkJsApi',
+				'startRecord',
+				'stopRecord',
+				'translateVoice',
+				'scanQRCode',
+				'openCard',
+				'chooseWXPay'
+			]
+		})
+
+		wx.chooseWXPay({
+			appId: data.appId,
+			timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
+			nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位  
+			package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）  
+			signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
+			paySign: data.paySign, // 支付签名  
+			success: function(res) {
+				WeixinJSBridge.call('closeWindow')
+			},
+			error: function() {
+				Vue.$vux.toast.show({
+					text: '支付失败',
+					type: 'text',
+					position: 'top',
+					width: '50%'
+				})
+			},
+			cancel: function() {
+				Vue.$vux.toast.show({
+					text: '您已取消了支付',
+					type: 'text',
+					position: 'top',
+					width: '50%'
+				})
+			}
+		})
+
+	})
+}
+
 //组件插件
 Vue.use(dialog)
 Vue.use(code)
@@ -76,9 +144,9 @@ Vue.use(VueLazyLoad, {
 Vue.filter('getDate', function(value) {
 	if(value != 0 && value) {
 		var v = value.toString()
-		if(v.length == 10){
+		if(v.length == 10) {
 			return mainApp.frDateTimehp.getFormatTimesTamp(value * 1000)
-		}else if(v.length == 13){
+		} else if(v.length == 13) {
 			return mainApp.frDateTimehp.getFormatTimesTamp(value)
 		}
 	} else {
@@ -194,18 +262,18 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
-	
-//	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
-//
-//		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
-//		let ua = window.navigator.userAgent.toLowerCase()
-//		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-//			next({
-//				path: '/member/oriza'
-//			})
-//			return false
-//		}
-//	}
+
+	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
+
+		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
+		let ua = window.navigator.userAgent.toLowerCase()
+		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+			next({
+				path: '/member/oriza'
+			})
+			return false
+		}
+	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []

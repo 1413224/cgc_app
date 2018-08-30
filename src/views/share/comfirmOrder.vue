@@ -123,7 +123,8 @@
 				couponType: 0,
 				condition: 0,
 				discount: 0,
-				recommendBalance: 0
+				recommendBalance: 0,
+				payParmars:{}
 			}
 		},
 		components: {
@@ -133,6 +134,8 @@
 			payMode
 		},
 		created() {
+			
+			var _this = this
 
 			this.getEquipmentOrderConfirmInfo(this.$route.query.equipNumber, this.$route.query.skuId)
 
@@ -144,8 +147,11 @@
 				changePay(index) {
 					console.log(index)
 				},
-				toPay(index) {
-					if(index == 1) {
+				toPay(type) {
+					if(type == 1) {
+						//微信支付
+						_this.pay(_this.payParmars)
+						return false;
 						_this.$router.push({
 							path: '/member/pay/wxgzhpay'
 						})
@@ -208,19 +214,24 @@
 							}, 1000)
 						} else if(res.data.data.status == 2) {
 							_this.payOptions.showPayMode = true
-							_this.payOptions.data.money = _this.info.payPrice
+							_this.payOptions.data.money = res.data.data.payPrice
+							_this.payParmars.payPrice = res.data.data.payPrice
+							_this.payParmars.body = res.data.data.body
+							_this.payParmars.ip = res.data.data.ip
+							_this.payParmars.parentOrderSn = res.data.data.orderSn
+							_this.payParmars.enterpriseName = _this.info.name
 						}
 					}
 				})
 			},
 			inputChange() {
-				
-				if(Number(this.info.recommendBalance)<0){
-					this.info.recommendBalance= 0
+
+				if(Number(this.info.recommendBalance) < 0) {
+					this.info.recommendBalance = 0
 				}
 
 				var recommendBalance = this.info.recommendBalance == '' ? 0 : this.info.recommendBalance
-				
+
 				if(this.couponType == 20) { //满减券
 					if(Number(this.info.price) >= Number(this.condition)) {
 						this.info.payPrice = Number(this.info.price) - Number(this.denomination)
@@ -228,18 +239,18 @@
 				} else if(this.couponType == 30) { //折扣券
 					if(Number(this.info.price) >= Number(this.condition)) {
 						var minMoney = Number(this.info.price) * (1 - Number(this.discount))
-						if(minMoney < Number(this.denomination)){
-							this.info.payPrice =  this.info.payPrice - minMoney
-						}else{
-							this.info.payPrice =  this.info.payPrice -Number(this.denomination)
+						if(minMoney < Number(this.denomination)) {
+							this.info.payPrice = this.info.payPrice - minMoney
+						} else {
+							this.info.payPrice = this.info.payPrice - Number(this.denomination)
 						}
 					}
 				} else if(this.couponType == 50) { //现金券
 					this.info.payPrice = Number(this.info.price) - Number(this.denomination)
-				}else{
+				} else {
 					this.info.payPrice = Number(this.info.price)
 				}
-				
+
 				var minAllMoney = Number(this.info.payPrice).toFixed(2)
 
 				//可用通用积分大于商品价格
@@ -258,7 +269,7 @@
 						this.info.recommendBalance = this.info.availableBalance
 						recommendBalance = this.info.availableBalance
 					}
-					
+
 					this.info.payPrice = (Number(minAllMoney) - Number(recommendBalance)).toFixed(2)
 				}
 			},
@@ -285,27 +296,24 @@
 
 						_this.info = res.data.data
 						_this.info.payPrice = Number(_this.info.price)
-						
+
 						_this.inputChange()
 					}
 				})
 			},
-			setServiceTime(serviceTime){
-				var time_str='';
-				if(serviceTime>=3600)
-				{
+			setServiceTime(serviceTime) {
+				var time_str = '';
+				if(serviceTime >= 3600) {
 					var hour = Math.floor(serviceTime / 3600);
 					time_str += hour + '小时';
-					serviceTime -=hour*3600;
+					serviceTime -= hour * 3600;
 				}
-				if(serviceTime>=60)
-				{
+				if(serviceTime >= 60) {
 					var minute = Math.floor(serviceTime / 60);
 					time_str += minute + '分钟';
-					serviceTime -=minute*60;
+					serviceTime -= minute * 60;
 				}
-				if(serviceTime>0)
-				{
+				if(serviceTime > 0) {
 					time_str += serviceTime + '秒';
 				}
 				return time_str;

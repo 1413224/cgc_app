@@ -79,6 +79,7 @@ var url = {
 	},
 	zf: {
 		wxScan: '/pay/public/v1/wechat/wxScan',
+		pay:'/pay/body/v1/wechat/pay'
 	},
 	order: {
 		getOrderList: uri3 + '/param/v1/order/getOrderList', //获取订单列表
