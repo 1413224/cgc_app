@@ -228,10 +228,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="back-index" :class="{'bottom2':info.isAlliance != 1 && info.isChains != 1}" @click="$router.push({path:'/share/storelist'})">
+			<!--<div class="back-index" :class="{'bottom2':info.isAlliance != 1 && info.isChains != 1}" @click="$router.push({path:'/share/storelist'})">
 				<p>返回</p>
 				<p>首页</p>
-			</div>
+			</div>-->
 			<transition enter-active-class="fadeInUp animated" leave-active-class="zoomOut animated" :duration="{ enter: 150, leave: 100 }">
 				<div class="foot-box" v-if="(info.isAlliance == 1 || info.isChains == 1) && showFoot">
 					<ul>

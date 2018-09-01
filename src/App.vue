@@ -19,18 +19,44 @@
 		</div>
 
 		<!-- 设备数开始 -->
-		<div v-if="equipmentShow" class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
+		<!--<div v-if="equipmentShow" class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
 			<img :src="'./static/images/wfgImg.png'" alt="" />
 			<p>{{equipmentNum}}台</p>
-		</div>
+		</div>-->
 		<!-- 设备数结束 -->
-
+		<masker v-if="isOpen" :fullscreen="true" color="222222" :opacity="0.5"></masker>
+		<div v-if="show" class="navigation_box" :class="{'r0':isOpen}" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end">
+			<div class="open" v-if="!isOpen && !$route.meta.navShow" @click="open">
+				<img :src="'./static/images/zhankai.png'" alt="" />
+				<div>
+					<p>快速</p>
+					<p>导航</p>
+				</div>
+			</div>
+			<div class="close" v-if="isOpen && !$route.meta.navShow" @click="close">
+				<div class="left">
+					<img :class="{'r180':isOpen}" :src="'./static/images/zhankai.png'" alt="" />
+					<div>
+						<p>收回</p>
+					</div>
+				</div>
+			</div>
+			<div class="nav_list">
+				<ul>
+					<li v-for="(item,index) in navList" :key="index" @click="navClick(index)">
+						<img :src="item.logo" />
+						<p>{{item.title}}</p>
+						<div class="tip" v-if="item.tip && item.tip != 0">{{item.tip}}</div>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 	import settingFooter from '@/components/setting_footer'
-	import { ButtonTab, ButtonTabItem } from 'vux'
+	import { ButtonTab, ButtonTabItem, Masker } from 'vux'
 	import { mapState } from 'vuex'
 	export default {
 		name: 'App',
@@ -61,8 +87,27 @@
 				xPum: '',
 				yPum: '',
 				equipmentNum: '',
-				equipmentShow: false
-
+				equipmentShow: false,
+				isOpen: false,
+				show: false,
+				navList: [{
+						title: '首页',
+						logo: './static/images/nav-one.png',
+					},
+					{
+						title: '设备管理',
+						logo: './static/images/nav-two.png',
+						tip: '0'
+					},
+					{
+						title: '产业联盟',
+						logo: './static/images/nav-three.png'
+					},
+					{
+						title: '个人中心',
+						logo: './static/images/nav-four.png'
+					}
+				]
 			}
 		},
 		created() {
@@ -83,12 +128,59 @@
 		components: {
 			ButtonTab,
 			ButtonTabItem,
-			settingFooter
+			settingFooter,
+			Masker
 		},
 		mounted() {
-
+			var _this = this
+			//显示快速导航
+			if(!_this.$route.meta.navShow) {
+				_this.show = true
+			} else {
+				_this.show = false
+			}
 		},
 		methods: {
+			open() {
+				this.isOpen = !this.isOpen
+			},
+			close() {
+				this.isOpen = !this.isOpen
+			},
+			navClick(index) {
+				var _this = this
+
+				this.isOpen = !this.isOpen
+
+				if(index == 0) {
+					_this.$router.push({
+						path: '/'
+					})
+				} else if(index == 1) {
+					if(_this.equipmentNum == 0) {
+						if(this.$store.state.page.isLogin == 'false') {
+							this.$vux.toast.text('请先登录', 'top')
+						} else {
+							this.$vux.toast.text('暂无设备', 'top')
+						}
+					} else {
+						_this.$router.push({
+							path: '/share/usetime',
+							query: {
+								id: _this.$store.state.user.userId
+							}
+						})
+					}
+				} else if(index == 2) {
+					_this.$router.push({
+						path: '/share/storelist'
+					})
+				} else {
+					_this.$router.push({
+						path: '/member/index'
+					})
+				}
+			},
 			//检测是否设置支付密码
 			getUserPayPassword() {
 				var _this = this
@@ -119,6 +211,8 @@
 							if(res.data.data) {
 								_this.equipmentNum = res.data.data.num
 								_this.equipmentShow = res.data.data.num > 0 ? true : false
+								
+								_this.navList[1].tip = res.data.data.num
 							}
 						}
 					})
@@ -165,16 +259,23 @@
 					}
 					this.nx = touch.clientX - this.position.x;
 					this.ny = touch.clientY - this.position.y;
-					this.xPum = this.dx + this.nx;
+					//this.xPum = this.dx + this.nx;
+					this.xPum = document.body.scrollWidth
 					this.yPum = this.dy + this.ny;
 
-					if(this.xPum >= Number(document.body.clientWidth / 6) && this.xPum < Number(document.body.clientWidth - 70)) {
+					//if(this.xPum >= Number(document.body.clientWidth / 6) && this.xPum < Number(document.body.clientWidth - 70)) {
+					//this.$refs.moveDiv.style.left = this.xPum + "px";
+					//} else if(this.xPum < 0) {
+					//this.$refs.moveDiv.style.left = Number(document.body.clientWidth / 6) + "px";
+					//}
+					if(this.xPum == 0) {
 						this.$refs.moveDiv.style.left = this.xPum + "px";
 					} else if(this.xPum < 0) {
-						this.$refs.moveDiv.style.left = Number(document.body.clientWidth / 6) + "px";
+						this.$refs.moveDiv.style.left = document.body.scrollWidth + "px";
 					}
-					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 120) : Number(document.body.clientHeight - 70)
+					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 140) : Number(document.body.clientHeight - 70)
 					if(this.yPum >= 0 && this.yPum < h) {
+						//this.$refs.moveDiv.style.top = this.yPum + "px";
 						this.$refs.moveDiv.style.top = this.yPum + "px";
 					} else if(this.yPum < 0) {
 						this.$refs.moveDiv.style.top = 0 + "px";
@@ -397,6 +498,102 @@
 			font-size: 0.24rem;
 			font-family: PingFangSC-Regular;
 			color: rgba(255, 255, 255, 1);
+		}
+	}
+	
+	.r0 {
+		right: 0rem!important;
+	}
+	
+	.navigation_box {
+		position: fixed;
+		bottom: 1.80rem;
+		right: -5.20rem;
+		height: 1.22rem;
+		z-index: 11115;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.3s ease-in-out;
+		.open,
+		.close .left {
+			width: 0.90rem;
+			height: 0.70rem;
+			background: rgba(26, 38, 66, 0.70);
+			border-radius: 4px 0px 0px 4px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				width: 0.20rem;
+				height: 0.20rem;
+				margin-right: 0.08rem;
+			}
+			p {
+				font-size: 0.22rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(255, 255, 255, 1);
+			}
+		}
+		.open div {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		}
+		.close {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.left .r180 {
+				transform: rotate(-180deg);
+			}
+		}
+		.nav_list {
+			width: 5.20rem;
+			height: 1.22rem;
+			background: rgba(255, 255, 255, 1);
+			border-radius: 4px 0px 0px 4px;
+			ul {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				li {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex-direction: column;
+					position: relative;
+					img {
+						width: 0.46rem;
+						height: 0.46rem;
+						margin-bottom: 0.05rem;
+					}
+					p {
+						font-size: 0.20rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(26, 38, 66, 1);
+					}
+					.tip {
+						width: 0.26rem;
+						height: 0.26rem;
+						line-height: 0.26rem;
+						text-align: center;
+						background: rgba(242, 48, 48, 1);
+						font-size: 0.20rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(255, 255, 255, 1);
+						position: absolute;
+						top: 0;
+						right: 0.28rem;
+						border-radius: 50%;
+					}
+				}
+			}
 		}
 	}
 </style>
