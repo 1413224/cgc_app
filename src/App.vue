@@ -19,21 +19,23 @@
 		</div>
 
 		<!-- 设备数开始 -->
-		<!--<div v-if="equipmentShow" class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
+		<div v-show="equipmentShow && !show" class="wfg-box" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end" @click="goDetail">
 			<img :src="'./static/images/wfgImg.png'" alt="" />
 			<p>{{equipmentNum}}台</p>
-		</div>-->
+		</div>
 		<!-- 设备数结束 -->
-		<masker v-if="isOpen" :fullscreen="true" color="222222" :opacity="0.5"></masker>
-		<div v-if="show" class="navigation_box" :class="{'r0':isOpen}" ref="moveDiv" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end">
-			<div class="open" v-if="!isOpen && !$route.meta.navShow" @click="open">
+
+		<masker v-if="isOpen" @click.native="close" :fullscreen="true" color="222222" :opacity="0.5"></masker>
+		<div v-show="show" class="navigation_box" :class="{'r0':isOpen}" ref="moveDiv2" @mousedown="down2" @touchstart="down2" @mousemove="move2" @touchmove="move2" @mouseup="end2">
+			<div class="open" v-if="!isOpen" @click="open">
 				<img :src="'./static/images/zhankai.png'" alt="" />
 				<div>
 					<p>快速</p>
 					<p>导航</p>
 				</div>
+				<span class="tip" v-if="equipmentNum > 0"></span>
 			</div>
-			<div class="close" v-if="isOpen && !$route.meta.navShow" @click="close">
+			<div class="close" v-if="isOpen" @click="close">
 				<div class="left">
 					<img :class="{'r180':isOpen}" :src="'./static/images/zhankai.png'" alt="" />
 					<div>
@@ -131,15 +133,6 @@
 			settingFooter,
 			Masker
 		},
-		mounted() {
-			var _this = this
-			//显示快速导航
-			if(!_this.$route.meta.navShow) {
-				_this.show = true
-			} else {
-				_this.show = false
-			}
-		},
 		methods: {
 			open() {
 				this.isOpen = !this.isOpen
@@ -159,7 +152,11 @@
 				} else if(index == 1) {
 					if(_this.equipmentNum == 0) {
 						if(this.$store.state.page.isLogin == 'false') {
-							this.$vux.toast.text('请先登录', 'top')
+							this.$vux.toast.text('请登录管理设备', 'top')
+
+							_this.$router.push({
+								path: '/user/reg'
+							})
 						} else {
 							this.$vux.toast.text('暂无设备', 'top')
 						}
@@ -211,7 +208,7 @@
 							if(res.data.data) {
 								_this.equipmentNum = res.data.data.num
 								_this.equipmentShow = res.data.data.num > 0 ? true : false
-								
+
 								_this.navList[1].tip = res.data.data.num
 							}
 						}
@@ -235,7 +232,7 @@
 				}
 
 			},
-			// 实现移动端拖拽
+			// 实现移动端拖拽   设备按钮
 			down() {
 				this.flags = true;
 				var touch;
@@ -259,23 +256,16 @@
 					}
 					this.nx = touch.clientX - this.position.x;
 					this.ny = touch.clientY - this.position.y;
-					//this.xPum = this.dx + this.nx;
-					this.xPum = document.body.scrollWidth
+					this.xPum = this.dx + this.nx;
 					this.yPum = this.dy + this.ny;
 
-					//if(this.xPum >= Number(document.body.clientWidth / 6) && this.xPum < Number(document.body.clientWidth - 70)) {
-					//this.$refs.moveDiv.style.left = this.xPum + "px";
-					//} else if(this.xPum < 0) {
-					//this.$refs.moveDiv.style.left = Number(document.body.clientWidth / 6) + "px";
-					//}
-					if(this.xPum == 0) {
+					if(this.xPum >= Number(document.body.clientWidth / 6) && this.xPum < Number(document.body.clientWidth - 70)) {
 						this.$refs.moveDiv.style.left = this.xPum + "px";
 					} else if(this.xPum < 0) {
-						this.$refs.moveDiv.style.left = document.body.scrollWidth + "px";
+						this.$refs.moveDiv.style.left = Number(document.body.clientWidth / 6) + "px";
 					}
 					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 140) : Number(document.body.clientHeight - 70)
 					if(this.yPum >= 0 && this.yPum < h) {
-						//this.$refs.moveDiv.style.top = this.yPum + "px";
 						this.$refs.moveDiv.style.top = this.yPum + "px";
 					} else if(this.yPum < 0) {
 						this.$refs.moveDiv.style.top = 0 + "px";
@@ -289,6 +279,53 @@
 			//鼠标释放时候的函数
 			end() {
 				this.flags = false;
+			},
+
+			//快速导航 
+
+			down2() {
+				this.flags = true;
+				var touch;
+				if(event.touches) {
+					touch = event.touches[0];
+				} else {
+					touch = event;
+				}
+				this.position.x = touch.clientX;
+				this.position.y = touch.clientY;
+				this.dx = this.$refs.moveDiv2.offsetLeft;
+				this.dy = this.$refs.moveDiv2.offsetTop;
+			},
+			move2() {
+				if(this.flags) {
+					var touch;
+					if(event.touches) {
+						touch = event.touches[0];
+					} else {
+						touch = event;
+					}
+					this.nx = touch.clientX - this.position.x;
+					this.ny = touch.clientY - this.position.y;
+					this.xPum = document.body.scrollWidth
+					this.yPum = this.dy + this.ny;
+					if(this.xPum == 0) {
+						this.$refs.moveDiv2.style.left = this.xPum + "px";
+					} else if(this.xPum < 0) {
+						this.$refs.moveDiv2.style.left = document.body.scrollWidth + "px";
+					}
+					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 140) : Number(document.body.clientHeight - 70)
+					if(this.yPum >= 0 && this.yPum < h) {
+						this.$refs.moveDiv2.style.top = this.yPum + "px";
+					} else if(this.yPum < 0) {
+						this.$refs.moveDiv2.style.top = 0 + "px";
+					}
+					//阻止页面的滑动默认事件
+					event.preventDefault();
+				}
+			},
+			//鼠标释放时候的函数
+			end2() {
+				this.flags = false;
 			}
 		},
 		watch: {
@@ -299,6 +336,15 @@
 				if(_this.isWx) {
 
 					if(sessionStorage['_openid_']) {
+
+						//显示快速导航
+						if(!_this.$route.meta.navShow && _this.$route.path != "/user/reg") {
+							_this.show = true
+							_this.isOpen = false
+						} else {
+							_this.show = false
+							_this.isOpen = false
+						}
 
 						if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
 							_this.getEquipment()
@@ -328,6 +374,15 @@
 						}
 					}
 				} else {
+					//显示快速导航
+					if(!_this.$route.meta.navShow && _this.$route.path != "/user/reg") {
+						_this.show = true
+						_this.isOpen = false
+					} else {
+						_this.show = false
+						_this.isOpen = false
+					}
+
 					//控制新人奖励弹窗
 					if(sessionStorage.getItem('isZc')) {
 						_this.$popup.hide()
@@ -533,6 +588,19 @@
 				font-size: 0.22rem;
 				font-family: PingFangSC-Regular;
 				color: rgba(255, 255, 255, 1);
+			}
+		}
+		.open {
+			position: relative;
+			span {
+				width: 0.14rem;
+				height: 0.14rem;
+				border-radius: 50%;
+				display: inline-block;
+				background: rgba(242, 48, 48, 1);
+				position: absolute;
+				right: 0.02rem;
+				top: 0.05rem;
 			}
 		}
 		.open div {
