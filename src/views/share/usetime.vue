@@ -439,6 +439,19 @@
 								position: 'top',
 								text: '设备关闭异常'
 							})
+
+							//设备正在关闭中
+							setTimeout(() => {
+								_this.$vux.toast.show({
+									width: '50%',
+									type: 'text',
+									position: 'top',
+									text: '设备正在关闭中'
+								})
+							},3000)
+							_this.$router.push({
+								path:'/shop/my_order2'
+							})
 							return;
 						}
 
