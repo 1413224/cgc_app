@@ -7,7 +7,8 @@ import record from '@/views/draw/record'
 import winning from '@/views/draw/winning'
 import pastevents from '@/views/draw/pastevents'
 import draw_details from '@/views/draw/draw_details' 
-import draw_rule from '@/views/draw/rule' 
+import draw_rule from '@/views/draw/rule'
+import unonline from '@/views/draw/unonline' 
 
 const drawModule = [
 	{
@@ -87,6 +88,14 @@ const drawModule = [
 		component: resolve => require(['@/views/draw/rule'], resolve),
 		meta: {
 			title:'抽奖规则'
+		}
+	},
+	{
+		path: '/draw/unonline',//抽奖详情
+		name: 'unonline',
+		component: resolve => require(['@/views/draw/unonline'], resolve),
+		meta: {
+			title:'线下领奖'
 		}
 	}
 ]

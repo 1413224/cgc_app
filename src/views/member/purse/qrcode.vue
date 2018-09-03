@@ -122,7 +122,7 @@
 			this.title = this.$route.query.text ? this.$route.query.text : '会员码'
 
 			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
-			this.width = Number(document.body.clientWidth * 0.6866666666666666)
+			this.width = Number(document.body.clientWidth * 0.5866666666666666)
 
 			this.getUserInfo()
 		},
@@ -402,7 +402,7 @@
 			/*padding-bottom: 1rem;*/
 			.bw-box3 {
 				position: absolute;
-				top: 48%;
+				top: 50%;
 				left: 50%;
 				transform: translate(-50%, -50%);
 				.all {
