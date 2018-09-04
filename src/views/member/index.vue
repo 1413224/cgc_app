@@ -239,6 +239,7 @@
 			}
 
 			this.getUserInfo()
+			this.getCardStat()
 		},
 		methods: {
 			toOrder(index) {
@@ -287,6 +288,20 @@
 					path: '/member/purse/qrcode',
 					query: {
 						index: 1
+					}
+				})
+			},
+			getCardStat(){
+				var _this = this
+				_this.$http.get(_this.url.user.getMyEnterpriseCardStat,{
+					params:{
+						userId:_this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						// console.log(res.data.data)
+						var data = res.data.data
+						_this.infoList[0].tip = "共"+data.cardNums+"张通用卡"
 					}
 				})
 			}

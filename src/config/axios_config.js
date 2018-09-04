@@ -13,6 +13,8 @@ Vue.use(isload)
 axios.defaults.retry = 4 //请求次数
 axios.defaults.retryDelay = 1000 //请求间隙
 axios.defaults.baseURL = '//domain.cgc999.com/apigw' // 请求默认地址
+// axios.defaults.baseURL = '//health.cgc999.com/apigw' // 请求默认地址,演示版
+
 //http://47.104.187.243:18666
 
 var URL = ""

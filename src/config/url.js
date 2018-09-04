@@ -52,6 +52,12 @@ var url = {
 		getUserCouponList: uri1 + '/param/v1/user/getUserCouponList', //获取优惠券列表
 		getRechargeList: uri1 + '/param/v1/user/getRechargeList', //获取平台充值套餐列表信息接口
 		getPaymentList:uri1 + '/param/v1/user/getPaymentList',//获取支付渠道接口
+		getMyEnterpriseCardStat: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardStat',//企业通用卡汇总数据
+		getMyEnterpriseCard: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCard',//获取我的企业通用卡列表信息
+		getMyEnterpriseCardDetail: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardDetail',//获取企业通用卡详情接口
+		getAvailableAllianceList: uri1 + '/param/v1/enterpriseCard/getAvailableAllianceList',//企业通用卡适用联盟企业列表
+		getUseEnterpriseCardList: uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardList',//企业通用卡明细列表
+		getUseEnterpriseCardDetail:  uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardDetail'//企业通用卡详情信息
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
