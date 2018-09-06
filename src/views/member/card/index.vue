@@ -1,6 +1,6 @@
 <template>
 	<div class="card_box">
-		<settingHeader title="企业通用卡"></settingHeader>
+		<settingHeader title="企业通用积分"></settingHeader>
 		<div class="wrapper" :class="[{'top46':!$store.state.page.isWx},{'b_white':cardList.length == 0}]" ref="wrapper">
 			<div class="content">
 				<ul class="card_list" v-if="cardList.length > 0">
@@ -20,7 +20,7 @@
 				<Loading v-if="showLoading"></Loading>
 				<Nomore v-if="showNomore"></Nomore>
 				<!-- cardList.length -->
-				<noData v-if="cardLength" :status="0" stateText="您还没有相关卡券"></noData>
+				<noData v-if="cardLength" :status="2" stateText="您还没有相关的企业通用积分"></noData>
 			</div>
 		</div>
 	</div>
@@ -44,7 +44,7 @@
 				nodatas:false,
 				cardLength:false,
 				styleObject:{
-					backgroundImage:'url("../../../../static/member/khh.png")',
+					backgroundImage:'url("./static/member/khh.png")',
 					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
 					backgroundSize:'100%'
 				},

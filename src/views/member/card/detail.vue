@@ -1,6 +1,6 @@
 <template>
 	<div class="cardDetail_box">
-		<settingHeader title="通用卡详情"></settingHeader>
+		<settingHeader title="企业通用积分详情"></settingHeader>
 		<!-- wrapper开始 -->
 		<div class="wrapper" ref="wrapper">
 			<div class="scrolls">
@@ -50,7 +50,7 @@
 					<popup v-model="showTip">
 						<div class="tip_box">
 							<div class="title">企业通用卡说明</div>
-							<div class="content">企业通用卡说明</div>
+							<div class="content">{{cardDetail.remark}}</div>
 							<div class="btn" @click="showTip = false">关闭</div>
 						</div>
 					</popup>
@@ -77,7 +77,7 @@
 				showNomore:false,
 				showLoading:false,
 				styleObject:{
-					backgroundImage:'url("../../../../static/member/khh.png")',
+					backgroundImage:'url("./static/member/khh.png")',
 					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
 					backgroundSize:'100%'
 				},
