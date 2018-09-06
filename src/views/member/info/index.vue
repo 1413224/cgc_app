@@ -19,6 +19,7 @@
 			<group>
 				<cell class="list-item" title="我的二维码" is-link @click.native="goCode"><img class="code" src="../../../assets/images/member/code@2x.png" /></cell>
 				<cell class="list-item user-address" title="地址管理" is-link link="/member/address/index"></cell>
+				<cell class="list-item" title="发票管理" is-link link="/invoice/index"></cell>
 			</group>
 			<group>
 			<!-- is-link link='/member/setting/real' -->

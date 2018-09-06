@@ -141,14 +141,14 @@
 				</router-link>
 			</section>-->
 			<section>
-				<group gutter="0" class="infoList1">
-					<cell v-for="(item,index) in infoList" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
+				<group gutter="0" class="infoList2">
+					<cell v-for="(item,index) in infoList2" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
 						<img slot="icon" :src="item.img">
 						<badge text="8" v-if="item.red"></badge>
 					</cell>
 				</group>
-				<group gutter="0" class="infoList2">
-					<cell v-for="(item,index) in infoList2" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
+				<group gutter="0" class="infoList1">
+					<cell v-for="(item,index) in infoList" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
 						<img slot="icon" :src="item.img">
 					</cell>
 				</group>
@@ -186,6 +186,11 @@
 					}
 				],
 				infoList2: [{
+						img: './static/member/m-index6.png',
+						text: '幸运抽奖',
+						url: '/draw',
+						tip: '您有一条中奖消息'
+					},{
 						img: './static/member/m-index4.png',
 						text: '积分商城',
 						url: '/shop'
@@ -201,12 +206,7 @@
 						url: '/shop/my_order'
 					},*/
 
-					{
-						img: './static/member/m-index6.png',
-						text: '幸运抽奖',
-						url: '/draw',
-						tip: '您有一条中奖消息'
-					},
+					
 					/*{
 						img: './static/member/m_index13.png',
 						text: '我的卡包',

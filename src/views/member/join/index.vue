@@ -1,159 +1,192 @@
 <template>
-	<section class="join">
+	<section class="join_box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="list">
-			<group gutter="0">
-				<cell class="list-item" title="公司名称">
-					<x-input class="input-item" ref="company" v-model="company" :value="company" text-align="right" placeholder="未填写" type="text" @on-change="companyChange"></x-input>
-				</cell>
-				<cell class="list-item" title="法人姓名">
-					<x-input class="input-item" ref="name" v-model="name" :value="name" text-align="right" placeholder="未填写" type="text" @on-change="nameChange"></x-input>
-				</cell>
-				<cell class="list-item" title="法人手机号">
-					<x-input class="input-item" ref="phone" v-model="phone" :value="phone" text-align="right" placeholder="未填写" type="text" @on-change="phoneChange"></x-input>
-				</cell>
-			</group>
-
-			<group class="input-div">
-				<cell class="list-item" title="加盟角色">
-					<x-input class="input-item" ref="role" v-model="role" :value="role" text-align="right" placeholder="未填写" type="text" @on-change="roleChange"></x-input>
-				</cell>
-				<cell class="list-item" title="预估门店数">
-					<x-input class="input-item" ref="storesnum" v-model="storesnum" :value="storesnum" text-align="right" placeholder="未填写" type="text" @on-change="storesnumChange"></x-input>
-				</cell>
-			</group>
-			<group class="remark">
-				<cell class="list-remark" title="备注"></cell>
-				<x-textarea :max="200" name="remark" placeholder="请填写备注" v-model="remark" :value="remark" :height="100" :show-counter="false"></x-textarea>
-			</group>
-		</div>
-		<div class="tip">
-			<div class="add-btn" @click="addCompany">保存</div>
-		</div>
+		<img class="datu" :src="'./static/images/jiameng.png'" />
+		<ul class="input_box">
+			<li>
+				<span>加盟角色</span>
+				<span @click="showJs = true">请选择<i class="icon iconfont icon-arrow-right"></i></span>
+			</li>
+			<li>
+				<span>申请人</span>
+				<div>
+					<input type="text" placeholder="请输入" />
+				</div>
+			</li>
+			<li>
+				<span>联系电话</span>
+				<div>
+					<input type="text" placeholder="请输入" />
+				</div>
+			</li>
+			<li>
+				<span>企业名称</span>
+				<div>
+					<input type="text" placeholder="请输入" />
+				</div>
+			</li>
+			<li>
+				<span>所在城市</span>
+				<span @click="showAddress = true">请选择<i class="icon iconfont icon-arrow-right"></i></span>
+			</li>
+		</ul>
+		<div class="btn">提交</div>
+		<p class="tip">创造价值 · 增信赋能</p>
+		
+		<!--角色-->
+		<popup-picker :show="showJs" :data="list2" v-model="value2" @on-change="jsChange" @on-hide="showJs = false"></popup-picker>
+		<!--地址-->
+		<x-address :show="showAddress" :list="list" class="address-item" v-model="addArr" value-text-align="left" @on-show="onAddArr" @on-hide="showAddress = false"></x-address>
 	</section>
 </template>
 
 <script>
-	import settingHeader from '../../../components/setting_header'
-	import { XInput, Actionsheet, Datetime } from 'vux'
+	import settingHeader from '@/components/setting_header'
+	import { PopupPicker,XAddress  } from 'vux'
 	export default {
 		components: {
 			settingHeader,
-			XInput,
-			Actionsheet
+			PopupPicker,XAddress
 		},
 		data() {
 			return {
 				title: '企业加盟',
-				company: '',
-				name: '',
-				phone: '18523945843',
-				role: '行业服务商',
-				storesnum: '10000家',
-				remark: ''
+				showJs:false,
+				showAddress:false,
+				list: [],
+				addArr: [],
+				list2:[[{name:'区域运营商',value:1},{name:'联盟企业',value:2},{name:'联营企业',value:3},{name:'服务商',value:4}]]
 			}
 		},
+		created(){
+			this.getRegionOptions(2)
+			this.getRegionOptions(3)
+			this.getRegionOptions(4)
+		},
 		methods: {
-			companyChange(val) {},
-			nameChange(val) {},
-			phoneChange(val) {},
-			roleChange(val) {},
-			storesnumChange(val) {},
-			addCompany() {
-				var _this = this
-				if(!_this.mainApp.isphone(_this.phone) && _this.phone) {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '手机号格式不正确'
-					})
-					return false
+			
+			jsChange(){
+				console.log(this.value2[0])
+			},
+			getRegionOptions(level) { // 获取地址选项
+				let _this = this
+				let param = {
+					'level': level
 				}
-
-				var data = {
-					company: _this.company,
-					name: _this.name,
-					phone: _this.phone,
-					role: _this.role,
-					storesnum: _this.storesnum,
-					remark: _this.remark,
-					userId: _this.$store.state.user.userId
-				}
-				console.log('--添加企业数据:', data)
-				// _this.$http.post(_this.url.user.changeUserInfo, data).then((res) => {
-				// 	if(res.data.status == '00000000') {
-				// 		_this.$vux.toast.show({
-				// 			width: '50%',
-				// 			type: 'text',
-				// 			position: 'middle',
-				// 			text: '添加成功'
-				// 		})
-				// 		_this.getUserInfo()
-				// 	}
-				// })
+				_this.$http.get(_this.url.zone.area, {
+					params: param
+				}).then(resp => {
+					let temp
+					let arrData = resp.data.data
+					if(level === 2) {
+						arrData.forEach(function(item) {
+							temp = {
+								name: item.name,
+								value: item.areaId
+							}
+							_this.list.push(temp)
+						})
+					} else {
+						arrData.forEach(function(item) {
+							temp = {
+								name: item.name,
+								value: item.areaId,
+								parent: item.parentId + ''
+							}
+							_this.list.push(temp)
+						})
+					}
+				})
+			},
+			onAddArr(){
+				console.log(this.addArr)
 			}
 		},
 
 	}
 </script>
-
 <style lang="less">
-	.join {
-		.list {
-			.remark {
-				.weui-cell:before {
-					border-top: none;
-				}
-				.weui-textarea {
-					font-size: 0.24rem;
-					color: #1A2642;
-				}
-			}
-			.list-item {
-				font-family: PingFangSC-Regular;
+	.vux-cell-box{
+		display: none!important;
+	}
+</style>
+<style lang="less" scoped>
+	.join_box {
+		background-color: white;
+		.datu {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+		.input_box {
+			padding: 0 0.30rem;
+			box-sizing: border-box;
+			li {
+				height: 1.08rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				position: relative;
 				font-size: 0.28rem;
-				color: #1A2642;
-				letter-spacing: 0;
-				height: 1.02rem;
-				padding-top: 0!important;
-				padding-bottom: 0!important;
-				.weui-cell__ft {
-					color: rgba(26, 38, 66, 1);
+				span:nth-child(1) {
+					color: rgba(50, 51, 51, 1);
+				}
+				span:nth-child(2) {
+					color: #A0A0A0;
+					display: flex;
+					align-items: center;
+					i {
+						font-size: 0.5rem;
+					}
+				}
+				div {
+					margin-left: 2rem;
+					flex: 1;
+					height: 100%;
+					padding: 0.2rem 0;
+					box-sizing: border-box;
+					padding-right: 0.45rem;
+					input {
+						width: 100%;
+						height: 100%;
+						text-align: right;
+						font-size: 0.28rem;
+					}
 				}
 			}
-			input::-webkit-input-placeholder {
-				color: #90A2C7;
-			}
-			textarea::-webkit-input-placeholder {
-				color: #90A2C7;
-				font-size: 0.24rem;
-			}
-			.list-remark {
-				font-family: PingFangSC-Regular;
-				font-size: 0.28rem;
-				color: #1A2642;
-				letter-spacing: 0;
-				padding-top: 0.31rem !important;
-				padding-bottom: 0!important;
-				.weui-cell__ft {
-					color: rgba(26, 38, 66, 1);
-				}
+			li:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #D9D9D9;
+				color: #D9D9D9;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
 			}
 		}
+		.btn {
+			width: 6.18rem;
+			height: 0.88rem;
+			line-height: 0.88rem;
+			text-align: center;
+			background: rgba(51, 111, 255, 1);
+			border-radius: 3px;
+			box-shadow: 2px 0px 20px rgba(51, 111, 255, 0.25);
+			font-size: 0.36rem;
+			color: rgba(255, 255, 255, 1);
+			margin: 0.6rem auto 0.3rem;
+		}
 		.tip {
-			margin-top: 0.5rem;
-			.add-btn {
-				width: 6.18rem;
-				height: 0.88rem;
-				line-height: 0.88rem;
-				background: rgba(51, 111, 255, 1);
-				font-size: 0.28rem;
-				text-align: center;
-				font-family: MicrosoftYaHei;
-				color: rgba(255, 255, 255, 1);
-				margin: 0 auto;
-			}
+			text-align: center;
+			font-size: 0.24rem;
+			color: rgba(160, 160, 160, 1);
+			padding-bottom: 0.3rem;
 		}
 	}
 </style>
