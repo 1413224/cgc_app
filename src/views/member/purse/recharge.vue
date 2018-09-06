@@ -29,7 +29,7 @@
 				</div>
 			</div>
 
-			<div class="btn-box">
+			<div class="btn-box" v-if="moneyList.length != 0">
 				<x-button class="add-btn" @click.native="submit">确认充值</x-button>
 			</div>
 		</div>

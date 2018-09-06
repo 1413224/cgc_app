@@ -195,11 +195,11 @@
 						text: '积分商城',
 						url: '/shop'
 					},
-					{
+					/*{
 						img: './static/member/m-index5.png',
 						text: '产业联盟',
 						url: '/share/storelist'
-					},
+					},*/
 					/*{
 						img: './static/member/member_2.png',
 						text: '我的订单',
@@ -239,6 +239,7 @@
 			}
 
 			this.getUserInfo()
+			this.getCardStat()
 		},
 		methods: {
 			toOrder(index) {
@@ -289,6 +290,23 @@
 						index: 1
 					}
 				})
+			},
+			getCardStat(){
+				var _this = this,
+					uid = _this.$store.state.user.userId;
+				if(uid){
+					_this.$http.get(_this.url.user.getMyEnterpriseCardStat,{
+						params:{
+							userId:uid
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000"){
+							// console.log(res.data.data)
+							var data = res.data.data
+							_this.infoList[0].tip = data.cardNums=='' || data.cardNums == null ? '' : "共"+data.cardNums+"张通用卡"
+						}
+					})
+				}
 			}
 		},
 		components: {

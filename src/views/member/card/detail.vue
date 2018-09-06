@@ -1,137 +1,207 @@
 <template>
 	<div class="cardDetail_box">
-		<settingHeader title="通用卡详情"></settingHeader>
-		<div class="top">
-			<div class="bg">
-				<p class="store">国美番禺万科里店</p>
-				<div class="middle">
-					<p>企业通用积分：</p>
-					<p>348786.53</p>
-				</div>
-				<div class="use_btn" @click="$router.push({path:'/member/card/record'})">使用明细<i class="icon iconfont icon-arrow-right"></i></div>
+		<settingHeader title="企业通用积分详情"></settingHeader>
+		<!-- wrapper开始 -->
+		<div class="wrapper" ref="wrapper">
+			<div class="scrolls">
+				<div class="top">
+					<div class="bg" :style="styleObject">
+						<p class="store">{{cardDetail.name}}</p>
+						<div class="middle">
+							<p>企业通用积分：</p>
+							<p>{{cardDetail.balance}}</p>
+						</div>
+						<div class="use_btn" @click="goRecord()">使用明细<i class="icon iconfont icon-arrow-right"></i></div>
 
-				<div class="tip_btn" @click="showTip = true">说明</div>
-			</div>
-		</div>
-		<div class="title">
-			<p>会员卡适用门店</p>
-		</div>
-		<div class="pd_box">
-			<div class="list" v-for="(item,index) in list" :key="index">
-				<div class="item">
-					<div class="logo">
-						<img v-if="item.logo" :src="item.logo.original" alt="" />
+						<div class="tip_btn" @click="showTip = true">说明</div>
 					</div>
-					<div>
-						<p class="name">{{item.name}}</p>
-						<p class="type" v-if="item.domainCate1Name">{{item.domainCate1Name}} l {{item.domainCate2Name}}</p>
-						<p class="address">
-							<span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
-							<span>{{item.distance}}km</span>
-						</p>
-						<p class="sf">
-							<span class="lm" v-if="item.isAlliance == 1">联盟企业</span>
-							<span class="ly" v-if="item.isChains == 1">联营企业</span>
-						</p>
+				</div>
+				<div class="title">
+					<p>会员卡适用门店</p>
+				</div>
+				<div class="pd_box">
+					<div class="list" v-for="(item,index) in list" :key="index" @click=goshop(item.enterpriseId)>
+						<div class="item">
+							<div class="logo">
+								<img v-if="item.logo" :src="item.logo.original" alt="" />
+							</div>
+							<div>
+								<p class="name">{{item.allianceName}}</p>
+								<p class="type" v-if="item.domainCate1Name">{{item.domainCate1Name}} l {{item.domainCate2Name}}</p>
+								<p class="address">
+									<span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
+									<!-- <span>{{item.distance}}km</span> -->
+								</p>
+								<p class="sf">
+								<!-- 	<span class="lm" v-if="item.isAlliance == 1">联盟企业</span>
+								<span class="ly" v-if="item.isChains == 1">联营企业</span> -->
+								</p>
+							</div>
+						</div>
 					</div>
+				</div>
+
+				<Loading v-if="showLoading"></Loading>
+				<Nomore v-if="showNomore"></Nomore>
+				<!-- list.length == 0 -->
+				<noData v-if="listLength" :status="2" stateText="暂无使用门店"></noData>
+				<!--说明-->
+				<div v-transfer-dom>
+					<popup v-model="showTip">
+						<div class="tip_box">
+							<div class="title">企业通用卡说明</div>
+							<div class="content">{{cardDetail.remark}}</div>
+							<div class="btn" @click="showTip = false">关闭</div>
+						</div>
+					</popup>
 				</div>
 			</div>
 		</div>
-		<!--说明-->
-		<div v-transfer-dom>
-			<popup v-model="showTip">
-				<div class="tip_box">
-					<div class="title">企业通用卡说明</div>
-					<div class="content">企业通用卡说明</div>
-					<div class="btn" @click="showTip = false">关闭</div>
-				</div>
-			</popup>
-		</div>
+		<!-- wrapper结束 -->
 	</div>
 </template>
 
 <script>
 	import settingHeader from '@/components/setting_header'
+	import BScroll from 'better-scroll'
 	import { Popup } from 'vux'
+	import Loading from '@/components/loading'
+	import Nomore from '@/components/noMore'
+	import noData from '@/components/noData'
 	export default {
 		data() {
 			return {
 				showTip: false,
-				list: [{
-					allianceId: null,
-					area: {
-						area: "天河区",
-						country: "中国",
-						province: "广东省",
-						town: null,
-						city: "广州市"
-					},
-					chainsId: null,
-					distance: 5,
-					domainCate1Name: "食品餐饮",
-					domainCate2Name: "餐馆",
-					domainCate3Name: null,
-					domainCate4Name: null,
-					enterpriseId: "enterBasic2018071600000002",
-					isAlliance: 1,
-					isChains: 1,
-					joinTime: 0,
-					lat: 22.987211,
-					lng: 113.373904,
-					logo: {
-						imageId: "img-ent628084771500000001",
-						large: "",
-						middle: null,
-						original: "http://domain.cgc999.com:8080/group1/M00/00/1F/rBL0CFtSlAqARGtwAACpB_W8R4E233.jpg",
-						small: "",
-					},
-					name: "广州鸿德国际大酒店",
-					tel: "020-38626995"
-				}, {
-					allianceId: null,
-					area: {
-						area: "天河区",
-						country: "中国",
-						province: "广东省",
-						town: null,
-						city: "广州市"
-					},
-					chainsId: null,
-					distance: 5,
-					domainCate1Name: "食品餐饮",
-					domainCate2Name: "餐馆",
-					domainCate3Name: null,
-					domainCate4Name: null,
-					enterpriseId: "enterBasic2018071600000002",
-					isAlliance: 1,
-					isChains: 1,
-					joinTime: 0,
-					lat: 22.987211,
-					lng: 113.373904,
-					logo: {
-						imageId: "img-ent628084771500000001",
-						large: "",
-						middle: null,
-						original: "http://domain.cgc999.com:8080/group1/M00/00/1F/rBL0CFtSlAqARGtwAACpB_W8R4E233.jpg",
-						small: "",
-					},
-					name: "广州鸿德国际大酒店",
-					tel: "020-38626995"
-				}]
+				cardDetail:{'balance':100},
+				page:0,
+				showNomore:false,
+				showLoading:false,
+				styleObject:{
+					backgroundImage:'url("./static/member/khh.png")',
+					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
+					backgroundSize:'100%'
+				},
+				list: [],
+				flag:true,
+				listLength:false
+
 			}
 		},
 		components: {
 			settingHeader,
-			Popup
+			Popup,
+			Loading,
+			Nomore,
+			noData
 		},
 		created() {
-
+			this.InitScroll()
+			this.getCardDetail()
+			this.getList()
 		},
 		mouted() {
 
 		},
 		methods: {
+			InitScroll() {
+				var _this = this
+				this.$nextTick(() => {
+					if(!this.scroll) {
+						this.scroll = new BScroll(this.$refs.wrapper, {
+							click: true,
+							scrollY: true,
+							pullUpLoad: {
+								threshold: 30, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+							}
+						})
+						this.scroll.on('pullingUp', (pos) => {
+							
+							if(_this.flag){
+								_this.flag = false;
+								_this.getList()
+							}
+							this.$nextTick(function() {
+								this.scroll.finishPullUp()
+								this.scroll.refresh()
+							})
+						})
+					} else {
+						this.scroll.refresh()
+					}
+				})
+			},
+			getCardDetail(){
+				var _this = this,
+					userCardId = _this.$route.query.userCardId;
+				_this.$http.get(_this.url.user.getMyEnterpriseCardDetail,{
+					params:{
+						userId:_this.$store.state.user.userId,
+						userCardId:userCardId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						console.log(res.data.data)
+						_this.cardDetail = res.data.data
+						// _this.styleObject.backgroundImage = 'url(' + res.data.data.logo.middle + ')'
+					}
+				})
+			},
+			getList(){
+				var _this = this 
 
+				_this.page ++;
+				_this.showLoading = true;
+				this.$http.get(_this.url.user.getAvailableAllianceList,{
+					params:{
+						userId:_this.$store.state.user.userId,
+						cardId:_this.$route.query.cardId,
+						curPage:_this.page,
+						pageSize:4
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						console.log(res.data.data)
+						var listLng = res.data.data.list.length
+						if(listLng>0){
+							_this.list = _this.list.concat(res.data.data.list) 
+							_this.showLoading = false 
+							_this.flag = true
+						}else{
+							_this.showLoading = false 
+							_this.showNomore = true
+						}
+
+						//判断有无可使用联盟企业
+						if(_this.page == 1){
+							_this.showNomore = false
+							if(listLng == 0){
+								_this.listLength = true
+							}
+						}
+						
+					}
+				})
+
+			},
+			goshop(id){
+				this.$router.push({
+					path:'multi_user_mall',
+					query:{
+						id:id,
+						// oIndex:3
+					}
+				})
+			},
+			goRecord(){
+				var _this = this,
+					userCardId=_this.$route.query.userCardId;
+				_this.$router.push({
+					path:'/member/card/record',
+					query:{
+						userCardId:userCardId
+					}
+				})
+			}
 		},
 
 	}
@@ -411,5 +481,23 @@
 		.list:not(:last-child) {
 			border-bottom: 1px solid rgba(216, 223, 240, 1);
 		}
+	}
+	html,body{
+		width: 100%;
+		height: 100%;
+	}
+	.settingHeader ~ .wrapper{
+		width: 100%;
+		position: absolute;
+		top: 46px;
+		bottom: 0;
+		overflow: hidden;
+	}
+	.wrapper{
+		width: 100%;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		overflow: hidden;
 	}
 </style>

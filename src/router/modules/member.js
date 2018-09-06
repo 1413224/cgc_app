@@ -335,6 +335,14 @@ const memberModule = [{
 		}
 	},
 	{
+		path:'/member/card/shopdetailfrac',
+		name:'fraction',
+		component: resolve => require(['@/views/member/card/shopdetailfrac'],resolve),
+		meta:{
+			title:'企业通用积分详情'
+		}
+	},
+	{
 		path: '/member/purse/banlancelog',
 		name: 'banlancelog',
 		component: resolve => require(['@/views/member/purse/banlancelog'], resolve),

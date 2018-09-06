@@ -30,11 +30,11 @@
 			<div class="content">
 				<div>
 					<div class="top">
-						<div class="bg">
-							<p class="store">国美番禺万科里店</p>
+						<div class="bg" :style="styleObject">
+							<p class="store">{{cardDetail.name}}</p>
 							<div class="middle">
 								<p>企业通用积分：</p>
-								<p>348786.53</p>
+								<p>{{cardDetail.balance}}</p>
 							</div>
 						</div>
 					</div>
@@ -106,17 +106,17 @@
 					title: '消费',
 					type: 2
 				}, {
-					title: '累计充值',
+					title: '充值',
 					type: 3
 				}, {
 					title: '购物奖励',
 					type: 4
 				}, {
-					title: '中奖奖励',
-					type: 6
-				}, {
 					title: '分红奖励',
 					type: 5
+				}, {
+					title: '中奖奖励',
+					type: 6
 				}, {
 					title: '任务奖励',
 					type: 7
@@ -129,6 +129,14 @@
 				show: false,
 				showNo: false,
 				isW: false,
+				//头部详情
+				cardDetail:'',
+				styleObject:{
+					backgroundImage:'url("../../../../static/member/khh.png")',
+					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
+					backgroundSize:'100%'
+				},
+
 			}
 		},
 		components: {
@@ -140,8 +148,36 @@
 			Sticky
 		},
 		created() {
+			this.list = []
+			this.type = this.$route.query.type ? this.$route.query.type : 1
+			//设置对应筛选INDEX
+			if(this.$route.query.type == 3) {
+				this.twoIndex = 2
+				this.typeTitle = '累计充值'
+			} else if(this.$route.query.type == 4) {
+				this.twoIndex = 3
+				this.typeTitle = '购物奖励'
+			} else if(this.$route.query.type == 6) {
+				this.twoIndex = 4
+				this.typeTitle = '中奖奖励'
+			} else if(this.$route.query.type == 5) {
+				this.twoIndex = 5
+				this.typeTitle = '分红奖励'
+			} else if(this.$route.query.type == 7) {
+				this.twoIndex = 6
+				this.typeTitle = '任务奖励'
+			} else if(this.$route.query.type == 1) {
+				this.twoIndex = 0
+				this.typeTitle = '全部列表'
+			} else if(this.$route.query.type == 2) {
+				this.twoIndex = 1
+				this.typeTitle = '消费'
+			}
+
 			this.getMyBalanceList()
 			this.InitScroll()
+
+			this.getCardDetail()
 		},
 		watch: {
 			isW() {
@@ -153,9 +189,10 @@
 		methods: {
 			getMyBalanceList() {
 				var _this = this
-				_this.$http.get(_this.url.user.getMyBalanceList, {
+				_this.$http.get(_this.url.user.getUseEnterpriseCardList, {
 					params: {
 						userId: _this.$store.state.user.userId,
+						userCardId:_this.$route.query.userCardId,
 						type: _this.type,
 						curPage: _this.curPage,
 						pageSize: _this.pageSize
@@ -187,7 +224,7 @@
 			},
 			toDetail(id) {
 				this.$router.push({
-					name: 'currencyrewarddetail',
+					path: '/member/card/shopdetailfrac',
 					query: {
 						id: id
 					}
@@ -268,7 +305,28 @@
 							}
 						}
 					})
-			}
+			},
+
+			//获取头详情
+			getCardDetail(){
+				var _this = this,
+					userCardId = _this.$route.query.userCardId;
+				_this.$http.get(_this.url.user.getMyEnterpriseCardDetail,{
+					params:{
+						userId:_this.$store.state.user.userId,
+						userCardId:userCardId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+						console.log(res.data.data)
+						_this.cardDetail = res.data.data
+						// _this.styleObject.backgroundImage = 'url(' + res.data.data.logo.middle + ')'
+					}
+				})
+			},
+
+
+
 		},
 
 	}

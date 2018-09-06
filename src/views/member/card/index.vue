@@ -1,21 +1,26 @@
 <template>
 	<div class="card_box">
-		<settingHeader title="企业通用卡"></settingHeader>
+		<settingHeader title="企业通用积分"></settingHeader>
 		<div class="wrapper" :class="[{'top46':!$store.state.page.isWx},{'b_white':cardList.length == 0}]" ref="wrapper">
 			<div class="content">
-				<ul class="card_list" v-if="cardList.length > 0" @click="toDetail">
-					<li class="item" :class="item.bj" v-for="(item,index) in cardList" :key="index">
-						<p class="store">{{item.store}}</p>
+				<ul class="card_list" v-if="cardList.length > 0">
+				<!-- 'url('+item.logo+')' -->  
+				<!-- :style="{backgroundImage:styleObject}" -->
+				<!-- :style="{ 'background-image': 'url(' + item.logo.middle + ')','background-repeat':'no-repeat','background-size':'cover' }"  -->
+					<li class="item" :class="item.bj" :style="styleObject"  v-for="(item,index) in cardList" :key="index" @click="toDetail(item.userCardId,item.cardId)">
+						<p class="store">{{item.name}}</p>
 						<div class="middle">
 							<p>可用企业通用积分：</p>
-							<p>{{item.jf}}</p>
+							<p>{{item.balance}}</p>
 						</div>
-						<p class="tip">注：适用于{{item.fw}}</p>
+						<p class="tip" v-if="item.availableNums == 1">注：适用于{{item.allianceName}}</p>
+						<p class="tip" v-else>注：适用于{{item.availableNums}}</p>
 					</li>
 				</ul>
 				<Loading v-if="showLoading"></Loading>
 				<Nomore v-if="showNomore"></Nomore>
-				<noData v-if="cardList.length == 0" :status="0" stateText="您还没有相关卡券"></noData>
+				<!-- cardList.length -->
+				<noData v-if="cardLength" :status="2" stateText="您还没有相关的企业通用积分"></noData>
 			</div>
 		</div>
 	</div>
@@ -33,36 +38,27 @@
 			return {
 				showLoading: false,
 				showNomore: false,
-				cardList: [{
+				page:0,
+				userCardId:0,
+				flag:true,
+				nodatas:false,
+				cardLength:false,
+				styleObject:{
+					backgroundImage:'url("./static/member/khh.png")',
+					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
+					backgroundSize:'100%'
+				},
+				cardList: [
+					/*{
+						store:'ddd'
+					}*/
+					/*{
 						store: '国美番禺万科里店',
 						jf: '348786.53',
 						fw: '广东成高成网络技术门店',
 						bj: 'black'
 					},
-					{
-						store: '国美番禺万科里店',
-						jf: '348786.53',
-						fw: '广东成高成网络技术门店',
-						bj: 'blue'
-					},
-					{
-						store: '国美番禺万科里店',
-						jf: '348786.53',
-						fw: '广东成高成网络技术门店',
-						bj: 'xk'
-					},
-					{
-						store: '国美番禺万科里店',
-						jf: '348786.53',
-						fw: '广东成高成网络技术门店',
-						bj: 'red'
-					},
-					{
-						store: '国美番禺万科里店',
-						jf: '348786.53',
-						fw: '广东成高成网络技术门店',
-						bj: 'white'
-					},
+					*/
 				]
 			}
 		},
@@ -74,15 +70,22 @@
 		},
 		created() {
 			this.InitScroll()
+			this.LoadData()
 		},
 		mounted() {},
 		methods: {
-			toDetail(){
+			toDetail(userCardId,cardId){
+				var _this = this
 				this.$router.push({
-					path:'/member/card/detail'
+					path:'/member/card/detail',
+					query:{
+						userCardId:userCardId,
+						cardId:cardId
+					}
 				})
 			},
 			InitScroll() {
+				var _this = this
 				this.$nextTick(() => {
 					if(!this.scroll) {
 						this.scroll = new BScroll(this.$refs.wrapper, {
@@ -93,7 +96,13 @@
 							}
 						})
 						this.scroll.on('pullingUp', (pos) => {
-							this.LoadData()
+							// _this.showLoading = true
+							
+							if(_this.flag){
+								_this.flag = false
+								this.LoadData()
+							}
+							
 							this.$nextTick(function() {
 								this.scroll.finishPullUp()
 								this.scroll.refresh()
@@ -106,14 +115,39 @@
 			},
 			LoadData() {
 				var _this = this
-				if(_this.cardList.length < 20) {
-					_this.showLoading = true
-					_this.showNomore = false
-					_this.cardList = _this.cardList.concat(_this.cardList)
-				} else {
-					_this.showLoading = false
-					_this.showNomore = true
-				}
+				// alert(_this.page)
+				
+				_this.page ++;
+				_this.showLoading = true;
+				_this.$http.get(_this.url.user.getMyEnterpriseCard,{
+					params:{
+						userId: _this.$store.state.user.userId,
+						curPage : _this.page,
+						pageSize:3
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+
+						// console.log(res.data.data)
+						var listLng = res.data.data.list.length
+
+						if(listLng != 0){
+							_this.cardList = _this.cardList.concat(res.data.data.list)
+							_this.showLoading = false;
+							_this.flag = true;
+						}else{
+							_this.showLoading = false
+							_this.showNomore = true
+
+							if(_this.page == 1){
+								_this.showNomore = false
+								if(listLng == 0){
+									_this.cardLength = true
+								}
+							}
+						}
+					}
+				})
 			},
 
 		}
