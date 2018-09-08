@@ -152,6 +152,11 @@
 						<img slot="icon" :src="item.img">
 					</cell>
 				</group>
+				<group gutter="0" class="infoList3">
+					<cell v-for="(item,index) in infoList3" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
+						<img slot="icon" :src="item.img">
+					</cell>
+				</group>
 			</section>
 		</div>
 	</div>
@@ -179,20 +184,25 @@
 						url: '/member/follow/index',
 					},
 					{
-						img: './static/member/m-index3.png',
-						text: '收货地址',
-						url: '/member/address/index',
+						img: './static/member/member_5.png',
+						text: '我的房卡',
+						url: '/shop',
 						tip: ''
 					}
 				],
 				infoList2: [{
 						img: './static/member/m-index6.png',
-						text: '幸运抽奖',
+						text: '幸运大抽奖',
 						url: '/draw',
 						tip: '您有一条中奖消息'
 					},{
 						img: './static/member/m-index4.png',
-						text: '积分商城',
+						text: '供应链云商城',
+						url: '/shop'
+					},
+					{
+						img: './static/member/m-index5.png',
+						text: '企业云商城',
 						url: '/shop'
 					},
 					/*{
@@ -216,6 +226,30 @@
 						text: '门禁系统',
 						url: '/lock/card'
 					},*/
+				],
+				infoList3: [
+					/*{
+						img: './static/member/m-index1.png',
+						text: '企业通用积分',
+						url: '/member/card/index',
+						tip: ''
+					},
+					{
+						img: './static/member/m-index2.png',
+						text: '我的关注',
+						url: '/member/follow/index',
+					},*/
+					{
+						img: './static/member/m-index3.png',
+						text: '收货地址',
+						url: '/member/address/index',
+						tip: ''
+					},
+					{
+						img: './static/member/fapiao.png',
+						text: '发票管理',
+						url: '/invoice/index'
+					},
 				],
 				yhqTip: '5张快过期',
 				isLogin: false,
