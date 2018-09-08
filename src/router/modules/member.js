@@ -1,61 +1,3 @@
-import index from '@/views/index'
-import test from '@/views/member/test'
-import reg from '@/views/user/reg'
-import changelist from '@/views/user/changelist'
-import changeLoginPassword from '@/views/user/changeLoginPassword'
-import changeLoginPassword2 from '@/views/user/changeLoginPassword2'
-import changePaymentPassword from '@/views/user/changePaymentPassword'
-import changePaymentPassword2 from '@/views/user/changePaymentPassword2'
-import couponindex from '@/views/member/coupon/index'
-import coupondetail from '@/views/member/coupon/detail'
-import member from '@/views/member/index'
-import msg_setting from '@/views/member/message/setting'
-import address from '@/views/member/address/index'
-import address_edit from '@/views/member/address/edit'
-import score from '@/views/member/score/index'
-import score_log from '@/views/member/score/log'
-import team from '@/views/member/team/index'
-import info from '@/views/member/info/index'
-import infodata from '@/views/member/info/data'
-import changeCode from '@/views/member/setting/changeCode'
-import nickname from '@/views/member/setting/nickname'
-import about from '@/views/member/setting/about'
-import real from '@/views/member/setting/real'
-import realoading from '@/views/member/setting/realoading'
-import resetCode from '@/views/member/setting/resetCode'
-import purseindex from '@/views/member/purse/index'
-import pursewallet from '@/views/member/purse/wallet'
-import qrcode from '@/views/member/purse/qrcode'
-import commercial from '@/views/member/purse/commercial'
-import hasqrcode from '@/views/member/purse/hasqrcode'
-import banlancelog from '@/views/member/purse/banlancelog'
-import banlance from '@/views/member/purse/banlance'
-import recharge from '@/views/member/purse/recharge'
-import card from '@/views/member/card/index'
-import carddetail from '@/views/member/card/detail'
-import setting from '@/views/member/setting/index'
-import follow from '@/views/member/follow/index'
-import earningsindex from '@/views/member/earnings/index'
-import earningscurrency from '@/views/member/earnings/currency'
-import earningscredit from '@/views/member/earnings/credit'
-import record from '@/views/member/earnings/record'
-import currencyreward from '@/views/member/earnings/currencyreward'
-import creditreward from '@/views/member/earnings/creditreward'
-import rule from '@/views/member/earnings/rule'
-import logs from '@/views/member/earnings/logs'
-import profit from '@/views/member/earnings/profit'
-import strategy from '@/views/member/score/strategy'
-import currencyrewarddetail from '@/views/member/score/currencyrewarddetail'
-import creditrewarddetail from '@/views/member/score/creditrewarddetail'
-import agreement from '@/views/member/setting/agreement'
-import preview from '@/views/member/setting/preview'
-import article from '@/views/member/article/index'
-import vip from '@/views/member/vip/index'
-import vipright from '@/views/member/vip/right'
-import generalize from '@/views/member/generalize/index'
-import wxpay from '@/views/member/pay/wxgzhpay'
-import oriza from '@/views/member/oriza/oriza'
-
 const memberModule = [{
 		path: '/index',
 		name: 'index',
@@ -69,7 +11,7 @@ const memberModule = [{
 	{
 		path: '/',
 		name: 'index',
-		component: index,
+		component: resolve => require(['@/views/index'], resolve),
 		meta: {
 			navShow: true,
 			navIndex: 0,
@@ -78,7 +20,7 @@ const memberModule = [{
 	}, {
 		path: '/member/test',
 		name: 'test',
-		component: test,
+		component: resolve => require(['@/views//member/test'], resolve),
 		meta: {
 			title: '所有弹框'
 		}
@@ -175,7 +117,7 @@ const memberModule = [{
 		meta: {
 			title: '地址管理'
 		}
-	},{
+	}, {
 		path: '/member/address/select_address',
 		name: 'select_address',
 		component: resolve => require(['@/views/member/address/select_address'], resolve),
@@ -319,14 +261,14 @@ const memberModule = [{
 		meta: {
 			title: '我的卡包'
 		}
-	},{
+	}, {
 		path: '/member/card/detail',
 		name: 'carddetail',
 		component: resolve => require(['@/views/member/card/detail'], resolve),
 		meta: {
 			title: '卡包详情'
 		}
-	},{
+	}, {
 		path: '/member/card/record',
 		name: 'cardRecord',
 		component: resolve => require(['@/views/member/card/record'], resolve),
@@ -335,11 +277,11 @@ const memberModule = [{
 		}
 	},
 	{
-		path:'/member/card/shopdetailfrac',
-		name:'fraction',
-		component: resolve => require(['@/views/member/card/shopdetailfrac'],resolve),
-		meta:{
-			title:'企业通用积分详情'
+		path: '/member/card/shopdetailfrac',
+		name: 'fraction',
+		component: resolve => require(['@/views/member/card/shopdetailfrac'], resolve),
+		meta: {
+			title: '企业通用积分详情'
 		}
 	},
 	{
@@ -526,10 +468,17 @@ const memberModule = [{
 	},
 	{
 		path: '/member/join/index',
-		name: 'join',
+		name: 'joinIndex',
 		component: resolve => require(['@/views/member/join/index'], resolve),
 		meta: {
-			title: '企业加盟'
+			title: '招商加盟'
+		}
+	},{
+		path: '/member/join/result',
+		name: 'joinResult',
+		component: resolve => require(['@/views/member/join/result'], resolve),
+		meta: {
+			title: '招商加盟'
 		}
 	},
 	{
@@ -547,7 +496,7 @@ const memberModule = [{
 		meta: {
 			title: '微信支付'
 		}
-	},{
+	}, {
 		path: '/member/pay/scan_pay',
 		name: 'scan_pay',
 		component: resolve => require(['@/views/member/pay/scan_pay'], resolve),

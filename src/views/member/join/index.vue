@@ -5,10 +5,10 @@
 		<ul class="input_box">
 			<li>
 				<span>加盟角色</span>
-				<span @click="showJs = true">请选择<i class="icon iconfont icon-arrow-right"></i></span>
+				<span @click="showJs = true">{{js != ''? js : '请选择'}}<i class="icon iconfont icon-arrow-right"></i></span>
 			</li>
 			<li>
-				<span>申请人</span>
+				<span class="btn123">申请人</span>
 				<div>
 					<input type="text" placeholder="请输入" />
 				</div>
@@ -27,46 +27,76 @@
 			</li>
 			<li>
 				<span>所在城市</span>
-				<span @click="showAddress = true">请选择<i class="icon iconfont icon-arrow-right"></i></span>
+				<span @click="showAddress = true">{{addressName != '' && showAddressText ? addressName : '请选择'}}<i class="icon iconfont icon-arrow-right"></i></span>
 			</li>
 		</ul>
-		<div class="btn">提交</div>
+		<div class="btn" @click="submit">提交</div>
 		<p class="tip">创造价值 · 增信赋能</p>
-		
+
 		<!--角色-->
-		<popup-picker :show="showJs" :data="list2" v-model="value2" @on-change="jsChange" @on-hide="showJs = false"></popup-picker>
+		<popup-picker class="showJs" :show="showJs" :data="list2" v-model="value2" @on-change="jsChange" @on-hide="showJs = false"></popup-picker>
 		<!--地址-->
-		<x-address :show="showAddress" :list="list" class="address-item" v-model="addArr" value-text-align="left" @on-show="onAddArr" @on-hide="showAddress = false"></x-address>
+		<x-address raw-value :show="showAddress" :list="list" class="address-item" v-model="addArr" value-text-align="left" @on-show="onAddArr" @on-hide="onHide" @on-shadow-change="onC"></x-address>
 	</section>
 </template>
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { PopupPicker,XAddress  } from 'vux'
+	import { PopupPicker, XAddress } from 'vux'
 	export default {
 		components: {
 			settingHeader,
-			PopupPicker,XAddress
+			PopupPicker,
+			XAddress
 		},
 		data() {
 			return {
 				title: '企业加盟',
-				showJs:false,
-				showAddress:false,
+				showJs: false,
+				showAddress: false,
+				showAddressText: false,
 				list: [],
 				addArr: [],
-				list2:[[{name:'区域运营商',value:1},{name:'联盟企业',value:2},{name:'联营企业',value:3},{name:'服务商',value:4}]]
+				addressName: '',
+				js: '',
+				list2: [
+					[{
+						name: '区域运营商',
+						value: 1
+					}, {
+						name: '联盟企业',
+						value: 2
+					}, {
+						name: '联营企业',
+						value: 3
+					}, {
+						name: '服务商',
+						value: 4
+					}]
+				]
 			}
 		},
-		created(){
+		created() {
 			this.getRegionOptions(2)
 			this.getRegionOptions(3)
 			this.getRegionOptions(4)
 		},
 		methods: {
-			
-			jsChange(){
-				console.log(this.value2[0])
+			submit(){
+				this.$router.push({
+					path:'/member/join/result'
+				})
+			},
+			jsChange() {
+				if(this.value2[0] == 1) {
+					return this.js = '区域运营商'
+				} else if(this.value2[0] == 2) {
+					return this.js = '联盟企业'
+				} else if(this.value2[0] == 3) {
+					return this.js = '联营企业'
+				} else if(this.value2[0] == 4) {
+					return this.js = '服务商'
+				}
 			},
 			getRegionOptions(level) { // 获取地址选项
 				let _this = this
@@ -98,20 +128,30 @@
 					}
 				})
 			},
-			onAddArr(){
+			onAddArr() {
+
+			},
+			onC(ids, names) {
+				this.addressName = names.join(' ')
+			},
+			onHide(names) {
 				console.log(this.addArr)
+				this.showAddress = false
+				this.showAddressText = true
 			}
 		},
 
 	}
 </script>
 <style lang="less">
-	.vux-cell-box{
+	.showJs,
+	.address-item {
 		display: none!important;
 	}
 </style>
 <style lang="less" scoped>
 	.join_box {
+		height: 100%;
 		background-color: white;
 		.datu {
 			width: 100%;

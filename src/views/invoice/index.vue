@@ -121,9 +121,9 @@
 		},
 		methods: {
 			//跳转详情
-			toDetail(){
+			toDetail() {
 				this.$router.push({
-					path:'/invoice/detail'
+					path: '/invoice/detail'
 				})
 			},
 			//tab切换
@@ -144,18 +144,23 @@
 				} else {
 					this.timeShow = this.tabList[index].show
 				}
+				this.$forceUpdate()
 			},
 			//类型选择
 			typeClick(index) {
 				this.typeIndex = index
-				this.typeShow = false
-				this.tabList[this.tabIndex].show = false
+				this.$nextTick(function() {
+					this.typeShow = false
+					this.tabList[this.tabIndex].show = false
+				})
 			},
 			//时间选择
 			timeClick(index) {
 				this.timeIndex = index
-				this.timeShow = false
-				this.tabList[this.tabIndex].show = false
+				this.$nextTick(function() {
+					this.timeShow = false
+					this.tabList[this.tabIndex].show = false
+				})
 			},
 			//初始化滑动组件
 			InitScroll() {
@@ -213,7 +218,7 @@
 					margin-right: 0.15rem;
 				}
 			}
-			div:nth-child(1){
+			div:nth-child(1) {
 				color: #336FFF;
 			}
 		}

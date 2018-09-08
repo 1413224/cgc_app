@@ -6,7 +6,8 @@
 				<div class="top">
 					<div class="left">
 						<p>{{infoData.goodsName}}</p>
-						<p class="tag">{{infoData.shortName}}</p>
+						<!--<p class="tag">{{infoData.shortName}}</p>-->
+						<p class="tag">{{equipNumber}}</p>
 						<div class="p3" @click="toDetail(infoData.enterpriseId)">
 							<span>{{infoData.name}}</span>
 							<p class="arrow"></p>
@@ -77,7 +78,7 @@
 				title: "仪器扫码",
 				infoData: {},
 				equipNumber: '',
-				enterpriseId:''
+				enterpriseId: ''
 			}
 
 		},
@@ -114,7 +115,6 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
-
 						for(var i = 0; i < res.data.data.list.length; i++) {
 							res.data.data.list[i].serviceTime = _this.setServiceTime(res.data.data.list[i].serviceTime)
 						}
@@ -124,7 +124,7 @@
 					}
 				})
 			},
-			
+
 			toDetail(id) {
 				this.$router.push({
 					path: '/multi_user_mall',
@@ -133,37 +133,34 @@
 					}
 				})
 			},
-			goList(){
+			goList() {
 				this.$router.push({
-					path:'/share/storelist'
+					path: '/share/storelist'
 				})
 			},
-			goDetail(){
-				var _this=this
+			goDetail() {
+				var _this = this
 				this.$router.push({
-					path:'/multi_user_mall',
-					query:{
-						id:_this.enterpriseId,
-						index:3
+					path: '/multi_user_mall',
+					query: {
+						id: _this.enterpriseId,
+						index: 3
 					}
 				})
 			},
-			setServiceTime(serviceTime){
-				var time_str='';
-				if(serviceTime>=3600)
-				{
+			setServiceTime(serviceTime) {
+				var time_str = '';
+				if(serviceTime >= 3600) {
 					var hour = Math.floor(serviceTime / 3600);
 					time_str += hour + '小时';
-					serviceTime -=hour*3600;
+					serviceTime -= hour * 3600;
 				}
-				if(serviceTime>=60)
-				{
+				if(serviceTime >= 60) {
 					var minute = Math.floor(serviceTime / 60);
 					time_str += minute + '分钟';
-					serviceTime -=minute*60;
+					serviceTime -= minute * 60;
 				}
-				if(serviceTime>0)
-				{
+				if(serviceTime > 0) {
 					time_str += serviceTime + '秒';
 				}
 				return time_str;
@@ -333,9 +330,9 @@
 			}
 		}
 	}
-
 	/*底部开始*/
-	.bottomnav{
+	
+	.bottomnav {
 		position: fixed;
 		bottom: 0;
 		width: 100%;
@@ -345,15 +342,15 @@
 		/*border-top: 1px solid #000000;*/
 		box-shadow: -2px -2px 5px #ccc;
 		padding: 5px 0;
-		.item{
+		.item {
 			flex: 1;
 			text-align: center;
 			border-left: 1px solid #ccc;
-			&:first-child{
+			&:first-child {
 				border-left: none;
 			}
-			.wap{
-				img{
+			.wap {
+				img {
 					width: .4rem;
 					height: .4rem;
 					position: relative;

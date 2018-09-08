@@ -15,7 +15,7 @@
 				</div>
 				<div class="middle">
 					<div>
-						<p class="name">{{info.shortName}}</p>
+						<p class="name">{{info.shortName}} ({{$route.query.equipNumber}})</p>
 						<p class="pinfo">{{info.skuName}}:{{info.serviceTime}}</p>
 					</div>
 					<p class="price">¥{{info.price}}</p>
