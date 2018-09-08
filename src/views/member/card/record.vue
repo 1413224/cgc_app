@@ -4,7 +4,7 @@
 		<popup v-model="isW" :show-mask="false" position="top">
 			<div class="screen-box">
 				<div class="sxi">
-					<div class="label" @click="lookAll" style="color: #336fff;">
+					<div class="label" @click="lookAll()" style="color: #336fff;">
 						查看全部
 					</div>
 					<div class="label" @click="show9 = !show9">
@@ -209,6 +209,9 @@
 				})
 			},
 			lookAll() {
+				
+				this.isW = false
+				
 				this.type = 1
 				this.twoIndex = 0
 				this.curPage = 1
