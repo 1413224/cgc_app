@@ -7,7 +7,7 @@
 				<tab-item :selected="tabIndex == 1" @on-item-click="showTab">中奖累计金额</tab-item>
 			</tab>
 			<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
-				<div class="content">
+				<div class="content" :class="{'pr_box':!showList}">
 					<div class="top">
 						<div class="one_box">
 							<span>奖励排名</span><span>{{tabIndex == 0 ?'奖励次数':'奖励金额(元)'}}</span>
@@ -26,7 +26,7 @@
 						</div>
 					</div>
 					<div class="bottom">
-						<div class="item_box" v-for="(item,index) in numberList">
+						<div class="item_box" v-for="(item,index) in numberList" v-if="showList">
 							<div class="left">
 								<div>
 									<img v-if="item.thumb" class="tx" :src="item.thumb.original" alt="">
@@ -43,6 +43,8 @@
 							<div class="right">{{tabIndex == 0 ?item.number : item.lotteryBonus}}</div>
 						</div>
 					</div>
+					<Null v-if="!showList && !inloading" status="zwsj" text="暂无记录"></Null>
+					<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 				</div>
 			</div>
 		</div>
@@ -54,6 +56,7 @@
 	import BScroll from 'better-scroll'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
+	import Null from '@/components/null'
 	import settingHeader from '../../components/setting_header'
 	import url from '../../config/url'
 	import Qs from 'qs'
@@ -74,6 +77,8 @@
 				userRank: {},
 				page: 1,
 				tabIndex: 0,
+				showList: false,
+				inloading: true
 			}
 		},
 		components: {
@@ -81,7 +86,8 @@
 			ButtonTabItem,
 			Loading,
 			noMore,
-			settingHeader
+			settingHeader,
+			Null
 		},
 		created() {
 			this.tabIndex = this.$route.query.index || 0
@@ -102,6 +108,9 @@
 		methods: {
 			showTab(val) {
 				this.tabIndex = val
+
+				this.showList = false
+				this.inloading = true
 			},
 			getLotteryRankByNums() {
 				var _this = this
@@ -114,6 +123,9 @@
 					if(res.data.status == "00000000") {
 						_this.numberList = res.data.data.rankList
 						_this.userRank = res.data.data.userRank
+
+						_this.showList = res.data.data.rankList.length > 0 ? true : false
+						_this.inloading = false
 					}
 				})
 			},
@@ -128,6 +140,9 @@
 					if(res.data.status == "00000000") {
 						_this.numberList = res.data.data.rankList
 						_this.userRank = res.data.data.userRank
+
+						_this.showList = res.data.data.rankList.length > 0 ? true : false
+						_this.inloading = false
 					}
 				})
 			},
@@ -174,6 +189,20 @@
 			padding: 0 0.30rem;
 			box-sizing: border-box;
 			overflow: hidden;
+			.pr_box {
+				position: relative;
+				height: 100%;
+				z-index: 11;
+				.bottom{
+					height: 100%;
+				}
+				.null_box {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+				}
+			}
 			.content {
 				background: rgba(255, 245, 245, 1);
 				.top {

@@ -19,7 +19,7 @@
 		</div>
 		<div class="order_list_box">
 			<div class="wrapper" ref="wrapper" :class="[{'top02':tabNo},{'bw':orderList.length  == 0},{'top0':tabNo2}]">
-				<div class="content" ref="content" :class="{'top50':showLoading2}">
+				<div class="content" ref="content" :class="[{'top50':showLoading2},{'pr_box':!showList}]">
 					<transition enter-active-class="zoomIn animated" leave-active-class="slideOutUp animated" :duration="{ enter: 500, leave: 1000 }">
 						<div class="jz-loading" v-if="showLoading2">
 							<img v-if="move" class="jiantou" :class="{'r180':huan}" :src="'./static/images/jiantou.png'" alt="" />
@@ -129,8 +129,8 @@
 					</div>
 					<Loading v-if="showLoading"></Loading>
 					<noMore v-if="showNo"></noMore>
-					<noData v-if="!showList && !inloading" :status="2" :stateText="tipText"></noData>
-					<noData v-if="orderList.length == 0 && inloading" :status="2" stateText="努力加载中..."></noData>
+					<Null v-if="!showList && !inloading" status="zwdd" :text="tipText"></Null>
+					<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 				</div>
 			</div>
 		</div>
@@ -158,11 +158,11 @@
 </template>
 
 <script>
-	import settingHeader from '../../components/setting_header'
+	import settingHeader from '@/components/setting_header'
 	import BScroll from 'better-scroll'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
-	import noData from '../../components/noData'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
+	import Null from '@/components/null'
 	export default {
 		data() {
 			return {
@@ -209,9 +209,9 @@
 				timeOut: '',
 				move: true,
 				huan: false,
-				showList: true,
-				tipText:'暂无订单',
-				inloading:true
+				showList: false,
+				inloading: true,
+				tipText: '暂无订单'
 			}
 		},
 		components: {
@@ -219,7 +219,7 @@
 			Loading,
 			noMore,
 			BScroll,
-			noData
+			Null
 		},
 		created() {
 
@@ -337,7 +337,8 @@
 				_this.tabIndex = index
 				_this.status = index
 				_this.curPage = 1
-				_this.showList = true
+				_this.showList = false
+				_this.inloading = true
 				_this.showLoading = false
 				_this.showNo = false
 				_this.getOrderList()
@@ -348,16 +349,16 @@
 						'status': index
 					})
 				})
-				
-				if(index == 0){
+
+				if(index == 0) {
 					this.tipText = '暂无订单'
-				}else if(index == 1){
+				} else if(index == 1) {
 					this.tipText = '暂无待处理订单'
-				}else if(index == 2){
+				} else if(index == 2) {
 					this.tipText = '暂无进行中订单'
-				}else if(index == 3){
+				} else if(index == 3) {
 					this.tipText = '暂无已完成订单'
-				}else if(index == 4){
+				} else if(index == 4) {
 					this.tipText = '暂无已取消订单'
 				}
 			},
@@ -516,10 +517,10 @@
 				})
 			},
 			//立即使用
-			gousetime(){
+			gousetime() {
 				this.$router.push({
 					path: '/share/usetime',
-					
+
 				})
 			},
 			InitScroll() {
@@ -604,7 +605,7 @@
 								} else {
 									_this.showLoading2 = false
 								}
-							} else if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight < _this.scroll.wrapperHeight){
+							} else if(_this.orderList.length > 0 && _this.scroll.scroller.clientHeight < _this.scroll.wrapperHeight) {
 								_this.getOrderList(_this.orderList[0].createTime)
 							}
 
@@ -729,6 +730,18 @@
 			width: 100%;
 			background: #f5f6fa;
 			z-index: 11;
+		}
+		.pr_box {
+			position: relative;
+			height: 100%;
+			z-index: 11;
+			background-color: white;
+			.null_box {
+				position: absolute;
+				top: 40%;
+				left: 50%;
+				transform: translate(-50%, -40%);
+			}
 		}
 		.px {
 			position: fixed;

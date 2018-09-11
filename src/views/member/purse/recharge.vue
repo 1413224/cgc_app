@@ -44,7 +44,7 @@
 
 <script>
 	import { Group, CellBox, XButton, PopupHeader, Radio, Checklist } from 'vux'
-	import settingHeader from '../../../components/setting_header'
+	import settingHeader from '@/components/setting_header'
 	import payMode from '@/components/payMode'
 	export default {
 		data() {
@@ -69,7 +69,9 @@
 				moneyList: [],
 				info: {},
 				userInfo: {},
-				payOptions: {}
+				payOptions: {},
+				parentOrderSn: '',
+				payParmars: {},
 			}
 		},
 		created() {
@@ -87,12 +89,70 @@
 				changePay(index) {
 					console.log(index)
 				},
-				toPay(index) {
-					if(index == 1) {
-						_this.$router.push({
-							path:'/member/pay/wxgzhpay'
-						})
-					}
+				toPay(type) {
+					_this.$http.post(_this.url.user.rechargeBalance, {
+						userId: _this.$store.state.user.userId,
+						platformId: _this.url.platformId,
+						rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
+						payType: type,
+						//						openId:sessionStorage['_openid_'],
+						openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
+						parentOrderSn: _this.parentOrderSn
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.parentOrderSn = res.data.data.parentOrderSn
+
+							if(type == 1) {
+								wx.config({
+									debug: true,
+									appId: res.data.data.appId,
+									timestamp: res.data.data.timeStamp,
+									nonceStr: res.data.data.nonceStr,
+									signature: res.data.data.signature,
+									jsApiList: [
+										'checkJsApi',
+										'startRecord',
+										'stopRecord',
+										'translateVoice',
+										'scanQRCode',
+										'openCard',
+										'chooseWXPay'
+									]
+								})
+
+								wx.chooseWXPay({
+									appId: res.data.data.appId,
+									timestamp: res.data.data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
+									nonceStr: res.data.data.nonceStr, // 支付签名随机串，不长于 32 位  
+									package: res.data.data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）  
+									signType: res.data.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
+									paySign: res.data.data.paySign, // 支付签名  
+									success: function(res) {
+										WeixinJSBridge.call('closeWindow')
+									},
+									error: function() {
+										Vue.$vux.toast.show({
+											text: '支付失败',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
+									},
+									cancel: function() {
+										Vue.$vux.toast.show({
+											text: '您已取消了支付',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
+									}
+								})
+							} else if(type == 2) {
+								document.write(res.data.data.orderStr)
+							}
+						}
+					})
+					return false
 				},
 				hide() {
 					console.log('hide')
@@ -126,8 +186,12 @@
 				this.ptIndex = index
 			},
 			submit() {
+
+				console.log(this.moneyList[this.moneyIndex].money)
+
 				this.payOptions.showPayMode = true
-				this.payOptions.data.money = 18888.00
+				this.payOptions.data.money = this.moneyList[this.moneyIndex].money
+
 			},
 			change(value, label) {
 				console.log('change:', value, label)

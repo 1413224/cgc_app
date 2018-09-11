@@ -58,7 +58,7 @@
 		</div>
 
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
-			<div class="content">
+			<div class="content" :class="{'pr_box':!showShop}">
 				<swiper :options="swiperOption" class="swiper">
 					<swiper-slide v-for="(item, index) in demoList" :key="index">
 						<a v-if="item.wbu">
@@ -97,8 +97,8 @@
 				<Loading v-if="showLoading"></Loading>
 				<noMore v-if="showNoMore"></noMore>
 				<div style="margin-top: 3px;">
-					<noData v-if="!showShop && !inloading" :status="2" :stateText="'暂无门店'"></noData>
-					<noData v-if="!showShop && inloading" :status="2" :stateText="'努力加载中...'"></noData>
+					<Null v-if="!showShop && !inloading" status="zwsj" text="暂无更多门店"></Null>
+					<Null v-if="!showShop && inloading" status="loading" text="加载中"></Null>
 				</div>
 			</div>
 		</div>
@@ -144,16 +144,10 @@
 	import scroll from '../../components/scroll.vue'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
-	import noData from '../../components/noData'
-	import {
-		swiper,
-		swiperSlide
-	} from 'vue-awesome-swiper'
+	import Null from '@/components/null'
+	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-	import {
-		Group,
-		XInput
-	} from 'vux'
+	import { Group, XInput } from 'vux'
 	export default {
 		name: 'storelist',
 		data() {
@@ -228,6 +222,7 @@
 					img: './static/share/banner1.png',
 					url: '/member/vip/right'
 				}],
+				showList: false,
 				inloading: true
 			}
 		},
@@ -236,7 +231,7 @@
 			scroll,
 			Loading,
 			noMore,
-			noData,
+			Null,
 			Group,
 			XInput,
 			swiper,
@@ -832,6 +827,18 @@
 		bottom: 1rem;
 		top: 1rem;
 		overflow: hidden;
+		.pr_box {
+			position: relative;
+			height: 100%;
+			z-index: 11;
+			background-color: white;
+			.null_box {
+				position: absolute;
+				top: 40%;
+				left: 50%;
+				transform: translate(-50%, -40%);
+			}
+		}
 	}
 	
 	.storelist {

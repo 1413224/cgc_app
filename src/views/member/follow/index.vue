@@ -14,8 +14,8 @@
 			<div v-show="index == 0">
 				<div class="store-list">
 					<div class="wrapper3" ref="wrapper3">
-						<div class="content">
-							<div class="list-item" v-for="(item,index) in lmList" v-if="lmList.length>0" @click="toDetail(item.enterpriseId)">
+						<div class="content" :class="{'pr_box':!showList}">
+							<div class="list-item" v-for="(item,index) in lmList" v-if="showList" @click="toDetail(item.enterpriseId)">
 								<div @click="changelmStore()">
 									<check-icon v-if="storeShow2" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
@@ -38,7 +38,8 @@
 							</div>
 							<Loading v-if="show1"> </Loading>
 							<Nomore v-if="showNo1"></Nomore>
-							<noData v-if="lmList.length==0" :status="2" :stateText="nolm"></noData>
+							<Null v-if="!showList && !inloading" status="zwgz" :text="nolm"></Null>
+							<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 						</div>
 					</div>
 				</div>
@@ -46,8 +47,8 @@
 			<div v-show="index == 1">
 				<div class="store-list">
 					<div class="wrapper2" ref="wrapper2">
-						<div class="content">
-							<div class="list-item" v-for="(item,index) in lyList" v-if="lyList.length>0" @click="toDetail(item.enterpriseId)">
+						<div class="content" :class="{'pr_box':!showList}">
+							<div class="list-item" v-for="(item,index) in lyList" v-if="showList" @click="toDetail(item.enterpriseId)">
 								<div @click="changelyStore()">
 									<check-icon v-if="storeShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
@@ -67,7 +68,8 @@
 							</div>
 							<Loading v-if="show2"> </Loading>
 							<Nomore v-if="showNo2"></Nomore>
-							<noData v-if="lyList.length==0" :status="2" :stateText="noly"></noData>
+							<Null v-if="!showList && !inloading" status="zwgz" :text="noly"></Null>
+							<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 						</div>
 					</div>
 				</div>
@@ -75,8 +77,8 @@
 			<div v-show="index == 2">
 				<div class="pro-list">
 					<div class="wrapper" ref="wrapper">
-						<div class="content">
-							<div class="list-item" v-for="(item,index) in proList">
+						<div class="content" :class="{'pr_box':!showList}">
+							<div class="list-item" v-for="(item,index) in proList" v-if="showList">
 								<div @click="changePr()">
 									<check-icon v-if="proShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
 								</div>
@@ -97,7 +99,8 @@
 							</div>
 							<Loading v-if="show3"> </Loading>
 							<Nomore v-if="showNo3"></Nomore>
-							<noData v-if="proList.length==0" :status="proState" :stateText="noPro"></noData>
+							<Null v-if="!showList && !inloading" status="zwgz" :text="noPro"></Null>
+							<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 						</div>
 					</div>
 				</div>
@@ -132,10 +135,10 @@
 <script>
 	import BScroll from 'better-scroll'
 	import { Tab, TabItem, Swiper, SwiperItem, CheckIcon, Scroller, Search, Popup, XButton, XHeader } from 'vux'
-	import settingHeader from '../../../components/setting_header'
-	import Loading from '../../../components/loading'
-	import noData from '../../../components/noData'
-	import Nomore from '../../../components/noMore'
+	import settingHeader from '@/components/setting_header'
+	import Loading from '@/components/loading'
+	import Null from '@/components/null'
+	import Nomore from '@/components/noMore'
 	export default {
 		data() {
 			return {
@@ -171,7 +174,9 @@
 				showNo1: false,
 				showNo2: false,
 				showNo3: false,
-				hasLe: true
+				hasLe: true,
+				showList: false,
+				inloading: true
 			}
 		},
 		created() {
@@ -244,12 +249,15 @@
 						} else {
 							_this.hasLe = false
 						}
+						
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
 					}
 				})
 			},
 			deleteConcern() {
 				var _this = this
-				
+
 				this.showNo1 = false
 				this.showNo2 = false
 				this.showNo3 = false
@@ -521,6 +529,8 @@
 				this.show1 = false
 				this.show2 = false
 				this.show3 = false
+				this.showList = false
+				this.inloading = true
 
 				if(index == 1) {
 					_this.type = 3
@@ -659,7 +669,7 @@
 			XButton,
 			XHeader,
 			Loading,
-			noData,
+			Null,
 			Nomore
 		}
 	}
@@ -777,6 +787,17 @@
 					display: inline-block;
 					width: 100%;
 				}*/
+				.pr_box {
+					position: relative;
+					height: 100%;
+					background-color: white;
+					.null_box {
+						position: absolute;
+						top: 40%;
+						left: 50%;
+						transform: translate(-50%, -40%);
+					}
+				}
 			}
 			.list-item {
 				background-color: white;

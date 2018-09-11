@@ -1,24 +1,3 @@
-
-// import ShareIndex from '@/views/share/index'
-import Sdetail from '@/views/share/sdetail'
-import StoreList from '@/views/share/storelist'
-import StoreList2 from '@/views/share/storelist2'
-import MeaiDetail from '@/views/share/meaidetail'
-import PIntroduce from '@/views/share/pintroduce'
-import Join from '@/views/share/join'
-import TreatMent from '@/views/share/treatment'
-import ComfirmOrder from '@/views/share/comfirmOrder'
-import OrderSuccess from '@/views/share/orderSuccess'
-import OrderDetail from '@/views/share/orderDetail'
-import OrderEval from '@/views/share/orderEval'
-import UseTime from '@/views/share/usetime'
-import Qrcode from '@/views/share/qrcode'
-import instrumentCode from '@/views/share/instrumentCode'
-import guidance from '@/views/share/guidance'
-import ceshi from '@/views/share/ceshi'
-
-
-
 const share =[
 	{
 		path:'/share',
@@ -49,14 +28,6 @@ const share =[
 			navIndex:3,
 			title:'门店列表',
 			keepAlive:true
-		}
-	},
-	{
-		path:'/share/storelist2',//门店列表2
-		name:'storelist2',
-		component:resolve => require(['@/views/share/storelist2'], resolve),
-		meta: {
-			title:'门店列表2'
 		}
 	},
 	{
@@ -164,11 +135,11 @@ const share =[
 		}
 	},
 	{
-		path: '/share/ceshi',
-		name: 'ceshi',
-		component:resolve => require(['@/views/share/ceshi'], resolve),
+		path: '/share/comsuccess',
+		name: 'comsuccess',
+		component:resolve => require(['@/views/share/comsuccess'], resolve),
 		meta: {
-			title: '测试'
+			title: '评价成功'
 		}
 	}
 ]

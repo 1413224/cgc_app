@@ -16,7 +16,7 @@
 			<div class="list-box">
 				<div class="scroll-box">
 					<div class="wrapper" ref="wrapper">
-						<div class="content">
+						<div class="content" :class="{'pr_box':list.length == 0}">
 							<div v-if="list.length>0">
 								<div class="list" v-for="(item,index) in list" :key="index">
 									<div class="he">
@@ -47,7 +47,7 @@
 								<Nomore v-if="showNo"></Nomore>
 							</div>
 							<div class="null-box" v-else>
-								<img src="../../../assets/images/index/null-data.png" alt="" />
+								<img :src="'./static/null/zwsj.png'" alt="" />
 								<p>暂无伙伴</p>
 								<div @click="toQrcode" class="add-btn">我要邀请</div>
 							</div>
@@ -61,10 +61,9 @@
 
 <script>
 	import { Grid, GridItem } from 'vux'
-	import settingHeader from '../../../components/setting_header'
-	import Loading from '../../../components/loading'
-	import noData from '../../../components/noData'
-	import Nomore from '../../../components/noMore'
+	import settingHeader from '@/components/setting_header'
+	import Loading from '@/components/loading'
+	import Nomore from '@/components/noMore'
 	import BScroll from 'better-scroll'
 	export default {
 		data() {
@@ -169,7 +168,6 @@
 			Grid,
 			GridItem,
 			Loading,
-			noData,
 			Nomore
 		}
 	}
@@ -195,24 +193,31 @@
 						position: absolute;
 						top: 0;
 						bottom: 0;
+						height: 100%;
 						width: 100%;
-						.content {
+						overflow: hidden;
+						.pr_box {
 							height: 100%;
+							position: relative;
+							background-color: white;
 						}
 					}
 					.null-box {
-						position: relative;
-						height: 100%;
+						position: absolute;
+						top: 40%;
+						left: 50%;
+						transform: translate(-50%, -40%);
 						text-align: center;
 						background: white;
 						img {
-							width: auto;
-							height: 4.12rem;
+							width: 2.77rem;
+							height: 2.77rem;
 						}
 						p {
 							font-size: 0.32rem;
-							font-family: PingFangSC-Medium;
+							font-family: PingFang-SC-Medium;
 							color: rgba(26, 38, 66, 1);
+							margin-top: 0.55rem;
 						}
 						.add-btn {
 							width: 6.18rem;

@@ -118,7 +118,7 @@
 						</ul>
 						<loading v-if="show"></loading>
 						<noMore v-if="showNomore"></noMore>
-						<noData v-if="recommendLottery.length == 0" :status="2" :stateText="'暂无精彩推荐'"></noData>
+						<Null v-if="recommendLottery.length == 0" status="zwsj" text="暂无精彩推荐"></Null>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -132,7 +132,7 @@
 	import BScroll from 'better-scroll'
 	import Loading from '@/components/loading'
 	import noMore from '@/components/noMore'
-	import noData from '@/components/noData'
+	import Null from '@/components/null'
 	import settingHeader from '@/components/setting_header'
 	import url from '@/config/url'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
@@ -141,7 +141,7 @@
 		components: {
 			Loading,
 			noMore,
-			noData,
+			Null,
 			settingHeader,
 			swiper,
 			swiperSlide
@@ -173,7 +173,7 @@
 			this.getRecommendLottery()
 		},
 		mounted() {
-			this.InitScroll()
+			
 		},
 		computed: {
 			tweenedNumber1: function() {
@@ -203,6 +203,8 @@
 						TweenMax.to(_this.$data, 1.5, {
 							animatedNumber2: _this.info.totalBonus //累计奖金金额
 						})
+						
+						_this.InitScroll()
 					}
 				})
 			},
@@ -238,15 +240,14 @@
 								this.LoadData()
 							}
 							this.$nextTick(function() {
-								this.scroll.finishPullUp();
-								this.scroll.refresh();
-							});
+								this.scroll.finishPullUp()
+								this.scroll.refresh()
+							})
 						})
 					} else {
 						this.scroll.refresh()
 					}
 				})
-
 			},
 			LoadData() {
 				var _this = this
@@ -559,6 +560,27 @@
 		background: #fff;
 		border-radius: 0.08rem;
 		padding: 0.2rem 0;
+		.null_box {
+			margin-top: 0.20rem;
+			padding: 0.30rem 0;
+			box-sizing: border-box;
+			position: relative;
+		}
+		.null_box:after {
+			content: " ";
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			height: 1px;
+			border-top: 1px solid #D9D9D9;
+			color: #D9D9D9;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+			left: 0px;
+		}
 		.wonderful {
 			text-align: center;
 			width: 100%;

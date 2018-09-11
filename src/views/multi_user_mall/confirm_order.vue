@@ -497,10 +497,14 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
-							res.data.data.availableCoupon[i].show = false
+						if(res.data.data.availableCoupon) {
+							for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
+								res.data.data.availableCoupon[i].show = false
+							}
+
+							_this.availableCoupon = res.data.data.availableCoupon
 						}
-						_this.availableCoupon = res.data.data.availableCoupon
+						
 						_this.availableBalance = res.data.data.availableBalance
 
 						this.integralNum = Number(this.availableBalance) > Number(this.goodsInfo.minPrice) ? Number(this.goodsInfo.minPrice) * Number(this.$route.query.goodsNum) : Number(this.availableBalance)

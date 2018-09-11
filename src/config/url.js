@@ -57,7 +57,8 @@ var url = {
 		getMyEnterpriseCardDetail: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardDetail',//获取企业通用卡详情接口
 		getAvailableAllianceList: uri1 + '/param/v1/enterpriseCard/getAvailableAllianceList',//企业通用卡适用联盟企业列表
 		getUseEnterpriseCardList: uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardList',//企业通用卡明细列表
-		getUseEnterpriseCardDetail:  uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardDetail'//企业通用卡详情信息
+		getUseEnterpriseCardDetail:  uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardDetail',//企业通用卡详情信息
+		rechargeBalance:uri1 + '/body/v1/user/rechargeBalance',//2.10.	用户在线充值接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息

@@ -39,8 +39,8 @@
 			<div class="masker" v-if="maskerShow" @click="maskerShow = false"></div>
 		</div>
 
-		<div class="wrapper" :class="[{'top46':!$store.state.page.isWx},{'bg_white':couponList.length == 0}]" ref="wrapper">
-			<div class="content">
+		<div class="wrapper" :class="[{'top46':!$store.state.page.isWx}]" ref="wrapper">
+			<div class="content" :class="{'pr_box':!showCoupon}">
 				<div class="list_box" v-if="showCoupon">
 					<div class="mb20" v-for="(item,index) in couponList" :key="index">
 						<div class="item" :class="[{'red_bg':item.type == 0 || item.type == 20 || item.type == 30 || item.type == 50},{'blue_bg':item.type == 10},{'yellow_bg':item.type == 40},{'gray_bg':item.status == 2 || item.status == 3}]">
@@ -75,21 +75,10 @@
 				</div>
 				<Loading v-if="show"></Loading>
 				<Nomore v-if="showNo"></Nomore>
+				<Null status="404" text="暂无优惠券" v-if="!showCoupon && !inloading"></Null>
+				<Null status="loading" text="加载中" v-if="!showCoupon && inloading"></Null>
 			</div>
 		</div>
-
-		<section class="no_data" v-if="!showCoupon && !inloading">
-			<div class="none-data">
-				<img :src="imgSrc" alt="">
-				<p>暂无优惠券</p>
-			</div>
-		</section>
-		<section class="no_data" v-if="couponList.length == 0 && inloading">
-			<div class="none-data">
-				<img :src="imgSrc" alt="">
-				<p>努力加载中...</p>
-			</div>
-		</section>
 	</section>
 </template>
 
@@ -98,14 +87,14 @@
 	import BScroll from 'better-scroll'
 	import Loading from '@/components/loading'
 	import Nomore from '@/components/noMore'
-	import noData from '@/components/noData'
+	import Null from '@/components/null'
 
 	export default {
 		components: {
 			settingHeader,
 			Loading,
 			Nomore,
-			noData
+			Null
 		},
 		data() {
 			return {
@@ -178,10 +167,9 @@
 				timeType: 0,
 				couponList: [],
 				showCoupon: false,
-				inloading: false,
+				inloading: true,
 				show: false,
-				showNo: false,
-				imgSrc: './static/shop/network.png',
+				showNo: false
 			}
 		},
 		watch: {
@@ -312,7 +300,7 @@
 				} else if(index == 2) {
 					this.timeShow = this.tabList[index].show
 				}
-				
+
 				//重置null
 				_this.show = false
 				_this.showNo = false
@@ -464,35 +452,28 @@
 				left: 0px;
 			}
 		}
-		.no_data {
-			width: 100%;
-			height: 100%;
-			background: #fff;
-			padding: 1.5rem 0;
-			margin-top: 0.20rem;
-			position: relative;
-			z-index: 11;
-			.none-data {
-				text-align: center;
-				width: 100%;
-				padding-bottom: 0.2rem;
-				img {
-					width: 100%;
-				}
-				p {
-					font-size: 0.32rem;
-					color: #1A2642;
-				}
-			}
-		}
 		.wrapper {
 			position: absolute;
 			top: 0.9rem;
 			bottom: 0;
 			overflow: hidden;
 			width: 100%;
-			padding: 0rem 0.21rem;
-			box-sizing: border-box;
+			.content {
+				padding: 0rem 0.21rem;
+				box-sizing: border-box;
+			}
+			.pr_box {
+				position: relative;
+				height: 100%;
+				z-index: 11;
+				background-color: white;
+				.null_box {
+					position: absolute;
+					top: 40%;
+					left: 50%;
+					transform: translate(-50%, -40%);
+				}
+			}
 			.list_box {
 				padding: 0.20rem 0;
 				.red_bg {
@@ -628,10 +609,6 @@
 					}
 				}
 			}
-		}
-		.bg_white {
-			background-color: white;
-			z-index: 11;
 		}
 		.top46 {
 			top: 14%!important;
