@@ -12,6 +12,8 @@
 						<div class="middle">
 							<p>可用企业通用积分：</p>
 							<p>{{item.balance}}</p>
+
+							
 						</div>
 						<p class="tip" v-if="item.availableNums == 1">注：适用于{{item.allianceName}}</p>
 						<p class="tip" v-else>注：适用于{{item.availableNums}}</p>
