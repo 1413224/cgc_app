@@ -38,7 +38,7 @@
 										<swiper :options="swiperOption" class="swiper">
 											<swiper-slide v-for="(item,index) in info.recommendMessage" :key="index">
 												<div class="one">
-													<img v-if="item.logo.original" class="tx" :src="item.logo.original" />
+													<img v-if="item.logo" class="tx" :src="item.logo.original" />
 													<img v-else class="tx" :src="'./static/images/mrtx.png'" />
 													<div class="user"><img :src="'./static/draw/ren.png'" /> {{item.mobile}}</div>
 													<p class="hua">{{item.message}}</p>
@@ -103,6 +103,7 @@
 									<li @click="goPastevents(item.lotteryId)">
 										<div class="img">
 											<img v-if="item.thumb" :src="item.thumb.original" alt="">
+											<img v-else :src="'./static/draw/video_bg.png'" alt="">
 											<div class="arrow">
 												<img src="../../assets/images/draw/lottery_index8.png" alt="">
 											</div>
@@ -294,6 +295,14 @@
 	}
 </script>
 
+<style lang="less">
+	.draw_index{
+		.weui-loadmore{
+			margin: 0 auto!important;
+		}
+	}
+</style>
+
 <style lang="less" scoped>
 	.draw_index {
 		height: 100%;
@@ -335,7 +344,6 @@
 				}
 				.middle {
 					display: flex;
-					border-bottom: 1px solid rgba(230, 230, 230, 1);
 					padding: 0.24rem 0;
 					.left {
 						border-right: 1px solid #eee;
@@ -359,6 +367,7 @@
 				}
 				.bottom {
 					padding: 0.2rem 0.2rem 0 0.2rem;
+					border-top: 1px solid rgba(230, 230, 230, 1);
 					.swiper-inner {
 						width: 100%;
 						height: 3.5rem;

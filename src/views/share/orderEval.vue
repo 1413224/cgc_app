@@ -131,17 +131,17 @@
 				})
 			},
 			//图片预览
-			preview(index,i) {
+			preview(index, i) {
 				var _this = this
-				
+
 				_this.photoList = []
 				_this.goods[index].data.imgs.forEach((value) => {
 					var item = {}
 					item.src = value
 					_this.photoList.push(item)
 				})
-				
-				this.$nextTick(function(){
+
+				this.$nextTick(function() {
 					this.$refs.previewer.show(i)
 				})
 
@@ -307,7 +307,6 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					margin-bottom: 0.20rem;
 					position: relative;
 					img {
 						width: 100%;
@@ -363,13 +362,28 @@
 				height: 0.87rem;
 				display: flex;
 				align-items: center;
-				border-bottom: 1px solid #D8DFF0;
 				padding-left: 0.10rem;
+				position: relative;
 				img {
 					width: 0.36rem;
 					height: 0.36rem;
 					margin-right: 0.1rem;
 				}
+			}
+			.top:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #E1E1E1;
+				color: #E1E1E1;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
 			}
 			.bottom {
 				flex: 1;

@@ -2,8 +2,8 @@
 	<section class="win-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
-			<div class="content" v-if="showList">
-				<div class="record-item" v-for="(item,index) in list" :key="index">
+			<div class="content" :class="{'pr_box':!showList}">
+				<div class="record-item" v-for="(item,index) in list" :key="index" v-if="showList">
 					<div class="top">
 						<div>第{{item.number}}期</div>
 						<p class="ellipsis">{{item.title}}</p>
@@ -45,8 +45,9 @@
 
 				<loading v-if="showLoading"></loading>
 				<noMore v-if="showNomore"></noMore>
+				<Null status="loading" text="加载中" v-if="!showList && inloading"></Null>
 			</div>
-			<div class="no_data_box" v-if="!showList">
+			<div class="no_data_box" v-if="!showList && !inloading">
 				<div class="bw-box">
 					<div>
 						<img :src="'./static/draw/no-data-img.png'" alt="" />
@@ -93,9 +94,11 @@
 		XDialog
 	} from 'vux'
 	import BScroll from 'better-scroll'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
-	import settingHeader from '../../components/setting_header'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
+	import settingHeader from '@/components/setting_header'
+	import Null from '@/components/null'
+
 	export default {
 		components: {
 			ButtonTab,
@@ -103,7 +106,8 @@
 			Loading,
 			noMore,
 			settingHeader,
-			XDialog
+			XDialog,
+			Null
 		},
 		data() {
 			return {
@@ -111,10 +115,11 @@
 				showLoading: false,
 				showNomore: false,
 				showDialog: false,
-				showList: true,
+				showList: false,
 				curPage: 1,
 				pageSize: 10,
-				list: []
+				list: [],
+				inloading: true
 			}
 		},
 		created() {
@@ -130,6 +135,7 @@
 				_this.$http.get(_this.url.lottery.getUserLotteryRecord, {
 					params: {
 						userId: _this.$store.state.user.userId,
+						type: 1,
 						curPage: _this.curPage,
 						pageSize: _this.pageSize
 					}
@@ -137,6 +143,7 @@
 					if(res.data.status == "00000000") {
 
 						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
 
 						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
@@ -161,21 +168,21 @@
 							} else if(res.data.data.status == 20) {
 								message = '您仍需完善资料'
 								buttons = ['前去完善', '取消']
-							}else if(res.data.data.status == 50) {
+							} else if(res.data.data.status == 50) {
 								message = '审核中'
 								buttons = ['取消']
-							}else if(res.data.data.status == 40) {
+							} else if(res.data.data.status == 40) {
 								_this.$router.push({
 									path: '/draw/awards',
-									query:{
-										id:id
+									query: {
+										id: id
 									}
 								})
-							} 
-//							else if(res.data.data.status == 30) {
-//								message = '您仍需绑定银行卡'
-//								buttons = ['马上绑定', '取消']
-//							} 
+							}
+							//							else if(res.data.data.status == 30) {
+							//								message = '您仍需绑定银行卡'
+							//								buttons = ['马上绑定', '取消']
+							//							} 
 
 							_this.$dialog.show({
 								type: 'warning',
@@ -230,12 +237,19 @@
 											path: '/member/info/data'
 										})
 									}
-//									else if(res.data.data.status == 30) {
-//										message = '您仍需绑定银行卡'
-//										buttons = ['马上绑定', '取消']
-//									} 
+									//									else if(res.data.data.status == 30) {
+									//										message = '您仍需绑定银行卡'
+									//										buttons = ['马上绑定', '取消']
+									//									} 
 								}
 							})
+						}
+					})
+				} else if(status == 50) {
+					_this.$router.push({
+						path: '/draw/unonline',
+						query: {
+							'id': id
 						}
 					})
 				}
@@ -274,6 +288,7 @@
 							userId: _this.$store.state.user.userId,
 							curPage: _this.curPage,
 							pageSize: _this.pageSize,
+							type: 1,
 							islist: true
 						}
 					}).then((res) => {
@@ -387,6 +402,20 @@
 			background-color: #E32922;
 			padding: 0 0.2rem;
 			box-sizing: border-box;
+			.pr_box {
+				position: relative;
+				height: 100%;
+				.null_box {
+					background-color: #e32922;
+					position: absolute;
+					top: 40%;
+					left: 50%;
+					transform: translate(-50%, -40%);
+					p {
+						color: white!important;
+					}
+				}
+			}
 			.content {
 				padding: 0.2rem 0;
 				.record-item {

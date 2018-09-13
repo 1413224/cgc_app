@@ -20,6 +20,7 @@
 								<li @click="goPastevents(item.lotteryId)">
 									<div class="img">
 										<img v-if="item.thumb" :src="item.thumb.original" alt="">
+										<img v-else :src="'./static/draw/video_bg.png'" alt="">
 										<div class="arrow">
 											<img src="../../assets/images/draw/lottery_index8.png" alt="">
 										</div>

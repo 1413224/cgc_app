@@ -47,6 +47,7 @@
 	import settingHeader from '@/components/setting_header'
 	import payMode from '@/components/payMode'
 	export default {
+		name: 'recharge',
 		data() {
 			return {
 				title: '通用积分充值',
@@ -76,9 +77,15 @@
 		},
 		created() {
 			var _this = this
+
 			if(localStorage['userInfo']) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
 			}
+
+			if(this.$route.params.reload) {
+				location.reload()
+			}
+
 			this.getRechargeList()
 
 			this.payOptions = {
@@ -87,7 +94,7 @@
 					money: 0,
 				},
 				changePay(index) {
-					console.log(index)
+
 				},
 				toPay(type) {
 					_this.$http.post(_this.url.user.rechargeBalance, {
@@ -95,8 +102,8 @@
 						platformId: _this.url.platformId,
 						rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
 						payType: type,
-						//						openId:sessionStorage['_openid_'],
-						openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
+						openId: sessionStorage['_openid_'],
+						//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
 						parentOrderSn: _this.parentOrderSn
 					}).then((res) => {
 						if(res.data.status == "00000000") {
@@ -104,7 +111,7 @@
 
 							if(type == 1) {
 								wx.config({
-									debug: true,
+									debug: false,
 									appId: res.data.data.appId,
 									timestamp: res.data.data.timeStamp,
 									nonceStr: res.data.data.nonceStr,
@@ -131,7 +138,7 @@
 										WeixinJSBridge.call('closeWindow')
 									},
 									error: function() {
-										Vue.$vux.toast.show({
+										_this.$vux.toast.show({
 											text: '支付失败',
 											type: 'text',
 											position: 'top',
@@ -139,7 +146,7 @@
 										})
 									},
 									cancel: function() {
-										Vue.$vux.toast.show({
+										_this.$vux.toast.show({
 											text: '您已取消了支付',
 											type: 'text',
 											position: 'top',
@@ -148,21 +155,32 @@
 									}
 								})
 							} else if(type == 2) {
+								_this.$router.push({
+									name: 'alipay',
+									params: {
+										'orderStr': res.data.data.orderStr
+									}
+								})
+								return false;
 								document.write(res.data.data.orderStr)
+								//const div = document.createElement('div')
+								//div.innerHTML = res.data.data.orderStr
+								//document.body.appendChild(div)
+								//_this.$nextTick(function(){
+								//document.forms[0].submit()
+								//})
 							}
 						}
 					})
-					return false
 				},
 				hide() {
-					console.log('hide')
+
 				},
 				show() {
-					console.log('show')
+
 				}
 			}
 		},
-		mounted() {},
 		methods: {
 			getRechargeList() {
 				var _this = this
@@ -181,17 +199,14 @@
 			},
 			changeMoney(index, id) {
 				this.moneyIndex = index
+				this.parentOrderSn = ''
 			},
 			changePt(index) {
 				this.ptIndex = index
 			},
 			submit() {
-
-				console.log(this.moneyList[this.moneyIndex].money)
-
 				this.payOptions.showPayMode = true
 				this.payOptions.data.money = this.moneyList[this.moneyIndex].money
-
 			},
 			change(value, label) {
 				console.log('change:', value, label)

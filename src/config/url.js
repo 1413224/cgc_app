@@ -51,14 +51,16 @@ var url = {
 		getMyPointDetail: uri1 + '/param/v1/user/getMyPointDetail', //获取信用积分详情
 		getUserCouponList: uri1 + '/param/v1/user/getUserCouponList', //获取优惠券列表
 		getRechargeList: uri1 + '/param/v1/user/getRechargeList', //获取平台充值套餐列表信息接口
-		getPaymentList:uri1 + '/param/v1/user/getPaymentList',//获取支付渠道接口
-		getMyEnterpriseCardStat: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardStat',//企业通用卡汇总数据
-		getMyEnterpriseCard: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCard',//获取我的企业通用卡列表信息
-		getMyEnterpriseCardDetail: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardDetail',//获取企业通用卡详情接口
-		getAvailableAllianceList: uri1 + '/param/v1/enterpriseCard/getAvailableAllianceList',//企业通用卡适用联盟企业列表
-		getUseEnterpriseCardList: uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardList',//企业通用卡明细列表
-		getUseEnterpriseCardDetail:  uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardDetail',//企业通用卡详情信息
-		rechargeBalance:uri1 + '/body/v1/user/rechargeBalance',//2.10.	用户在线充值接口
+		getPaymentList: uri1 + '/param/v1/user/getPaymentList', //获取支付渠道接口
+		getMyEnterpriseCardStat: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardStat', //企业通用卡汇总数据
+		getMyEnterpriseCard: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCard', //获取我的企业通用卡列表信息
+		getMyEnterpriseCardDetail: uri1 + '/param/v1/enterpriseCard/getMyEnterpriseCardDetail', //获取企业通用卡详情接口
+		getAvailableAllianceList: uri1 + '/param/v1/enterpriseCard/getAvailableAllianceList', //企业通用卡适用联盟企业列表
+		getUseEnterpriseCardList: uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardList', //企业通用卡明细列表
+		getUseEnterpriseCardDetail: uri1 + '/param/v1/enterpriseCard/getUseEnterpriseCardDetail', //企业通用卡详情信息
+		rechargeBalance: uri1 + '/body/v1/user/rechargeBalance', //用户在线充值接口
+		getList: uri1 + '/param/v1/feedbackCause/getList', //获取反馈原因列表信息接口
+		addFeedback: uri1 + '/body/v1/feedback/addFeedback', //新增反馈信息接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
@@ -86,7 +88,7 @@ var url = {
 	},
 	zf: {
 		wxScan: '/pay/public/v1/wechat/wxScan',
-		pay:'/pay/body/v1/wechat/pay'
+		pay: '/pay/body/v1/wechat/pay'
 	},
 	order: {
 		getOrderList: uri3 + '/param/v1/order/getOrderList', //获取订单列表
@@ -121,6 +123,7 @@ var url = {
 		getBonus: uri5 + '/ubody/v1/lottery/getBonus', //2.11.会员领奖接口
 		getMessage: uri5 + '/uparam/v1/lottery/getMessage', //2.13.获取会员中奖感言接口
 		writeMessage: uri5 + '/uparam/v1/lottery/writeMessage', //2.14.提交会员填写中奖感言接口
+		getAwardCode:uri5 + '/uparam/v1/lottery/getAwardCode',//2.12.获取会员领取线下奖品信息接口
 	},
 	ocr: {
 		getOCR: uri1 + '/param/v1/user/getOCR',

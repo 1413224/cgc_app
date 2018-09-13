@@ -111,6 +111,8 @@
 
 				this.showList = false
 				this.inloading = true
+				
+				this.scroll.scrollTo(0, 0, 500)
 			},
 			getLotteryRankByNums() {
 				var _this = this
@@ -182,7 +184,7 @@
 		height: 100%;
 		.wrapper {
 			position: absolute;
-			top: 0.8rem;
+			top: 44px;
 			left: 0;
 			bottom: 0;
 			width: 100%;
@@ -347,7 +349,7 @@
 			}
 		}
 		.wrapper-top {
-			top: 1.63rem!important;
+			top: 90px!important;
 		}
 	}
 </style>

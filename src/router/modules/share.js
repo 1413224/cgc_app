@@ -95,6 +95,38 @@ const share =[
 		}
 	},
 	{
+		path:'/share/evaluation',//订单评价
+		name:'evaluation',
+		component:resolve => require(['@/views/share/evaluation'], resolve),
+		meta: {
+			title:'评价中心'
+		}
+	},
+	{
+		path:'/share/orderReview',//发表追评
+		name:'orderReview',
+		component:resolve => require(['@/views/share/orderReview'], resolve),
+		meta: {
+			title:'发表追评'
+		}
+	},
+	{
+		path:'/share/orderSunburn',//评价晒单
+		name:'orderSunburn',
+		component:resolve => require(['@/views/share/orderSunburn'], resolve),
+		meta: {
+			title:'评价晒单'
+		}
+	},
+	{
+		path:'/share/serviceAssess',//服务评价
+		name:'serviceAssess',
+		component:resolve => require(['@/views/share/serviceAssess'], resolve),
+		meta: {
+			title:'服务评价'
+		}
+	},
+	{
 		path:'/share/usetime',//使用时间
 		name:'usetime',
 		component:resolve => require(['@/views/share/usetime'], resolve),

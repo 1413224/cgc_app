@@ -260,7 +260,8 @@ const memberModule = [{
 		name: 'recharge',
 		component: resolve => require(['@/views/member/purse/recharge'], resolve),
 		meta: {
-			title: '通用积分充值'
+			title: '通用积分充值',
+			//keepAlive: true
 		}
 	},
 	{
@@ -511,6 +512,13 @@ const memberModule = [{
 		component: resolve => require(['@/views/member/pay/scan_pay'], resolve),
 		meta: {
 			title: '向商家付款'
+		}
+	}, {
+		path: '/member/pay/alipay',
+		name: 'alipay',
+		component: resolve => require(['@/views/member/pay/alipay'], resolve),
+		meta: {
+			title: '支付宝付款'
 		}
 	},
 	{

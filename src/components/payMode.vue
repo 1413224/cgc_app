@@ -27,7 +27,7 @@
 
 		<div class="pay-box" v-else>
 			<popup class="payMode-popup" height="100%" v-model="options.showPayMode" @on-hide="hide" @on-show="show">
-				<div class="pr-box">
+				<div class="pr-box" v-if="options.showPayMode">
 					<div class="bt" @click="options.showPayMode = !options.showPayMode">
 						<i class="iconfont icon-arrow-right"></i>
 						<p>支付收银台</p>
