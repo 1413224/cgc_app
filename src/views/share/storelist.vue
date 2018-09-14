@@ -834,9 +834,9 @@
 			background-color: white;
 			.null_box {
 				position: absolute;
-				top: 40%;
+				top: 50%;
 				left: 50%;
-				transform: translate(-50%, -40%);
+				transform: translate(-50%, -50%);
 			}
 		}
 	}

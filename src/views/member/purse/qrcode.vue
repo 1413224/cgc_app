@@ -100,7 +100,7 @@
 				},
 				barcodes: '',
 
-				noOpen: true,
+				noOpen: 1,
 			}
 		},
 		created() {
@@ -198,6 +198,8 @@
 						_this.userInfo = res.data.data
 						_this.barcodes = res.data.data.mobile
 						_this.barcode_option.text = res.data.data.mobile
+						//判断是否开启会员支付码
+						_this.noOpen = res.data.data.openPayCode
 					}
 				})
 			},

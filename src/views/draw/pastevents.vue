@@ -132,7 +132,7 @@
 					volume: 0.7, //音量
 					mutex: true, //多个视频同时播放
 					video: {
-						url: '',
+						url: './static/video/movie.mp4',
 						pic: './static/draw/video_bg.png'
 					}
 				},

@@ -269,7 +269,7 @@ const memberModule = [{
 		name: 'card',
 		component: resolve => require(['@/views/member/card/index'], resolve),
 		meta: {
-			title: '我的卡包'
+			title: '企业通用积分'
 		}
 	}, {
 		path: '/member/card/detail',
@@ -450,6 +450,14 @@ const memberModule = [{
 		component: resolve => require(['@/views/member/generalize/index'], resolve),
 		meta: {
 			title: '推广助手'
+		}
+	},
+	{
+		path:'/member/article/detail',
+		name:'artDetail',
+		component:resolve => require(['@/views/member/generalize/detail'],resolve),
+		meta:{
+			title:'文章详情'
 		}
 	},
 	{

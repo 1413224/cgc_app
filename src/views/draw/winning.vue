@@ -14,7 +14,7 @@
 							<p>
 								<i>￥</i>{{item.userBonus}}</p>
 						</div>
-						<div class="btn" :class="{'jz':item.status != 60 && item.status != 70}" @click="toReceive(item.id,item.status)">
+						<div class="btn" :class="{'jz':item.status != 60 && item.status != 70}" @click="toReceive(item.id,item.status,item.userBonus)">
 							<p v-if="item.status == 10">领奖</p>
 							<p v-if="item.status == 20">待审核</p>
 							<p v-if="item.status == 30">立即领取</p>
@@ -74,7 +74,7 @@
 						<p>奖金领取成功</p>
 						<img :src="'./static/draw/dian.png'" alt="" />
 						<p class="money">￥
-							<span>5000</span>
+							<span>{{userBonus}}</span>
 						</p>
 						<div @click="$router.push({path:'/member/purse/wallet'})">查看我的资产</div>
 					</div>
@@ -119,11 +119,15 @@
 				curPage: 1,
 				pageSize: 10,
 				list: [],
-				inloading: true
+				inloading: true,
+				userBonus: ''
 			}
 		},
 		created() {
 			this.getUserLotteryRecord()
+			if(this.$route.query.draw){
+				this.toReceive(this.$route.query.draw.id,this.$route.query.draw.status,this.$route.query.draw.userBonus)
+			}
 		},
 		mounted() {
 			this.InitScroll()
@@ -152,97 +156,131 @@
 				})
 			},
 			//领奖
-			toReceive(id, status) {
+			toReceive(id, status, userBonus) {
 				var _this = this
-				if(status == 10 || status == 30) {
+				if(status == 10 || status == 30 || status == 40) {
 					_this.$http.post(_this.url.lottery.getBonus, {
 						userId: _this.$store.state.user.userId,
 						id: id
 					}).then((res) => {
 						if(res.data.status == "00000000") {
+
 							var message = ''
 							var buttons = []
 							if(res.data.data.status == 10) {
 								message = '您仍尚未实名认证'
 								buttons = ['马上认证', '取消']
 							} else if(res.data.data.status == 20) {
-								message = '您仍需完善资料'
+								if(res.data.data.needPhotos == 1) {
+									message = '您仍需完善中奖照'
+								} else if(res.data.data.needWechat == 1) {
+									message = '您仍需绑定微信账号'
+								} else if(res.data.data.needAlipay == 1) {
+									message = '您仍需绑定支付宝账号'
+								}
+
 								buttons = ['前去完善', '取消']
+							} else if(res.data.data.status == 40) {
+								message = '您仍需填写中奖感言'
+								buttons = ['马上填写', '取消']
 							} else if(res.data.data.status == 50) {
 								message = '审核中'
 								buttons = ['取消']
-							} else if(res.data.data.status == 40) {
-								_this.$router.push({
-									path: '/draw/awards',
-									query: {
-										id: id
-									}
-								})
+							} else if(res.data.data.status == 60) {
+								message = '仍需线下领奖'
+								buttons = ['取消']
+							} else if(res.data.data.status == 70) {
+								message = '已经过了领取截止时间'
+								buttons = ['取消']
+							} else if(res.data.data.status == 80) {
+								message = '已领取成功，无需重复领取'
+								buttons = ['取消']
+							} else if(res.data.data.status == 90) {
+								_this.showDialog = true
+								_this.userBonus = userBonus
+								_this.curPage = 1
+								_this.getUserLotteryRecord()
 							}
 							//							else if(res.data.data.status == 30) {
 							//								message = '您仍需绑定银行卡'
 							//								buttons = ['马上绑定', '取消']
 							//							} 
+							if(res.data.data.status != 90) {
+								_this.$dialog.show({
+									type: 'warning',
+									headMessage: '提示',
+									message: message,
+									buttons: buttons,
+									canel() {
 
-							_this.$dialog.show({
-								type: 'warning',
-								headMessage: '提示',
-								message: message,
-								buttons: buttons,
-								canel() {
+									},
+									confirm() {
 
-								},
-								confirm() {
-
-									if(res.data.data.status == 10) {
-										_this.$http.get(_this.url.ocr.getOCR, {
-											params: {
-												userId: _this.$store.state.user.userId
-											}
-										}).then((res) => {
-											if(res.data.status == "00000000") {
-												_this.data = res.data.data
-												if(_this.data.status == 0) {
-													window.location.href = res.data.data.url
-												} else if(_this.data.status == 1) {
-
-													_this.$router.push({
-														// path:'/member/setting/real',
-														name: "real",
-														params: {
-															suc: true
-														}
-													})
-												} else if(_this.data.status == 3) {
-													_this.$router.push({
-														name: "real",
-														params: {
-															suc: false
-														}
-													})
-												} else if(_this.data.status == 4) {
-													_this.$vux.toast.show({
-														width: '50%',
-														type: 'text',
-														position: 'top',
-														text: '超过当日认证次数上限'
-													})
-												} else {
-													alert("sha")
+										if(res.data.data.status == 10) {
+											_this.$http.get(_this.url.ocr.getOCR, {
+												params: {
+													userId: _this.$store.state.user.userId
 												}
-											}
-										})
-									} else if(res.data.data.status == 20) {
-										_this.$router.push({
-											path: '/member/info/data'
-										})
+											}).then((res) => {
+												if(res.data.status == "00000000") {
+													_this.data = res.data.data
+													if(_this.data.status == 0) {
+														window.location.href = res.data.data.url
+													} else if(_this.data.status == 1) {
+
+														_this.$router.push({
+															// path:'/member/setting/real',
+															name: "real",
+															params: {
+																suc: true
+															}
+														})
+													} else if(_this.data.status == 3) {
+														_this.$router.push({
+															name: "real",
+															params: {
+																suc: false
+															}
+														})
+													} else if(_this.data.status == 4) {
+														_this.$vux.toast.show({
+															width: '50%',
+															type: 'text',
+															position: 'top',
+															text: '超过当日认证次数上限'
+														})
+													} else {
+														alert("sha")
+													}
+												}
+											})
+										} else if(res.data.data.status == 20) {
+											_this.$router.push({
+												path: '/member/info/data',
+												query:{
+													draw:{
+														'id':id,
+														'status':status,
+														'userBonus':userBonus
+													}
+												}
+											})
+										} else if(res.data.data.status == 40) {
+											_this.$router.push({
+												path: '/draw/awards',
+												query: {
+													id: id
+												}
+											})
+										}
+										//									else if(res.data.data.status == 30) {
+										//										message = '您仍需绑定银行卡'
+										//										buttons = ['马上绑定', '取消']
+										//									} 
 									}
-									//									else if(res.data.data.status == 30) {
-									//										message = '您仍需绑定银行卡'
-									//										buttons = ['马上绑定', '取消']
-									//									} 
-								}
-							})
+								})
+							}
+
 						}
 					})
 				} else if(status == 50) {

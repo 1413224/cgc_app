@@ -61,6 +61,10 @@ var url = {
 		rechargeBalance: uri1 + '/body/v1/user/rechargeBalance', //用户在线充值接口
 		getList: uri1 + '/param/v1/feedbackCause/getList', //获取反馈原因列表信息接口
 		addFeedback: uri1 + '/body/v1/feedback/addFeedback', //新增反馈信息接口
+		getInfoByType: uri1 + '/public/v1/agreement/getInfoByType',//获取协议信息接口
+		getCategoryLists: uri1 + '/public/v1/article/getCategoryLists',//获取文章分类列表
+		getLists: uri1 + '/public/v1/article/getLists',//获取文章列表接口
+		getDetails:uri1 + '/public/v1/article/getDetails'//获取文章详情接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
@@ -122,7 +126,7 @@ var url = {
 		getUserLotteryRecord: uri5 + '/uparam/v1/lottery/getUserLotteryRecord', //2.10获取会员中奖记录列表接口
 		getBonus: uri5 + '/ubody/v1/lottery/getBonus', //2.11.会员领奖接口
 		getMessage: uri5 + '/uparam/v1/lottery/getMessage', //2.13.获取会员中奖感言接口
-		writeMessage: uri5 + '/uparam/v1/lottery/writeMessage', //2.14.提交会员填写中奖感言接口
+		writeMessage: uri5 + '/ubody/v1/lottery/writeMessage', //2.14.提交会员填写中奖感言接口
 		getAwardCode:uri5 + '/uparam/v1/lottery/getAwardCode',//2.12.获取会员领取线下奖品信息接口
 	},
 	ocr: {

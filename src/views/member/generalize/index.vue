@@ -4,7 +4,7 @@
 		<div class="alerts-tob">
 			<swiper :options="swiperOption" class="swiper">
 		        <swiper-slide v-for="(item, index) in tabData" :key="index">
-		        	<div class="tab-item" :class="{'tab-item-active':actTab == index}" @click="onLoadDataFirst(index,item.cateid)">
+		        	<div class="tab-item" :class="{'tab-item-active':actTab == index}" @click="onLoadDataFirst(index,item.cateId)">
 	                    {{item.name}}
 	                </div>
 		        </swiper-slide>
@@ -16,14 +16,25 @@
 		       <div class="news">   
 					<noData v-if="showNull" :status="2" stateText="暂无数据"></noData>
 
-					<div class="new" :class="{'oneImage':item.imgs.length>0}" v-for="(item,index) in articleList" :key="index">
+					<!-- <div class="new" :class="{'oneImage':item.imgs.length>0}" v-for="(item,index) in articleList" :key="index">
 						<a :href="item.url">
-							<p class="newTitle">{{item.name}}</p>
-							<!-- ../../../assets/images/member/index01.jpg -->
+							<p class="newTitle">{{item.title}}</p>
+							../../../assets/images/member/index01.jpg
 							<div class="right" v-if="item.imgs.length"><img :src='item.imgs[0]' alt=""></div>
-							<p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
+							<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime}}</span></p>
 							<div class="clear"></div>
 						</a>
+					</div> -->
+					<div class="new" v-for="(item,index) in articleList" :key="index" @click="goDetail(item.articleId)">
+						<p class="newTitle">{{item.title}}</p>
+						<!-- <div class="right" v-if="item.thumb.length"><img :src='item.thumb[0].original' alt=""></div> -->
+						<div class="tuwap" v-if="item.thumb.length">
+							<div class="imgs" v-for="(itemimg,index) in item.thumb">
+								<img :src="itemimg.original" alt="">
+							</div>
+						</div>
+						<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>
+						<div class="clear"></div>
 					</div>
 
 					<!-- <div class="new oneImage">
@@ -57,8 +68,8 @@
 				// tabData:['新闻类','活动类','品牌类','视频推广','领导关怀'],
 				tabData:[
 					{
-						cateid:'1',
-						name:'快讯'
+						cateid:'',
+						name:''
 					}
 				],
 				firseId:0,
@@ -121,14 +132,9 @@
 				var _this = this
 					_this.show = true
 
-				if(_this.showNomore){
+				/*if(_this.showNomore){
 					_this.show = false;
 				}else{
-					// setTimeout(() => {
-					// 	// let len = _this.articleList.length;
-						
-					// },1500)
-					// let len = _this.articleList.length;
 					var params={
 							cateid:id,
 							page:_this.page,
@@ -163,11 +169,50 @@
 							console.log(error)
 						});
 					_this.flage = true
+				}*/
+				if(_this.showNomore){
+					_this.show = false;
+				}else{
+
+					_this.$http.get(_this.url.user.getLists,{
+						params:{
+							type:2,
+							cateIds:id,
+							curPage:_this.page,
+							pageSize:10
+						}
+					}).then((res) => {
+						_this.show = false
+						if(res.status == 200 && res.data != null){
+
+							_this.show = false
+
+							_this.articleList = _this.articleList.concat(res.data.data.list)
+
+							if(_this.articleList.length == 0){
+								_this.showNull = true
+							}else{
+								_this.showNull = false
+							}
+
+							// if(len == _this.articleList.length){
+							// 	_this.showNomore = true;
+							// }
+							if(res.data.result.lists.length < 10){
+								// _this.show = false
+								_this.showNomore = true
+							}
+
+						}
+					}).catch((error)=>{
+						console.log(error)
+					});
+					_this.flage = true
 				}
 			},
 			getArticleCategory(){
 				var _this = this
-				_this.$http.post(url.article.getArticleCategory).then((res) => {
+				/*_this.$http.post(url.article.getArticleCategory).then((res) => {
 					if(res.status == 200 && res.data != null){
 						_this.tabData = res.data.result.lists
 						_this.firseId = JSON.parse(res.data.result.lists[0].cateid)
@@ -175,7 +220,22 @@
 						_this.onLoadDataFirst(0,_this.firseId)
 						// console.log(res)
 					}
-				});
+				});*/
+				_this.$http.get(url.user.getCategoryLists,{
+					params:{
+						level:1,
+						curPage:1,
+						pageSize:8
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000" && res.data.data != ""){
+						// console.log(res.data.data)
+						_this.tabData = res.data.data.list
+						_this.firseId = res.data.data.list[0].cateId
+						// alert(_this.firseId)
+						_this.onLoadDataFirst(0,_this.firseId)
+					}
+				})
 			},
 			onLoadDataFirst(index,id){
 				let _this = this
@@ -187,14 +247,14 @@
 				_this.cateid = id
 				
 
-				var params={
+				/*var params={
 					cateid:id,
-					page:1,
-					pagesize:10
-				}
+					curPage:1,
+					pageSize:10
+				}*/
 
-				let par = Qs.stringify(params)
-				_this.$http.post(url.article.getArticleLists,par).then((res) => {
+				// let par = Qs.stringify(params)
+				/*_this.$http.post(url.article.getArticleLists,par).then((res) => {
 					if(res.status == 200 && res.data != null){
 						_this.articleList = res.data.result.lists
 
@@ -205,7 +265,38 @@
 						}
 
 					}
+				});*/
+				_this.$http.get(_this.url.user.getLists,{
+					params:{
+						type:2,
+						cateIds:id,
+						curPage:1,
+						pageSize:10
+					}
+				}).then((res) => {
+					if(res.status == 200 && res.data != null){
+						// _this.articleList = res.data.result.lists
+						_this.articleList = res.data.data.list
+
+						// console.log(_this.articleList)
+
+						if(_this.articleList.length == 0){
+							_this.showNull = true
+						}else{
+							_this.showNull = false
+						}
+
+					}
 				});
+			},
+			goDetail(id){
+				var _this = this
+				_this.$router.push({
+					path:'/member/article/detail',
+					query:{
+						id:id
+					}
+				})
 			}
 		}
 	}
@@ -299,7 +390,7 @@
 			    padding-left:0.24rem;
 			    padding-right: 0.16rem;
 			    .newTitle{
-				    float: left;
+				    /*float: left;*/
 				    margin: 0.24rem 0.5rem 0.18rem 0;
 				    font-size: 0.34rem;
 				    color: #1A2642;
@@ -309,21 +400,35 @@
 				.newBottom{
 				    color: #7386AD;
 				    font-size: 0.26rem;
-				    float:left;
+				    margin-top: .3rem;
+				    /*float:left;*/
 				    span{
 					    color: #7386AD;
 					}
 				}
-				.right{
+				/* .right{
 					img{
 						width:2.2rem;
 					    height:1.2rem;
 					    margin-top: 0.35rem;
 					}
 				    
+				} */
+
+				.tuwap{
+					display: flex;
+					height: 1.85rem;
+					justify-content:space-between;
+					.imgs{
+						flex: 1;
+						img{
+							width: 95%;
+							height: 100%; 
+						}
+					}
 				}
 				
-				.imgList{
+				/* .imgList{
 				    width: 100%;
 				    display: flex;
 				    flex-wrap: nowrap;
@@ -333,7 +438,7 @@
 					    height: 1.1rem;
 					    margin-right: 0.8%;
 					}
-				}
+				} */
 			}
 			.oneImage {
 				.newTitle{

@@ -1,8 +1,8 @@
 <template>
 	<section class="review" style="height: 100%;">
+		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper">
 			<div class="content">
-				<settingHeader :title="title"></settingHeader>
 				<!-- 轮播 -->
 				<!--<swiper :options="swiperOption" class="swiper">
 			        <swiper-slide v-for="(item,index) in imgList" :key="index">

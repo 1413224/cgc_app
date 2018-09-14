@@ -26,7 +26,7 @@
 					<img :src="'./static/index/index_notice.png'" alt="">
 					<div style="padding-left: 0.16rem">
 						<marquee>
-							<marquee-item v-for="(item,index) in articleList" :key="index" @click.native="goArticleDetail(item.url)" :duration='3000' class="align-middle">{{item.name}}</marquee-item>
+							<marquee-item v-for="(item,index) in articleList" :key="index" @click.native="goArticleDetail(item.articleId)" :duration='3000' class="align-middle">{{item.title}}</marquee-item>
 						</marquee>
 					</div>
 					<router-link to="/member/article/index">
@@ -428,12 +428,7 @@
 			},
 			onLoadArticle() {
 				let _this = this
-				// let parJson = {
-				// 	pagesize:6,
-				// 	page: 1
-				// }
-				// let par = Qs.stringify(parJson)
-				_this.$http.post(url.article.getArticleLists).then((res) => {
+				/*_this.$http.post(url.article.getArticleLists).then((res) => {
 					if(res.status == 200 && res.data != null) {
 
 						_this.articleList = res.data.result.lists
@@ -449,10 +444,39 @@
 
 				}).catch((err) => {
 					console.log(err);
+				});*/
+				_this.$http.get(_this.url.user.getLists,{
+					params:{
+						type:1,
+						curPage:1,
+						pageSize:10
+					}
+				}).then((res) => {
+					if(res.status == 200) {
+
+						_this.articleList = res.data.data.list
+						// console.log(_this.articleList)
+					} else {
+						Vue.$vux.toast.show({
+							text: "请求快讯失败",
+							type: 'text',
+							position: 'middle',
+							width: '50%'
+						})
+					}
+
+				}).catch((err) => {
+					console.log(err);
 				});
 			},
 			goArticleDetail(uri) {
-				window.location.href = uri;
+				// window.location.href = uri;
+				this.$router.push({
+					path:'/member/article/detail',
+					query:{
+						id:uri
+					}
+				})
 			},
 			toStoreDetails(index, item,index2) {
 				console.log(index2)

@@ -75,7 +75,7 @@
 				showsex: false,
 				showrec: false,
 				sexlist: ['男', '女', '保密'],
-				reclist: ['小学', '初中', '高中', '大专', '本科','硕士','博士'],
+				reclist: ['小学', '初中', '高中', '大专', '本科', '硕士', '博士'],
 				txt: '<span>请选择性别</span>',
 				backImages: [],
 				pindex: 0,
@@ -97,6 +97,8 @@
 			this.getUserInfo()
 
 			_this.maxDate = _this.getDate()
+
+			
 		},
 		mounted() {
 
@@ -134,7 +136,7 @@
 							_this.education = '大专'
 						} else if(info.education == 4) {
 							_this.education = '本科'
-						}else if(info.education == 5) {
+						} else if(info.education == 5) {
 							_this.education = '硕士'
 						} else if(info.education == 6) {
 							_this.education = '博士'
@@ -213,7 +215,7 @@
 				for(var i = 0; i < file.length; i++) {
 					if(file.length > 3) {
 						this.$vux.toast.show({
-							width:'60%',
+							width: '60%',
 							text: '最多只能上传三张照片',
 							type: 'text'
 						})
@@ -260,9 +262,7 @@
 			},
 			changeUserInfo() {
 				var _this = this
-				
-				console.log(_this.birthday)
-				
+
 				if(!_this.mainApp.isqq(_this.qq) && _this.qq) {
 					_this.$vux.toast.show({
 						width: '50%',
@@ -315,6 +315,15 @@
 							text: '修改成功'
 						})
 						_this.getUserInfo()
+
+						if(_this.$route.query.draw) {
+							_this.$router.replace({
+								path: '/draw/winning',
+								query: {
+									draw: _this.$route.query.draw
+								}
+							})
+						}
 					}
 				})
 			},

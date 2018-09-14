@@ -17,16 +17,15 @@
 
 				   <noData v-if="showNull" :status="2" stateText="暂无数据"></noData>
 
-					<div class="new" v-for="(item,index) in articleList" :key="index"  :class="item.imgNumber==1?'oneImage':''">
-						<a :href="item.url">
-							<p class="newTitle">{{item.name}}!</p>
-							<div class="right" v-show="item.imgNumber==1"><img :src="item.imgs[0]" alt=""></div>
-							<div class="imgList" v-show="item.imgNumber>1">
-								<img :src="img" alt="" v-for="(img,index) in item.imgs" v-if='index<=2' :key="index">
-							</div>
-							<p class="newBottom">{{item.cateName}} &nbsp;<span>{{item.addTime}}</span></p>
-							<div class="clear"></div>
-						</a>
+					<div class="new" v-for="(item,index) in articleList" :key="index"  :class="item.thumb.length==1?'oneImage':''" @click="goDetail(item.articleId)">
+					<!-- :href="item.url" -->
+						<p class="newTitle">{{item.title}}</p>
+						<div class="right" v-if="item.thumb.length==1"><img :src="item.thumb[0].original" alt=""></div>
+						<!-- <div class="imgList" v-show="item.thumbthumb.length>1">
+							<img :src="img" alt="" v-for="(img,index) in item.thumb" v-if='index<=2' :key="index">
+						</div> -->
+						<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>
+						<div class="clear"></div>
 					</div>
 			                
 			    </div>
@@ -68,6 +67,7 @@
 			swiper,
 			swiperSlide,
 			Loading,
+			noData,
 			noMore
 		},
 		mounted() {
@@ -111,7 +111,7 @@
 				var _this = this
 				_this.show = true
 
-				if(_this.showNomore){
+				/*if(_this.showNomore){
 					_this.show = false;
 				}else{
 						_this.page ++;
@@ -141,10 +141,44 @@
 							console.log(error);
 						});
 					_this.flag = true
+				}*/
+				if(_this.showNomore){
+					_this.show = false;
+				}else{
+						_this.page ++;
+						let len = _this.articleList.length;
+						
+
+						_this.$http.get(_this.url.user.getLists,{
+							params:{
+								type:1,
+								curPage:_this.page,
+								pageSize:10
+							}
+						}).then(function (response) {
+							_this.show = false
+							if( response.status == 200 && response.data.data != null&&response.data.data.page == _this.page){
+								_this.articleList = _this.articleList.concat(response.data.data.list)
+							}
+							// console.log(_this.articleList);
+
+							if(_this.articleList.length == 0){
+									_this.showNull = true
+								}else{
+									_this.showNull = false
+								}
+
+							if(len == _this.articleList.length){
+								_this.showNomore = true;
+							}
+						}).catch(function (error) {
+							console.log(error);
+						});
+					_this.flag = true
 				}
 			},
 			getData(){
-				let _this = this;
+				/*let _this = this;
 				let parJson = {
 					pagesize:10,
 					page: 1
@@ -157,7 +191,36 @@
 					// console.log(_this.articleList);
 				}).catch(function (error) {
 					console.log(error);
-				});
+				});*/
+
+				var _this = this
+				_this.$http.get(_this.url.user.getLists,{
+					params:{
+						type:1,
+						curPage:1,
+						pageSize:10
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000"){
+
+						_this.articleList = res.data.data.list
+
+						if(_this.articleList.length == 0){
+							_this.showNull = true
+						}else{
+							_this.showNull = false
+						}
+					}
+				})
+
+			},
+			goDetail(id){
+				this.$router.push({
+					path:'/member/article/detail',
+					query:{
+						id:id
+					}
+				})
 			}
 		}
 	}
@@ -168,6 +231,13 @@
 		height: 100%;
 		padding: 0 0.1rem;
 		background: #fff;
+		.settingHeader ~ .wrapper{
+			position: fixed;
+			top: 46px;
+			bottom: 0;
+			width: 100%;
+			overflow: hidden;
+		}
 		.wrapper {
 			position: fixed;
 			top: 0;
