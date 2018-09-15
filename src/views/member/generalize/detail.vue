@@ -4,7 +4,7 @@
 		<div class="content">
 			<div class="tit">{{data.title}}</div>
 			<p class="author">{{data.author}} <span>{{data.createTime | getDate}}</span></p>
-			<div class="card" v-if="data.userId">
+			<div class="card" v-if="data.userId && (data.userId != $store.state.user.userId)">
 				<img v-if="data.avatar" :src="data.avatar.original" />
 				<img v-else :src="'./static/images/wz_tx.png'" />
 				<div class="tip_box">
