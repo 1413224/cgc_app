@@ -1,7 +1,7 @@
 <template>
 	<div class="opinion">
 		<setting-header :title="title"></setting-header>
-		<checklist v-model="checkArr" :max="1" :options="options"></checklist>
+		<checklist :max="1" :options="options" @on-change="nameChange"></checklist>
 		<div class="tit">请补充详细问题和意见</div>
 		<group>
 			<x-textarea title="" v-model="opinval" :max="240"></x-textarea>
@@ -25,7 +25,7 @@
 			</div>
 
 			<div class="tip">
-				<div class="add-btn" @click="">保存</div>
+				<div class="add-btn" @click="submit">保存</div>
 			</div>
 		</div>
 	</div>
@@ -43,32 +43,44 @@
 		data() {
 			return {
 				title: '意见反馈',
-				options: [{
-					key: 1,
-					value: '功能异常：功能故障或不可用'
-				}, {
-					key: 2,
-					value: '产品建议：用的不爽，我有建议'
-				}, {
-					key: 3,
-					value: '安全问题：密码、隐私、欺诈等'
-				}, {
-					key: 4,
-					value: '其他问题'
-				}],
-				checkArr: [],
+				options: [],
+				nameId: '',
+				name: '',
 				opinval: '',
 				backImages: [],
 				fileIdList: [],
 				pindex: 0,
-				
-				curPage:1,
+
+				curPage: 1,
 			}
 		},
 		created() {
 			this.getList()
 		},
 		methods: {
+			submit() {
+				var _this = this
+
+				_this.$http.post(_this.url.user.addFeedback, {
+					userId: _this.$store.state.user.userId,
+					type: '110',
+					name: _this.name[0],
+					content: _this.opinval,
+					thumb: _this.fileIdList.join() + ","
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.message == 'success') {
+							_this.$vux.toast.show({
+								width: '50%',
+								type: 'text',
+								position: 'middle',
+								text: '提交成功，感谢您的反馈'
+							})
+							_this.$router.go(-1)
+						}
+					}
+				})
+			},
 			getList() {
 				var _this = this
 
@@ -76,14 +88,23 @@
 					params: {
 						userId: _this.$store.state.user.userId,
 						type: '110',
-						curPage:_this.curPage,
-						pageSize:20,
+						curPage: _this.curPage,
+						pageSize: 20,
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-
+						res.data.data.list.forEach((value) => {
+							var item = {}
+							item.key = value.causeId
+							item.value = value.name
+							_this.options.push(item)
+						})
 					}
 				})
+			},
+			nameChange(value, label) {
+				this.nameId = value
+				this.name = label
 			},
 			cindex(index) {
 				this.pindex = index

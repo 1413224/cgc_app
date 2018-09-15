@@ -585,7 +585,7 @@
 						flex-direction: column;
 						p {
 							font-size: 0.7rem;
-							font-family: DINOT-Bold;
+							font-family: PingFang-SC-Medium;
 							color: rgba(255, 255, 255, 1);
 							i {
 								font-size: 0.39rem;

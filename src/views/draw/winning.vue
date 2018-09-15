@@ -46,17 +46,17 @@
 				<loading v-if="showLoading"></loading>
 				<noMore v-if="showNomore"></noMore>
 				<Null status="loading" text="加载中" v-if="!showList && inloading"></Null>
-			</div>
-			<div class="no_data_box" v-if="!showList && !inloading">
-				<div class="bw-box">
-					<div>
-						<img :src="'./static/draw/no-data-img.png'" alt="" />
-						<p>您还没有中奖记录</p>
-					</div>
-					<div>
-						<div @click="$router.push({path:'/share/storelist'})">我要抽奖</div>
-						<p class="tip1">温馨提示：</p>
-						<p class="tip2">只要在平台上消费任意一笔订单，就能参加周末幸运大抽奖</p>
+				<div class="no_data_box" v-if="!showList && !inloading">
+					<div class="bw-box">
+						<div>
+							<img :src="'./static/draw/no-data-img.png'" alt="" />
+							<p>您还没有中奖记录</p>
+						</div>
+						<div>
+							<div @click="$router.push({path:'/share/storelist'})">我要抽奖</div>
+							<p class="tip1">温馨提示：</p>
+							<p class="tip2">只要在平台上消费任意一笔订单，就能参加周末幸运大抽奖</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -125,8 +125,8 @@
 		},
 		created() {
 			this.getUserLotteryRecord()
-			if(this.$route.query.draw){
-				this.toReceive(this.$route.query.draw.id,this.$route.query.draw.status,this.$route.query.draw.userBonus)
+			if(this.$route.query.draw) {
+				this.toReceive(this.$route.query.draw.id, this.$route.query.draw.status, this.$route.query.draw.userBonus)
 			}
 		},
 		mounted() {
@@ -257,11 +257,11 @@
 										} else if(res.data.data.status == 20) {
 											_this.$router.push({
 												path: '/member/info/data',
-												query:{
-													draw:{
-														'id':id,
-														'status':status,
-														'userBonus':userBonus
+												query: {
+													draw: {
+														'id': id,
+														'status': status,
+														'userBonus': userBonus
 													}
 												}
 											})

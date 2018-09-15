@@ -104,7 +104,7 @@
 		methods: {
 			toReg() {
 				this.vm.$router.push({
-					path: '/user/reg'
+					path: '/user/login'
 				})
 			},
 			toPay() {

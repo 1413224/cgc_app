@@ -64,7 +64,8 @@ var url = {
 		getInfoByType: uri1 + '/public/v1/agreement/getInfoByType',//获取协议信息接口
 		getCategoryLists: uri1 + '/public/v1/article/getCategoryLists',//获取文章分类列表
 		getLists: uri1 + '/public/v1/article/getLists',//获取文章列表接口
-		getDetails:uri1 + '/public/v1/article/getDetails'//获取文章详情接口
+		getDetails:uri1 + '/public/v1/article/getDetails',//获取文章详情接口
+		addFeedback:uri1 + '/body/v1/feedback/addFeedback',//2.4.新增反馈信息接口
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
