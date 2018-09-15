@@ -69,8 +69,15 @@
 			}
 		},
 		created() {
+			
+			if(this.mainApp.getCs('parentId')){
+				this.parentId = this.mainApp.getCs('parentId')
+			}else{
+				this.parentId = sessionStorage['parentUserId']
+			}
 
-			this.parentId = this.mainApp.getCs('parentId')
+			
+			
 			if(this.$route.query.mobile) {
 				this.mobile = this.$route.query.mobile
 			}
@@ -167,7 +174,7 @@
 					smsVerificationCode: _this.code,
 					platformId: _this.url.platformId,
 					parentUserId: _this.parentId,
-					unionid: sessionStorage['_openid_']
+					unionid: sessionStorage['_openid_'],
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 						//sessionStorage.setItem('regFirst',true)

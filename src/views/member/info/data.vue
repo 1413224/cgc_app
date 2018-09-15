@@ -126,19 +126,19 @@
 							_this.sex = '保密'
 						}
 						_this.xl = info.education
-						if(info.education == 0) {
+						if(info.education == 1) {
 							_this.education = '小学'
-						} else if(info.education == 1) {
-							_this.education = '初中'
 						} else if(info.education == 2) {
-							_this.education = '高中'
+							_this.education = '初中'
 						} else if(info.education == 3) {
-							_this.education = '大专'
+							_this.education = '高中'
 						} else if(info.education == 4) {
-							_this.education = '本科'
+							_this.education = '大专'
 						} else if(info.education == 5) {
-							_this.education = '硕士'
+							_this.education = '本科'
 						} else if(info.education == 6) {
+							_this.education = '硕士'
+						} else if(info.education == 7) {
 							_this.education = '博士'
 						}
 						_this.birthday = info.birthday ? _this.mainApp.frDateTimehp.getFormatDateTamp(info.birthday * 1000) : '请选择日期'
@@ -178,7 +178,7 @@
 				}
 			},
 			recclick(val) {
-				this.xl = val
+				this.xl = Number(val+1)
 				if(val == 0) {
 					this.education = '小学'
 				} else if(val == 1) {
