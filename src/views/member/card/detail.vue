@@ -140,9 +140,9 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
-						console.log(res.data.data)
+						// console.log(res.data.data)
 						_this.cardDetail = res.data.data
-						// _this.styleObject.backgroundImage = 'url(' + res.data.data.logo.middle + ')'
+						_this.styleObject.backgroundImage = 'url(' + res.data.data.logo.original + ')'
 					}
 				})
 			},
@@ -156,11 +156,12 @@
 						userId:_this.$store.state.user.userId,
 						cardId:_this.$route.query.cardId,
 						curPage:_this.page,
-						pageSize:4
+						pageSize:4,
+						islist:true
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
-						console.log(res.data.data)
+						// console.log(res.data.data)
 						var listLng = res.data.data.list.length
 						if(listLng>0){
 							_this.list = _this.list.concat(res.data.data.list) 

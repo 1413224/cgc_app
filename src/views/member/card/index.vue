@@ -7,7 +7,12 @@
 				<!-- 'url('+item.logo+')' -->  
 				<!-- :style="{backgroundImage:styleObject}" -->
 				<!-- :style="{ 'background-image': 'url(' + item.logo.middle + ')','background-repeat':'no-repeat','background-size':'cover' }"  -->
-					<li class="item" :class="item.bj" :style="styleObject"  v-for="(item,index) in cardList" :key="index" @click="toDetail(item.userCardId,item.cardId)">
+					<li class="item" 
+						:class="item.bj"
+						:style="{ 'background-image': 'url(' + item.logo.original + ')','background-repeat':'no-repeat','background-size':'cover' }"
+					    v-for="(item,index) in cardList" 
+					    :key="index" 
+					    @click="toDetail(item.userCardId,item.cardId)">
 						<p class="store">{{item.name}}</p>
 						<div class="middle">
 							<p>可用企业通用积分：</p>
@@ -45,6 +50,7 @@
 				flag:true,
 				nodatas:false,
 				cardLength:false,
+				datas:[],
 				styleObject:{
 					backgroundImage:'url("./static/member/khh.png")',
 					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
@@ -125,7 +131,8 @@
 					params:{
 						userId: _this.$store.state.user.userId,
 						curPage : _this.page,
-						pageSize:3
+						pageSize:3,
+						islist:true
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
