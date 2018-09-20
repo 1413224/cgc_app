@@ -20,10 +20,10 @@
 
 			<div class="start" v-show="infoItem.status == 0 || infoItem.status == 2">
 
-				<div class="cont" @click="startEquipment(infoItem.itemId,infoItem.status)">
+				<div class="cont">
 					<img src="../../assets/images/share/button0.png" alt="" class="btn0">
 					<img src="../../assets/images/share/sh_btn0.png" alt="" class="sh_btn0">
-					<div class="nr">
+					<div class="nr" @click="startEquipment(infoItem.itemId,infoItem.status)">
 						<!-- <p>{{infoItem.itemId}}</p> -->
 						<p class="tit">启动</p>
 						<p class="text">开启后开始计时</p>
