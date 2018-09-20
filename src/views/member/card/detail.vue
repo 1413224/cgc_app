@@ -186,7 +186,7 @@
 			},
 			goshop(id){
 				this.$router.push({
-					path:'multi_user_mall',
+					path:'/multi_user_mall',
 					query:{
 						id:id,
 						// oIndex:3

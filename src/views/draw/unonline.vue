@@ -3,22 +3,22 @@
 		<settingHeader title="线下领奖"></settingHeader>
 		<div class="record-item">
 			<div class="top">
-				<div>第123123期</div>
-				<p class="ellipsis">国美番禺店大抽奖</p>
+				<div>第{{info.number}}期</div>
+				<p class="ellipsis">{{info.title}}</p>
 			</div>
 			<div class="bottom">
 				<ul>
 					<li>
 						<span>中奖名称</span>
-						<span>一等奖</span>
+						<span>{{info.awardName}}</span>
 					</li>
 					<li>
 						<span>价值金额</span>
-						<span>￥9500</span>
+						<span>￥{{info.bonus}}</span>
 					</li>
 					<li>
 						<span>奖品</span>
-						<span>iPhone X + 500通用积分</span>
+						<span>{{info.goodsName}}</span>
 					</li>
 				</ul>
 			</div>
@@ -26,12 +26,12 @@
 		<div class="code_box">
 			<div class="bg_w">
 				<div class="top">
-					<p class="tip1">还剩19时27分截止领奖</p>
-					<qrcode :value="qrcodeVal" :size="width" type="img" class="qrcode"></qrcode>
+					<!--<p class="tip1">还剩19时27分截止领奖</p>-->
+					<qrcode :value="info.code" :size="width" type="img" class="qrcode"></qrcode>
 
 				</div>
 				<div class="bottom">
-					<span>核销码: </span>{{qrcodeVal}}
+					<span>核销码: {{info.code}}</span>
 				</div>
 			</div>
 		</div>
@@ -41,23 +41,21 @@
 				<span>领奖时间</span>
 			</div>
 			<div class="text">
-				2018.2.18 6:00-2018.3.2 19:00
+				{{info.getAwardDeadline}}
 			</div>
 			<div class="title">
 				<span></span>
 				<span>领奖地点</span>
 			</div>
 			<div class="text">
-				滨江区江汉路1515号龙湖滨江天街5楼
+				{{info.getAwardInfo}}
 			</div>
 			<div class="title">
 				<span></span>
-				<span>领奖时间</span>
+				<span>领奖事项</span>
 			</div>
 			<div class="text">
-				1.请在规定时间内到指定地点领取。<br />
-				2.请带好相关证件前去领取，如当事人无法到场，代 领人员需提供身份证明及与当事人身份关系相关证明 方可发放。<br />
-				3.商品不可兑现不可改换。
+				1.请在规定时间内到指定地点领取。<br /> 2.请带好相关证件前去领取，如当事人无法到场，代 领人员需提供身份证明及与当事人身份关系相关证明 方可发放。<br /> 3.商品不可兑现不可改换。
 			</div>
 		</div>
 	</div>
@@ -74,6 +72,7 @@
 		data() {
 			return {
 				qrcodeVal: '7259 3671',
+				info:{}
 			}
 		},
 		computed: {
@@ -81,8 +80,24 @@
 				return Number(document.body.clientWidth * 0.45)
 			}
 		},
+		created(){
+			this.getAwardCode()
+		},
 		methods: {
+			getAwardCode() {
+				var _this = this
 
+				_this.$http.get(_this.url.lottery.getAwardCode, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						id: _this.$route.query.id
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.info = res.data.data
+					}
+				})
+			},
 		}
 	}
 </script>

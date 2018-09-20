@@ -57,7 +57,7 @@
 				</div>
 				<div class="clear"></div>
 
-				<div class="winList" v-if="info.awardList.length > 0">
+				<div class="winList">
 					<!-- 中奖人员 -->
 					<div class="win-person">
 						<div class="wz-period">中奖名单</div>
@@ -73,7 +73,7 @@
 					<!-- 一等奖数据列表 -->
 					<div class="web">
 						<!--数据列表-->
-						<div class="item" v-for="(item,index) in personList">
+						<div class="item" v-for="(item,index) in personList" v-if="showList">
 							<div class="left">
 								<img src="../../assets/images/draw/photo0.png" alt="">
 							</div>
@@ -86,11 +86,12 @@
 								<p class="tip">{{item.message}}</p>
 							</div>
 						</div>
-						<loading v-if="show"></loading>
-						<noMore v-if="showNomore"></noMore>
-						<noData v-if="personList.length == 0" :status="2" :stateText="'暂无中奖名单'"></noData>
+						<Null v-if="!showList && !inloading" status="zwsj" text="暂无中奖名单"></Null>
+						<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 					</div>
-					
+
+					<Loading v-if="show"></Loading>
+					<noMore v-if="showNomore"></noMore>
 				</div>
 			</div>
 		</div>
@@ -104,7 +105,7 @@
 	import settingHeader from '@/components/setting_header'
 	import Loading from '@/components/loading'
 	import noMore from '@/components/noMore'
-	import noData from '@/components/noData'
+	import Null from '@/components/null'
 
 	import VueDPlayer from 'vue-dplayer'
 	import 'vue-dplayer/dist/vue-dplayer.css'
@@ -115,7 +116,7 @@
 			settingHeader,
 			Loading,
 			noMore,
-			noData,
+			Null,
 			'd-player': VueDPlayer
 		},
 		data() {
@@ -132,7 +133,7 @@
 					mutex: true, //多个视频同时播放
 					video: {
 						url: './static/video/movie.mp4',
-						pic: './static/images/video.jpg'
+						pic: './static/draw/video_bg.png'
 					}
 				},
 				show: false,
@@ -168,7 +169,10 @@
 				pageSize: 10,
 				list: [],
 				info: {},
-				awardId:'',
+				awardId: '',
+				awardListLength: 0,
+				showList: false,
+				inloading: true
 			}
 		},
 		computed: {
@@ -201,9 +205,6 @@
 					if(res.data.status == "00000000") {
 						_this.info = res.data.data
 
-						_this.options.video.url = _this.info.videoUrl
-						_this.options.video.pic = _this.info.thumb.original
-
 						var indexLottery = [{
 							'lotteryId': _this.$route.query.lotteryId,
 							'number': _this.info.number
@@ -218,8 +219,18 @@
 								this.$refs.mySwiper.swiper.slideTo(_this.act3, 10, false)
 							}
 						})
-						
-						_this.actice(0, _this.info.awardList[0].awardId)
+
+						if(res.data.data.awardList.length > 0) {
+							_this.options.video.url = _this.info.videoUrl
+							_this.options.video.pic = _this.info.thumb ? _this.info.thumb.original : './static/draw/video_bg.png'
+
+							_this.awardListLength = _this.info.awardList.length
+
+							_this.actice(0, _this.info.awardList[0].awardId)
+						}else{
+							_this.inloading = false
+							_this.personList = []
+						}
 					}
 				})
 			},
@@ -235,9 +246,9 @@
 			},
 			periodActive(index, id) {
 				var _this = this
-				
+
 				_this.act3 = index
-				
+
 				_this.$router.replace({
 					query: _this.merge(_this.$route.query, {
 						'lotteryId': id
@@ -248,6 +259,10 @@
 			//中奖人员 一等奖
 			actice(index, id) {
 				var _this = this
+
+				_this.personList = []
+				_this.showList = false
+				_this.inloading = true
 
 				_this.act1 = index
 				_this.awardId = id
@@ -261,6 +276,10 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+					
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+
 						if(res.data.data.list.length > 0) {
 							_this.personList = res.data.data.list
 						}
@@ -291,29 +310,29 @@
 
 			},
 			LoadData() {
-				if(this.personList > 0){
+				if(this.personList > 0) {
 					var _this = this
-				_this.curPage++
+					_this.curPage++
 
-					_this.$http.get(_this.url.lottery.getAwardUserList, {
-						params: {
-							lotteryId: _this.$route.query.lotteryId,
-							awardId: _this.awardId,
-							curPage: _this.curPage,
-							pageSize: _this.pageSize
-						}
-					}).then((res) => {
-						if(res.data.status == "00000000") {
-							if(res.data.data.list.length > 0) {
-								_this.show = true
-								_this.showNomore = false
-								_this.personList = _this.personList.concat(res.data.data.list)
-							} else {
-								_this.show = fasle
-								_this.showNomore = true
+						_this.$http.get(_this.url.lottery.getAwardUserList, {
+							params: {
+								lotteryId: _this.$route.query.lotteryId,
+								awardId: _this.awardId,
+								curPage: _this.curPage,
+								pageSize: _this.pageSize
 							}
-						}
-					})
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								if(res.data.data.list.length > 0) {
+									_this.show = true
+									_this.showNomore = false
+									_this.personList = _this.personList.concat(res.data.data.list)
+								} else {
+									_this.show = fasle
+									_this.showNomore = true
+								}
+							}
+						})
 				}
 			}
 		}
@@ -586,7 +605,7 @@
 			}
 			.player {
 				width: 100%;
-				height: 4.2rem;
+				/*height: 4.2rem;*/
 				position: relative;
 				img {
 					position: absolute;
@@ -603,6 +622,10 @@
 	.web {
 		padding: 0 0.30rem;
 		box-sizing: border-box;
+		.null_box {
+			padding: 0.20rem;
+			box-sizing: border-box;
+		}
 		.item {
 			display: flex;
 			align-items: center;

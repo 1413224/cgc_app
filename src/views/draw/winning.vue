@@ -2,8 +2,8 @@
 	<section class="win-box">
 		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper" :class="{'wrapper-top':!$store.state.page.isWx}">
-			<div class="content" v-if="showList">
-				<div class="record-item" v-for="(item,index) in list" :key="index">
+			<div class="content" :class="{'pr_box':!showList}">
+				<div class="record-item" v-for="(item,index) in list" :key="index" v-if="showList">
 					<div class="top">
 						<div>第{{item.number}}期</div>
 						<p class="ellipsis">{{item.title}}</p>
@@ -14,7 +14,7 @@
 							<p>
 								<i>￥</i>{{item.userBonus}}</p>
 						</div>
-						<div class="btn" :class="{'jz':item.status != 60 && item.status != 70}" @click="toReceive(item.id,item.status)">
+						<div class="btn" :class="{'jz':item.status != 60 && item.status != 70}" @click="toReceive(item.id,item.status,item.userBonus)">
 							<p v-if="item.status == 10">领奖</p>
 							<p v-if="item.status == 20">待审核</p>
 							<p v-if="item.status == 30">立即领取</p>
@@ -45,17 +45,18 @@
 
 				<loading v-if="showLoading"></loading>
 				<noMore v-if="showNomore"></noMore>
-			</div>
-			<div class="no_data_box" v-if="!showList">
-				<div class="bw-box">
-					<div>
-						<img :src="'./static/draw/no-data-img.png'" alt="" />
-						<p>您还没有中奖记录</p>
-					</div>
-					<div>
-						<div @click="$router.push({path:'/share/storelist'})">我要抽奖</div>
-						<p class="tip1">温馨提示：</p>
-						<p class="tip2">只要在平台上消费任意一笔订单，就能参加周末幸运大抽奖</p>
+				<Null status="loading" text="加载中" v-if="!showList && inloading"></Null>
+				<div class="no_data_box" v-if="!showList && !inloading">
+					<div class="bw-box">
+						<div>
+							<img :src="'./static/draw/no-data-img.png'" alt="" />
+							<p>您还没有中奖记录</p>
+						</div>
+						<div>
+							<div @click="$router.push({path:'/share/storelist'})">我要抽奖</div>
+							<p class="tip1">温馨提示：</p>
+							<p class="tip2">只要在平台上消费任意一笔订单，就能参加周末幸运大抽奖</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -73,7 +74,7 @@
 						<p>奖金领取成功</p>
 						<img :src="'./static/draw/dian.png'" alt="" />
 						<p class="money">￥
-							<span>5000</span>
+							<span>{{userBonus}}</span>
 						</p>
 						<div @click="$router.push({path:'/member/purse/wallet'})">查看我的资产</div>
 					</div>
@@ -93,9 +94,11 @@
 		XDialog
 	} from 'vux'
 	import BScroll from 'better-scroll'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
-	import settingHeader from '../../components/setting_header'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
+	import settingHeader from '@/components/setting_header'
+	import Null from '@/components/null'
+
 	export default {
 		components: {
 			ButtonTab,
@@ -103,7 +106,8 @@
 			Loading,
 			noMore,
 			settingHeader,
-			XDialog
+			XDialog,
+			Null
 		},
 		data() {
 			return {
@@ -111,14 +115,19 @@
 				showLoading: false,
 				showNomore: false,
 				showDialog: false,
-				showList: true,
+				showList: false,
 				curPage: 1,
 				pageSize: 10,
-				list: []
+				list: [],
+				inloading: true,
+				userBonus: ''
 			}
 		},
 		created() {
 			this.getUserLotteryRecord()
+			if(this.$route.query.draw) {
+				this.toReceive(this.$route.query.draw.id, this.$route.query.draw.status, this.$route.query.draw.userBonus)
+			}
 		},
 		mounted() {
 			this.InitScroll()
@@ -130,6 +139,7 @@
 				_this.$http.get(_this.url.lottery.getUserLotteryRecord, {
 					params: {
 						userId: _this.$store.state.user.userId,
+						type: 1,
 						curPage: _this.curPage,
 						pageSize: _this.pageSize
 					}
@@ -137,6 +147,7 @@
 					if(res.data.status == "00000000") {
 
 						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
 
 						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
@@ -145,97 +156,138 @@
 				})
 			},
 			//领奖
-			toReceive(id, status) {
+			toReceive(id, status, userBonus) {
 				var _this = this
-				if(status == 10 || status == 30) {
+				if(status == 10 || status == 30 || status == 40) {
 					_this.$http.post(_this.url.lottery.getBonus, {
 						userId: _this.$store.state.user.userId,
 						id: id
 					}).then((res) => {
 						if(res.data.status == "00000000") {
+
 							var message = ''
 							var buttons = []
 							if(res.data.data.status == 10) {
 								message = '您仍尚未实名认证'
 								buttons = ['马上认证', '取消']
 							} else if(res.data.data.status == 20) {
-								message = '您仍需完善资料'
+								if(res.data.data.needPhotos == 1) {
+									message = '您仍需完善中奖照'
+								} else if(res.data.data.needWechat == 1) {
+									message = '您仍需绑定微信账号'
+								} else if(res.data.data.needAlipay == 1) {
+									message = '您仍需绑定支付宝账号'
+								}
+
 								buttons = ['前去完善', '取消']
-							}else if(res.data.data.status == 50) {
+							} else if(res.data.data.status == 40) {
+								message = '您仍需填写中奖感言'
+								buttons = ['马上填写', '取消']
+							} else if(res.data.data.status == 50) {
 								message = '审核中'
 								buttons = ['取消']
-							}else if(res.data.data.status == 40) {
-								_this.$router.push({
-									path: '/draw/awards',
-									query:{
-										id:id
+							} else if(res.data.data.status == 60) {
+								message = '仍需线下领奖'
+								buttons = ['取消']
+							} else if(res.data.data.status == 70) {
+								message = '已经过了领取截止时间'
+								buttons = ['取消']
+							} else if(res.data.data.status == 80) {
+								message = '已领取成功，无需重复领取'
+								buttons = ['取消']
+							} else if(res.data.data.status == 90) {
+								_this.showDialog = true
+								_this.userBonus = userBonus
+								_this.curPage = 1
+								_this.getUserLotteryRecord()
+							}
+							//							else if(res.data.data.status == 30) {
+							//								message = '您仍需绑定银行卡'
+							//								buttons = ['马上绑定', '取消']
+							//							} 
+							if(res.data.data.status != 90) {
+								_this.$dialog.show({
+									type: 'warning',
+									headMessage: '提示',
+									message: message,
+									buttons: buttons,
+									canel() {
+
+									},
+									confirm() {
+
+										if(res.data.data.status == 10) {
+											_this.$http.get(_this.url.ocr.getOCR, {
+												params: {
+													userId: _this.$store.state.user.userId
+												}
+											}).then((res) => {
+												if(res.data.status == "00000000") {
+													_this.data = res.data.data
+													if(_this.data.status == 0) {
+														window.location.href = res.data.data.url
+													} else if(_this.data.status == 1) {
+
+														_this.$router.push({
+															// path:'/member/setting/real',
+															name: "real",
+															params: {
+																suc: true
+															}
+														})
+													} else if(_this.data.status == 3) {
+														_this.$router.push({
+															name: "real",
+															params: {
+																suc: false
+															}
+														})
+													} else if(_this.data.status == 4) {
+														_this.$vux.toast.show({
+															width: '50%',
+															type: 'text',
+															position: 'top',
+															text: '超过当日认证次数上限'
+														})
+													} else {
+														alert("sha")
+													}
+												}
+											})
+										} else if(res.data.data.status == 20) {
+											_this.$router.push({
+												path: '/member/info/data',
+												query: {
+													draw: {
+														'id': id,
+														'status': status,
+														'userBonus': userBonus
+													}
+												}
+											})
+										} else if(res.data.data.status == 40) {
+											_this.$router.push({
+												path: '/draw/awards',
+												query: {
+													id: id
+												}
+											})
+										}
+										//									else if(res.data.data.status == 30) {
+										//										message = '您仍需绑定银行卡'
+										//										buttons = ['马上绑定', '取消']
+										//									} 
 									}
 								})
-							} 
-//							else if(res.data.data.status == 30) {
-//								message = '您仍需绑定银行卡'
-//								buttons = ['马上绑定', '取消']
-//							} 
+							}
 
-							_this.$dialog.show({
-								type: 'warning',
-								headMessage: '提示',
-								message: message,
-								buttons: buttons,
-								canel() {
-
-								},
-								confirm() {
-
-									if(res.data.data.status == 10) {
-										_this.$http.get(_this.url.ocr.getOCR, {
-											params: {
-												userId: _this.$store.state.user.userId
-											}
-										}).then((res) => {
-											if(res.data.status == "00000000") {
-												_this.data = res.data.data
-												if(_this.data.status == 0) {
-													window.location.href = res.data.data.url
-												} else if(_this.data.status == 1) {
-
-													_this.$router.push({
-														// path:'/member/setting/real',
-														name: "real",
-														params: {
-															suc: true
-														}
-													})
-												} else if(_this.data.status == 3) {
-													_this.$router.push({
-														name: "real",
-														params: {
-															suc: false
-														}
-													})
-												} else if(_this.data.status == 4) {
-													_this.$vux.toast.show({
-														width: '50%',
-														type: 'text',
-														position: 'top',
-														text: '超过当日认证次数上限'
-													})
-												} else {
-													alert("sha")
-												}
-											}
-										})
-									} else if(res.data.data.status == 20) {
-										_this.$router.push({
-											path: '/member/info/data'
-										})
-									}
-//									else if(res.data.data.status == 30) {
-//										message = '您仍需绑定银行卡'
-//										buttons = ['马上绑定', '取消']
-//									} 
-								}
-							})
+						}
+					})
+				} else if(status == 50) {
+					_this.$router.push({
+						path: '/draw/unonline',
+						query: {
+							'id': id
 						}
 					})
 				}
@@ -274,6 +326,7 @@
 							userId: _this.$store.state.user.userId,
 							curPage: _this.curPage,
 							pageSize: _this.pageSize,
+							type: 1,
 							islist: true
 						}
 					}).then((res) => {
@@ -387,6 +440,20 @@
 			background-color: #E32922;
 			padding: 0 0.2rem;
 			box-sizing: border-box;
+			.pr_box {
+				position: relative;
+				height: 100%;
+				.null_box {
+					background-color: #e32922;
+					position: absolute;
+					top: 40%;
+					left: 50%;
+					transform: translate(-50%, -40%);
+					p {
+						color: white!important;
+					}
+				}
+			}
 			.content {
 				padding: 0.2rem 0;
 				.record-item {

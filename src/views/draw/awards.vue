@@ -7,38 +7,13 @@
 		</div>
 
 		<div class="awards-main">
-			<div class="photos" style="margin-bottom: 0.3rem;" v-if="1>2">
-				<div class="awards-title clear">
-					<div class="border left"></div>
-					<h4 class="left">上传生活照</h4>
-				</div>
-
-				<div class="life-box">
-					<div class="tc" v-for="(item,index) in imgList" :key="index">
-						<div class="life" @click="cindex(index)">
-							<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png" />
-
-							<div class="bigPic" v-show="[imgList.length ? imgList.length >0 : imgList.length =0]">
-								<img :src="item">
-							</div>
-							<input type="file" accept="image/*" multiple="multiple" @change="cone">
-						</div>
-					</div>
-
-					<div class="life" v-if="imgList.length!=5">
-						<img src="../../assets/images/draw/addIcon.png" class="add">
-						<p class="length">生活照</p>
-						<input type="file" accept="image/*" multiple="multiple" @change="test($event)">
-					</div>
-				</div>
-			</div>
 			<div class="photos" style="text-align:center">
 				<div class="awards-title clear">
 					<div class="border left"></div>
 					<h4 class="left">中奖感言</h4>
 				</div>
 				<group style="margin-top: 0.3rem;">
-					<x-textarea :value="info.message" :max="200" :min="20" name="detail" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
+					<x-textarea @on-change="ch" :value="info.message" :max="200" :min="20" placeholder="文字不得少于20字" :height="137" :show-counter="false"></x-textarea>
 				</group>
 			</div>
 		</div>
@@ -93,13 +68,18 @@
 				imgSrc: './static/draw/wait.png',
 				demo1: false,
 
-				info: {}
+				info: {},
+				message: '',
+				status: 0
 			}
 		},
 		mounted: function() {
 			this.getMessage()
 		},
 		methods: {
+			ch(value) {
+				this.message = value
+			},
 			getMessage() {
 				var _this = this
 
@@ -118,16 +98,15 @@
 
 				var _this = this
 
-				_this.$http.get(_this.url.lottery.writeMessage, {
-					params: {
-						userId: _this.$store.state.user.userId,
-						id: _this.$route.query.id,
-						message: _this.info.message
-					}
+				_this.$http.post(_this.url.lottery.writeMessage, {
+					userId: _this.$store.state.user.userId,
+					id: _this.$route.query.id,
+					message: _this.message
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						//0 已领奖成功，无需重新提交 1提交成功，请等待审核 2提交失败，请重新提交 3已过了领奖期，无法提交中奖感言
+						//0 已领奖成功，无需重新提交 1提交成功，请等待审核 2提交失败，请重新提交 3已过了领奖期，无法提交中奖感言4已提交过资料，请等待审核 5 中奖感言已审核通过，无需重复提交 6 领奖成功
 						_this.showDialog = true
+						_this.status = res.data.data.status
 						if(res.data.data.status == 0) {
 							_this.headMessage = '已领奖成功，无需重新提交'
 						} else if(res.data.data.status == 1) {
@@ -136,6 +115,12 @@
 							_this.headMessage = '提交失败，请重新提交'
 						} else if(res.data.data.status == 3) {
 							_this.headMessage = '已过了领奖期，无法提交中奖感言'
+						}else if(res.data.data.status == 4) {
+							_this.headMessage = '已提交过资料，请等待审核'
+						}else if(res.data.data.status == 5) {
+							_this.headMessage = '中奖感言已审核通过，无需重复提交 '
+						}else if(res.data.data.status == 6) {
+							_this.headMessage = '领取成功'
 						}
 					}
 				})
@@ -162,9 +147,12 @@
 			showToast() {
 				var _this = this
 
-				_this.$router.push({
-					path: '/draw/winning'
-				})
+				if(_this.status != 2) {
+
+					_this.$router.push({
+						path: '/draw/winning'
+					})
+				}
 
 				this.showDialog = false
 			},

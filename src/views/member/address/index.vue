@@ -30,7 +30,8 @@
 				</div>
 			</div>
 			<div v-else style="background-color: white;height: 100%;">
-				<noData v-if="list.length == 0" :status="2" stateText="暂无数据"></noData>
+				<Null v-if="!showList && !inloading" status="zwdz" text="暂无收货地址"></Null>
+				<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 			</div>
 			<div class="add-btn-box">
 				<router-link to="/member/address/edit">
@@ -44,12 +45,14 @@
 <script>
 	import { Scroller, CheckIcon, XButton } from 'vux'
 	import settingHeader from '../../../components/setting_header'
-	import noData from '../../../components/noData'
+	import Null from '@/components/null'
 	export default {
 		data() {
 			return {
 				title: '管理收货地址',
-				list: []
+				list: [],
+				showList: false,
+				inloading: true
 			}
 		},
 		created() {
@@ -83,7 +86,7 @@
 								_this.$vux.toast.show({
 									type: 'text',
 									text: '已删除该收货地址',
-									width:'60%'
+									width: '60%'
 								})
 								_this.getShippingAddress()
 							}
@@ -120,6 +123,10 @@
 				}).then(resp => {
 					if(resp.data.status === '00000000') {
 						_this.list = resp.data.data.list
+						
+						_this.showList = resp.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+						
 						_this.list.forEach(function(value) {
 							value.isDefault = !!value.isDefault
 						})
@@ -133,7 +140,7 @@
 			CheckIcon,
 			XButton,
 			Scroller,
-			noData
+			Null
 		}
 	}
 </script>
@@ -159,6 +166,12 @@
 			-webkit-transform: scaleY(0.5);
 			transform: scaleY(0.5);
 			left: 0;
+		}
+		.null_box{
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
 		}
 		.add-btn-box {
 			width: 100%;

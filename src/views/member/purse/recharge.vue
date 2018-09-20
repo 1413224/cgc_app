@@ -44,9 +44,10 @@
 
 <script>
 	import { Group, CellBox, XButton, PopupHeader, Radio, Checklist } from 'vux'
-	import settingHeader from '../../../components/setting_header'
+	import settingHeader from '@/components/setting_header'
 	import payMode from '@/components/payMode'
 	export default {
+		name: 'recharge',
 		data() {
 			return {
 				title: '通用积分充值',
@@ -69,14 +70,22 @@
 				moneyList: [],
 				info: {},
 				userInfo: {},
-				payOptions: {}
+				payOptions: {},
+				parentOrderSn: '',
+				payParmars: {},
 			}
 		},
 		created() {
 			var _this = this
+
 			if(localStorage['userInfo']) {
 				this.userInfo = JSON.parse(localStorage['userInfo'])
 			}
+
+			if(this.$route.params.reload) {
+				location.reload()
+			}
+
 			this.getRechargeList()
 
 			this.payOptions = {
@@ -85,24 +94,93 @@
 					money: 0,
 				},
 				changePay(index) {
-					console.log(index)
+
 				},
-				toPay(index) {
-					if(index == 1) {
-						_this.$router.push({
-							path:'/member/pay/wxgzhpay'
-						})
-					}
+				toPay(type) {
+					_this.$http.post(_this.url.user.rechargeBalance, {
+						userId: _this.$store.state.user.userId,
+						platformId: _this.url.platformId,
+						rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
+						payType: type,
+						openId: sessionStorage['_openid_'],
+						//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
+						parentOrderSn: _this.parentOrderSn
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							_this.parentOrderSn = res.data.data.parentOrderSn
+
+							if(type == 1) {
+								wx.config({
+									debug: false,
+									appId: res.data.data.appId,
+									timestamp: res.data.data.timeStamp,
+									nonceStr: res.data.data.nonceStr,
+									signature: res.data.data.signature,
+									jsApiList: [
+										'checkJsApi',
+										'startRecord',
+										'stopRecord',
+										'translateVoice',
+										'scanQRCode',
+										'openCard',
+										'chooseWXPay'
+									]
+								})
+
+								wx.chooseWXPay({
+									appId: res.data.data.appId,
+									timestamp: res.data.data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
+									nonceStr: res.data.data.nonceStr, // 支付签名随机串，不长于 32 位  
+									package: res.data.data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）  
+									signType: res.data.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
+									paySign: res.data.data.paySign, // 支付签名  
+									success: function(res) {
+										WeixinJSBridge.call('closeWindow')
+									},
+									error: function() {
+										_this.$vux.toast.show({
+											text: '支付失败',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
+									},
+									cancel: function() {
+										_this.$vux.toast.show({
+											text: '您已取消了支付',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
+									}
+								})
+							} else if(type == 2) {
+								_this.$router.push({
+									name: 'alipay',
+									params: {
+										'orderStr': res.data.data.orderStr
+									}
+								})
+								return false;
+								document.write(res.data.data.orderStr)
+								//const div = document.createElement('div')
+								//div.innerHTML = res.data.data.orderStr
+								//document.body.appendChild(div)
+								//_this.$nextTick(function(){
+								//document.forms[0].submit()
+								//})
+							}
+						}
+					})
 				},
 				hide() {
-					console.log('hide')
+
 				},
 				show() {
-					console.log('show')
+
 				}
 			}
 		},
-		mounted() {},
 		methods: {
 			getRechargeList() {
 				var _this = this
@@ -121,13 +199,14 @@
 			},
 			changeMoney(index, id) {
 				this.moneyIndex = index
+				this.parentOrderSn = ''
 			},
 			changePt(index) {
 				this.ptIndex = index
 			},
 			submit() {
 				this.payOptions.showPayMode = true
-				this.payOptions.data.money = 18888.00
+				this.payOptions.data.money = this.moneyList[this.moneyIndex].money
 			},
 			change(value, label) {
 				console.log('change:', value, label)

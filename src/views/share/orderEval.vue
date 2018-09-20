@@ -1,375 +1,418 @@
 <template>
-	<section class="order_eval">
-		<settingHeader :title="title"></settingHeader>
-
-		<div class="writing">
-			<div class="content">
-				<div class="img">
-					<img src="../../assets/images/shop/shop4.png">
-					<div class="img-text">商品评价</div>
+	<section class="order_eval_box">
+		<settingHeader title="订单评价"></settingHeader>
+		<div class="input_box" v-for="(item,index) in goods" :key="index">
+			<div class="top">
+				<img src="../../assets/images/shop/shop4.png">
+				<div class="right">
+					<p class="title">{{item.title}}</p>
+					<div class="star_box">
+						<p>商品评价</p>
+						<rater @click.native="starChange(index)" class="rater_box" v-model="item.data.starNum" :min="1" :max="5" active-color="#336FFF" :margin="5" star='<i class="iconfont icon-xingxing"></i>'></rater>
+						<span>{{item.data.starText}}</span>
+					</div>
 				</div>
-				<div class="star">
-					<rater v-model="data" :max="5" active-color="#336FFF" class="center" :margin="5" star='<i class="iconfont icon-xingxing"></i>'></rater>
-				</div>
-				<div class="summary">{{ describe}}</div>
 			</div>
-
-			<div class="textarea">
-				<group>
-			      	<x-textarea :max="200" name="detail" placeholder="分享你的购买心得" :height="137" :show-counter="true"></x-textarea>
-			    </group>
-			    <div class="upload">
-			    	<div class="imgUpload"  v-for="(item,index) in imgList" @click="cindex(index)" :key="index">
-			    		<img @click="imgDelete(index)" class="gbx" src="../../assets/images/member/gbx.png"/>
-			    		<input class="upinput" type="file" @change="cone" />
-			    		<div class="bigPic" v-show="[imgList.length ? imgList.length >0 : imgList.length =0]">
-							<img :src="item">
-						</div>
-			    	</div>
-
-			    	<div class="imgUpload" v-if="imgList.length!=5">
-    		    		<i class="iconfont icon-zhaoxiangji icon"></i>
-    		    		<p class="length">{{ imgList.length}}/5</p>
-    		    		<input type="file" accept="image/*" multiple="multiple" @change="test($event)">
-			    	</div>
-			    	<div class="clear"></div>
-			    </div>
+			<x-textarea class="textarea_box" :max="200" placeholder="分享你的购买心得" v-model="item.data.textValue"></x-textarea>
+			<ul class="photo_box">
+				<li v-for="(img,i) in item.data.imgs" :key="index">
+					<img @click="preview(index,i)" :src="img" />
+					<img @click="deleteImg(index,i)" class="gbx" :src="'./static/images/del.png'" />
+				</li>
+				<li @click="imgUpIndex = index" class="last_box" v-if="item.data.imgs.length < 5">
+					<img :src="'./static/images/camera.png'" />
+					<p>上传照片</p>
+					<input type="file" multiple @change="up" accept="image/*" />
+				</li>
+			</ul>
+		</div>
+		<div class="store_box">
+			<div class="top">
+				<img src="../../assets/images/shop/shop4.png">优衣库旗舰店
+			</div>
+			<div class="bottom">
+				<div class="star_box">
+					<p>卖家服务</p>
+					<rater class="rater_box" v-model="storeStarNum" :min="1" :max="5" active-color="#336FFF" :margin="5" star='<i class="iconfont icon-xingxing"></i>'></rater>
+					<span>{{storeStarText}}</span>
+				</div>
+				<div class="star_box">
+					<p>物流服务</p>
+					<rater class="rater_box" v-model="logisticsStarNum" :min="1" :max="5" active-color="#336FFF" :margin="5" star='<i class="iconfont icon-xingxing"></i>'></rater>
+					<span>{{logisticsStarText}}</span>
+				</div>
 			</div>
 		</div>
-
-		<div class="store">
-			<div class="storename">
-				<img src="../../assets/images/shop/UNIQLO.png">
-				<span>威健康番禺店</span>
-			</div>
-			<div class="store-star">
-				<div class="s-text">商品打分</div>
-				<rater v-model="data2" :max="5" active-color="#336FFF" class="s-star" :margin="5" star='<i class="iconfont icon-xingxing"></i>'></rater>
-				<div class="summary">{{ storeDesc}}</div>
-			</div>
-			<div class="store-star">
-				<div class="s-text">物流服务</div>
-				<rater v-model="data3" :max="5" active-color="#336FFF" class="s-star" :margin="5" star='<i class="iconfont icon-xingxing"></i>'></rater>
-				<div class="summary">{{ logisticsDesc}}</div>
-			</div>
-			<div class="clear"></div>
+		<div class="submit_box">
+			<check-icon :value.sync="isAnonymous">匿名</check-icon>
+			<div class="btn" @click="submit">提交</div>
 		</div>
 
-		<div class="footer">
-			<div class="left">
-				<check-icon :value.sync="demo1">匿名</check-icon>
-			</div>
-			<div class="right" @click="goComents">
-				提交评价
-			</div>
+		<!--图片预览-->
+		<div v-transfer-dom>
+			<previewer :list="photoList" ref="previewer" :options="options" @on-index-change="logIndexChange"></previewer>
 		</div>
 	</section>
 </template>
 
 <script>
-import settingHeader from '../../components/setting_header'
-import { CheckIcon } from 'vux'
-export default {
-	components: {
-		settingHeader,CheckIcon
-	},
-	data() {
-		return {
-			demo1: false,
-			title: '订单评价',
-			data: 0,
-			data2: 0,
-			data3: 0,
-			imgList: [],
-			pindex: 0,
-			describe: '',
-			storeDesc: '',
-			logisticsDesc: ''
-		}
-	},
-	created(){
-
-	},
-	methods:{
-		test:function (e) {
-  			var _this = this;
-  			var file = e.target.files;
-			for(var i = 0; i < file.length; i++) {
-				var reader = new FileReader();
-				reader.readAsDataURL(file[i]); // 读出 base64
-				reader.onloadend = function(e) {
-					// 图片的 base64 格式, 可以直接当成 img 的 src 属性值        
-					var dataURL = reader.result;
-					if(_this.imgList.length<5){
-						_this.imgList.push(e.target.result)
-					}
-				};
+	import settingHeader from '@/components/setting_header'
+	import { CheckIcon, Rater, XTextarea, Previewer } from 'vux'
+	export default {
+		components: {
+			settingHeader,
+			CheckIcon,
+			Rater,
+			XTextarea,
+			Previewer
+		},
+		data() {
+			return {
+				goods: [{
+						title: '女装U宽腿牛仔裤(水洗产品)',
+					},
+					{
+						title: '女装U宽腿牛仔裤2(水洗产品)',
+					},
+				],
+				imgUpIndex: 0,
+				storeStarNum: 1,
+				logisticsStarNum: 1,
+				storeStarText: '非常差',
+				logisticsStarText: '非常差',
+				isAnonymous: true,
+				photoList: [],
+				options: {},
 			}
-       },
-       goComents(){
-       		this.$router.push({name:'meaidetail',params:2});
-       },
-       imgDelete(index){
-       		this.imgList.splice(index, 1);
-       },
-       cindex(index) {
-			this.pindex = index
-			console.log(this.pindex)
-	   },
-       cone(e) {
-			var _this = this
-			var reader = new FileReader();
-			var file = e.target.files[0];
-			reader.readAsDataURL(file);
-			reader.onloadend = function(e) {
-				var dataURL = reader.result;
-				_this.imgList.splice(_this.pindex, 1, e.target.result)
-			};
-	   },
-	   changeDescribe(val,index){
-	   		let text;
-	   		if(val == 1){
-	   			text = '非常差'
-	   		}else if(val == 2){
-	   			text = '差'
-	   		}else if(val == 3){
-	   			text = '一般'
-	   		}else if (val == 4) {
-	   			text = '好'
-	   		}else if(val == 5){
-	   			text = '非常好'
-	   		}else {
-	   			text = ''
-	   		}
-	   		if(index == 0){
-	   			this.describe = text;
-	   		}else if(index == 1){
-	   			this.storeDesc = text
-	   		}else {
-	   			this.logisticsDesc = text
-	   		} 
-	   }
-	},
-	watch:{
-		data(val, oldVal){
-            console.log("data: "+val, oldVal);
-            this.changeDescribe(val,0)
-        },
-        data2(val, oldVal){
-            console.log("data2: "+val, oldVal);
-            this.changeDescribe(val,1)
-        },
-        data3(val, oldVal){
-            console.log("data3: "+val, oldVal);
-            this.changeDescribe(val,2)
-        }
+		},
+		created() {
+			this.goods.forEach((value) => {
+				value.data = {
+					imgs: [],
+					fileIdList: [],
+					starNum: 4,
+					starText: '好',
+					textValue: '',
+				}
+			})
+		},
+		watch: {
+			storeStarNum() {
+				if(this.storeStarNum == 1) {
+					this.storeStarText = '非常差'
+				} else if(this.storeStarNum == 2) {
+					this.storeStarText = '差'
+				} else if(this.storeStarNum == 3) {
+					this.storeStarText = '一般'
+				} else if(this.storeStarNum == 4) {
+					this.storeStarText = '好'
+				} else if(this.storeStarNum == 5) {
+					this.storeStarText = '非常好'
+				}
+			},
+			logisticsStarNum() {
+				if(this.logisticsStarNum == 1) {
+					this.logisticsStarText = '非常差'
+				} else if(this.logisticsStarNum == 2) {
+					this.logisticsStarText = '差'
+				} else if(this.logisticsStarNum == 3) {
+					this.logisticsStarText = '一般'
+				} else if(this.logisticsStarNum == 4) {
+					this.logisticsStarText = '好'
+				} else if(this.logisticsStarNum == 5) {
+					this.logisticsStarText = '非常好'
+				}
+			}
+		},
+		methods: {
+			submit() {
+				this.$router.push({
+					path: '/share/comsuccess'
+				})
+			},
+			//图片预览
+			preview(index, i) {
+				var _this = this
+
+				_this.photoList = []
+				_this.goods[index].data.imgs.forEach((value) => {
+					var item = {}
+					item.src = value
+					_this.photoList.push(item)
+				})
+
+				this.$nextTick(function() {
+					this.$refs.previewer.show(i)
+				})
+
+			},
+			//上传评价图片
+			up(e) {
+				var _this = this
+				var file = e.target.files
+
+				if((file.length + _this.goods[this.imgUpIndex].data.imgs.length) <= 5) {
+					for(var i = 0; i < file.length; i++) {
+						var imgdata = file[i]
+						var data = {
+							type: 'user',
+							name: 'pj',
+							file: imgdata
+						}
+						_this.$http.post(_this.url.user.fileuploadImage, data).then((res) => {
+							if(res.data.status == '00000000') {
+								_this.goods[this.imgUpIndex].data.imgs.push(res.data.data.fileUrl)
+								_this.goods[this.imgUpIndex].data.fileIdList.push(res.data.data.fileId)
+							}
+
+							console.log(_this.goods)
+							_this.$forceUpdate()
+						})
+					}
+				} else if((file.length + _this.goods[this.imgUpIndex].data.imgs.length) > 5) {
+					var length = 5 - _this.goods[this.imgUpIndex].data.imgs.length
+					for(var i = 0; i < length; i++) {
+						var imgdata = file[i]
+						var data = {
+							type: 'user',
+							name: 'pj',
+							file: imgdata
+						}
+						_this.$http.post(_this.url.user.fileuploadImage, data).then((res) => {
+							if(res.data.status == '00000000') {
+								_this.goods[this.imgUpIndex].data.imgs.push(res.data.data.fileUrl)
+								_this.goods[this.imgUpIndex].data.fileIdList.push(res.data.data.fileId)
+							}
+							console.log(_this.goods)
+							_this.$forceUpdate()
+						})
+					}
+				}
+
+			},
+			//删除评价图片
+			deleteImg(index, i) {
+				this.goods[index].data.imgs.splice(i, 1)
+				this.goods[index].data.fileIdList.splice(i, 1)
+				this.$forceUpdate()
+				console.log(this.goods[index].data)
+			},
+			//星星改变
+			starChange(index) {
+				this.$nextTick(function() {
+					if(this.goods[index].data.starNum == 1) {
+						this.goods[index].data.starText = '非常差'
+					} else if(this.goods[index].data.starNum == 2) {
+						this.goods[index].data.starText = '差'
+					} else if(this.goods[index].data.starNum == 3) {
+						this.goods[index].data.starText = '一般'
+					} else if(this.goods[index].data.starNum == 4) {
+						this.goods[index].data.starText = '好'
+					} else if(this.goods[index].data.starNum == 5) {
+						this.goods[index].data.starText = '非常好'
+					}
+
+					this.$forceUpdate()
+				})
+			}
+		}
 	}
-}
 </script>
-
-<style lang="less" scoped>
-@import url('../../../static/css/global');
-.order_eval{
-	width: 100%;
-	background: #F5F6FA;
-	overflow: auto;
-	padding-bottom: 1.2rem;
-	.writing{
-		background: #fff;
-		margin-top: 0.01rem;
-		.content{
-			overflow: hidden;
-			margin-left: 0.21rem;
-			margin-right: 0.17rem;
-			border-bottom: 0.01rem solid #D8DFF0;
-			font-size:0.28rem;
-			color: #1A2642;
-			padding-top: 0.19rem;
-			padding-bottom: 0.26rem;
-			.img{
-				float: left;
-				width: 38%;
-				/*line-height: 1.1rem;*/
-				img{
-					width: 36%;
-					float: left;
-					margin-left: 0.09rem;
-					margin-right: 0.18rem;
-				}
-				.img-text{
-					margin-top: 0.34rem;
-				}
-			}
-			.star{
-				float: left;
-				.center{
-					margin: 0.22rem 0 0 0;
-				}
-			}
-			.summary{
-			    color:#90A2C7;
-			    float:right;
-			    text-align: center;
-			    margin-top: 0.34rem;
-			    margin-right: .35rem;
-			}
+<style lang="less">
+	.textarea_box {
+		textarea {
+			height: 2.80rem;
 		}
-		.textarea{
-			.upload{
-				margin-left: 0.3rem;
-				padding-bottom: 0.28rem;
-				.imgUpload{
-					background: #F5F6FA;
-					width: 1.6rem;
-					height: 1.6rem;
-					text-align: center;
-					position: relative;
-					float: left;
-					margin-right: 0.3rem;
-					margin-bottom: 0.15rem;
-					margin-top: 0.25rem;
-					.gbx{
-						position: absolute;
-						right: -7px;
-						top: -7px;
-						width: 0.38rem;
-						height: 0.38rem;
-						z-index: 222;
-					}
-					.length{
-						font-size: .3rem;
-						color: #90A2C7;
-						margin-top: -0.22rem;
-					}
-		        	.bigPic{
-		        		position: absolute;
-		     			width: 95%;
-		     			height: 95%;
-		     			left: 50%;
-		     			top: 50%;
-		     			transform: translate(-50%,-50%);
-		     			overflow: hidden;
-			     		img{
-			     			width: 100%;
-			     			height: auto;
-			     			position: absolute;
-			     			left: 50%;
-			     			top: 50%;
-			     			transform: translate(-50%,-50%);
-			     		}
-			     	}
-					.icon{
-						font-size: 0.73rem;
-						color: #90A2C7;
-						line-height: 1.3rem;
-					}
-					input{
-					    position: absolute;
-					    top:0;
-					    left:0;
-					    width:100%;
-					    height: 100%;
-					    opacity: 0;
-					    z-index: 111;
-					}
-				}
-				.clear{
-				    clear:both;
-				}
+	}
+	
+	.submit_box {
+		.vux-check-icon {
+			padding-left: 0.20rem;
+			box-sizing: border-box;
+			span {
+				font-size: 0.24rem!important;
+				font-family: PingFangSC-Regular!important;
+				color: rgba(34, 34, 34, 1)!important;
 			}
 		}
 	}
-	.store{
-		margin-top: 0.2rem;
-		background: #fff;
-		padding-bottom: 0.2rem;
-		.storename{
-			margin-left: 0.21rem;
-			border-bottom: 0.01rem solid #D8DFF0;
-			margin-right: 0.17rem;
-			padding: 0.25rem 0.09rem;
-			font-size: 0.3rem;
-			color: #222222;
-			line-height: 0.42rem;
-			img{
-				width: 5%;
-				vertical-align: middle;
-			}
-		}
-		.store-star{
-			overflow: hidden;
-			margin-left: 0.21rem;
-			font-size: 0.28rem;
-			color: #1A2642;
-			.s-text{
-				float: left;
-				text-align: center;
-				margin-right: 0.2rem;
-				margin-left: 0.09rem;
-				line-height: 0.4rem;
-				padding-top: 0.06rem;
-				margin-top: 0.26rem;
-			}
-			.s-star{
-				float: left;
-				margin-top: 0.23rem;
-			}
-			.summary{
-				float: right;
-				margin-right: 1rem;
-				color:#90A2C7;
-				padding-top: 0.1rem;
-				text-align: center;
-				margin-top: 0.24rem;
-			}
-		}
-	}
-	.footer{
-		position: fixed;
-		bottom: 0;
-		width: 100%;
-		height: 0.94rem;
-		line-height: 0.94rem;
-		background: #fff;
-		.left{
-			float: left;
-			width: 64.5%;
-			padding-left: 0.16rem;
-		}
-		.right{
-			float: right;
-			width: 32%;
-			height: 0.94rem; 
-			background: #336FFF;
-			text-align: center;
-			font-size:0.28rem;
-			color: #fff;
-
-		}
-	}
-}
-
 </style>
 
-<style lang="less">
-.order_eval .iconfont{
-	font-size: 0.36rem;
-}
-.textarea .weui-cells{
-	margin-top: 0;
-}
-.textarea .weui-textarea{
-	color: #1A2642;
-	font-size: 0.28rem;
-}
-.textarea .vux-no-group-title{
-	margin-top: 0;
-}
-.textarea .weui-cells:before{
-	border-top: none;
-}
-.textarea .weui-cells:after{
-	border-bottom: 1px solid #D8DFF0;
-}
-textarea::-webkit-input-placeholder{color:#90A2C7 !important;}
+<style lang="less" scoped>
+	.order_eval_box {
+		padding-bottom: 1.50rem;
+		background-color: #F5F6FA;
+		.star_box {
+			display: flex;
+			align-items: center;
+			p {
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+			}
+			.rater_box {
+				margin: 0 0.30rem;
+				margin-bottom: 0.10rem;
+			}
+			span {
+				font-size: 0.24rem;
+				font-family: PingFangSC-Medium;
+				color: rgba(255, 123, 17, 1);
+			}
+		}
+		.input_box {
+			padding: 0.20rem;
+			box-sizing: border-box;
+			background-color: white;
+			margin-bottom: 0.20rem;
+			.top {
+				display: flex;
+				align-items: center;
+				padding: 0 0 0.25rem 0.10rem;
+				img {
+					width: 1.0rem;
+					height: 1.0rem;
+					margin-right: 0.20rem;
+				}
+				.right {
+					padding-top: 0.05rem;
+					.title {
+						font-size: 0.28rem;
+						font-family: PingFangSC-Regular;
+						color: rgba(115, 134, 173, 1);
+						margin-bottom: 0.05rem;
+					}
+				}
+			}
+			.textarea_box {
+				padding: 0.20rem 0.10rem;
+				box-sizing: border-box;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(26, 38, 66, 1);
+				textarea {
+					height: 2.80rem;
+				}
+			}
+			.weui-cell:before {
+				left: 0!important;
+			}
+			.photo_box {
+				display: flex;
+				align-items: center;
+				flex-wrap: wrap;
+				li {
+					width: 1.3rem;
+					height: 1.3rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					position: relative;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+					.gbx {
+						position: absolute;
+						right: -0.05rem;
+						top: -0.05rem;
+						width: 0.30rem;
+						height: 0.30rem;
+						/*z-index: 222;*/
+					}
+				}
+				li:not(:last-child) {
+					margin-right: 0.15rem;
+				}
+				.last_box {
+					background: rgba(245, 246, 250, 1);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex-direction: column;
+					font-size: 0.22rem;
+					font-family: PingFangSC-Regular;
+					color: rgba(144, 162, 199, 1);
+					position: relative;
+					border-radius: 2px;
+					input {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						opacity: 0;
+						z-index: 15;
+					}
+					img {
+						width: 0.86rem;
+						height: 0.86rem;
+					}
+				}
+			}
+		}
+		.store_box {
+			height: 2.50rem;
+			padding: 0 0.20rem;
+			box-sizing: border-box;
+			background-color: white;
+			display: flex;
+			flex-direction: column;
+			.top {
+				height: 0.87rem;
+				display: flex;
+				align-items: center;
+				padding-left: 0.10rem;
+				position: relative;
+				img {
+					width: 0.36rem;
+					height: 0.36rem;
+					margin-right: 0.1rem;
+				}
+			}
+			.top:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #E1E1E1;
+				color: #E1E1E1;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
+			}
+			.bottom {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				padding-left: 0.10rem;
+			}
+		}
+		.submit_box {
+			height: 0.94rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background-color: white;
+			.btn {
+				width: 2.40rem;
+				height: 0.94rem;
+				line-height: 0.94rem;
+				text-align: center;
+				background: rgba(51, 111, 255, 1);
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(255, 255, 255, 1);
+			}
+		}
+	}
 </style>

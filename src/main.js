@@ -229,7 +229,7 @@ const history = window.sessionStorage
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' && key != 'isPay' && key != 'isZc' && key != '_openid_') {
+	if(key != 'isPopup' && key != 'isPay' && key != 'isZc' && key != '_openid_' && key != 'parentUserId') {
 		history.removeItem(key)
 	}
 }
@@ -286,11 +286,11 @@ router.beforeEach(function(to, from, next) {
 		store.state.user.userId = info.id
 	}
 
-	if(to.path == '/user/reg') {
+	if(to.path == '/user/reg' || to.path == '/user/login') {
 		to.meta.keepAlive = true
-	} else if(from.path == '/user/reg' && to.path != '/member/setting/agreement') {
+	} else if((from.path == '/user/reg' || from.path == '/user/login') && to.path != '/member/setting/agreement') {
 		from.meta.keepAlive = false
-	} else if(from.path == '/user/reg' && to.path == '/member/setting/agreement') {
+	} else if((from.path == '/user/reg' || from.path == '/user/login') && to.path == '/member/setting/agreement') {
 		from.meta.keepAlive = true
 	}
 

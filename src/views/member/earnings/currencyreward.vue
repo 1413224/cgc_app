@@ -31,7 +31,7 @@
 			</div>
 
 			<div class="wrapper" ref="wrapper">
-				<div class="content">
+				<div class="content" :class="{'pr_box':!showList}">
 					<div v-if="showList">
 						<div class="list-box">
 							<ul>
@@ -47,8 +47,8 @@
 						<Loading v-if="show"></Loading>
 						<Nomore v-if="showNo"></Nomore>
 					</div>
-					<noData v-if="!showList && !inloading" :status="2" stateText="暂无记录"></noData>
-					<noData v-if="!showList && inloading" :status="2" stateText="努力加载中..."></noData>
+					<Null v-if="!showList && !inloading" status="zwsj" text="暂无记录"></Null>
+					<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 				</div>
 			</div>
 		</div>
@@ -57,10 +57,10 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import settingHeader from '../../../components/setting_header'
-	import Loading from '../../../components/loading'
-	import Nomore from '../../../components/noMore'
-	import noData from '../../../components/noData'
+	import settingHeader from '@/components/setting_header'
+	import Loading from '@/components/loading'
+	import Nomore from '@/components/noMore'
+	import Null from '@/components/null'
 	import mainApp from '@/global/global'
 	import { Masker } from 'vux'
 	export default {
@@ -259,7 +259,7 @@
 			settingHeader,
 			Loading,
 			Nomore,
-			noData,
+			Null,
 			Masker
 		}
 	}
@@ -312,6 +312,18 @@
 				bottom: 0rem;
 				width: 100%;
 				overflow: hidden;
+				.pr_box {
+					position: relative;
+					height: 100%;
+					z-index: 11;
+					background-color: white;
+					.null_box {
+						position: absolute;
+						top: 40%;
+						left: 50%;
+						transform: translate(-50%, -40%);
+					}
+				}
 			}
 			.top {
 				height: 2rem;

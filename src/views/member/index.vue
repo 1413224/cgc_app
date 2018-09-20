@@ -41,7 +41,7 @@
 						<img class="setting-img" src="../../assets/images/member/shezi.png" />
 					</router-link>
 					<div class="avatar noLogin">
-						<router-link to="/user/reg">
+						<router-link to="/user/login">
 							<img :src="'./static/images/mrtx.png'" alt="">
 							<p>登录 / 注册</p>
 						</router-link>

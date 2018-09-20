@@ -29,7 +29,7 @@
 				</popup>
 
 				<div :class="[{'h':!$store.state.page.isWx},{'b-white':goodsList.length == 0}]" class="wrapper" ref="wrapper">
-					<div class="content">
+					<div class="content" :class="{'pr_box':!showGoods}">
 						<div class="top2">
 							<div class="left">
 								<img class="store-logo" v-if="info.logo" :src="info.logo.original?info.logo.original:'./static/shop/storeLogo.png'">
@@ -82,11 +82,12 @@
 							</div>
 
 							<!--</scroll>-->
+							<Loading v-if="showLoading"></Loading>
+							<Nomore v-if="showNomore"></Nomore>
 						</div>
-						<Loading v-if="showLoading"></Loading>
-						<noMore v-if="showNomore"></noMore>
-						<noData v-if="!showGoods" :status="2" stateText="暂无商品"></noData>
-						<noData v-if="goodsList.length == 0" :status="2" stateText="努力加载中..."></noData>
+
+						<Null v-if="!showGoods && !inloading" status="zwsj" text="暂无记录"></Null>
+						<Null v-if="!showGoods && inloading" status="loading" text="加载中"></Null>
 					</div>
 				</div>
 			</div>
@@ -258,8 +259,8 @@
 	import scroll from '@/components/scroll'
 	import BScroll from 'better-scroll'
 	import Loading from '@/components/loading'
-	import noMore from '@/components/noMore'
-	import noData from '@/components/noData'
+	import Nomore from '@/components/noMore'
+	import Null from '@/components/null'
 	export default {
 		data() {
 			return {
@@ -320,7 +321,8 @@
 				ishasStock: false,
 				showLoading: false,
 				showNomore: false,
-				showGoods: true,
+				showGoods: false,
+				inloading: true,
 
 				navList: [{
 						navTitle: '首页',
@@ -377,8 +379,8 @@
 			Radio,
 			Checklist,
 			CheckIcon,
-			noData,
-			noMore,
+			Null,
+			Nomore,
 			Loading,
 			scroll
 		},
@@ -467,32 +469,36 @@
 			pullingUp() {
 				var _this = this
 
-				_this.curPage++
+				_this.curPage++;
 
-					_this.$http.get(_this.url.qy.getGoodsList, {
-						params: {
-							allianceId: _this.allianceId,
-							type: _this.prType,
-							hasStock: _this.hasStock,
-							curPage: _this.curPage,
-							pageSize: _this.pageSize,
-							islist: true
+				_this.$http.get(_this.url.qy.getGoodsList, {
+					params: {
+						allianceId: _this.allianceId,
+						type: _this.prType,
+						hasStock: _this.hasStock,
+						curPage: _this.curPage,
+						pageSize: _this.pageSize,
+						islist: true
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.goodsList = _this.goodsList.concat(res.data.data.list)
+							_this.showLoading = true
+							_this.showNoMore = false
+						} else {
+							_this.showLoading = false
+							_this.showNoMore = true
 						}
-					}).then((res) => {
-						if(res.data.status == "00000000") {
-							if(res.data.data.list.length > 0) {
-								_this.goodsList = _this.goodsList.concat(res.data.data.list)
-								_this.showLoading = true
-								_this.showNoMore = false
-							} else {
-								_this.showLoading = false
-								_this.showNoMore = true
-							}
-						}
-					})
+						_this.$forceUpdate()
+					}
+				})
 			},
 
 			prNavClick(index) {
+
+				this.showGoods = false
+				this.inloading = true
 
 				if(index != 3) {
 					this.prNavIndex = index
@@ -638,6 +644,7 @@
 					if(res.data.status == "00000000") {
 						_this.goodsList = res.data.data.list
 						_this.showGoods = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
 					}
 				})
 			},
@@ -913,6 +920,18 @@
 			overflow: hidden;
 			.content {
 				padding-bottom: 1.20rem;
+			}
+			.pr_box {
+				position: relative;
+				height: 100%;
+				z-index: 11;
+				background-color: white;
+				.null_box {
+					position: absolute;
+					top: 40%;
+					left: 50%;
+					transform: translate(-50%, -40%);
+				}
 			}
 		}
 		.b-white {

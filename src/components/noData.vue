@@ -26,6 +26,8 @@
 					this.imgSrc = './static/shop/404.png';
 				}else if(this.status == 2){
 					this.imgSrc = './static/shop/network.png';
+				}else if(this.status == 3){
+					this.imgSrc = './static/null/zwsj.png';
 				}
 			}
 		},

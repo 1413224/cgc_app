@@ -43,6 +43,15 @@ const memberModule = [{
 		}
 	},
 	{
+		path: '/user/login',
+		name: 'login',
+		component: resolve => require(['@/views/user/login'], resolve),
+		meta: {
+			title: '大健康产业联盟',
+			keepAlive: true
+		}
+	},
+	{
 		path: '/user/changeLoginPassword',
 		name: 'changeLoginPassword',
 		component: resolve => require(['@/views/user/changeLoginPassword'], resolve),
@@ -251,7 +260,8 @@ const memberModule = [{
 		name: 'recharge',
 		component: resolve => require(['@/views/member/purse/recharge'], resolve),
 		meta: {
-			title: '通用积分充值'
+			title: '通用积分充值',
+			//keepAlive: true
 		}
 	},
 	{
@@ -481,7 +491,7 @@ const memberModule = [{
 		meta: {
 			title: '招商加盟'
 		}
-	},{
+	}, {
 		path: '/member/join/result',
 		name: 'joinResult',
 		component: resolve => require(['@/views/member/join/result'], resolve),
@@ -510,6 +520,13 @@ const memberModule = [{
 		component: resolve => require(['@/views/member/pay/scan_pay'], resolve),
 		meta: {
 			title: '向商家付款'
+		}
+	}, {
+		path: '/member/pay/alipay',
+		name: 'alipay',
+		component: resolve => require(['@/views/member/pay/alipay'], resolve),
+		meta: {
+			title: '支付宝付款'
 		}
 	},
 	{

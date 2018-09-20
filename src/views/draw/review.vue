@@ -1,8 +1,8 @@
 <template>
 	<section class="review" style="height: 100%;">
+		<settingHeader :title="title"></settingHeader>
 		<div class="wrapper" ref="wrapper">
 			<div class="content">
-				<settingHeader :title="title"></settingHeader>
 				<!-- 轮播 -->
 				<!--<swiper :options="swiperOption" class="swiper">
 			        <swiper-slide v-for="(item,index) in imgList" :key="index">
@@ -14,12 +14,13 @@
 
 				<div class="drawList">
 					<p class="wonderful">往期回顾</p>
-					<ul class="commodity2" v-if="historyLottery.length > 0">
+					<ul class="commodity2" v-if="showList">
 						<group v-for="(item,index) in historyLottery" :key="index">
 							<cell>
 								<li @click="goPastevents(item.lotteryId)">
 									<div class="img">
 										<img v-if="item.thumb" :src="item.thumb.original" alt="">
+										<img v-else :src="'./static/draw/video_bg.png'" alt="">
 										<div class="arrow">
 											<img src="../../assets/images/draw/lottery_index8.png" alt="">
 										</div>
@@ -35,7 +36,8 @@
 					</ul>
 					<loading v-if="show"></loading>
 					<noMore v-if="showNomore"></noMore>
-					<noData v-if="historyLottery.length == 0" :status="2" :stateText="'暂无往期回顾'"></noData>
+					<Null v-if="!showList && !inloading" status="zwsj" text="暂无往期回顾"></Null>
+					<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -47,7 +49,7 @@
 	import BScroll from 'better-scroll'
 	import Loading from '@/components/loading'
 	import noMore from '@/components/noMore'
-	import noData from '@/components/noData'
+	import Null from '@/components/null'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import settingHeader from '@/components/setting_header'
 	import url from '@/config/url'
@@ -55,7 +57,7 @@
 		components: {
 			Loading,
 			noMore,
-			noData,
+			Null,
 			swiper,
 			swiperSlide,
 			settingHeader
@@ -82,7 +84,9 @@
 
 				curPage: 1,
 				pageSize: 10,
-				historyLottery: []
+				historyLottery: [],
+				showList: false,
+				inloading: true
 			}
 		},
 		create() {},
@@ -109,6 +113,10 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
+
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+
 						if(res.data.data.list.length > 0) {
 							_this.historyLottery = res.data.data.list
 						}
@@ -147,7 +155,7 @@
 						params: {
 							curPage: _this.curPage,
 							pageSize: _this.pageSize,
-							islist:true
+							islist: true
 						}
 					}).then((res) => {
 						if(res.data.status == "00000000") {
@@ -209,6 +217,27 @@
 		background: #fff;
 		border-radius: 0.08rem;
 		padding-top: 0.36rem;
+		.null_box {
+			margin-top: 0.20rem;
+			padding: 0.30rem 0;
+			box-sizing: border-box;
+			position: relative;
+		}
+		.null_box:after {
+			content: " ";
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			height: 1px;
+			border-top: 1px solid #D9D9D9;
+			color: #D9D9D9;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+			left: 0px;
+		}
 		.wonderful {
 			text-align: center;
 			width: 100%;

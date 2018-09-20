@@ -63,7 +63,7 @@
 									text: '退出成功'
 								})
 								_this.$router.replace({
-									path: '/user/reg'
+									path: '/user/login'
 								})
 								localStorage.removeItem('userInfo')
 								localStorage.setItem('isLogin', false)

@@ -41,6 +41,7 @@
 							<img class="tx" :src="images?images:'./static/images/mrtx.png'" />
 						</div>
 					</cell>
+					<cell class="info-item" title="剩余余额" :value="balanceDetail.remainBalance"></cell>
 				</group>
 			</section>
 		</div>

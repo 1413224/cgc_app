@@ -155,7 +155,7 @@
 							this.$vux.toast.text('请登录管理设备', 'top')
 
 							_this.$router.push({
-								path: '/user/reg'
+								path: '/user/login'
 							})
 						} else {
 							this.$vux.toast.text('暂无设备', 'top')
@@ -338,7 +338,7 @@
 					if(sessionStorage['_openid_']) {
 
 						//显示快速导航
-						if(!_this.$route.meta.navShow && _this.$route.path != "/user/reg") {
+						if(!_this.$route.meta.navShow && _this.$route.path != "/user/login") {
 							_this.show = true
 							_this.isOpen = false
 						} else {
@@ -356,7 +356,7 @@
 						if(sessionStorage.getItem('isZc')) {
 							_this.$popup.hide()
 						} else {
-							if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/reg') {
+							if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/login') {
 								sessionStorage.setItem('isZc', 1)
 								_this.$popup.show({
 									showZc: true
@@ -367,7 +367,7 @@
 						if(sessionStorage.getItem('isPay')) {
 							_this.$popup.hide()
 						} else {
-							if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/reg') {
+							if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/login') {
 								sessionStorage.setItem('isPay', 1)
 								_this.getUserPayPassword()
 							}
@@ -375,7 +375,7 @@
 					}
 				} else {
 					//显示快速导航
-					if(!_this.$route.meta.navShow && _this.$route.path != "/user/reg") {
+					if(!_this.$route.meta.navShow && _this.$route.path != "/user/login") {
 						_this.show = true
 						_this.isOpen = false
 					} else {
@@ -387,7 +387,7 @@
 					if(sessionStorage.getItem('isZc')) {
 						_this.$popup.hide()
 					} else {
-						if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/reg') {
+						if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/login') {
 							sessionStorage.setItem('isZc', 1)
 							_this.$popup.show({
 								showZc: true
@@ -398,7 +398,7 @@
 					if(sessionStorage.getItem('isPay')) {
 						_this.$popup.hide()
 					} else {
-						if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/reg') {
+						if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/login') {
 							sessionStorage.setItem('isPay', 1)
 							_this.getUserPayPassword()
 						}

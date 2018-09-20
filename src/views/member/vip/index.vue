@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class="btn-box">
-				<div v-if="$store.state.page.isLogin == 'false'" class="left" @click="$router.push({path:'/user/reg'})">
+				<div v-if="$store.state.page.isLogin == 'false'" class="left" @click="$router.push({path:'/user/login'})">
 					<img :src="'./static/vip/reg-img.png'" /> 立即注册
 				</div>
 				<div class="right">
