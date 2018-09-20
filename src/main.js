@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import creatrStore from './store'
+import store from './store'
 import Vuex from 'vuex'
 import echatrs from 'echarts'
 import './assets/icons_font/iconfont.css'
@@ -50,10 +50,10 @@ Vue.prototype.mainApp = mainApp
 
 //全局支付方法
 Vue.prototype.pay = function(params) {
-	
+	console.log(params)
 	var oid = sessionStorage['_openid_']
 	let openid = sessionStorage['_openid_']
-	console.log(params)
+
 	axios.post(url.zf.pay, {
 		id: '200001',
 		subMchId: '1511640641',
@@ -92,7 +92,16 @@ Vue.prototype.pay = function(params) {
 			signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
 			paySign: data.paySign, // 支付签名  
 			success: function(res) {
-				WeixinJSBridge.call('closeWindow')
+				
+				if(params.toUrl) {
+					router.push({
+						path: params.toUrl
+					})
+				} else {
+					router.push({
+						path: '/shop/my_order2'
+					})
+				}
 			},
 			error: function() {
 				Vue.$vux.toast.show({
@@ -131,7 +140,7 @@ Vue.use(ToastPlugin)
 Vue.use(vuePicturePreview)
 Vue.use(BusPlugin)
 
-const store = creatrStore()
+//const store = creatrStore()
 
 // 懒加载图片
 Vue.use(VueLazyLoad, {

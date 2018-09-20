@@ -84,16 +84,6 @@
 					<img :src="'./static/images/b-right.png'" />
 				</div>
 			</div>
-			<!--企业通用积分-->
-			<div class="enterprise-integral-box pr" @click="useIntegral">
-				<div class="left">企业通用积分</div>
-				<div class="right">
-					<p>- ¥{{Number(enterpriseIntegral).toFixed(2)}}</p>
-					<!--<p class="no" v-if="coupon.length==0">暂无可用优惠券</p>-->
-					<!--<p v-if="denomination != ''">- ¥{{denomination}}</p>-->
-					<img class="right-img" :src="'./static/images/b-right.png'" />
-				</div>
-			</div>
 			<div class="middle">
 				<div class="left">
 					<div>
@@ -126,7 +116,7 @@
 						</div>
 					</div>
 					<div class="couponlist-box">
-						<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item,'active')">
+						<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item)">
 							<div class="blue" v-if="sureIndex == index && item.show">
 								<div class="pr-box">
 									<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
@@ -195,7 +185,7 @@
 			<div class="btn" @click="integralOptions.showIntegralMode = false">确认 </div>
 		</div>
 		<solt v-if="ready">
-			<integral :options="integralOptions" :topIntegral="topIntegral" @watch="setIntegral" @set="watchIn"></integral>
+			<integral :options="integralOptions"></integral>
 		</solt>
 	</section>
 </template>
@@ -250,12 +240,7 @@
 					showIntegralMode: false,
 					data: {}
 				},
-				topIntegral: 0,
 				enterpriseIntegral: 0,
-				price: '',
-				ready: false,
-				enterpriseCards: [],
-				totalEnterpriseBalance: 0
 			}
 		},
 		created() {
@@ -325,94 +310,30 @@
 				}
 			}
 
+			this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
+
+			this.getEquipmentOrderConfirmInfo()
 			this.getGoodsOrderConfirmUseBalances()
 		},
 		mounted() {
 
 		},
 		methods: {
-			useIntegral() {
-				if(this.totalEnterpriseBalance > 0) {
-					this.integralOptions.showIntegralMode = true
-				} else {
-					this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '暂无可用企业通用积分'
-					})
-				}
-			},
-			watchIn(data) {
-				this.enterpriseIntegral = data.totalUseEnterpriseBalance
-				this.enterpriseCards = data.enterpriseCards
-
-				this.allMoney = (Number(this.price) - Number(this.enterpriseIntegral)).toFixed(2)
-				this.integralNumChange()
-			},
-			setIntegral(data) {
-				this.enterpriseIntegral = data.balance
-				this.enterpriseCards = data.enterpriseCards
-
-				this.integralNumChange()
-			},
-			//获取积分 优惠券
 			getGoodsOrderConfirmUseBalances() {
 				var _this = this
-
-				this.ready = false
-
 				_this.$http.get(_this.url.goods.getGoodsOrderConfirmUseBalances, {
 					params: {
 						userId: _this.$store.state.user.userId,
 						platformId: _this.url.platformId,
 						nums: _this.goodsInfo.goodsNum,
-						skuId: _this.goodsInfo.skuId,
-						couponId: _this.userCouponIds[0] || ''
+						skuId: _this.goodsInfo.skuId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
-						this.allMoney = res.data.data.price
-						this.price = res.data.data.price
-						this.totalEnterpriseBalance = res.data.data.totalEnterpriseBalance
-
-						//优惠券
-						if(res.data.data.availableCoupon) {
-							for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
-								res.data.data.availableCoupon[i].show = false
-								_this.availableCoupon = res.data.data.availableCoupon
-								if(_this.availableCoupon[i].userCouponId == res.data.data.chooseCouponId) {
-									_this.sure(i, res.data.data.availableCoupon[i])
-								}
-							}
-						}
-						//清空优惠券id
-						if(!res.data.data.chooseCouponId) {
-							_this.userCouponIds = []
-						}
-
-						//企业通用积分
-						_this.ready = true
-						_this.integralOptions.data = res.data.data //返回的所有数据
-
-						//初始化总价-企业通用积分
-						_this.enterpriseIntegral = res.data.data.totalUseEnterpriseBalance
-						_this.allMoney = (Number(_this.allMoney) - Number(_this.enterpriseIntegral)).toFixed(2)
-
-						//通用积分
-						_this.availableBalance = res.data.data.availableBalance
-
-						if(Number(_this.allMoney) > 0) {
-							//初始化总价-通用积分
-							_this.integralNum = Number(_this.availableBalance) > Number(_this.allMoney) ? Number(_this.allMoney) : Number(_this.availableBalance)
-						} else {
-							_this.integralNum = ''
-						}
 					}
 				})
 			},
-			//数量加减
 			numC() {
 
 				var _this = this
@@ -423,101 +344,63 @@
 					})
 				})
 
-				this.getGoodsOrderConfirmUseBalances()
-			},
-			//计算最后价格
-			integralNumChange(e) {
+				this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
+
 				if(Number(this.integralNum) < 0) {
 					this.integralNum = 0
 				}
 
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
 
-				this.payMoney = this.allMoney
+				//优先减去优惠券满足金额
+				if(this.couponType == 20) { //满减券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						this.payMoney = Number(this.allMoney) - Number(this.denomination) //选择优惠券减去的钱
+					}
+				} else if(this.couponType == 30) { //折扣券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						var minMoney = Number(this.allMoney) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)) {
+							this.payMoney = Number(this.allMoney) - minMoney
+						} else {
+							this.payMoney = Number(this.allMoney) - Number(this.denomination)
+						}
 
-				//console.log(this.payMoney, 3)
+					}
+				} else if(this.couponType == 50) { //现金券
+					this.payMoney = Number(this.allMoney) - Number(this.denomination)
+				} else {
+					this.payMoney = Number(this.allMoney)
+				}
 
 				var minAllMoney = Number(this.payMoney).toFixed(2)
 
-				if(Number(minAllMoney) > 0) { //再减去通用积分
-					if(Number(minAllMoney) <= Number(this.availableBalance)) {
-						if(Number(this.integralNum) > Number(minAllMoney)) {
-							this.integralNum = Number(minAllMoney)
-							inputNum = Number(minAllMoney)
-						}
+				//再减去通用积分
+				if(Number(minAllMoney) <= Number(this.availableBalance)) {
+					this.integralNum = Number(minAllMoney)
+					inputNum = Number(minAllMoney)
+					if(Number(this.integralNum) > Number(minAllMoney)) {
+						this.integralNum = Number(minAllMoney)
+						inputNum = Number(minAllMoney)
+					}
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
+				}
 
-						this.payMoney = Number(minAllMoney) - Number(inputNum)
+				if(Number(minAllMoney) > Number(this.availableBalance)) {
+					this.integralNum = Number(this.availableBalance)
+					inputNum = Number(this.availableBalance)
+					if(Number(this.integralNum) > Number(this.availableBalance)) {
+						this.integralNum = Number(this.availableBalance)
+						inputNum = Number(this.availableBalance)
 					}
 
-					if(Number(minAllMoney) > Number(this.availableBalance)) {
-
-						if(Number(this.integralNum) > Number(this.availableBalance)) {
-							this.integralNum = Number(this.availableBalance)
-							inputNum = Number(this.availableBalance)
-						}
-
-						this.payMoney = Number(minAllMoney) - Number(inputNum)
-					}
-
-					//已经使用通用积分  设置企业通用积分上限
-					if(e) {
-						this.topIntegral = Number(this.price) - Number(inputNum)
-					}
-				} else {
-					this.integralNum = ''
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
 				}
 
 				this.payMoney = Number(this.payMoney).toFixed(2)
 
+				console.log(this.payMoney)
 			},
-
-			//  优惠券  下标 名字 减去金额 类型  使用门槛 
-			sure(index, item, active) {
-
-				this.sureIndex = index
-
-				let sureCouponList = []
-				this.userCouponIds = []
-
-				for(var i = 0; i < this.availableCoupon.length; i++) {
-					if(i != index) {
-						this.availableCoupon[i].show = false
-					} else {
-						this.availableCoupon[i].show = this.availableCoupon[index].show
-					}
-				}
-
-				this.availableCoupon[index].show = !this.availableCoupon[index].show
-
-				for(var i = 0; i < this.availableCoupon.length; i++) {
-					if(this.availableCoupon[i].show) {
-						this.userCouponIds.push(this.availableCoupon[i].userCouponId)
-						sureCouponList.push(this.availableCoupon[i])
-					}
-				}
-
-				if(sureCouponList.length > 0) {
-					this.couponType = item.type //获取优惠券类型
-					this.couponName = item.name //获取优惠券标题
-					this.denomination = item.denomination //获取优惠券减去金额
-					this.condition = item.condition //获取优惠券门槛金额
-					this.discount = item.discount //获取优惠券折扣
-				} else {
-					this.userCouponIds = []
-					this.couponName = ''
-					this.denomination = 0
-					this.condition = 0
-					this.discount = 0
-				}
-
-				console.log(this.userCouponIds)
-
-				if(active) {
-					this.getGoodsOrderConfirmUseBalances()
-				}
-			},
-
-			//
 			select(addressItem) {
 
 				if(addressItem) {
@@ -559,8 +442,7 @@
 					nums: _this.goodsInfo.goodsNum,
 					skuId: _this.goodsInfo.skuId,
 					userCouponIds: _this.userCouponIds,
-					remark: _this.remark,
-					enterpriseCards: _this.enterpriseCards
+					remark: _this.remark
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						if(res.data.data.status == 1) {
@@ -587,6 +469,128 @@
 					}
 				})
 			},
+			integralNumChange(e) {
+
+				if(Number(this.integralNum) < 0) {
+					this.integralNum = 0
+				}
+
+				var inputNum = this.integralNum == '' ? 0 : this.integralNum
+
+				//优先减去优惠券满足金额
+				if(this.couponType == 20) { //满减券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						this.payMoney = Number(this.allMoney) - Number(this.denomination) //选择优惠券减去的钱
+					}
+				} else if(this.couponType == 30) { //折扣券
+					if(Number(this.allMoney) >= Number(this.condition)) {
+						var minMoney = Number(this.allMoney) * (1 - Number(this.discount))
+						if(minMoney < Number(this.denomination)) {
+							this.payMoney = Number(this.allMoney) - minMoney
+						} else {
+							this.payMoney = Number(this.allMoney) - Number(this.denomination)
+						}
+					}
+				} else if(this.couponType == 50) { //现金券
+					this.payMoney = Number(this.allMoney) - Number(this.denomination) //选择优惠券减去的钱
+				} else {
+					this.payMoney = Number(this.allMoney)
+				}
+
+				var minAllMoney = Number(this.payMoney).toFixed(2)
+
+				//再减去通用积分
+				if(Number(minAllMoney) <= Number(this.availableBalance)) {
+					if(Number(this.integralNum) > Number(minAllMoney)) {
+						this.integralNum = Number(minAllMoney)
+						inputNum = Number(minAllMoney)
+					}
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
+				}
+
+				if(Number(minAllMoney) > Number(this.availableBalance)) {
+
+					if(Number(this.integralNum) > Number(this.availableBalance)) {
+						this.integralNum = Number(this.availableBalance)
+						inputNum = Number(this.availableBalance)
+					}
+
+					this.payMoney = Number(minAllMoney) - Number(inputNum)
+				}
+
+				this.payMoney = Number(this.payMoney).toFixed(2)
+			},
+			//获取优惠券列表
+			getEquipmentOrderConfirmInfo(id, num) {
+				var _this = this
+
+				_this.$http.get(_this.url.share.getEquipmentOrderConfirmInfo, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						platformId: _this.url.platformId,
+						equipNumber: 60009,
+						skuId: 2
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.availableCoupon) {
+							for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
+								res.data.data.availableCoupon[i].show = false
+							}
+
+							_this.availableCoupon = res.data.data.availableCoupon
+						}
+
+						_this.availableBalance = res.data.data.availableBalance
+
+						this.integralNum = Number(this.availableBalance) > Number(this.goodsInfo.minPrice) ? Number(this.goodsInfo.minPrice) * Number(this.$route.query.goodsNum) : Number(this.availableBalance)
+
+						this.payMoney = (Number(this.$route.query.minPrice) * Number(this.$route.query.goodsNum) - Number(this.integralNum)).toFixed(2)
+					}
+				})
+			},
+			//  优惠券  下标 名字 减去金额 类型  使用门槛 
+			sure(index, item) {
+				this.sureIndex = index
+
+				let sureCouponList = []
+				this.userCouponIds = []
+
+				for(var i = 0; i < this.availableCoupon.length; i++) {
+					if(i != index) {
+						this.availableCoupon[i].show = false
+					} else {
+						this.availableCoupon[i].show = this.availableCoupon[index].show
+					}
+				}
+
+				this.availableCoupon[index].show = !this.availableCoupon[index].show
+
+				for(var i = 0; i < this.availableCoupon.length; i++) {
+					if(this.availableCoupon[i].show) {
+						this.userCouponIds.push(this.availableCoupon[i].userCouponId)
+						sureCouponList.push(this.availableCoupon[i])
+					}
+				}
+
+				if(sureCouponList.length > 0) {
+					this.couponType = item.type //获取优惠券类型
+					this.couponName = item.name //获取优惠券标题
+					this.denomination = item.denomination //获取优惠券减去金额
+					this.condition = item.condition //获取优惠券门槛金额
+					this.discount = item.discount //获取优惠券折扣
+				} else {
+					this.userCouponIds = []
+					this.couponName = ''
+					this.denomination = 0
+					this.condition = 0
+					this.discount = 0
+				}
+
+				this.allMoney = this.goodsInfo.minPrice * this.goodsInfo.goodsNum
+
+				this.integralNumChange()
+			}
 		}
 	}
 </script>
@@ -661,36 +665,6 @@
 			font-size: 0.36rem;
 			font-family: PingFangSC-Regular;
 			color: rgba(255, 255, 255, 1);
-		}
-	}
-	
-	.enterprise-integral-box {
-		height: 1.0rem;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0 0.20rem;
-		box-sizing: border-box;
-		background-color: white;
-		position: relative;
-		.left {
-			font-size: 0.28rem;
-			/*font-family: PingFang-SC-Medium;*/
-			color: rgba(53, 53, 53, 1);
-		}
-		.right {
-			display: flex;
-			align-items: center;
-			font-size: 0.28rem;
-			/*font-family: DINOT-Medium;*/
-			color: rgba(242, 48, 48, 1);
-			img {
-				width: 0.20rem;
-				margin-left: 0.15rem;
-			}
-			.no {
-				font-size: 0.28rem!important;
-			}
 		}
 	}
 	

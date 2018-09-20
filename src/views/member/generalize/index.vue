@@ -301,7 +301,7 @@
 		background: #fff;
 		.settingHeader+.alerts-tob~.wrapper {
 			position: absolute;
-			top: 2rem;
+			top: 2.3rem;
 			left: 0;
 			right: 0;
 			bottom: 0;
@@ -309,7 +309,7 @@
 		}
 		.wrapper {
 			position: absolute;
-			top: 1rem;
+			top: 1.3rem;
 			left: 0;
 			right: 0;
 			bottom: 0;

@@ -21,7 +21,7 @@
 	</div>
 </template>
 <script>
-	import settingHeader from '../../../components/setting_header'
+	import settingHeader from '@/components/setting_header'
 
 	export default {
 		data() {
@@ -140,8 +140,8 @@
 			}
 		}
 		.cont {
-			text-indent: .6rem;
-			margin: .1rem 0;
+			/*text-indent: .6rem;
+			margin: .1rem 0;*/
 		}
 		.yuedu {
 			font-size: .28rem;

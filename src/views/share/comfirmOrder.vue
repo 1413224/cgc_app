@@ -220,6 +220,7 @@
 							_this.payParmars.ip = res.data.data.ip
 							_this.payParmars.parentOrderSn = res.data.data.orderSn
 							_this.payParmars.enterpriseName = _this.info.name
+							_this.payParmars.toUrl = '/share/usetime'
 						}
 					}
 				})

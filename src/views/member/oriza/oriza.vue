@@ -31,6 +31,7 @@
 					if(res.data.status == '00000000') {
 						let data = res.data
 						window.location.href = data.data
+						
 					}
 				});
 			},
@@ -38,16 +39,17 @@
 				var _this = this
 
 				let openid = this.$route.query.openId
-				// let params = this.$route.query
-
+				let accessCode = this.$route.query.accessCode
 				let uid = this.$route.query.userId
 				let acscode = this.$route.query.randomAccessCode
 				let token = this.$route.query.token
 
 				if(openid) {
 					this.$store.commit('getOpenId', openid)
-					// localStorage.setItem('_openid_',openid)
+				
 					sessionStorage.setItem('_openid_', openid)
+					sessionStorage.setItem('_accessCode_', accessCode)
+
 					if(uid && acscode && token) {
 						let hash = {
 							id: uid,

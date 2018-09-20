@@ -1,77 +1,86 @@
 <template>
-	<div class="storelist-box1" style="height: 100%;background-color: white;">
-		<settingHeader style="z-index: 700;position: relative;" :title="title"></settingHeader>
-
-		<!-- <div class="searchBox" @click="goSearch">
-			<div class="search">
-				<img :src="'./static/images/ss.png'" />
-				<input type="text" placeholder="搜索心仪的门店" readonly="readonly">
-			</div>
-		</div> -->
-
-		<div class="nav1">
-			<div class="pr">
-				<div class="top" :class="onIndex == 2 ?'z0':'z1115'">
-					<div class="area" :class="{'blue':onIndex == 0}" @click="onArea(0)">
-						<p class="areaDetail">{{region}}
-							<i class="iconfont" :class="areaShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i>
-						</p>
-					</div>
-					<div class="price" :class="{'blue':onIndex == 1}" @click="onPrice(1)">
-						<p>{{priceType}}
-							<i class="iconfont" :class="priceShang ? 'icon-shixinjiantou' : 'icon-shixinjiantou-copy'"></i>
-						</p>
-					</div>
-					<div class="type" :class="{'blue':onIndex == 2}" @click="onScreening(2)">
-						<p>{{screening}}
-							<img src="../../assets/images/shop/screen.png" alt="">
-						</p>
-					</div>
+	<div class="store_list_box">
+		<settingHeader title="门店列表"></settingHeader>
+		<div class="tab_box">
+			<div class="top">
+				<div class="item" :class="{'blue':tabIndex == index}" v-for="(item,index) in tabList" :key="index" @click="tabClick(index)">
+					<span>{{item.type}}</span>
+					<i v-if="index < 2" :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-shixinjiantou-copy"></i>
+					<img v-else src="../../assets/images/shop/screen.png" alt="">
 				</div>
-				<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
-					<div ref="address" style="animation-duration:0.3s" v-if="isActive" class="address animated" :class="isActive? 'maskTive' : ''">
-						<ul ref="viewBox">
-							<li class="category">
-								<i class="iconfont">&#xe60b;</i>
-								<span class="province" :class="addressKey==1? 'active':'' " @click="provice">省份</span>
-								<span class="city" :class="addressKey==2? 'active':'' " @click="city">城市</span>
-								<span class="district" :class="addressKey==3? 'active':'' " @click="district">区县</span>
-							</li>
-							<li v-for="(item,index) in items" :key="index" @click="next(item.areaId,item.name)">
-								<span>{{item.name}}</span>
-								<i class="fr">
-									<i class="icon iconfont icon-arrow-right"></i>
-								</i>
-							</li>
-						</ul>
-					</div>
-				</transition>
-
 			</div>
-			<transition enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
-				<div id="distanceType" v-if="priceShang" style="animation-duration:0.3s">
-					<group>
-						<radio class="opPrice" title="title" :options="opPrice" :value="listType" @on-change="changePrice"></radio>
-					</group>
+			<!--区域-->
+			<transition name="region-classes-transition" enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
+				<div class="region_box item_box" :class="{'top1':!$store.state.page.isWx}" v-if="regionShow && tabIndex == 0" style="animation-duration:0.5s">
+					<!--省-->
+					<div class="address_wrapper" ref="wrapper1">
+						<div class="content">
+							<ul class="province_box one_box">
+								<li v-for="(item,index) in provinceList" :class="{'blue':provinceIndex == index}" :key="index" @click="activeAddressItem(index,item,1)">
+									{{item.name}}
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--市-->
+					<div class="address_wrapper" ref="wrapper2">
+						<div class="content">
+							<ul v-if="cityShow" style="animation-duration:0.5s" class="city_box one_box fadeInLeft animated">
+								<li v-for="(item,index) in cityList" :key="index" :class="{'blue':cityIndex == index}" @click="activeAddressItem(index,item,2)">
+									{{item.name}}
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--区-->
+					<div class="address_wrapper" ref="wrapper3">
+						<div class="content">
+							<ul v-if="areaShow" style="animation-duration:0.5s" class="area_box one_box fadeInLeft animated">
+								<li v-for="(item,index) in areaList" :class="{'blue':areaIndex == index}" :key="index" @click="activeAddressItem(index,item,3)">
+									{{item.name}}
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</transition>
+			<!--类型-->
+			<transition name="type-classes-transition" enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
+				<ul class="type_box item_box" :class="{'top1':!$store.state.page.isWx}" v-if="typeShow && tabIndex == 1" style="animation-duration:0.5s">
+					<li v-for="(item,index) in typeList" :key="index" @click="activeType(index,item)">
+						<span>{{item.key}}</span>
+						<img v-if="typeIndex == index" :src="'./static/images/s_gou.png'" />
+					</li>
+				</ul>
+			</transition>
+			<!--筛选-->
+			<transition name="screen-classes-transition" enter-active-class="fadeInRight animated" leave-active-class="fadeOutRight animated">
+				<div class="screen_box" :class="{'top1':!$store.state.page.isWx}" v-if="screenShow && tabIndex == 2" style="animation-duration:0.5s">
+					<div class="pr_box2">
+						<div class="logolist_box">
+							<div class="item" :class="{'li_selected':distanceIndex == index}" v-for="(item, index) in logolist" :key="index" @click="changeCss(index,item)">
+								<div>
+									{{item}}公里
+								</div>
+							</div>
+						</div>
+						<input v-model="jl" type="number" @input="distanceChange" placeholder="请输入距离" />
+						<div class="btn_box">
+							<span @click="reset()">重置</span>
+							<span @click="complete">完成</span>
+						</div>
+					</div>
+				</div>
+			</transition>
+			<!--遮罩层-->
+			<div class="masker" v-if="maskerShow" @click="maskerShow = false"></div>
 		</div>
 
+		<!--门店-->
 		<div :class="{'h':!$store.state.page.isWx}" class="wrapper" ref="wrapper">
-			<div class="content" :class="{'pr_box':!showShop}">
-				<swiper :options="swiperOption" class="swiper">
-					<swiper-slide v-for="(item, index) in demoList" :key="index">
-						<a v-if="item.wbu">
-							<img :src="item.img">
-						</a>
-						<router-link v-else :to="item.url">
-							<img :src="item.img">
-						</router-link>
-					</swiper-slide>
-					<div v-if="demoList.length>=2" class="swiper-pagination" slot="pagination"></div>
-				</swiper>
+			<div class="content" :class="{'pr_box':!showList}">
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
-				<div v-if="showShop" class="pd_box">
+				<div v-if="showList" class="pd_box">
 					<!-- list.length > 0 -->
 					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
 						<div class="item">
@@ -96,54 +105,20 @@
 
 				<Loading v-if="showLoading"></Loading>
 				<noMore v-if="showNoMore"></noMore>
-				<div style="margin-top: 3px;">
-					<Null v-if="!showShop && !inloading" status="zwsj" text="暂无更多门店"></Null>
-					<Null v-if="!showShop && inloading" status="loading" text="加载中"></Null>
+				<div>
+					<Null v-if="!showList && !inloading" status="zwsj" text="暂无更多门店"></Null>
+					<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 				</div>
-			</div>
-		</div>
-
-		<div class="mask animated" :class="maskActive? 'maskTive' : ''" @click="hide"></div>
-
-		<!-- 筛选 -->
-		<div style="height: 100%;" v-if="show1">
-			<div v-transfer-dom class="screen">
-				<popup v-model='show1' position="right">
-					<div :class="{'h':!$store.state.page.isWx}" class="wrapper2" ref="wrapper2">
-						<div class="content">
-							<div class="screening">
-								<div class="logo">
-									<group class="input-div">
-										<!-- <cell islink :title="logoTitle" :border-intent="false" :arrow-direction="showContent ? 'up' : 'down'" @click.native="down()"> -->
-										<cell :title="logoTitle" :border-intent="false">
-										</cell>
-										<div>
-											<div class="logolist">
-												<li class="item" :class="{'li-selected':distanceIndex == index}" v-for="(item, index) in logolist" :key="index" @click="changeCss(index,item)">{{item}}公里</li>
-												<x-input class="distance" placeholder="请输入距离" v-model="jl" type="number" @on-change="distanceChange"></x-input>
-											</div>
-										</div>
-									</group>
-								</div>
-							</div>
-						</div>
-						<div class="bottom">
-							<div class="reset" @click="reset()">重置</div>
-							<div class="complete" @click="complete">完成</div>
-						</div>
-					</div>
-				</popup>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-	import settingHeader from '../../components/setting_header'
+	import settingHeader from '@/components/setting_header'
 	import BScroll from 'better-scroll'
-	import scroll from '../../components/scroll.vue'
-	import Loading from '../../components/loading'
-	import noMore from '../../components/noMore'
+	import Loading from '@/components/loading'
+	import noMore from '@/components/noMore'
 	import Null from '@/components/null'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
@@ -152,78 +127,66 @@
 		name: 'storelist',
 		data() {
 			return {
-				title: '门店列表',
-				data: [],
-				hasDw: false,
-				addressDetail: null, //选中的市
-				addressKey: 1, //省 市 区的状态切换
-				isActive: false, //地址框的显隐
-				maskActive: false, //遮罩层的显隐
-				proviceItem: null, //省级数据暂存
-				cityItem: null, //城市数据暂存
-				districtItem: null, //市区数据暂存
-				region: '区域', //区域
-				screening: '筛选', //类型
-				priceType: '类型', //价格
-				areaShang: false, //区域箭头
-				typeShang: false, //类型箭头
-				priceShang: false, //价格箭头
-				active: 1, //列表选中样式（地址）
-				items: null, //三级联动地址
-				showShop: false,
-				opPrice: [
-					/*'离我最近',
-					'价格最低'*/
-					{
-						key: '1',
-						value: '离我最近'
-					},
-					{
-						key: '2',
-						value: '智能推荐'
-					}
-				],
-				onIndex: 0,
-				show1: false,
-				logoTitle: '距离',
-				logolist: [5, 10, 20, 50, 100],
-				showContent: true,
-				showLoading: false,
-				showNoMore: false,
-				distanceIndex: 4,
-				jl: '',
-
-				listType: '1',
-				countryId: 1,
+				tabList: [{
+					type: '区域',
+					show: false
+				}, {
+					type: '类型',
+					show: false
+				}, {
+					type: '筛选',
+					show: false
+				}],
+				tabIndex: 0,
+				regionShow: false, //区域显示
+				screenShow: false, //筛选显示
+				maskerShow: false, //遮罩层显示
+				provinceList: [],
+				cityList: [],
+				areaList: [],
+				cityShow: false,
+				areaShow: false,
+				provinceIndex: '-1',
+				cityIndex: '-1',
+				areaIndex: '-1',
+				provinceName: '',
+				cityName: '',
+				areaName: '',
+				typeShow: false, //类型显示
+				typeIndex: 0,
+				typeList: [{
+					key: '离我最近',
+					value: 1
+				}, {
+					key: '智能推荐',
+					value: 2
+				}],
+				addressName: '',
+				//获取地址入参
+				countryId: 1, //国家ID
 				provinceId: '',
 				cityId: '',
-				isprovince: '',
-				iscity: '',
-				isdistrict: '',
 				areaId: '',
-				distance: 100,
+				logolist: [5, 10, 20, 50, 100],
+				distanceIndex: 4,
+				jl: '',
+				//筛选入参
 				lat: '',
 				lng: '',
+				distance: 100,
 				curPage: 1,
 				pageSize: 20,
+				listType: 1,
 
-				list: [],
-				isload: false,
-				islist: false,
-
-				swiperOption: {
-					pagination: {
-						el: '.swiper-pagination'
-					},
-					autoplay: false,
-					loop: true
-				},
 				demoList: [{
 					img: './static/share/banner1.png',
 					url: '/member/vip/right'
 				}],
+				list: [],
 				showList: false,
-				inloading: true
+				inloading: true,
+				showLoading: false,
+				showNoMore: false
 			}
 		},
 		components: {
@@ -238,12 +201,98 @@
 			swiperSlide
 		},
 		created() {
+			this.itemsInit(this.countryId, 0)
 			this.InitScroll()
-			this.itemsInit()
-			this.getLg()
-			this.getLocation()
+
+			if(this.$store.state.page.isWx == false) {
+				this.getLg()
+			} else {
+				this.getLocation()
+			}
+		},
+		watch: {
+			//关闭遮罩层
+			regionShow() {
+				return this.maskerShow = this.regionShow ? true : false
+			},
+			typeShow() {
+				return this.maskerShow = this.typeShow ? true : false
+			},
+			screenShow() {
+				return this.maskerShow = this.screenShow ? true : false
+			},
+			//重置下拉列表展示
+			maskerShow() {
+				if(!this.maskerShow) {
+					this.regionShow = false
+					this.typeShow = false
+					this.screenShow = false
+					this.tabList[this.tabIndex].show = false
+				}
+			}
 		},
 		methods: {
+			//重置
+			reset() {
+				this.tabIndex = 0
+				this.listType = 1
+				this.countryId = 1
+				this.provinceId = ''
+				this.provinceIndex = '-1'
+				this.cityIndex = '-1'
+				this.areaIndex = '-1'
+				this.addressName = ''
+				this.typeIndex = 0
+				this.cityId = ''
+				this.areaId = ''
+				this.distance = 100
+				this.distanceIndex = 4
+				this.lat = ''
+				this.lng = ''
+				this.curPage = 1
+				this.pageSize = 20
+				this.tabList[0].type = '区域'
+				this.screenShow = false
+
+				if(this.$store.state.page.isWx == false) {
+					this.getLg()
+				} else {
+					this.getLocation()
+				}
+			},
+			// 完成
+			complete() {
+				var _this = this
+
+				//重置加载中
+				_this.showList = false
+				_this.inloading = true
+
+				this.screenShow = false
+
+				this.getEnterpriseListInfo()
+
+			},
+			changeCss(index, kilometre) {
+				var _this = this
+				_this.distanceIndex = index
+				_this.jl = kilometre
+				_this.distance = kilometre
+			},
+			distanceChange() {
+				var _this = this
+
+				_this.distance = _this.jl
+
+				for(var i = 0; i < _this.logolist.length; i++) {
+					if(_this.logolist[i] == _this.jl) {
+						_this.distanceIndex = i
+						return false
+					} else {
+						_this.distanceIndex = 50
+					}
+				}
+			},
 			toDetail(id) {
 				this.$router.push({
 					path: '/multi_user_mall',
@@ -253,25 +302,108 @@
 					}
 				})
 			},
-			checkQuery(obj) {
+			//地址三级联动
+			itemsInit(id, type) {
 				var _this = this
-				var k = []
-				var v = []
-				for(var i in obj) {
-					k.push(i)
-					v.push(obj[i])
-				}
-				k.forEach((value, index) => {
-					var i = value
-					_this[i] = v[index]
+				this.$http.get(this.url.zone.address, {
+					params: {
+						'parentId': id
+					}
+				}).then(res => {
+					if(type == 0) { //获取省
+						_this.provinceList = res.data.data
+					} else if(type == 1) { //获取市
+						_this.cityList = res.data.data
+						_this.cityShow = true
+					} else if(type == 2) {
+						_this.areaList = res.data.data
+						_this.areaShow = true
+					}
+
+					if(_this.maskerShow) {
+						_this.addressInitScroll()
+					}
 				})
 			},
-			getLocation() {
-				//微信扫一扫
+			//选择省 市  区
+			activeAddressItem(index, item, type) {
+
+				this.curPage = 1
+				this.showLoading = false
+				this.showNoMore = false
+
+				if(type == 1) {
+					this.areaList = []
+					this.areaShow = false
+					this.provinceIndex = index
+					this.provinceId = item.areaId
+					this.provinceName = item.name
+
+					this.cityIndex = '-1'
+					this.areaIndex = '-1'
+					this.cityId = ''
+					this.areaId = ''
+
+					this.addressName = this.provinceName
+					this.tabList[0].type = this.addressName
+				} else if(type == 2) {
+					this.cityIndex = index
+					this.cityId = item.areaId
+					this.cityName = item.name
+
+					this.areaIndex = '-1'
+					this.areaId = ''
+
+					this.addressName = this.provinceName + this.cityName
+				} else if(type == 3) {
+					this.areaIndex = index
+					this.areaId = item.areaId
+					this.areaName = item.name
+
+					this.maskerShow = false
+
+					this.addressName = this.provinceName + this.cityName + this.areaName
+				}
+
+				this.itemsInit(item.areaId, type)
+
+				this.getEnterpriseListInfo()
+			},
+			//选择类型
+			activeType(index, item) {
+				this.typeIndex = index
+				this.listType = item.value
+
+				this.maskerShow = false
+				this.$forceUpdate()
+
+				this.getEnterpriseListInfo()
+				console.log(this.listType)
+			},
+			//非微信定位
+			getLg() {
 				var _this = this
+				var geolocation = new qq.maps.Geolocation(_this.url.mapKey, "myapp")
 
+				var options = {
+					timeout: 3000
+				} //设置定位超时
+
+				geolocation.getLocation(showPosition, showErr, options)
+
+				function showPosition(res) {
+					_this.lat = res.lat
+					_this.lng = res.lng
+					_this.getEnterpriseListInfo()
+
+				}
+
+				function showErr(position) {}
+			},
+			//微信定位
+			getLocation() {
+				var _this = this
 				var uri = window.location.href.split('#')[0] //截取#前面的路径
-
 				_this.$http.post(_this.url.zf.wxScan, {
 					mchId: '1388332102',
 					url: uri
@@ -288,43 +420,14 @@
 					wx.ready(function() {
 						wx.getLocation({
 							success: function(res) {
+								console.log(res)
 								_this.lat = res.latitude
 								_this.lng = res.longitude
-								_this.checkQuery(_this.$route.query)
-								_this.hasDw = true
 								_this.getEnterpriseListInfo()
 							}
 						})
 					})
 				})
-			},
-			getLg() {
-
-				var _this = this
-
-				var geolocation = new qq.maps.Geolocation(_this.url.mapKey, "myapp")
-
-				var options = {
-					timeout: 3000
-				} //设置定位超时
-
-				geolocation.getLocation(showPosition, showErr, options)
-
-				function showPosition(res) {
-					_this.region = res.province + res.city
-					if(_this.$store.state.page.isWx == false) {
-
-						_this.lat = res.lat
-						// _this.lat = 22.9377200000
-						_this.lng = res.lng
-						// _this.lng = 113.3842400000
-						_this.checkQuery(_this.$route.query)
-						_this.hasDw = true
-						_this.getEnterpriseListInfo()
-					}
-				}
-
-				function showErr(position) {}
 			},
 			getEnterpriseListInfo() {
 				var _this = this
@@ -334,19 +437,16 @@
 					distance: _this.distance = _this.distance > 0 ? _this.distance : 5,
 					lat: _this.lat,
 					lng: _this.lng,
+					//lat: 22.93772,
+					//lng: 113.38424,
+					provinceId: _this.provinceId || null,
+					cityId: _this.cityId || null,
+					areaId: _this.areaId || null,
 					curPage: _this.curPage,
 					pageSize: _this.pageSize,
-					islist: _this.islist
+					islist: false
 				}
-				if(_this.provinceId != '') {
-					data.provinceId = _this.provinceId
-				}
-				if(_this.cityId != '') {
-					data.cityId = _this.cityId
-				}
-				if(_this.areaId != '') {
-					data.areaId = _this.areaId
-				}
+
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: data
 				}).then((res) => {
@@ -354,11 +454,73 @@
 
 						if(res.data.data) {
 							_this.list = res.data.data.list
+							_this.showList = res.data.data.list.length > 0 ? true : false
+							_this.inloading = false
+						} else {
+							_this.showList = false
+							_this.inloading = false
 						}
-
-						_this.showShop = _this.list.length > 0 ? true : false
-						_this.inloading = false
 					}
+				})
+			},
+			//tab切换
+			tabClick(index) {
+				var _this = this
+
+				_this.showLoading = false
+				_this.showNoMore = false
+
+				this.tabIndex = index
+				this.tabList.forEach((value, i) => {
+					if(i != index) {
+						value.show = false
+						return false;
+					}
+				})
+
+				this.tabList[index].show = !this.tabList[index].show
+
+				if(index == 0) {
+					this.addressInitScroll()
+					this.regionShow = this.tabList[index].show
+				} else if(index == 1) {
+					this.typeShow = this.tabList[index].show
+				} else if(index == 2) {
+					this.screenShow = this.tabList[index].show
+				}
+
+				this.$forceUpdate()
+			},
+			addressInitScroll() {
+				var _this = this
+				_this.$nextTick(() => {
+					if(_this.tabList[_this.tabIndex].show) {
+						_this.scroll1 = new BScroll(_this.$refs.wrapper1, {
+							click: true,
+							scrollY: true,
+							momentum: true
+						})
+						_this.scroll1.refresh()
+
+						if(_this.cityShow) {
+							_this.scroll2 = new BScroll(_this.$refs.wrapper2, {
+								click: true,
+								scrollY: true,
+								momentum: true
+							})
+							_this.scroll2.refresh()
+
+						}
+						if(_this.areaShow) {
+							_this.scroll3 = new BScroll(_this.$refs.wrapper3, {
+								click: true,
+								scrollY: true,
+								momentum: true
+							})
+							_this.scroll3.refresh()
+						}
+					}
+
 				})
 			},
 			InitScroll() {
@@ -370,7 +532,7 @@
 							scrollY: true,
 							momentum: true,
 							pullUpLoad: {
-								threshold: 10
+								threshold: 50
 							}
 						})
 						_this.scroll.on('pullingUp', (pos) => {
@@ -386,27 +548,24 @@
 				})
 			},
 			onLoadData() {
-				let _this = this
-				_this.curPage++
-					var data = {
-						listType: _this.listType,
-						countryId: _this.countryId,
-						distance: _this.distance,
-						lat: _this.lat,
-						lng: _this.lng,
-						curPage: _this.curPage,
-						pageSize: _this.pageSize,
-						islist: true
-					}
-				if(_this.provinceId != '') {
-					data.provinceI = _this.provinceId
+				var _this = this
+				_this.curPage++;
+				var data = {
+					listType: _this.listType,
+					countryId: _this.countryId,
+					distance: _this.distance = _this.distance > 0 ? _this.distance : 5,
+					//lat: _this.lat,
+					//lng: _this.lng,
+					lat: 22.93772,
+					lng: 113.38424,
+					provinceId: _this.provinceId || null,
+					cityId: _this.cityId || null,
+					areaId: _this.areaId || null,
+					curPage: _this.curPage,
+					pageSize: _this.pageSize,
+					islist: true
 				}
-				if(_this.cityId != '') {
-					data.cityId = _this.cityId
-				}
-				if(_this.areaId != '') {
-					data.areaId = _this.areaId
-				}
+
 				_this.$http.get(_this.url.qy.getEnterpriseListInfo, {
 					params: data
 				}).then((res) => {
@@ -424,924 +583,352 @@
 					}
 				})
 			},
-			onArea() {
-				this.curPage = 1
-				this.onIndex = 0
-				this.showLoading = false
-				//点击区域
-				if(this.areaShang) {
-					this.hide();
-				} else {
-					this.hide();
-					this.areaShang = true;
-					this.isActive = true;
-					this.maskActive = true;
-				}
-			},
-			onScreening() {
-				//点击筛选
-				this.show1 = !this.show1
-
-				this.curPage = 1
-				this.onIndex = 2
-				this.showLoading = false
-
-				if(this.show1) {
-					this.$nextTick(() => {
-						this.scroll2 = new BScroll(this.$refs.wrapper2, {
-							click: true,
-							scrollY: true,
-							pullUpLoad: {
-								threshold: -30
-							}
-						})
-					})
-				}
-
-				//地址选择框消失
-				this.hide();
-			},
-			onPrice() {
-
-				this.curPage = 1
-				this.onIndex = 1
-				this.showLoading = false
-
-				//点击价格
-				if(this.priceShang) {
-					this.hide();
-				} else {
-					this.hide();
-					this.priceShang = true;
-					this.maskActive = true;
-				}
-			},
-			changePrice(value, label) {
-
-				//改变价格，距离
-				var _this = this
-
-				//重置加载中
-				_this.showShop = false
-				_this.inloading = true
-
-				_this.listType = value
-				this.list = []
-				_this.getEnterpriseListInfo()
-
-				_this.$router.replace({
-					query: _this.merge(_this.$route.query, {
-						'listType': value
-					})
-				})
-
-				setTimeout(function() {
-					_this.priceType = label
-					_this.priceShang = false
-				}, 50)
-
-				this.hide()
-			},
-			changeType(value, label) { //改变类型
-				var _this = this;
-				setTimeout(function() {
-					_this.indType = label;
-					_this.typeShang = false;
-
-				}, 50);
-			},
-			goSearch() {
-				this.$router.push({
-					path: '/multi_user_mall/search'
-				})
-			},
-
-			// 切换样式
-			changeCss: function(index, kilometre) {
-
-				var _this = this
-
-				_this.distance = kilometre
-
-				_this.jl = kilometre
-
-				_this.distanceIndex = index
-			},
-			// 重置
-			reset() {
-				this.addressKey = 1
-				this.listType = '1'
-				this.countryId = 1
-				this.provinceId = ''
-				this.cityId = ''
-				this.areaId = ''
-				this.distance = 5
-				this.distanceIndex = 0
-				this.lat = ''
-				this.lng = ''
-				this.curPage = 1
-				this.pageSize = 20
-				this.show1 = false
-				this.$router.replace({
-					query: {}
-				})
-				this.getLg()
-			},
-			// 完成
-			complete() {
-				var _this = this
-
-				//重置加载中
-				_this.showShop = false
-				_this.inloading = true
-
-				this.show1 = false
-				this.list = []
-				this.getEnterpriseListInfo()
-				_this.$router.replace({
-					query: _this.merge(_this.$route.query, {
-						'distance': _this.distance,
-						'distanceIndex': _this.distanceIndex
-					})
-				})
-			},
-			distanceChange() {
-				var _this = this
-
-				_this.distance = _this.jl
-
-				for(var i = 0; i < _this.logolist.length; i++) {
-					if(_this.logolist[i] == _this.jl) {
-						_this.distanceIndex = i
-						return false
-					} else {
-						_this.distanceIndex = 50
-					}
-				}
-			},
-			selectCss: function(e) {
-				if(e.target.className.indexOf("li-selected") == -1) {
-					e.target.className = "item li-selected"; //切换按钮样式
-					var obox = e.target.parentNode;
-					var lis = obox.children;
-					for(var i = 1; i < lis.length; i++) {
-						if(lis[i] != e.target) {
-							lis[i].className = "item"
-						}
-					}
-				} else {
-					e.target.className = "item"; //切换按钮样式
-				}
-			},
-			goStoreDetail(id) {
-				this.$router.push({
-					path: '/multi_user_mall',
-					query: {
-						id: id
-					}
-				});
-			},
-			/*
-			 *     三级联动地址框选择
-			 */
-			itemsInit() {
-
-				var _this = this
-
-				let param = {
-					'parentId': _this.countryId //国家ID
-				}
-				this.$http.get(this.url.zone.address, {
-					params: param
-				}).then(resp => {
-					this.items = resp.data.data;
-					this.proviceItem = this.items;
-				})
-			},
-			next(id, name) {
-
-				var _this = this
-
-				//重置加载中
-				_this.showShop = false
-				_this.inloading = true
-
-				_this.list = []
-
-				if(_this.addressKey == 3) {
-					_this.areaShang = false
-					_this.isActive = false
-					_this.maskActive = false
-
-					_this.isdistrict = name
-
-					_this.region = _this.isprovince + _this.iscity + _this.isdistrict
-
-					_this.areaId = id //区级ID
-					_this.getEnterpriseListInfo()
-
-					_this.$router.replace({
-						query: _this.merge(_this.$route.query, {
-							'areaId': id,
-							'region': _this.isprovince + _this.iscity + _this.isdistrict
-						})
-					})
-					return
-				} else if(this.addressKey == 1) {
-
-					_this.isprovince = name
-
-					_this.region = _this.isprovince
-
-					_this.provinceId = id //省级ID
-					_this.getEnterpriseListInfo()
-
-					_this.$router.replace({
-						query: _this.merge(_this.$route.query, {
-							'provinceId': id,
-							'region': _this.isprovince
-						})
-					})
-				} else if(_this.addressKey == 2) {
-
-					_this.iscity = name
-					_this.region = _this.isprovince + _this.iscity
-
-					_this.cityId = id //市级ID
-					_this.getEnterpriseListInfo()
-
-					_this.$router.replace({
-						query: _this.merge(_this.$route.query, {
-							'cityId': id,
-							'region': _this.isprovince + _this.iscity
-						})
-					})
-				}
-
-				let param = {
-					'parentId': id
-				}
-				_this.$http.get(_this.url.zone.address, {
-					params: param
-				}).then(resp => {
-					_this.items = resp.data.data;
-					_this.addressKey++;
-					if(_this.addressKey == 2) {
-						_this.cityItem = _this.items;
-					} else if(_this.addressKey == 3) {
-						_this.districtItem = _this.items;
-						_this.addressDetail = name;
-					}
-				})
-				this.$refs.address.scrollTop = 0
-			},
-			provice() {
-				var _this = this
-
-				if(_this.$route.query.region) {
-					_this.items = _this.proviceItem
-					_this.addressKey = 1
-
-					_this.region = _this.isprovince
-					_this.$router.replace({
-						query: _this.merge(_this.$route.query, {
-							'cityId': _this.cityId,
-							'region': _this.isprovince
-						})
-					})
-
-					_this.$refs.address.scrollTop = 0
-				}
-			},
-			city() {
-				var _this = this
-
-				if(_this.cityItem) {
-					_this.items = _this.cityItem
-					_this.addressKey = 2
-				}
-				_this.region = _this.isprovince + _this.iscity
-				_this.$router.replace({
-					query: _this.merge(_this.$route.query, {
-						'cityId': _this.cityId,
-						'region': _this.isprovince + _this.iscity
-					})
-				})
-
-				_this.$refs.address.scrollTop = 0
-			},
-			district() {
-				if(this.districtItem) {
-					this.items = this.districtItem
-					this.addressKey = 3
-				}
-				this.region = this.isprovince + this.iscity + this.isdistrict
-				this.$refs.address.scrollTop = 0
-			},
-			hide() {
-				this.areaShang = false;
-				this.priceShang = false;
-				this.isActive = false;
-				this.maskActive = false;
-			}
 		}
 	}
 </script>
-<style>
-	.aa .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
-		color: #336FFF !important;
-	}
-	
-	.aa .vux-radio-label {
-		color: #336FFF !important;
-	}
-	
-	.aa .vux-no-group-title {
-		margin-top: 0;
-	}
-	/*
-	 *   类型推荐
-	*/
-	
-	#distanceType {
-		width: 100%;
-		position: absolute;
-		top: 0.9rem;
-		bottom: inherit;
-		max-height: 500%;
-		z-index: 600;
-	}
-	
-	.nav1 .vux-no-group-title {
-		margin-top: 0!important;
-	}
-	
-	.opPrice .vux-radio-label {
-		font-size: 0.24rem!important;
-	}
-	
-	.opPrice .weui-check__label .weui-cell__ft .weui-icon-checked:before {
-		color: #336FFF!important;
-	}
-	
-	.input-div .distance .weui-cell__bd input {
-		font-size: 0.24rem;
-		text-align: center!important;
-	}
-</style>
 <style lang="less" scoped>
-	/*banner轮播*/
-	
-	.swiper {
-		img {
-			width: 100%;
-			height: 2.3rem;
-			display: block;
-		}
-		.swiper-pagination-bullet {
-			background: #fff!important;
-			width: 8px;
-			height: 2px!important;
-		}
-		.swiper-pagination-bullet-active {
-			margin: -2px 4px!important;
-			height: 4px!important;
-			width: 4px!important;
-			background-color: transparent!important;
-			border: 2px solid #fff;
-			border-radius: 50%;
-		}
-	}
-	
-	.storelistMask {
-		top: 3rem!important;
-	}
-	
-	.h {
-		top: 1.8rem!important;
-	}
-	
-	.wrapper {
-		position: absolute;
-		width: 100%;
-		bottom: 1rem;
-		top: 1rem;
-		overflow: hidden;
-		.pr_box {
-			position: relative;
-			height: 100%;
-			z-index: 11;
-			background-color: white;
-			.null_box {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			}
-		}
-	}
-	
-	.storelist {
-		background: #fff;
-		height: 100%;
-	}
-	
-	.header {
-		/*position:relative !important;*/
-	}
-	
-	.nav1 {
-		width: 100%;
-		height: .9rem;
-		position: relative;
-		.pr {
+	.store_list_box {
+		background-color: white;
+		.masker {
+			position: fixed;
+			top: 0;
+			bottom: 0;
 			width: 100%;
 			height: 100%;
-			display: flex;
-			align-items: center;
-			position: relative;
-			background-color: white;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 12;
 		}
-		.top {
-			position: relative;
-			background-color: white;
-			height: 100%;
-			align-items: center;
-			width: 100%;
-			display: flex;
-		}
-		.z1115 {
-			z-index: 1115;
-		}
-		.z0 {
-			z-index: 0;
-		}
-		.areaDetail {
-			width: 2rem;
-			text-align: center;
-			overflow: hidden;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-		}
-		.address {
-			display: none;
-			transition: opacity 800ms;
-			opacity: 0;
-			position: absolute;
-			top: 0.9rem;
-			left: 0;
-			height: 6rem;
-			width: 100%;
-			background: #fff;
-			z-index: 501;
-			overflow: auto;
-			border-top: 1px solid #D8DFF0;
-			ul {
-				padding-left: 15px;
-				box-sizing: border-box;
-				li {
-					position: relative;
-					overflow: hidden;
-					text-align: left;
-					font-size: 0.24rem;
-					line-height: 0.85rem;
-					height: 0.85rem;
-					/*border-bottom: 1px solid #c8c7cc;*/
-					padding: 0 0.35rem;
-					list-style: none;
-				}
-				li:not(:last-child) {
-					box-sizing: border-box;
-					border-bottom: 1px solid #D8DFF0;
-				}
-			}
-			.category {
-				i {
-					font-size: 0.16rem;
-					color: #5497ff;
-				}
-				span {
-					display: inline-block;
-					color: #999;
-					padding: 0 10px;
-					font-size: 0.28rem;
-				}
-				span.active {
-					color: #000;
-					border-bottom: 0.04rem solid #256fff;
-				}
-			}
-		}
-		.area,
-		.price,
-		.type {
-			flex: 1;
-			display: flex;
-			justify-content: center;
-			p {
-				font-size: .28rem;
-				color: #1A2642;
-				i {
-					color: #90A2C7;
-				}
-				img {
-					width: 23%;
-					margin-left: 0.05rem;
-					vertical-align: middle;
-				}
-			}
-		}
-		.blue {
-			p {
-				color: #336FFF;
-			}
-		}
-	}
-	
-	.wrapper .content {
-		h2 {
-			padding-left: 3%;
-			font-size: .36rem;
-			color: #141C33;
-			font-weight: 600;
-			margin-top: .4rem;
-			span {
-				font-weight: normal;
-				color: #60719D;
-				font-size: .28rem;
-				display: block;
-				vertical-align: bottom;
-				padding-right: .2rem;
-			}
-		}
-		.pd_box {
-			padding: 0 0.19rem;
-			box-sizing: border-box;
-			.list:not(:last-child) {
-				border-bottom: 1px solid rgba(216, 223, 240, 1);
-			}
-		}
-		.list {
-			padding: 0.30rem 0;
-			box-sizing: border-box;
-			.item {
+		.tab_box {
+			.top {
+				height: 0.87rem;
 				display: flex;
-				.logo {
-					width: 2.4rem;
-					height: 1.62rem;
-					margin-right: 0.18rem;
-					/* display: flex;
+				position: relative;
+				background-color: white;
+				z-index: 111;
+				.item {
+					flex: 1;
+					display: flex;
 					align-items: center;
-					justify-content: center; */
+					justify-content: center;
+					font-size: 0.28rem;
+					/*font-family: PingFang-SC-Medium;*/
+					color: rgba(51, 51, 51, 1);
+					/*span {
+						width: 1.5rem;
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}*/
+					i {
+						color: rgb(144, 162, 199);
+						margin-left: 0.15rem;
+						transition: all 0.3s linear;
+					}
 					img {
-						width: 100%;
-						height: 100%;
+						width: 0.21rem;
+						height: auto;
+					}
+					.r180 {
+						transform: rotate(-180deg);
 					}
 				}
-				div {
-					/*flex: 1;*/
-					width: 5rem;
+				.blue {
+					color: #336FFF;
+					i {
+						color: #336FFF;
+					}
+				}
+			}
+			.top:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #D9D9D9;
+				color: #D9D9D9;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
+			}
+		}
+		.type_box {
+			li {
+				height: 0.88rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				font-size: 0.24rem;
+				font-family: PingFang-SC-Medium;
+				color: rgba(51, 51, 51, 1);
+				padding: 0 0.40rem;
+				box-sizing: border-box;
+				position: relative;
+				img {
+					width: 0.29rem;
+					height: auto;
+				}
+			}
+			li:not(:last-child):after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #D9D9D9;
+				color: #D9D9D9;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 0px;
+			}
+		}
+		.item_box {
+			width: 100%;
+			position: absolute;
+			background-color: white;
+			z-index: 15;
+			top: 0.87rem;
+		}
+		.screen_box {
+			position: absolute;
+			background-color: white;
+			z-index: 15;
+			top: 0.87rem;
+			bottom: 1rem;
+			right: 0;
+			width: 6.6rem;
+			box-sizing: border-box;
+			.pr_box2 {
+				height: 100%;
+				position: relative;
+				padding: 0.20rem;
+				box-sizing: border-box;
+				.logolist_box {
 					display: flex;
-					flex-direction: column;
-					justify-content: space-between;
-					.name {
-						font-size: 0.32rem;
-						font-family: PingFangSC-Medium;
-						color: rgba(26, 38, 66, 1);
-					}
-					.type {
+					align-items: center;
+					flex-wrap: wrap;
+					.item {
+						width: 1.92rem;
+						height: 0.66rem;
+						line-height: 0.66rem;
+						border-radius: 3px;
+						background: #F5F6FA;
 						font-size: 0.24rem;
-						font-family: PingFangSC-Regular;
-						color: rgba(115, 134, 173, 1);
+						text-align: center;
+						margin-bottom: 0.22rem;
 					}
-					.address {
+					.item:not(:nth-child(3n)) {
+						margin-right: 0.22rem;
+					}
+					.li_selected {
+						color: #336FFF;
+						background: #E4EBFB;
+					}
+				}
+				input {
+					font-size: 0.24rem;
+					width: 100%;
+					text-align: center;
+					background: #F5F6FA;
+					height: 0.7rem;
+					line-height: 0.7rem;
+					border-radius: 3px;
+					padding: 0.20rem 0;
+					box-sizing: border-box;
+				}
+				.btn_box {
+					display: flex;
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					width: 100%;
+					font-size: 0.26rem;
+					span {
+						height: 0.8rem;
+						line-height: 0.8rem;
+						display: inline-block;
+						text-align: center;
+					}
+					span:nth-child(1) {
+						width: 2.64rem;
+						background: #F5F6FA;
+						color: #336FFF;
+					}
+					span:nth-child(2) {
+						flex: 1;
+						background: #336FFF;
+						color: #fff;
+					}
+				}
+			}
+		}
+		.region_box {
+			display: flex;
+			bottom: 3rem;
+			width: 100%;
+			overflow: hidden;
+			li {
+				height: 0.80rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				font-size: 0.28rem;
+				/*font-family: PingFang-SC-Medium;*/
+				color: rgba(51, 51, 51, 1);
+				box-sizing: border-box;
+			}
+			.address_wrapper {
+				width: 33.333333333333336%;
+				overflow: hidden;
+				.blue {
+					color: #336FFF!important;
+				}
+			}
+		}
+		.top1,
+		.h {
+			top: 12.8%!important;
+		}
+		.wrapper {
+			position: absolute;
+			top: 0.87rem;
+			bottom: 1rem;
+			overflow: hidden;
+			width: 100%;
+			background-color: white;
+			.pr_box {
+				position: relative;
+				height: 100%;
+				z-index: 11;
+				background-color: white;
+				.null_box {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+				}
+			}
+		}
+		.wrapper .content {
+			h2 {
+				padding-left: 3%;
+				font-size: .36rem;
+				color: #141C33;
+				font-weight: 600;
+				margin-top: .4rem;
+				span {
+					font-weight: normal;
+					color: #60719D;
+					font-size: .28rem;
+					display: block;
+					vertical-align: bottom;
+					padding-right: .2rem;
+				}
+			}
+			.pd_box {
+				padding: 0 0.19rem;
+				box-sizing: border-box;
+				.list:not(:last-child):after {
+					content: " ";
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					height: 1px;
+					border-top: 1px solid rgba(216, 223, 240, 1);
+					color: rgba(216, 223, 240, 1);
+					-webkit-transform-origin: 0 0;
+					transform-origin: 0 0;
+					-webkit-transform: scaleY(0.5);
+					transform: scaleY(0.5);
+					left: 0px;
+				}
+			}
+			.list {
+				padding: 0.30rem 0;
+				position: relative;
+				box-sizing: border-box;
+				.item {
+					display: flex;
+					.logo {
+						width: 1.50rem;
+						height: 1.50rem;
+						margin-right: 0.18rem;
+						overflow: hidden;
 						display: flex;
-						justify-content: space-between;
-						span:nth-child(1) {
-							width: 3rem;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							white-space: nowrap;
-							-webkit-line-clamp: 1;
-							-webkit-box-orient: vertical;
+						align-items: center;
+						/*justify-content: center;*/
+						img {
+							width: 100%;
+							height: auto;
 						}
-						span {
+					}
+					div {
+						/*flex: 1;*/
+						width: 5rem;
+						display: flex;
+						flex-direction: column;
+						justify-content: space-between;
+						.name {
+							font-size: 0.32rem;
+							font-family: PingFangSC-Medium;
+							color: rgba(26, 38, 66, 1);
+						}
+						.type {
 							font-size: 0.24rem;
 							font-family: PingFangSC-Regular;
 							color: rgba(115, 134, 173, 1);
 						}
-					}
-					.sf {
-						span {
-							display: inline-block;
-							width: 1.02rem;
-							height: 0.34rem;
-							line-height: 0.34rem;
-							text-align: center;
-							border-radius: 3px;
-							font-size: 0.22rem;
-							font-family: PingFangSC-Regular;
-							margin-right: 0.20rem;
+						.address {
+							display: flex;
+							justify-content: space-between;
+							span:nth-child(1) {
+								width: 3rem;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+								-webkit-line-clamp: 1;
+								-webkit-box-orient: vertical;
+							}
+							span {
+								font-size: 0.24rem;
+								font-family: PingFangSC-Regular;
+								color: rgba(115, 134, 173, 1);
+							}
 						}
-						.lm {
-							color: #336FFF;
-							background: rgba(51, 111, 255, 0.1);
-							border: 1px solid rgba(51, 111, 255, 1);
+						.sf {
+							span {
+								display: inline-block;
+								width: 1.02rem;
+								height: 0.34rem;
+								line-height: 0.34rem;
+								text-align: center;
+								border-radius: 3px;
+								font-size: 0.22rem;
+								font-family: PingFangSC-Regular;
+								margin-right: 0.20rem;
+							}
+							.lm {
+								color: #336FFF;
+								background: rgba(51, 111, 255, 0.1);
+								border: 1px solid rgba(51, 111, 255, 1);
+							}
+							.ly {
+								color: #FF5365;
+								background: rgba(255, 83, 101, 0.1);
+								border: 1px solid rgba(255, 83, 101, 1);
+							}
 						}
-						.ly {
-							color: #FF5365;
-							background: rgba(255, 83, 101, 0.1);
-							border: 1px solid rgba(255, 83, 101, 1);
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	.mask {
-		display: none;
-		position: fixed;
-		top: 2.65rem;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.5);
-		opacity: 0;
-		z-index: 11;
-		transition: opacity 800ms;
-	}
-	
-	.maskTive {
-		display: block!important;
-		opacity: 1!important;
-	}
-	/*地址遮罩*/
-	
-	.storelist .vux-popup-dialog {
-		background: #fff;
-	}
-	
-	.change_area {
-		padding-top: .28rem;
-		.title {
-			padding-left: .2rem;
-			i {
-				font-size: .5rem;
-				color: #333;
-			}
-			.adre {
-				font-size: .24rem;
-				color: #1A2642;
-				position: relative;
-				top: -.1rem;
-				left: -.1rem;
-			}
-			.again {
-				color: #336FFF;
-				font-size: .28rem;
-				position: relative;
-				top: -.1rem;
-			}
-		}
-		.list {
-			width: 7.08rem;
-			margin: 0 auto;
-			/*border:1px solid #333;*/
-			padding-left: .12rem;
-			li {
-				width: 2.16rem;
-				height: .66rem;
-				line-height: .66rem;
-				background: #F5F6FA;
-				color: #333;
-				float: left;
-				margin-right: .2rem;
-				margin-bottom: .2rem;
-				border-radius: 4px;
-				text-align: center;
-			}
-			li.current {
-				background: #336FFF;
-				color: #fff;
-			}
-		}
-	}
-	
-	.storelist .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
-		color: #336FFF !important;
-	}
-	
-	.searchBox {
-		width: 100%;
-		height: 0.89rem;
-		background: #fff;
-		padding: 0.16rem 0.30rem;
-		border-top: 0.01rem solid #D8DFF0;
-		position: relative;
-		z-index: 1115;
-		box-sizing: border-box;
-		.search {
-			position: relative;
-			width: 100%;
-			border-radius: 15px;
-			overflow: hidden;
-			img {
-				position: absolute;
-				width: 0.32rem;
-				height: 0.32rem;
-				top: 0.13rem;
-				left: 0.26rem;
-			}
-			input {
-				width: 100%;
-				background: #F5F6FA;
-				color: #1A2642;
-				font-size: 0.24rem;
-				height: 0.59rem;
-				line-height: 0.59rem;
-				padding: 0rem 0.1rem 0rem 0.78rem;
-				box-sizing: border-box;
-				vertical-align: middle;
-			}
-			input::-webkit-input-placeholder {
-				color: #90A2C7 !important; // WebKit browsers 
-			}
-			input:-moz-placeholder {
-				color: #90A2C7 !important; // Mozilla Firefox 4 to 18 
-			}
-			input::-moz-placeholder {
-				color: #90A2C7 !important; //Mozilla Firefox 19+ /
-			}
-			input:-ms-input-placeholder {
-				color: #90A2C7 !important; //Internet Explorer 10+ */
-			}
-		}
-	}
-	
-	.searchBox:after {
-		content: " ";
-		position: absolute;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		height: 1px;
-		border-top: 1px solid #D8DFF0;
-		color: #D8DFF0;
-		-webkit-transform-origin: 0 0;
-		transform-origin: 0 0;
-		-webkit-transform: scaleY(0.5);
-		transform: scaleY(0.5);
-		left: 0px;
-		z-index: 1115;
-	}
-</style>
-
-<style lang="less" scoped>
-	.wrapper2 {
-		height: 80%;
-		overflow: hidden;
-		z-index: 750;
-		.content {
-			padding-top: 0.4rem;
-			padding-bottom: 0.7rem;
-		}
-	}
-	
-	.screen {
-		height: 100%;
-		position: relative;
-		z-index: 1117;
-	}
-	
-	.screen .vux-popup-dialog {
-		background: #fff;
-	}
-	
-	.screening {
-		width: 6.6rem;
-		font-family: PingFangSC-Regular;
-		font-size: 0.28rem;
-		color: #90A2C7;
-		letter-spacing: 0;
-		list-style: none;
-		li {
-			float: left;
-			background: #F5F6FA;
-			font-size: 0.24rem;
-			text-align: center;
-			list-style: none;
-		}
-		.logo {
-			overflow: hidden;
-			margin-left: 0.25rem;
-			margin-bottom: 0.45rem;
-			img {
-				float: right;
-				width: 5%;
-				margin-right: 0.255rem;
-			}
-			.logolist {
-				margin: 0.24rem 0 0 0;
-				color: #1A2642;
-				.item {
-					width: 1.92rem;
-					height: 0.66rem;
-					line-height: 0.66rem;
-					margin: 0 0.18rem 0.18rem 0;
-					border-radius: 3px;
-				}
-				.distance {
-					width: 96%;
-					background: #F5F6FA;
-					height: 0.7rem;
-					line-height: 0.7rem;
-					box-sizing: border-box;
-					border-radius: 3px;
-					.weui-cell__bd>.weui-input {
-						text-align: center!important;
 					}
 				}
-				.weui-cell:before {
-					border-top: none;
-				}
 			}
 		}
-		.li-selected {
-			color: #336FFF;
-			background: #E4EBFB;
-		}
-		.screenlist {
-			overflow: hidden;
-			margin-bottom: 0.35rem;
-			margin-left: 0.18rem;
-			color: #1A2642;
-			.category {
-				margin-left: 0.07rem;
-				margin-bottom: 0.24rem;
-				color: #90A2C7;
-			}
-			.item {
-				width: 1.96rem;
-				padding: 0.2rem 0;
-				border-radius: 0.04rem;
-				margin-right: 0.18rem;
-				margin-bottom: 0.18rem;
-			}
-		}
-	}
-	
-	.screen .bottom {
-		position: fixed;
-		bottom: 1rem;
-		font-size: 0.28rem;
-		text-align: center;
-		.reset {
-			float: left;
-			width: 2.64rem;
-			padding: 0.3rem 0;
-			background: #F5F6FA;
-			color: #336FFF;
-		}
-		.complete {
-			float: left;
-			width: 3.96rem;
-			padding: 0.3rem 0;
-			background: #336FFF;
-			color: #fff;
-		}
-	}
-</style>
-
-<style lang="less">
-	.logo {
-		.weui-cells {
-			margin-top: 0;
-		}
-		.weui-cell {
-			padding: 0 0.24rem 0 0;
-		}
-		.vux-no-group-title {
-			margin-top: 0;
-		}
-		.weui-cells:before {
-			border-top: none;
-		}
-		.weui-cells:after {
-			border-bottom: none;
-		}
-		.vux-label {
-			font-size: 0.28rem;
-			color: #90A2C7;
-		}
-	}
-	
-	.screen .vux-popup-dialog {
-		min-height: 100%;
-		height: 100%;
-	}
-	
-	.screen .vux-popup-dialog.vux-popup-right {
-		height: 100%;
 	}
 </style>

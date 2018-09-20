@@ -18,6 +18,7 @@ var url = {
 		fileuploadImage: uri2 + '/v1/fileupload/image', //上传图片
 		login: uri2 + '/public/v1/login', //云中心登录
 		userLogin: uri1 + '/public/v1/user/login', //用户登录
+		loginByUnionId:uri1 + '/public/v1/user/loginByUnionId',
 		logout: uri1 + '/logout/v1', //用户登出
 		userRegister: uri1 + '/public/v1/user/register', //用户注册
 		forgetPassword: uri1 + '/public/v1/user/forgetPassword', //重置登录密码
@@ -114,7 +115,8 @@ var url = {
 	},
 	goods: {
 		getGoodsInfo: uri4 + '/public/v1/goods/getGoodsInfo', //获取商品信息接口
-		buynow: uri3 + '/bodyIds/v1/order/buynow'
+		buynow: uri3 + '/bodyIds/v1/order/buynow',
+		getGoodsOrderConfirmUseBalances:uri4 + '/param/v1/goods/getGoodsOrderConfirmUseBalances',//商品下单
 	},
 	lottery: {
 		getStatInfo: uri5 + '/public/v1/lottery/getStatInfo', //获取抽奖首页接口

@@ -135,7 +135,13 @@
 									signType: res.data.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
 									paySign: res.data.data.paySign, // 支付签名  
 									success: function(res) {
-										WeixinJSBridge.call('closeWindow')
+										_this.payOptions.showPayMode = false
+										_this.$vux.toast.show({
+											text: '支付成功',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
 									},
 									error: function() {
 										_this.$vux.toast.show({
