@@ -156,11 +156,18 @@
 						//重置默认值
 						_this.payList = res.data.data.lists
 
-						_this.payList.forEach(function(index, value, array) {
-							_this.payList[value].isChoice = false
+						_this.payList.forEach(function(value, index, array) {
+							if(_this.$store.state.page.isWx == true && value.payTypeName == '支付宝') {
+								array.splice(index, 1)
+							} else if(_this.$store.state.page.isWx == false && value.payTypeName == '微信') {
+								array.splice(index, 1)
+							}
+							
+							_this.payList[index].isChoice = false
 							_this.payList[0].isChoice = true
 							_this.payModeType = _this.payList[0].payType
 						})
+
 					}
 				})
 			},
@@ -173,7 +180,7 @@
 				var _this = this
 				_this.options.show()
 				//重置默认值
-				
+
 				_this.payList.forEach(function(index, value, array) {
 					_this.payList[value].isChoice = false
 					_this.payList[0].isChoice = true
@@ -182,21 +189,20 @@
 			//支付方式改变时
 			changePayMode(i, type) {
 				var _this = this
-				
+
 				_this.payList.forEach(function(index, value, array) {
 					_this.payList[value].isChoice = false
 					_this.payList[i].isChoice = true
 				})
-				
+
 				this.$forceUpdate()
-				
+
 				_this.payModeType = type
 
 				_this.payModeIndex = i
-				
+
 				_this.options.changePay(type)
 
-				
 			},
 			//倒计时
 			countdown(item) {

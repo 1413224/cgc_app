@@ -255,6 +255,7 @@
 				var _this = this
 
 				let pid = sessionStorage['_openid_']
+				let accessCode = sessionStorage['_accessCode_']
 
 				let params = {
 					audience: 'user',
@@ -264,8 +265,9 @@
 					terminal: _this.url.client
 				}
 				if(pid) {
-					params.type = 1;
-					params.unionid = pid;
+					params.type = 1
+					params.unionid = pid
+					params.accessCode = accessCode
 				}
 
 				_this.$http.post(this.url.user.userLogin, params).then(function(res) {

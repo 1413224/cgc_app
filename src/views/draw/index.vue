@@ -52,11 +52,11 @@
 						</div>
 					</div>
 
-					<div class="head">
+					<div class="head" >
 						<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
 						<div class="list">
 							<p class="has">我的中奖</p>
-							<ul class="ul-list">
+							<ul class="ul-list" v-if="$store.state.page.isLogin == 'true'">
 								<li @click="toLuckyrank(0)">
 									<p class="status">中奖次数</p>
 									<p class="money">{{userLottery.lotteryNum}}</p>
@@ -195,7 +195,7 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.info = res.data.data
-						_this.userLottery = _this.info.userLottery
+						_this.userLottery = _this.info.userLottery || {}
 						_this.recommendMessage = _this.info.recommendMessage
 						//数字动画
 						TweenMax.to(_this.$data, 1.5, {

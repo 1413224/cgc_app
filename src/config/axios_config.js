@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
-import store from '@/store'
+import store from '@/store/index'
 import isload from '@/components/isload'
 import router from '@/router'
 import url from '../config/url.js'
-import { base64_decode } from '../global/course.js'
+import { base64_decode, base64_encode } from '../global/course.js'
 
 import MD5 from 'js-md5'
 
@@ -113,10 +113,10 @@ axios.interceptors.response.use(res => {
 			router.push({
 				path: '/user/login'
 			})
-			
-			if(res.data.status == 'user-0020'){
+
+			if(res.data.status == 'user-0020') {
 				var t = '用户不存在，请重新注册'
-			}else{
+			} else {
 				var t = '登录已过期,请重新登录'
 			}
 
@@ -139,6 +139,21 @@ axios.interceptors.response.use(res => {
 		} else if((res.data.status == 'utils007' || res.data.status == 'utils010') && URL == '/user/param/v1/user/getBasicInfo') {
 			//重复登录 获取个人信息接口 改变登录状态
 			localStorage.setItem('isLogin', false)
+		} else if(res.data.status == 'utils009') {
+			//微信token过期 自动重新登录  
+			axios.post(url.user.loginByUnionId, {
+				accessCode: sessionStorage['_accessCode_'],
+				unionid: sessionStorage['_openid_'],
+				platformId: url.platformId,
+				type: 0
+			}).then((res) => {
+				if(res.data.status == "00000000") {
+					let hash = base64_encode(res.data.data)
+					store.state.user.userId = res.data.data.id
+					localStorage.setItem('_HASH_', hash)
+					localStorage.setItem('isLogin', true)
+				}
+			})
 		} else if(URL != '/user/param/v1/user/getBasicInfo') {
 			//其他接口 提示
 			Vue.$vux.toast.show({
