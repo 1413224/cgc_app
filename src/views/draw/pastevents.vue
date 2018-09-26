@@ -99,7 +99,7 @@
 </template>
 
 <script>
-	import videojs from 'video.js'
+	// import videojs from 'video.js'
 	import BScroll from 'better-scroll'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import settingHeader from '@/components/setting_header'

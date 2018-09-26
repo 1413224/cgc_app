@@ -205,7 +205,7 @@
 	import { Popup, Group, Cell, XNumber, XInput } from 'vux'
 	import payMode from '@/components/payMode'
 	import addressMode from '@/views/member/address/select_address'
-	import Integral from '../multi_user_mall/components/Integral'
+	import Integral from '../multi_user_mall/components/integral'
 	export default {
 		components: {
 			settingHeader,

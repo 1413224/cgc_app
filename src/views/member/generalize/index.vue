@@ -25,25 +25,29 @@
 							<div class="clear"></div>
 						</a>
 					</div> -->
-					<div class="new" v-for="(item,index) in articleList" :key="index" @click="goDetail(item.articleId)">
-						<p class="newTitle">{{item.title}}</p>
-						<!-- <div class="right" v-if="item.thumb.length"><img :src='item.thumb[0].original' alt=""></div> -->
-						<div class="tuwap" v-if="item.thumb">
-							<div class="imgs" v-for="(itemimg,index) in item.thumb">
-								<img :src="itemimg.original" alt="">
+					<template v-for="(item,index) in articleList">
+						<div v-if="item.thumb && item.thumb.length>1" class="new" :key="index"
+							 @click="goDetail(item.articleId)">
+							<p class="newTitle">{{item.title}}</p>
+							<div class="tuwap clearfix">
+								<div class="imgs" v-for="(itemimg,index) in item.thumb">
+									<img :src="itemimg.original" alt="">
+								</div>
+							</div>
+							<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>
+						</div>
+						<div class="new clearfix" v-else :key="index">
+							<div class="left">
+								<p class="newTitle">{{item.title}}</p>
+								<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>
+							</div>
+							<div class="right">
+								<div class="imgs" v-for="(itemimg,index) in item.thumb">
+									<img :src="itemimg.original" alt="">
+								</div>
 							</div>
 						</div>
-						<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>
-						<div class="clear"></div>
-					</div>
-
-					<!-- <div class="new oneImage">
-						<p class="newTitle">CGC区块链共享经济引领传统产业规模化转型升级</p >
-						<div class="right"><img src="../../../assets/images/member/index01.jpg" alt=""></div>
-						<p class="newBottom">共享经济 &nbsp;<span>2018.5.7 &nbsp;12：00</span></p >
-						<div class="clear"></div>
-					</div> -->
-
+					</template>
 				</div>
 				<loading v-if="show"></loading>
 				<noMore v-if="showNomore"></noMore>
@@ -95,7 +99,7 @@
 		},
 		mounted() {
 			this.InitScroll();
-			this.getArticleCategory();
+			this.getArticleCategory();//获取分类
 		},
 		methods: {
 
@@ -190,7 +194,8 @@
 							// if(len == _this.articleList.length){
 							// 	_this.showNomore = true;
 							// }
-							if(res.data.result.lists.length < 10) {
+							// console.log(res.data.data.list.length)
+							if(res.data.data.list.length < 10) {
 								// _this.show = false
 								_this.showNomore = true
 							}
@@ -217,7 +222,7 @@
 					params: {
 						level: 1,
 						curPage: 1,
-						pageSize: 8
+						pageSize: 20
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -235,7 +240,7 @@
 			onLoadDataFirst(index, id) {
 				let _this = this
 				_this.flage = true
-				_this.actTab = index
+				_this.actTab = index  //控制默认选中
 				_this.show = false
 				_this.showNomore = false
 				_this.page = 1
@@ -388,7 +393,7 @@
 			}
 			.new {
 				border-bottom: 1px solid #D8DFF0;
-				padding-bottom: 0.2rem;
+				padding-bottom: 0.5rem;
 				padding-left: 0.24rem;
 				padding-right: 0.16rem;
 				.newTitle {
@@ -398,6 +403,11 @@
 					color: #1A2642;
 					line-height: 0.45rem;
 					width: 100%;
+					overflow: hidden;
+					text-overflow:ellipsis;
+		            display: -webkit-box;
+		            -webkit-box-orient: vertical;
+		            -webkit-line-clamp: 2;
 				}
 				.newBottom {
 					color: #7386AD;
@@ -408,20 +418,28 @@
 						color: #7386AD;
 					}
 				}
-				/* .right{
+				.left{
+					float: left;
+					width: 4.4rem;
+				}
+				.right{
+					float: right;
+					width: 2.3rem;
+					height: 1.64rem;
 					img{
-						width:2.2rem;
-					    height:1.2rem;
-					    margin-top: 0.35rem;
+						width: 100%;
+						height: 100;
 					}
-				    
-				} */
+				}
 				.tuwap {
-					display: flex;
-					height: 1.85rem;
+					/*display: flex;*/
 					justify-content: space-between;
 					.imgs {
-						flex: 1;
+						/*flex: 1;*/
+						width: 2.3rem;
+						height: 1.64rem;
+						float: left;
+						margin-right:.05rem;
 						img {
 							width: 95%;
 							height: 100%;
