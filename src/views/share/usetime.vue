@@ -310,7 +310,21 @@
 							position: 'top',
 							text: '订单不存在'
 						})
-					} 
+					}else if(res.data.status == "goods-1000"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '开启设备失败，请稍后重试'
+						})
+					}else if(res.data.status == "goods-1001"){
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'top',
+							text: '暂停设备失败，请稍后重试'
+						})
+					}
 				})
 				
 			},

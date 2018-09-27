@@ -27,9 +27,9 @@
 			</div>
 		</div>
 		<div class="fix-box">
-			<div class="one">
+			<!--<div class="one">
 				<div class="left">
-					<!--通用积分-->
+					
 					<img :src="'./static/share/tyjf.png'" alt="" />
 				</div>
 				<div class="right">
@@ -39,7 +39,7 @@
 			</div>
 			<div class="two" v-if="value">
 				<input type="number" v-model="info.recommendBalance" @input="inputChange" placeholder="请输入使用的通用积分" />
-			</div>
+			</div>-->
 			<div class="three">
 				<div class="left">
 					<p>需付款：</p>
@@ -48,6 +48,38 @@
 				<div class="right" @click="submit()">确认提交</div>
 			</div>
 		</div>
+		<!--通用积分-->
+		<div class="middle2 pr" @click="showIntegral = true">
+			<div class="left">
+				<div>
+					<img :src="'./static/images/qian.png'" />
+					<p>通用积分</p>
+				</div>
+				<p class="money">可用：{{info.availableBalance}}</p>
+			</div>
+			<div class="right">
+				<p>已抵用<i class="money">¥ {{Number(info.recommendBalance).toFixed(2)}}</i></p>
+				<i class="iconfont icon-arrow-right rj"></i>
+			</div>
+		</div>
+
+		<popup v-model="showIntegral">
+			<div class="integral_popup">
+				<div class="pd">
+					<p class="title">通用积分使用</p>
+					<div class="tip">
+						<p>使用金额</p>
+						<p>可用：{{info.availableBalance}}</p>
+					</div>
+					<div class="input-div">
+						<p>¥</p>
+						<input type="number" v-model="info.recommendBalance" @input="inputChange" placeholder="请输入通用积分数">
+					</div>
+					<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
+				</div>
+				<div class="btn" @click="showIntegral = false">确定</div>
+			</div>
+		</popup>
 
 		<popup class="coupon-popup" v-model="show">
 			<div class="pr-box">
@@ -124,7 +156,8 @@
 				condition: 0,
 				discount: 0,
 				recommendBalance: 0,
-				payParmars:{}
+				payParmars: {},
+				showIntegral: false,
 			}
 		},
 		components: {
@@ -134,7 +167,7 @@
 			payMode
 		},
 		created() {
-			
+
 			var _this = this
 
 			this.getEquipmentOrderConfirmInfo(this.$route.query.equipNumber, this.$route.query.skuId)
@@ -378,8 +411,185 @@
 		}
 	}
 </script>
-
+<style lang="less">
+	.integral_popup {
+		.input-div {
+			width: 100%;
+			height: 0.8rem;
+			margin-top: 0.15rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			p {
+				font-size: 0.36rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(53, 53, 53, 1);
+				margin-right: 0.20rem;
+			}
+			input {
+				flex: 1;
+				height: 100%;
+				font-size: 0.50rem;
+			}
+		}
+	}
+	
+	.number-box .weui-cell {
+		padding-left: 0!important;
+		padding-right: 0!important;
+	}
+	
+	.number-box .weui-cell:before {
+		border-top: none;
+	}
+</style>
 <style lang="less" scoped>
+	.pr {
+		position: relative;
+	}
+	
+	.pr:after {
+		content: " ";
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		height: 1px;
+		border-top: 1px solid #E1E1E1;
+		color: #E1E1E1;
+		-webkit-transform-origin: 0 0;
+		transform-origin: 0 0;
+		-webkit-transform: scaleY(0.5);
+		transform: scaleY(0.5);
+		left: 0px;
+	}
+	
+	.middle2 {
+		height: 1.40rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 0.20rem;
+		box-sizing: border-box;
+		background-color: white;
+		.left {
+			display: flex;
+			align-items: center;
+			div {
+				width: 1.28rem;
+				height: 0.46rem;
+				background: rgba(242, 48, 48, 1);
+				border-radius: 23px;
+				border: 1px solid rgba(242, 48, 48, 1);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				img {
+					width: 0.22rem;
+					height: 0.22rem;
+					margin-right: 0.07rem;
+				}
+				p {
+					font-size: 0.20rem;
+					font-family: Helvetica;
+					color: rgba(255, 255, 255, 1);
+				}
+			}
+			.money {
+				margin-left: 0.20rem;
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(53, 53, 53, 1);
+			}
+		}
+		.right {
+			display: flex;
+			align-items: center;
+			p {
+				font-size: 0.28rem;
+				font-family: PingFangSC-Regular;
+				color: rgba(53, 53, 53, 1);
+				.money {
+					color: #F23030;
+				}
+			}
+			.rj {
+				font-size: 0.40rem;
+				color: #7386ad;
+			}
+		}
+	}
+	
+	.integral_popup {
+		height: 8.36rem;
+		background-color: white;
+		position: relative;
+		.pd {
+			padding: 0 0.30rem;
+			box-sizing: border-box;
+		}
+		.title {
+			font-size: 0.32rem;
+			font-family: Adobe Heiti Std R;
+			color: rgba(34, 34, 34, 1);
+			text-align: center;
+			padding: 0.40rem 0;
+		}
+		.tip {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 0.30rem;
+			p:nth-child(1) {
+				font-size: 0.28rem;
+				font-family: Adobe Heiti Std R;
+				color: rgba(34, 34, 34, 1);
+			}
+			p:nth-child(2) {
+				font-size: 0.28rem;
+				color: rgba(160, 160, 160, 1);
+			}
+		}
+		.input-div {
+			padding-bottom: 0.10rem;
+			position: relative;
+		}
+		.input-div:after {
+			content: " ";
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 1px;
+			border-top: 1px solid #E1E1E1;
+			color: #E1E1E1;
+			-webkit-transform-origin: 0 0;
+			transform-origin: 0 0;
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5);
+			left: 0px;
+		}
+		.gz {
+			text-align: right;
+			margin-top: 0.20rem;
+			font-size: 0.24rem;
+			font-family: Adobe Heiti Std R;
+			color: rgba(46, 106, 255, 1);
+		}
+		.btn {
+			height: 0.90rem;
+			line-height: 0.90rem;
+			text-align: center;
+			background: rgba(51, 111, 255, 1);
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			font-size: 0.32rem;
+			font-family: PingFang-SC-Medium;
+			color: rgba(254, 254, 254, 1);
+		}
+	}
+	
 	.coupon-popup {
 		box-sizing: border-box;
 		/*background: #F5F6FA;*/
@@ -653,7 +863,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 0 0.26rem;
+				padding: 0 0.20rem;
 				box-sizing: border-box;
 				p:nth-child(1) {
 					font-size: 0.28rem;

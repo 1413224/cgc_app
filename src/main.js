@@ -238,7 +238,7 @@ const history = window.sessionStorage
 for(var i = 0, len = history.length; i < len; i++) {
 	var key = history.key(i)
 	var value = history.getItem(key)
-	if(key != 'isPopup' && key != 'isPay' && key != 'isZc' && key != '_openid_' && key != 'parentUserId') {
+	if(key != 'isPopup' && key != 'isPay' && key != 'isZc' && key != '_openid_' && key != 'parentUserId' && key != '_accessCode_') {
 		history.removeItem(key)
 	}
 }
@@ -271,9 +271,7 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
-
 	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
-
 		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
 		let ua = window.navigator.userAgent.toLowerCase()
 		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
@@ -286,11 +284,8 @@ router.beforeEach(function(to, from, next) {
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []
-
 	store.state.page.isLogin = localStorage['isLogin']
-
 	let info = base64_decode(localStorage['_HASH_'])
-
 	if(info) {
 		store.state.user.userId = info.id
 	}
@@ -314,12 +309,10 @@ router.beforeEach(function(to, from, next) {
 	var wechatInfo = navigator.userAgent.match(/MicroMessenger\/([\d\.]+)/i)
 	if(wechatInfo) {
 		if(wechatInfo[1] < '6.6.7') {
-
 			//touchEnd事件
 			document.addEventListener('touchend', function(event) {
 				startX = 0
 			}, false)
-
 			window.onpopstate = function(e) {
 				if((Date.now() - endTime) < 377) {
 					store.state.page.back = false
@@ -329,10 +322,8 @@ router.beforeEach(function(to, from, next) {
 					store.state.page.back = true
 				}
 			}
-
 			const toIndex = history.getItem(to.path)
 			const fromIndex = history.getItem(from.path)
-
 			if(toIndex) {
 				if(!fromIndex || parseInt(toIndex, 10) > parseInt(fromIndex, 10) || (toIndex === '0' && fromIndex === '0')) {
 					// 判断是否是ios左滑返回
@@ -422,7 +413,6 @@ router.beforeEach(function(to, from, next) {
 		document.addEventListener('touchend', function(event) {
 			startX = 0
 		}, false)
-
 		window.onpopstate = function(e) {
 			if((Date.now() - endTime) < 377) {
 				store.state.page.back = false
@@ -432,10 +422,8 @@ router.beforeEach(function(to, from, next) {
 				store.state.page.back = true
 			}
 		}
-
 		const toIndex = history.getItem(to.path)
 		const fromIndex = history.getItem(from.path)
-
 		if(toIndex) {
 			if(!fromIndex || parseInt(toIndex, 10) > parseInt(fromIndex, 10) || (toIndex === '0' && fromIndex === '0')) {
 				// 判断是否是ios左滑返回
@@ -493,7 +481,6 @@ router.beforeEach(function(to, from, next) {
 			}
 		}
 	}
-
 	if(/\/http/.test(to.path)) {
 		let url = to.path.split('http')[1]
 		window.location.href = `http${url}`

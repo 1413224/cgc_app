@@ -146,7 +146,7 @@
 						</div>
 					</div>
 				</div>
-				<popup v-model="show" class="popwrap">
+				<popup v-model="show" :show-mask="false" class="popwrap">
 					<p class="tit">选择设备</p>
 					<div class="ov-box">
 						<div class="list equipment" v-for="(item,index) in equipList" :key="index" @click="activeEq(index,item.num)">
@@ -552,6 +552,8 @@
 			navActive(index, iIndex) {
 				this.navIndex = index
 				this.showIndex = iIndex
+				this.isW = false
+				
 				// this.$route.query.oIndex = iIndex
 				// 
 				if(iIndex == 2) {
@@ -803,7 +805,6 @@
 				var _this = this
 				_this.$http.get(_this.url.share.getEquipmentInfo2, {
 					params: {
-
 						chainsId: _this.chainsId
 					}
 				}).then((res) => {

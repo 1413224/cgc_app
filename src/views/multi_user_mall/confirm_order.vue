@@ -94,7 +94,7 @@
 					<img class="right-img" :src="'./static/images/b-right.png'" />
 				</div>
 			</div>
-			<div class="middle">
+			<div class="middle" @click="showIntegral = true">
 				<div class="left">
 					<div>
 						<img :src="'./static/images/qian.png'" />
@@ -102,7 +102,7 @@
 					</div>
 					<p class="money">可用：{{availableBalance}}</p>
 				</div>
-				<div class="right" @click="showIntegral = true">
+				<div class="right">
 					<p>已抵用<i>¥ {{Number(integralNum).toFixed(2)}}</i></p>
 					<img :src="'./static/images/b-right.png'" />
 				</div>

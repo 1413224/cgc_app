@@ -140,18 +140,20 @@ axios.interceptors.response.use(res => {
 			//重复登录 获取个人信息接口 改变登录状态
 			localStorage.setItem('isLogin', false)
 		} else if(res.data.status == 'utils009') {
-			//微信token过期 自动重新登录  
+			//微信token过期 自动重新登录   
 			axios.post(url.user.loginByUnionId, {
 				accessCode: sessionStorage['_accessCode_'],
 				unionid: sessionStorage['_openid_'],
 				platformId: url.platformId,
-				type: 0
+				terminal: url.client,
+				type: 1
 			}).then((res) => {
 				if(res.data.status == "00000000") {
 					let hash = base64_encode(res.data.data)
 					store.state.user.userId = res.data.data.id
 					localStorage.setItem('_HASH_', hash)
 					localStorage.setItem('isLogin', true)
+					location.reload()
 				}
 			})
 		} else if(URL != '/user/param/v1/user/getBasicInfo') {

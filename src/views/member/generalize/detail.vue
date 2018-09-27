@@ -35,13 +35,7 @@
 
 		},
 		created() {
-			var _this = this 
-			
-			_this.$router.replace({
-				query: _this.merge(_this.$route.query, {
-					'userId': _this.$store.state.user.userId
-				})
-			})
+			var _this = this
 		},
 		mounted() {
 			this.onLoadData()
@@ -59,7 +53,13 @@
 					if(res.data.status == "00000000") {
 						_this.data = res.data.data
 
-						if(res.data.data.userId){
+						_this.$router.replace({
+							query: _this.merge(_this.$route.query, {
+								'userId': _this.$store.state.user.userId
+							})
+						})
+
+						if(res.data.data.userId) {
 							sessionStorage.setItem('parentUserId', res.data.data.userId)
 						}
 					}
@@ -70,9 +70,13 @@
 </script>
 
 <style lang='less' scoped>
+	iframe{
+		width: 100% !important;
+	}
 	.content {
 		padding: 0.15rem 0.30rem;
 		box-sizing: border-box;
+		background: #fff;
 		.tit {
 			font-size: 0.48rem;
 			font-family: MicrosoftYaHei;

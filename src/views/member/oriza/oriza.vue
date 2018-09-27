@@ -19,8 +19,7 @@
 		},
 		methods: {
 			grant() {
-
-				let _this = this;
+				let _this = this
 				// 跳转到微信授权页面
 				_this.$http.get(_this.url.origin.getAuthorizationUrl, {
 					params: {
@@ -31,9 +30,8 @@
 					if(res.data.status == '00000000') {
 						let data = res.data
 						window.location.href = data.data
-						
 					}
-				});
+				})
 			},
 			updateRouter() {
 				var _this = this
