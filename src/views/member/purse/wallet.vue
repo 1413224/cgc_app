@@ -218,7 +218,7 @@
 
 <style lang="less">
 	.wallet-box {
-		font-family: PingFangSC-Medium;
+		/*font-family: PingFangSC-Medium;*/
 		padding-bottom: 0.20rem;
 		background-color: #F5F6FA;
 		.w_bg {
