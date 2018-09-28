@@ -113,7 +113,7 @@
 					text: '请先登录再体验此功能'
 				})
 				this.$router.replace({
-					path: '/user/reg'
+					path: '/user/login'
 				})
 			}
 

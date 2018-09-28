@@ -23,7 +23,7 @@
 				// 跳转到微信授权页面
 				_this.$http.get(_this.url.origin.getAuthorizationUrl, {
 					params: {
-						platformId: '2018050800000002', //2018050800000002
+						platformId: _this.url.platformId, //2018050800000002
 						type: 1
 					}
 				}).then((res) => {

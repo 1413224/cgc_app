@@ -344,7 +344,8 @@
 					p:nth-child(2) {
 						font-size: 0.48rem;
 						color: rgba(115, 134, 173, 1);
-						margin-top: 0.10rem
+						margin-top: 0.10rem;
+						
 					}
 				}
 			}

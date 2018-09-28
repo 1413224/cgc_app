@@ -22,7 +22,7 @@
 								</div>
 							</div>
 							<p class="pm" v-if="$store.state.page.isLogin == 'true'">{{tabIndex == 0 ?userRank.number:userRank.lotteryBonus}}</p>
-							<div v-else class="login_btn" @click="$router.push({path:'/user/reg'})">点击登录</div>
+							<div v-else class="login_btn" @click="$router.push({path:'/user/login'})">点击登录</div>
 						</div>
 					</div>
 					<div class="bottom">
