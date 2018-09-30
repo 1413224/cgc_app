@@ -97,6 +97,7 @@
 
 				},
 				toPay(type) {
+					// alert("发送"+_this.parentOrderSn)
 					_this.$http.post(_this.url.user.rechargeBalance, {
 						userId: _this.$store.state.user.userId,
 						platformId: _this.url.platformId,
@@ -108,7 +109,7 @@
 					}).then((res) => {
 						if(res.data.status == "00000000") {
 							_this.parentOrderSn = res.data.data.parentOrderSn
-
+							// alert("订单编号"+_this.parentOrderSn)
 							if(type == 1) {
 								wx.config({
 									debug: false,
@@ -142,6 +143,7 @@
 											position: 'top',
 											width: '50%'
 										})
+										_this.parentOrderSn = ""
 									},
 									error: function() {
 										_this.$vux.toast.show({

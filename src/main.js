@@ -13,7 +13,7 @@ import './config/wy_rem'
 import { Group, DatetimeRange, Cell, XDialog, Tab, TabItem, CellBox, XHeader, Scroller, LoadMore, Confirm, Popup, Toast, Swiper, InlineXNumber, CheckIcon, CellFormPreview, XSwitch, XNumber, Badge, Previewer, Timeline, TimelineItem, Rater, XTextarea, Radio, Swipeout, SwipeoutItem, SwipeoutButton } from 'vux'
 import { TransferDom } from 'vux'
 import FastClick from 'fastclick'
-import 'video.js/dist/video-js.css'
+// import 'video.js/dist/video-js.css'
 import VueLazyLoad from 'vue-lazyload'
 import mainApp from './global/global' //时间控件  全局时间过滤器
 import { base64_encode, base64_decode } from './global/course.js'

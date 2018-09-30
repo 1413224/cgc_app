@@ -121,7 +121,13 @@
 			document.title = this.$route.query.text ? this.$route.query.text : '会员码'
 			this.title = this.$route.query.text ? this.$route.query.text : '会员码'
 
-			this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
+
+			if(location.host == "health.cgc999.com"){
+				this.qrcodeVal = 'http://health.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
+			}else{
+				this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
+			}
+
 			this.width = Number(document.body.clientWidth * 0.5866666666666666)
 
 			this.getUserInfo()
