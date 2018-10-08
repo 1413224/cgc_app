@@ -3,7 +3,7 @@
 		<scoreheader :title="title"></scoreheader>
 		<div class="about-tip">
 			<div class="title" style="margin-top: 0;">智慧产业共享经济云平台消费会员注册协议</div>
-			<div class="cont">{{content}}</div>
+			<div class="cont" v-html="content"></div>
 			<!-- <p class="le2">
 				本协议是您与智慧产业共享经济云平台之间就网站服务等相关事宜所订立的契约，请您仔细阅读本注册协议，您勾选“本人同意”选项或点击“同意协议”按钮后，本协议即构成对双方有约束力的法律文件。
 			</p>
