@@ -36,7 +36,7 @@
 							</div>
 							<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>
 						</div>
-						<div class="new clearfix" v-else :key="index">
+						<div class="new clearfix" v-else :key="index" @click="goDetail(item.articleId)">
 							<div class="left">
 								<p class="newTitle">{{item.title}}</p>
 								<p class="newBottom">{{item.author}} &nbsp;<span>{{item.createTime | getDate}}</span></p>

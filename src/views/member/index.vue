@@ -194,7 +194,7 @@
 						img: './static/member/m-index6.png',
 						text: '幸运大抽奖',
 						url: '/draw',
-						tip: '您有一条中奖消息'
+						//tip: '您有一条中奖消息'
 					},{
 						img: './static/member/m-index4.png',
 						text: '供应链云商城',

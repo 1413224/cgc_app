@@ -23,7 +23,7 @@
 						</div>
 					</div>
 					<!--市-->
-					<div class="address_wrapper" ref="wrapper2">
+					<div class="address_wrapper" :class="{'border-r':cityShow}"  ref="wrapper2">
 						<div class="content">
 							<ul v-if="cityShow" style="animation-duration:0.5s" class="city_box one_box fadeInLeft animated">
 								<li v-for="(item,index) in cityList" :key="index" :class="{'blue':cityIndex == index}" @click="activeAddressItem(index,item,2)">
@@ -394,6 +394,7 @@
 				function showPosition(res) {
 					_this.lat = res.lat
 					_this.lng = res.lng
+					_this.tabList[0].type = res.province + res.city
 					_this.getEnterpriseListInfo()
 
 				}
@@ -773,6 +774,17 @@
 			bottom: 3rem;
 			width: 100%;
 			overflow: hidden;
+			.province_box {
+				background-color: #F8F7F5;
+				li {
+					color: #A8A8A8!important;
+				}
+			}
+			.city_box,.area_box {
+				.blue {
+					color: #336FFF!important;
+				}
+			}
 			li {
 				height: 0.80rem;
 				display: flex;
@@ -787,9 +799,20 @@
 			.address_wrapper {
 				width: 33.333333333333336%;
 				overflow: hidden;
-				.blue {
-					color: #336FFF!important;
+				.province_box .blue {
+					color: #333333!important;
+					background-color: white;
+					span{
+						display: inline-block;
+						width: 100%;
+						border-left: 3px solid #336FFF;
+						box-sizing: border-box;
+					}
 				}
+			}
+			.border-r{
+				border-right: 1px solid #E1E1E1;
+				box-sizing: border-box;
 			}
 		}
 		.top1,
