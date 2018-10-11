@@ -219,6 +219,14 @@ const shopModule = [
 		meta: {
 			title:'店铺二维码'
 		}
+	},
+	{
+		path:'/tsuen',
+		name:'tsuen',
+		component: resolve => require(['@/views/tsuen/tsuen'],resolve),
+		meta:{
+			title:'荃优品专题页'
+		}
 	}
 ];
 

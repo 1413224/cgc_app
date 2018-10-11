@@ -22,14 +22,25 @@
 					<p>疗效显著</p>
 				</div>
 			</div>
-			<div class="swiper-inner">
+			<!-- <div class="swiper-inner">
 				<swiper :options="swiperOption" ref="mySwiper">
 					<swiper-slide v-for="(item,index) in swiperList" :key="index">
 						<img :src="item" alt="" />
 					</swiper-slide>
 				</swiper>
 				<div class="swiper-pagination"></div>
+			</div> -->
+			
+			<div class="wrapswiper">
+				<swiper :options="swiperOption">
+					<swiper-slide v-for="(item,index) in swiperList" key="index">
+						<img :src="item" alt="">
+					</swiper-slide>
+					<div class="swiper-pagination" slot="pagination"></div>
+				</swiper>
 			</div>
+
+
 		</div>
 
 		<!-- <div class="face">
@@ -92,7 +103,7 @@
 		data() {
 			return {
 				title: '共享设备',
-				swiperOption: {
+				/*swiperOption: {
 					// 所有的参数同 swiper 官方 api 参数
 					autoplay: {
 						delay: 5000,
@@ -101,7 +112,7 @@
 					centeredSlides: true, //active slide会居中，而不是默认状态下的居左。
 					slidesPerView: 'auto',
 					loop: true,
-					loopedSlides: 6,
+					// loopedSlides: 6,
 					coverflowEffect: {
 						rotate: 50,
 						stretch: 0,
@@ -116,6 +127,23 @@
 					},
 					pagination: {
 						el: '.swiper-pagination',
+					}
+				},*/
+				swiperOption:{
+					loop:true,
+					effect: 'coverflow',
+					grabCursor: true,
+					centeredSlides: true,
+					slidesPerView: 'auto',
+					coverflowEffect:{
+						rotate:50,
+						stretch:0,
+						depth:100,
+						modifier:1,
+						slideShadows:true
+					},
+					pagination:{
+						el:'.swiper-pagination'
 					}
 				},
 				swiperList: ['./static/share/lb1.png', './static/share/lb1.png', './static/share/lb1.png'],
@@ -437,12 +465,13 @@
 </style>
 <style lang="less">
 	.share-box {
-		.swiper-inner {
+		/* .swiper-inner {
 			width: 100%;
 			height: 3.5rem;
 			margin-top: 0.62rem;
 			.swiper-slide {
 				width: 6.30rem;
+				width: 90%;
 				height: 4.24rem;
 				img {
 					width: 100%;
@@ -464,6 +493,22 @@
 					background: rgba(255, 255, 255, 1);
 					border-radius: 50%;
 				}
+			}
+		} */
+	}
+	.wrapswiper{
+		margin-top: .5rem;
+		width: 100%;
+		overflow: hidden;
+		.swiper-slide{
+			text-align: center;
+			height: 100px;
+			border: 1px solid #fff;
+			width: 5.8rem;
+			height: 4.24rem;
+			img{
+				width: 100%;
+				height: 100%;
 			}
 		}
 	}

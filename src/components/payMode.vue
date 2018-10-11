@@ -28,8 +28,10 @@
 		<div class="pay-box" v-else>
 			<popup class="payMode-popup" height="100%" v-model="options.showPayMode" @on-hide="hide" @on-show="show">
 				<div class="pr-box" v-if="options.showPayMode">
-					<div class="bt" @click="options.showPayMode = !options.showPayMode">
-						<i class="iconfont icon-arrow-right"></i>
+					<div class="bt">
+						<!-- <i class="iconfont icon-arrow-right"></i> -->
+						<!-- options.showPayMode = !options.showPayMode -->
+						<span @click="cancel()">取消</span>
 						<p>支付收银台</p>
 					</div>
 					<div class="money_box">
@@ -104,7 +106,7 @@
 				payModeIndex: 0,
 				payModeType: 0,
 				timeNum: [0, 6, 0, 0],
-				time: 360
+				time: 360,
 			}
 		},
 		components: {
@@ -125,7 +127,8 @@
 
 		},
 		mounted() {
-
+			// alert(0)
+			// console.log("id"+this.options.data.orderSn)
 		},
 		props: {
 			options: {
@@ -137,9 +140,14 @@
 					hide() {},
 					show() {},
 					data: {
-						money: 0
+						time:'',
+						money: 0,
 					}
 				}
+			},
+			orderSn:{
+				type:String,
+				default:''
 			}
 		},
 		methods: {
@@ -170,6 +178,29 @@
 
 					}
 				})
+			},
+			//取消订单
+			cancel(){
+				
+				var _this = this
+				// alert(_this.orderSn)
+				var params={
+						userId:_this.$store.state.user.userId,
+						orderSn:_this.orderSn,
+						cancelReason:"0"
+					}
+				_this.$http.post(_this.url.order.cancelOrderByOrderSn,params).then((res)=>{
+					if(res.data.status=="00000000"){
+						_this.options.showPayMode = !_this.options.showPayMode
+					}else{
+						_this.$vux.toast.show({
+							text: res.data.message,
+							type: 'text',
+							position: 'top',
+							width: '50%'
+						})
+					}
+				});
 			},
 			//关闭弹窗
 			hide() {

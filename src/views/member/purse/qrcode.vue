@@ -123,9 +123,9 @@
 
 
 			if(location.host == "health.cgc999.com"){
-				this.qrcodeVal = 'http://health.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
+				this.qrcodeVal = 'http://health.cgc999.com/new/index.html#/user/login?parentId=' + this.$store.state.user.userId
 			}else{
-				this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/reg?parentId=' + this.$store.state.user.userId
+				this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/login?parentId=' + this.$store.state.user.userId
 			}
 
 			this.width = Number(document.body.clientWidth * 0.5866666666666666)

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div>
 		<settingHeader :title="title"></settingHeader>
 		<div class="purse-box">
@@ -39,12 +39,12 @@
 						<span>积分充值</span>
 					</div>
 				</router-link>
-				<!--<router-link to="/member/purse/recharge">
+				<router-link to="/member/purse/recharge">
 					<div>
 						<img src="../../../assets/images/member/purse3.png" alt="" />
 						<span>账单</span>
 					</div>
-				</router-link>-->
+				</router-link>
 				<router-link to="/member/purse/banlancelog">
 					<div>
 						<img src="../../../assets/images/member/purse4.png" />
@@ -53,12 +53,12 @@
 				</router-link>
 			</div>
 			<div class="pur-row2">
-				<!--<div class="row-item" v-for="i in 3">
+				<div class="row-item" v-for="i in 3">
 					<div>
 						<p>累计收益</p>
 						<p>0.00</p>
 					</div>
-				</div>-->
+				</div>
 				<group gutter="0">
 					<cell class="item" title='累计收益' value="200.0"></cell>
 					<cell class="item" title='返现积分' value="88.0"></cell>
@@ -472,4 +472,4 @@
 			}
 		}
 	}
-</style>
+</style> -->

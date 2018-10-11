@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import Vuex from 'vuex'
-import echatrs from 'echarts'
+// import echatrs from 'echarts'
 import './assets/icons_font/iconfont.css'
 import './style/global.css'
 import 'swiper/dist/css/swiper.css'
@@ -27,7 +27,6 @@ import scimg from '@/components/scimg'
 import popup from '@/components/popup'
 import animate from 'animate.css' //引用动画库
 import { LoadingPlugin, DatetimePlugin, ToastPlugin } from 'vux' //全局load
-import echarts from 'echarts' //echart
 import merge from 'webpack-merge'
 import vuePicturePreview from 'vue-picture-preview'
 import { BusPlugin } from 'vux'
@@ -43,7 +42,7 @@ Vue.prototype.$http = axios //定义axios组件用法  this.$http(opt).then(fn)
 Vue.prototype.url = url //全局url路径
 Vue.prototype.url2 = url //全局url路径
 
-Vue.prototype.$echarts = echarts
+// Vue.prototype.$echarts = echarts
 Vue.prototype.merge = merge
 
 Vue.prototype.mainApp = mainApp
