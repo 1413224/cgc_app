@@ -101,6 +101,7 @@
 					_this.$http.post(_this.url.user.rechargeBalance, {
 						userId: _this.$store.state.user.userId,
 						platformId: _this.url.platformId,
+						payConfigId:200000,
 						rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
 						payType: type,
 						openId: sessionStorage['_openid_'],

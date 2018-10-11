@@ -333,8 +333,10 @@
 						_this.maxPayPrice = res.data.data.payPrice
 						_this.recommendBalance = res.data.data.recommendBalance
 
-						for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
-							res.data.data.availableCoupon[i].show = false
+						if(res.data.data.availableCoupon) {
+							for(var i = 0; i < res.data.data.availableCoupon.length; i++) {
+								res.data.data.availableCoupon[i].show = false
+							}
 						}
 
 						_this.info = res.data.data
