@@ -262,6 +262,15 @@
 
 				if(Number(this.info.recommendBalance) < 0) {
 					this.info.recommendBalance = 0
+				} else {
+					var reg = /^(([0-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/
+					if(!reg.test(this.info.recommendBalance)) {
+						if(Number(this.info.recommendBalance) > 0) {
+							this.info.recommendBalance = Number(this.info.recommendBalance).toFixed(2)
+						} else {
+							this.info.recommendBalance = ''
+						}
+					}
 				}
 
 				var recommendBalance = this.info.recommendBalance == '' ? 0 : this.info.recommendBalance

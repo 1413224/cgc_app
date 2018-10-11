@@ -108,21 +108,23 @@
 						if(resp.data.data.list.length > 0) {
 							_this.list = resp.data.data.list
 
-							_this.list.forEach((value) => {
+							for(var i = 0; i < _this.list.length; i++) {
 								if(sessionStorage.getItem('selectAddressId')) {
-									if(value.addressId == sessionStorage.getItem('selectAddressId')) {
-										_this.defaultAddress = value
-										_this.$emit('watch', value)
+									_this.list[i].isDefault = 0
+									if(_this.list[i].addressId == sessionStorage.getItem('selectAddressId')) {
+										_this.defaultAddress = _this.list[i]
+										_this.list[i].isDefault = 1
+										_this.$emit('watch', _this.list[i])
+										break;
 									}
 								} else {
-									if(value.isDefault == 1) {
-										_this.defaultAddress = value
-										_this.$emit('watch', value)
+									if(_this.list[i].isDefault == 1) {
+										_this.defaultAddress = _this.list[i]
+										_this.$emit('watch', _this.list[i])
 									}
 								}
-
-							})
-						}else{
+							}
+						} else {
 							_this.$emit('watch', false)
 						}
 					}

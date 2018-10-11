@@ -431,6 +431,15 @@
 				
 				if(Number(this.integralNum) < 0) {
 					this.integralNum = 0
+				} else {
+					var reg = /^(([0-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/
+					if(!reg.test(this.integralNum)) {
+						if(Number(this.integralNum) > 0) {
+							this.integralNum = Number(this.integralNum).toFixed(2)
+						} else {
+							this.integralNum = ''
+						}
+					}
 				}
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
 

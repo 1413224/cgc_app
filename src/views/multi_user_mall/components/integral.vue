@@ -82,12 +82,6 @@
 			_this.$emit('watch', data)
 		},
 		watch: {
-			value: function(val) {
-				if(!val) return
-				if(!/^\d*\.?\d{0,2}$/.test(val)) {
-					return ''
-				}
-			},
 			topIntegral(newValue, oldValue) {
 				this.balance = newValue
 			}
@@ -97,6 +91,16 @@
 				var _this = this
 
 				var topBalance = 0
+
+				var reg = /^(([0-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/
+				if(!reg.test(_this.cardList[index].canUseBalance)) {
+					if(Number(_this.cardList[index].canUseBalance) > 0){
+						_this.cardList[index].canUseBalance = Number(_this.cardList[index].canUseBalance).toFixed(2)
+					}else{
+						_this.cardList[index].canUseBalance = ''
+					}
+				}
+
 				_this.cardList.forEach((value, i) => {
 
 					if(value.canUseBalance < 0) {
