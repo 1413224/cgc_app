@@ -70,25 +70,25 @@
 						<p class="areaTitle">免费</p>
 						<span class="areadiscount">消费面单卷</span>
 						<br>
-						<img src="../../assets/images/multi_user_mall/Shape.png" alt="" class="fr">
+						<img src="../../assets/images/multi_user_mall/shape.png" alt="" class="fr">
 					</li>
 					<li>
 						<p class="areaTitle">折扣</p>
 						<span class="areadiscount">8.5折</span>
 						<br>
-						<img src="../../assets/images/multi_user_mall/Shape2.png" alt="" class="fr">
+						<img src="../../assets/images/multi_user_mall/shape2.png" alt="" class="fr">
 					</li>
 					<li>
 						<p class="areaTitle">霸王餐</p>
 						<span class="areadiscount">超级尊贵体验</span>
 						<br>
-						<img src="../../assets/images/multi_user_mall/Shape3.png" alt="" class="fr">
+						<img src="../../assets/images/multi_user_mall/shape3.png" alt="" class="fr">
 					</li>
 					<li>
 						<p class="areaTitle">足疗按摩</p>
 						<span class="areadiscount">积分大放送</span>
 						<br>
-						<img src="../../assets/images/multi_user_mall/Shape4.png" alt="" class="fr">
+						<img src="../../assets/images/multi_user_mall/shape4.png" alt="" class="fr">
 					</li>
 				</ul>
 			</div>

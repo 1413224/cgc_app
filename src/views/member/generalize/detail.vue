@@ -73,10 +73,13 @@
 	iframe{
 		width: 100% !important;
 	}
+	
 	.content {
 		padding: 0.15rem 0.30rem;
 		box-sizing: border-box;
 		background: #fff;
+		width: 100%;
+		overflow: hidden;
 		.tit {
 			font-size: 0.48rem;
 			font-family: MicrosoftYaHei;

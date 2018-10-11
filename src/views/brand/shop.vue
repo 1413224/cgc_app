@@ -8,7 +8,8 @@
 		<div class="banner-box">
 			<img :src="'./static/brand/shop_banner1.png'" />
 		</div>
-		<div class="trait-box">
+		<qyp-nav :icocont="icocont"></qyp-nav>
+		<!-- <div class="trait-box">
 			<div>
 				<img :src="'./static/brand/48.png'" alt="" />
 				<p>极速发货</p>
@@ -25,7 +26,7 @@
 				<img :src="'./static/brand/zy.png'" alt="" />
 				<p>海外直邮</p>
 			</div>
-		</div>
+		</div> -->
 
 		<div class="guan-box">
 			<div v-for="(item,index) in gList">
@@ -70,11 +71,13 @@
 <script>
 	import settingHeader from '../../components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
+	import qypNav from '../../components/qypnav.vue'
 	export default {
 		components: {
 			settingHeader,
 			swiper,
-			swiperSlide
+			swiperSlide,
+			qypNav
 		},
 		data() {
 			return {
@@ -83,6 +86,12 @@
 					slidesPerView: 'auto',
 					autoplay: false
 				},
+				icocont:[
+					{icourl:'./static/shop/js48.png',icoText:'急速发货'},
+					{icourl:'./static/shop/shwy.png',icoText:'售后无忧'},
+					{icourl:'./static/shop/zpbz.png',icoText:'正品保障'},
+					{icourl:'./static/shop/hwzy.png',icoText:'海外直邮'}
+				],
 				jxList: [
 					'./static/brand/jx1.png',
 					'./static/brand/jx1.png',
@@ -308,7 +317,7 @@
 				display: block;
 			}
 		}
-		.trait-box {
+		/* .trait-box {
 			height: 0.94rem;
 			display: flex;
 			background-color: white;
@@ -329,7 +338,7 @@
 					color: rgba(115, 134, 173, 1);
 				}
 			}
-		}
+		} */
 		.choicest-box {
 			margin: 0.20rem;
 			background-color: white;

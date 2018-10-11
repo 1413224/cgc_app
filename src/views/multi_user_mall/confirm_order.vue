@@ -183,7 +183,7 @@
 				</div>
 			</popup>
 		</div>
-		<payMode :options="payOptions"></payMode>
+		<payMode :options="payOptions" :orderSn="orderSn"></payMode>
 		<addressMode :options="addressOptions" @watch="select"></addressMode>
 
 		<!--企业通用卡-->
@@ -255,7 +255,8 @@
 				price: '',
 				ready: false,
 				enterpriseCards: [],
-				totalEnterpriseBalance: 0
+				totalEnterpriseBalance: 0,
+				orderSn:''   //订单编号
 			}
 		},
 		created() {
@@ -276,7 +277,7 @@
 				showPayMode: false,
 				data: {
 					time: 900,
-					money: _this.payMoney,
+					money: _this.payMoney
 				},
 				changePay(index) {
 					console.log(index)
@@ -440,14 +441,13 @@
 						}
 					}
 				}
-
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
 
-				this.payMoney = this.allMoney
 
+				this.payMoney = this.allMoney
 				//console.log(this.payMoney, 3)
 
-				var minAllMoney = Number(this.payMoney).toFixed(2)
+				var minAllMoney = Number(this.payMoney)
 
 				if(Number(minAllMoney) > 0) { //再减去通用积分
 					if(Number(minAllMoney) <= Number(this.availableBalance)) {
@@ -477,7 +477,7 @@
 					this.integralNum = ''
 				}
 
-				this.payMoney = Number(this.payMoney).toFixed(2)
+				this.payMoney = this.payMoney.toFixed(2)
 
 			},
 
@@ -592,7 +592,11 @@
 							_this.payParmars.body = res.data.data.body
 							_this.payParmars.ip = res.data.data.ip
 							_this.payParmars.parentOrderSn = res.data.data.orderSn
+
+							_this.orderSn = res.data.data.orderSn
 							_this.payParmars.enterpriseName = _this.goodsInfo.enterpriseName
+
+							console.log(_this.orderSn)
 						}
 					}
 				})

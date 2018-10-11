@@ -32,7 +32,12 @@
 		created(){
 			this.title = this.mainApp.getCs('title')
 			this.type = this.mainApp.getCs('type')
-			this.storeUrl = 'http://www.cgc999.com/new/index.html#/multi_user_mall?id=' + this.mainApp.getCs('enterpriseId')
+			
+			if(location.host == "health.cgc999.com"){
+				this.storeUrl = 'https://health.cgc999.com/new/index.html#/multi_user_mall?id=' + this.mainApp.getCs('enterpriseId')
+			}else{
+				this.storeUrl = 'http://www.cgc999.com/new/index.html#/multi_user_mall?id=' + this.mainApp.getCs('enterpriseId')
+			}
 			
 			console.log(this.storeUrl)
 		},
