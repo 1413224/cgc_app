@@ -4,39 +4,39 @@
 		<div class="bg">
 			<div class="dis">
 				<div class="yuan"></div>
-				<p class="from">飞利浦官方旗舰店</p>
+				<p class="from">{{info.invoiceAddress}}</p>
 			</div>
 			<img class="logo" :src="'./static/images/ptInvoice.png'" />
 			<ul class="items_box">
 				<li>
 					<div class="left">收款方</div>
-					<div class="right">上海宝尊电子商务有限公司</div>
+					<div class="right">{{info.invoicePayee}}</div>
 				</li>
 				<li>
 					<div class="left">付款方</div>
-					<div class="right">金南俊</div>
+					<div class="right">{{info.invoiceCheckName}}</div>
 				</li>
 				<li>
 					<div class="left">发票金额</div>
-					<div class="right">399.00</div>
+					<div class="right">{{info.taxAmount}}</div>
 				</li>
 				<li>
 					<div class="left">开票日期</div>
-					<div class="right">2017-07-22</div>
+					<div class="right">{{info.dctime}}</div>
 				</li>
-				<li>
+				<!--<li>
 					<div class="left">发票代码</div>
-					<div class="right">031001600411</div>
-				</li>
+					<div class="right">{{info.invoiceNum}}</div>
+				</li>-->
 				<li>
 					<div class="left">发票号码</div>
-					<div class="right">74098550</div>
+					<div class="right">{{info.invoiceNum}}</div>
 				</li>
 			</ul>
 		</div>
 		<ul class="btn_box">
-			<li class="blue" @click="$router.push({path:'/invoice/send'})">发送到邮箱</li>
-			<li class="white">查看PDF</li>
+			<li class="blue" @click="toEmail">发送到邮箱</li>
+			<li class="white" @click="pdf">查看PDF</li>
 		</ul>
 	</section>
 </template>
@@ -49,14 +49,41 @@
 		},
 		data() {
 			return {
-
+				info: {}
 			}
 		},
-		mounted() {
-
+		created() {
+			this.queryInvoiceInfoByNum()
 		},
 		methods: {
-
+			toEmail() {
+				this.$router.push({
+					path: '/invoice/send',
+					query:{
+						'info':JSON.stringify(this.info)
+					}
+				})
+			},
+			queryInvoiceInfoByNum() {
+				var _this = this
+				_this.$http.post(_this.url.user.queryInvoiceInfoByNum, {
+					num: _this.$route.query.invoiceNum
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.info = res.data.data
+					}
+				})
+			},
+			pdf() {
+				var _this = this
+				_this.$http.post(_this.url.user.checkBlueInvoice, {
+					invoiceId: _this.info.invoiceId
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.$showPDF.show(res.data.data.pdfCode)
+					}
+				})
+			},
 		}
 	}
 </script>
@@ -128,12 +155,12 @@
 				font-size: 0.28rem;
 				font-family: PingFang-SC-Medium;
 			}
-			.blue{
+			.blue {
 				color: white;
 				background-color: #336FFF;
 				margin-bottom: 0.30rem;
 			}
-			.white{
+			.white {
 				color: #A0A0A0;
 				background-color: white;
 			}

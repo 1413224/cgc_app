@@ -119,6 +119,7 @@
 			up2(e) {
 				var _this = this
 				_this.isC = false
+				console.log(_this.$scImg)
 				_this.$scImg.show({
 					panel: true,
 					e: e,

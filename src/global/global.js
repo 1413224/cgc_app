@@ -247,7 +247,30 @@ var mainApp = {
 			}
 		}
 	},
-
+	ischeckTax(number) {
+		var reg = /^[A-Z0-9]{15}$|^[A-Z0-9]{17}$|^[A-Z0-9]{18}$|^[A-Z0-9]{20}$/
+		if(!reg.test(number)) {
+			return false
+		} else {
+			return true
+		}
+	},
+	isbankcard(number) {
+		var reg = /^([1-9]{1})([0-9]{14,18})$/
+		if(!reg.test(number)) {
+			return false
+		} else {
+			return true
+		}
+	},
+	istel(tel) {
+		var reg = /^0\d{2,3}-?\d{7,8}$/
+		if(!reg.test(tel)) {
+			return false
+		} else {
+			return true
+		}
+	},
 	isphone(tel) {
 		var reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199)\d{8}$/
 

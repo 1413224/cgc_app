@@ -124,25 +124,25 @@
 				infoList: [{
 						img: './static/benefits/zf-1.png',
 						text: '消费购物',
-						url: '/member/coupon/index',
+						url: '/share/storelist',
 						text2: '交易成功后，获得实付金额20%的通用积分'
 					},
 					{
 						img: './static/benefits/zf-2.png',
 						text: '幸运抽奖',
-						url: '/member/follow/index',
+						url: '/draw',
 						text2: '消费参加抽奖，大奖可抽得5000通用积分'
 					},
 					{
 						img: './static/benefits/zf-3.png',
 						text: '推荐分享',
-						url: '/member/address/index',
+						url: '/member/purse/qrcode?index=1&text=推广码',
 						text2: '会员分享可以获得消费金额10%的通用积分'
 					},
 					{
 						img: './static/benefits/zf-4.png',
 						text: '充值有奖',
-						url: '/shop',
+						url: '/member/purse/recharge',
 						text2: '会员在e消费APP充值，获得等值信用积分'
 					}
 				],

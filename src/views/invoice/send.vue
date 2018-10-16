@@ -4,10 +4,10 @@
 		<div class="b_white">
 			<p class="tip">邮箱地址</p>
 			<div class="input">
-				<input type="text" placeholder="请输入您的邮箱地址" />
+				<input v-model="invoiceCheckEmail" type="text" placeholder="请输入您的邮箱地址" />
 			</div>
 		</div>
-		<div class="send_btn" @click="$router.push({path:'/invoice/result'})">发送</div>
+		<div class="send_btn" @click="submit">发送</div>
 	</section>
 </template>
 
@@ -21,14 +21,54 @@
 		},
 		data() {
 			return {
-				email: ''
+				info:{},
+				invoiceCheckEmail: ''
 			}
 		},
-		mounted() {
-
+		created() {
+			this.info = JSON.parse(this.$route.query.info)
 		},
 		methods: {
+			submit() {
+				var _this = this
+				
+				if(!_this.mainApp.isemail(_this.invoiceCheckEmail)) {
+					_this.$vux.toast.show({
+						type: 'text',
+						width: '50%',
+						position: 'top',
+						text: '请输入正确的邮箱地址'
+					})
+					return false;
+				}
+				
+				_this.$http.post(_this.url.user.openInvoice, {
+					number: _this.info.invoiceNum,
+					name:_this.info.name,
+					phone:_this.info.phone,
+					flag: _this.info.flag,
+					invoiceCustomersName:_this.info.invoiceCustomersName,
+					invoiceIdentifyNo: _this.info.invoiceIdentifyNo,
+					invoiceCheckName: _this.info.invoiceCheckName,
+					invoiceCheckPhone:_this.info.invoiceCheckPhone,
+					invoiceCheckEmail: _this.info.invoiceCheckEmail,
+					invoiceAddress: _this.info.invoiceAddress,
+					invoicePhone:_this.info.invoicePhone,
+					invoiceDeposit: _this.info.invoiceDeposit,
+					invoiceBankAccount:_this.info.invoiceBankAccount,
+					invoicePayee:_this.info.invoicePayee,
+					invoiceChecher: _this.info.invoiceChecher,
+					money: _this.info.money,
+					noTaxAmount:_this.info.noTaxAmount,
+					taxAmount: _this.info.taxAmount,
+					itemList:_this.info.itemList,
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						
+					}
+				})
 
+			}
 		}
 	}
 </script>

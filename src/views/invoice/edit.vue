@@ -10,13 +10,25 @@
 			<li>
 				<div class="tip">名称</div>
 				<div class="input">
-					<input v-model="name" type="text" placeholder="请输入发票抬头" />
+					<input v-model="title" type="text" placeholder="请输入发票抬头" />
+				</div>
+			</li>
+			<li>
+				<div class="tip">收票人名称</div>
+				<div class="input">
+					<input v-model="name" type="text" placeholder="请输入收票人名称" />
+				</div>
+			</li>
+			<li>
+				<div class="tip">手机号码</div>
+				<div class="input">
+					<input v-model="mobile" type="text" placeholder="请输入手机号码" />
 				</div>
 			</li>
 			<li v-if="tabIndex != 0">
 				<div class="tip">税号</div>
 				<div class="input">
-					<input v-model="dutyNumber" type="text" placeholder="请输入纳税人识别号" />
+					<input v-model="taxNumber" type="text" placeholder="请输入纳税人识别号" />
 				</div>
 			</li>
 			<slot v-if="tabIndex == 2">
@@ -35,13 +47,13 @@
 				<li>
 					<div class="tip">开户银行</div>
 					<div class="input">
-						<input v-model="bank" type="text" placeholder="请输入企业开户银行" />
+						<input v-model="bankName" type="text" placeholder="请输入企业开户银行" />
 					</div>
 				</li>
 				<li>
 					<div class="tip">银行账号</div>
 					<div class="input">
-						<input v-model="bankNumber" type="number" placeholder="请输入企业银行账号" />
+						<input v-model="bankAccount" type="number" placeholder="请输入企业银行账号" />
 					</div>
 				</li>
 			</slot>
@@ -70,28 +82,200 @@
 		},
 		data() {
 			return {
-				tabList: ['个人电子发票', '企业电子发票', '增值税专用发票'],
+				tabList: ['个人电子发票', '企业电子发票'],
 				tabIndex: 0,
+				email: '',
+				type: 1,
+				title: '',
 				name: '',
-				dutyNumber: '',
+				mobile: '',
+				taxNumber: '',
 				address: '',
 				tel: '',
-				bank: '',
-				bankNumber: '',
-				email: ''
+				bankName: '',
+				bankAccount: '',
 			}
 		},
-		mounted() {
-
+		created() {
+			if(this.$route.query.invoiceTitleId) {
+				this.getInvoiceInfoById()
+			}
 		},
 		methods: {
+			//获取发票抬头详情
+			getInvoiceInfoById() {
+				var _this = this
+				_this.$http.get(_this.url.user.getInvoiceInfoById, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						invoiceTitleId: _this.$route.query.invoiceTitleId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.type = res.data.data.type
+
+						if(res.data.data.type == 1) {
+							_this.tabIndex = 0
+						} else if(res.data.data.type == 2) {
+							_this.tabIndex = 1
+						} else {
+							_this.tabIndex = 2
+						}
+
+						_this.title = res.data.data.title
+						_this.name = res.data.data.name
+						_this.email = res.data.data.email
+						_this.mobile = res.data.data.mobile
+						_this.taxNumber = res.data.data.taxNumber
+						_this.address = res.data.data.address
+						_this.tel = res.data.data.tel
+						_this.bankName = res.data.data.bankName
+						_this.bankAccount = res.data.data.bankAccount
+					}
+				})
+			},
 			//tab切换
 			tabClick(index) {
 				this.tabIndex = index
+				if(index == 0) {
+					this.type = 1
+				} else if(index == 1) {
+					this.type = 2
+				} else {
+					this.type = 3
+				}
 			},
 			//提交
 			submit() {
-				console.log(this.name)
+				var _this = this
+
+				if(_this.title == '') {
+					_this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'top',
+						text: '请输入发票抬头名称'
+					})
+					return false;
+				}
+
+				if(_this.mobile && !_this.mainApp.isphone(_this.mobile)) {
+					_this.$vux.toast.show({
+						type: 'text',
+						width: '50%',
+						position: 'top',
+						text: '请输入正确的手机号码'
+					})
+					return false;
+				}
+				if(_this.email && !_this.mainApp.isemail(_this.email)) {
+					_this.$vux.toast.show({
+						type: 'text',
+						width: '50%',
+						position: 'top',
+						text: '请输入正确的邮箱地址'
+					})
+					return false;
+				}
+				
+				if(!_this.mainApp.ischeckTax(_this.taxNumber)) {
+					_this.$vux.toast.show({
+						type: 'text',
+						width: '50%',
+						position: 'top',
+						text: '请输入请输入纳税人识别号'
+					})
+					return false;
+				}
+
+				if(_this.tabIndex == 2) {
+					if(_this.address == '') {
+						_this.$vux.toast.show({
+							width: '60%',
+							type: 'text',
+							position: 'top',
+							text: '请输入企业注册地址'
+						})
+						return false;
+					}
+					if(!_this.mainApp.istel(_this.tel)) {
+						_this.$vux.toast.show({
+							type: 'text',
+							width: '50%',
+							position: 'top',
+							text: '请输入正确的企业电话号码'
+						})
+						return false;
+					}
+					if(_this.bankName == '') {
+						_this.$vux.toast.show({
+							width: '60%',
+							type: 'text',
+							position: 'top',
+							text: '请输入开户银行'
+						})
+						return false;
+					}
+					if(!_this.mainApp.isbankcard(_this.bankAccount)) {
+						_this.$vux.toast.show({
+							type: 'text',
+							width: '50%',
+							position: 'top',
+							text: '请输入正确的银行账号'
+						})
+						return false;
+					}
+				}
+
+				var url = _this.$route.query.invoiceTitleId ? _this.url.user.editInfoById : _this.url.user.addInfo
+
+				var params = {
+					userId: _this.$store.state.user.userId,
+					type: _this.type,
+
+				}
+
+				if(_this.tabIndex == 0) {
+					params.title = _this.title
+					params.name = _this.name
+					params.email = _this.email
+					params.mobile = _this.mobile
+				}
+				if(_this.tabIndex == 1) {
+					params.title = _this.title
+					params.name = _this.name
+					params.email = _this.email
+					params.mobile = _this.mobile
+					params.taxNumber = _this.taxNumber
+				}
+				if(_this.tabIndex == 2) {
+					params.title = _this.title
+					params.name = _this.name
+					params.email = _this.email
+					params.mobile = _this.mobile
+					params.taxNumber = _this.taxNumber
+					params.address = _this.address
+					params.tel = _this.tel
+					params.bankName = _this.bankName
+					params.bankAccount = _this.bankAccount
+				}
+
+				if(_this.$route.query.invoiceTitleId) {
+					params.userId = _this.$store.state.user.userId
+					params.invoiceTitleId = _this.$route.query.invoiceTitleId
+				}
+
+				_this.$http.post(url, params).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: _this.$route.query.invoiceTitleId ? '修改成功' : '添加成功'
+						})
+						_this.$router.go(-1)
+					}
+				})
 			}
 		}
 	}
@@ -121,13 +305,13 @@
 			margin: 1.10rem auto 0;
 			border-radius: 2px;
 		}
-		.mb3{
+		.mb3 {
 			margin: 0.50rem auto 0;
 		}
 		.tab_box {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
+			/*justify-content: space-between;*/
 			height: 1.20rem;
 			padding: 0 0.30rem;
 			box-sizing: border-box;

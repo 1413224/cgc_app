@@ -25,6 +25,7 @@ import dialog from '@/components/dialog'
 import code from '@/components/code'
 import scimg from '@/components/scimg'
 import popup from '@/components/popup'
+import pdf from '@/components/pdf'
 import animate from 'animate.css' //引用动画库
 import { LoadingPlugin, DatetimePlugin, ToastPlugin } from 'vux' //全局load
 import merge from 'webpack-merge'
@@ -128,6 +129,7 @@ Vue.use(dialog)
 Vue.use(code)
 Vue.use(scimg)
 Vue.use(popup)
+Vue.use(pdf)
 
 Vue.use(Vuex)
 Vue.use(animate)
@@ -270,16 +272,16 @@ methods.forEach(key => {
 router.beforeEach(function(to, from, next) {
 
 	let openid = sessionStorage['_openid_']
-	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
-		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
-		let ua = window.navigator.userAgent.toLowerCase()
-		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
-			next({
-				path: '/member/oriza'
-			})
-			return false
-		}
-	}
+//	if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
+//		window.localStorage.setItem("beforeLoginUrl", to.fullPath); //保存用户进入的url
+//		let ua = window.navigator.userAgent.toLowerCase()
+//		if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+//			next({
+//				path: '/member/oriza'
+//			})
+//			return false
+//		}
+//	}
 
 	//缓存路由页面 注册协议
 	store.state.page.includeList = []

@@ -2,7 +2,8 @@ var uri1 = '/user',
 	uri2 = '/datacenter',
 	uri3 = '/order',
 	uri4 = '/goods',
-	uri5 = '/lottery'
+	uri5 = '/lottery',
+	uri6 = '/tax'
 
 var url = {
 	platformId: 2018050800000002, //平台ID
@@ -18,7 +19,7 @@ var url = {
 		fileuploadImage: uri2 + '/v1/fileupload/image', //上传图片
 		login: uri2 + '/public/v1/login', //云中心登录
 		userLogin: uri1 + '/public/v1/user/login', //用户登录
-		loginByUnionId:uri1 + '/public/v1/user/loginByUnionId',
+		loginByUnionId: uri1 + '/public/v1/user/loginByUnionId',
 		logout: uri1 + '/logout/v1', //用户登出
 		userRegister: uri1 + '/public/v1/user/register', //用户注册
 		forgetPassword: uri1 + '/public/v1/user/forgetPassword', //重置登录密码
@@ -62,11 +63,21 @@ var url = {
 		rechargeBalance: uri1 + '/body/v1/user/rechargeBalance', //用户在线充值接口
 		getList: uri1 + '/param/v1/feedbackCause/getList', //获取反馈原因列表信息接口
 		addFeedback: uri1 + '/body/v1/feedback/addFeedback', //新增反馈信息接口
-		getInfoByType: uri1 + '/public/v1/agreement/getInfoByType',//获取协议信息接口
-		getCategoryLists: uri1 + '/public/v1/article/getCategoryLists',//获取文章分类列表
-		getLists: uri1 + '/public/v1/article/getLists',//获取文章列表接口
-		getDetails:uri1 + '/public/v1/article/getDetails',//获取文章详情接口
-		addFeedback:uri1 + '/body/v1/feedback/addFeedback',//2.4.新增反馈信息接口
+		getInfoByType: uri1 + '/public/v1/agreement/getInfoByType', //获取协议信息接口
+		getCategoryLists: uri1 + '/public/v1/article/getCategoryLists', //获取文章分类列表
+		getLists: uri1 + '/public/v1/article/getLists', //获取文章列表接口
+		getDetails: uri1 + '/public/v1/article/getDetails', //获取文章详情接口
+		addFeedback: uri1 + '/body/v1/feedback/addFeedback', //2.4.新增反馈信息接口
+		getInvoiceLists: uri6 + '/param/v1/invoiceTitle/getLists', //2.1.获取发票抬头列表接口
+		getInvoiceInfoById: uri6 + '/param/v1/invoiceTitle/getInfoById', //2.2.	获取发票抬头详情接口
+		addInfo: uri6 + '/body/v1/invoiceTitle/addInfo', //2.3.	新增发票抬头接口
+		editInfoById: uri6 + '/body/v1/invoiceTitle/editInfoById', //2.4.	修改发票抬头信息接口
+		setDefaultById: uri6 + '/body/v1/invoiceTitle/setDefaultById', //2.5.	设置默认发票抬头信息接口
+		deleteById: uri6 + '/body/v1/invoiceTitle/deleteById', //2.6.	删除发票抬头信息接口
+		invoiceList: uri6 + '/body/v1/invoiceFunction/invoiceList', //发票列表查询接口
+		queryInvoiceInfoByNum: uri6 + '/body/v1/invoiceFunction/queryInvoiceInfoByNum', //发票详情
+		checkBlueInvoice: uri6 + '/body/v1/invoiceFunction/checkBlueInvoice', //查看发票pdf
+		openInvoice: uri6 + '/body/v1/invoiceFunction/openInvoice',//发送pdf到邮箱
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
@@ -116,7 +127,7 @@ var url = {
 	goods: {
 		getGoodsInfo: uri4 + '/public/v1/goods/getGoodsInfo', //获取商品信息接口
 		buynow: uri3 + '/bodyIds/v1/order/buynow',
-		getGoodsOrderConfirmUseBalances:uri4 + '/param/v1/goods/getGoodsOrderConfirmUseBalances',//商品下单
+		getGoodsOrderConfirmUseBalances: uri4 + '/param/v1/goods/getGoodsOrderConfirmUseBalances', //商品下单
 	},
 	lottery: {
 		getStatInfo: uri5 + '/public/v1/lottery/getStatInfo', //获取抽奖首页接口
@@ -130,7 +141,7 @@ var url = {
 		getBonus: uri5 + '/ubody/v1/lottery/getBonus', //2.11.会员领奖接口
 		getMessage: uri5 + '/uparam/v1/lottery/getMessage', //2.13.获取会员中奖感言接口
 		writeMessage: uri5 + '/ubody/v1/lottery/writeMessage', //2.14.提交会员填写中奖感言接口
-		getAwardCode:uri5 + '/uparam/v1/lottery/getAwardCode',//2.12.获取会员领取线下奖品信息接口
+		getAwardCode: uri5 + '/uparam/v1/lottery/getAwardCode', //2.12.获取会员领取线下奖品信息接口
 	},
 	ocr: {
 		getOCR: uri1 + '/param/v1/user/getOCR',

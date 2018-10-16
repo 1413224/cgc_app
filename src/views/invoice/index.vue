@@ -11,8 +11,8 @@
 			<!--type-->
 			<transition name="type-classes-transition" enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
 				<ul class="type_box" v-if="typeShow && tabIndex == 0" style="animation-duration:0.5s">
-					<li v-for="(item,index) in typeList" :key="index" @click="typeClick(index)">
-						<span>{{item}}</span>
+					<li v-for="(item,index) in typeList" :key="index" @click="typeClick(index,item.value)">
+						<span>{{item.key}}</span>
 						<img v-if="typeIndex == index" :src="'./static/images/s_gou.png'" />
 					</li>
 				</ul>
@@ -20,8 +20,8 @@
 			<!--time-->
 			<transition name="time-classes-transition" enter-active-class="fadeInDown animated" leave-active-class="fadeOutUp animated">
 				<ul class="time_box" v-if="timeShow && tabIndex == 1" style="animation-duration:0.5s">
-					<li :class="{'blue':timeIndex == index}" v-for="(item,index) in timeList" :key="index" @click="timeClick(index)">
-						{{item}}
+					<li :class="{'blue':timeIndex == index}" v-for="(item,index) in timeList" :key="index" @click="timeClick(index,item.value)">
+						{{item.key}}
 					</li>
 				</ul>
 			</transition>
@@ -29,32 +29,33 @@
 			<div class="masker" v-if="maskerShow" @click="maskerShow = false"></div>
 		</div>
 		<div class="wrapper" ref="wrapper" :class="[{'top46':!$store.state.page.isWx},{'bg_white':invoiceList.length == 0}]">
-			<div class="content">
-				<ul class="invoice_list_box" v-if="invoiceList.length > 0">
-					<li class="item" v-for="(item,index) in invoiceList" :key="index" @click="toDetail()">
+			<div class="content" :class="{'pr_box':!showList}">
+				<ul class="invoice_list_box" v-if="showList">
+					<li class="item" v-for="(item,index) in invoiceList" :key="index" @click="toDetail(item.invoiceNum)">
 						<div class="top">
 							<div class="yd"></div>
-							<span>飞利浦官方旗舰店</span>
+							<span>{{item.invoiceAddress}}</span>
 						</div>
 						<ul class="bottom">
 							<li>
 								<span class="left">付款方</span>
-								<span class="right">金南俊</span>
+								<span class="right">{{item.name}}</span>
 							</li>
 							<li>
 								<span class="left">发票金额</span>
-								<span class="right">399.00</span>
+								<span class="right">{{item.taxAmount}}</span>
 							</li>
 							<li>
 								<span class="left">开票日期</span>
-								<span class="right">2017-07-22</span>
+								<span class="right">{{item.dctime}}</span>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<Loading v-if="showLoading"></Loading>
 				<Nomore v-if="showNomore"></Nomore>
-				<noData v-if="invoiceList.length == 0" :status="0" stateText="您还没有相关发票"></noData>
+				<Null v-if="!showList && !inloading" status="zwsj" text="您暂无相关发票"></Null>
+				<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 			</div>
 		</div>
 		<div class="bottom_box">
@@ -73,10 +74,16 @@
 <script>
 	import settingHeader from '@/components/setting_header'
 	import BScroll from 'better-scroll'
+	import Loading from '@/components/loading'
+	import Null from '@/components/null'
+	import Nomore from '@/components/noMore'
 
 	export default {
 		components: {
-			settingHeader
+			settingHeader,
+			Loading,
+			Null,
+			Nomore
 		},
 		data() {
 			return {
@@ -88,16 +95,53 @@
 					show: false
 				}],
 				tabIndex: 0,
-				typeList: ['全部', '个人电子发票', '企业电子发票', '增值税专用发票'],
+				typeList: [{
+					key: '全部',
+					value: 0
+				}, {
+					key: '个人电子发票',
+					value: 1
+				}, {
+					key: '企业电子发票',
+					value: 2
+				}],
+				timeList: [{
+					key: '全部',
+					value: 0
+				}, {
+					key: '7天以内',
+					value: 1
+				}, {
+					key: '1个月以内',
+					value: 2
+				}, {
+					key: '3个月以内',
+					value: 3
+				}, {
+					key: '6个月以内',
+					value: 4
+				}, {
+					key: '1年以内',
+					value: 5
+				}, {
+					key: '1年以前',
+					value: 6
+				}],
 				typeIndex: 0,
 				typeShow: false,
-				timeList: ['全部', '7天以内', '1个月以内', '3个月以内', '6个月以内', '1年以内', '1年以前'],
 				timeIndex: 0,
 				timeShow: false,
 				maskerShow: false,
 				showLoading: false,
 				showNomore: false,
-				invoiceList: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+				invoiceList: [],
+				showList: false,
+				inloading: true,
+
+				pageSize: 10,
+				curPage: 1,
+				type: 0,
+				queryTime: 0
 			}
 		},
 		watch: {
@@ -118,12 +162,36 @@
 		},
 		created() {
 			this.InitScroll()
+			this.getInvoiceList()
 		},
 		methods: {
+			//获取发票列表
+			getInvoiceList() {
+				var _this = this
+				_this.$http.post(_this.url.user.invoiceList, {
+					//userId: _this.$store.state.user.userId,
+					pageSize: _this.pageSize,
+					curPage: _this.curPage,
+					status: 1,
+					type: _this.type,
+					queryTime: _this.queryTime
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+
+						_this.invoiceList = res.data.data.list
+					}
+				})
+			},
 			//跳转详情
-			toDetail() {
+			toDetail(invoiceNum) {
 				this.$router.push({
-					path: '/invoice/detail'
+					path: '/invoice/detail',
+					query: {
+						'invoiceNum': invoiceNum
+					}
 				})
 			},
 			//tab切换
@@ -147,20 +215,32 @@
 				this.$forceUpdate()
 			},
 			//类型选择
-			typeClick(index) {
+			typeClick(index, type) {
 				this.typeIndex = index
 				this.$nextTick(function() {
 					this.typeShow = false
 					this.tabList[this.tabIndex].show = false
 				})
+
+				this.showLoading = false
+				this.showNomore = false
+				this.curPage = 1
+				this.type = type
+				this.getInvoiceList()
 			},
 			//时间选择
-			timeClick(index) {
+			timeClick(index, queryTime) {
 				this.timeIndex = index
 				this.$nextTick(function() {
 					this.timeShow = false
 					this.tabList[this.tabIndex].show = false
 				})
+
+				this.showLoading = false
+				this.showNomore = false
+				this.curPage = 1
+				this.queryTime = queryTime
+				this.getInvoiceList()
 			},
 			//初始化滑动组件
 			InitScroll() {
@@ -187,7 +267,26 @@
 			},
 			//上拉加载
 			LoadData() {
+				var _this = this
+				_this.curPage++;
+				_this.$http.post(_this.url.user.invoiceList, {
+					//userId: _this.$store.state.user.userId,
+					pageSize: _this.pageSize,
+					curPage: _this.curPage,
+					status: 1
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.showLoading = true
+							_this.showNomore = false
+							_this.invoiceList = _this.invoiceList.concat(res.data.data.list)
+						} else {
+							_this.showLoading = false
+							_this.showNomore = true
+						}
 
+					}
+				})
 			},
 
 		}
@@ -352,6 +451,16 @@
 			bottom: 0.9rem;
 			width: 100%;
 			overflow: hidden;
+			.pr_box {
+				height: 100%;
+				background-color: white;
+				.null_box {
+					position: absolute;
+					top: 40%;
+					left: 50%;
+					transform: translate(-50%, -40%);
+				}
+			}
 			.invoice_list_box {
 				padding: 0.20rem 0.20rem 0 0.20rem;
 				box-sizing: border-box;

@@ -5,31 +5,33 @@
 			<img :src="'./static/images/tianjia.png'" /><span>新增抬头</span>
 		</div>
 		<div class="wrapper" ref="wrapper" :class="[{'top46':!$store.state.page.isWx},{'bg_white':riseList.length == 0}]">
-			<div class="content">
-				<ul class="rise_list_box">
+			<div class="content" :class="{'pr_box':!showList}">
+				<ul class="rise_list_box" v-if="showList">
 					<li class="item" v-for="(item,index) in riseList" :key="index">
 						<div class="top">
 							<div>
-								<span class="name">{{item.name}}</span>
-								<span class="type" v-if="item.type == 0">个人</span>
-								<span class="type" v-if="item.type == 1">增值税专用</span>
-								<span class="type" v-if="item.type == 2">企业</span>
+								<span class="name">{{item.title}}</span>
+								<span class="type" v-if="item.type == 1">个人</span>
+								<span class="type" v-if="item.type == 2">增值税专用</span>
+								<span class="type" v-if="item.type == 3">企业</span>
 							</div>
-							<p v-if="item.type != 0">税号：91440101MA59F1MW0B</p>
+							<p v-if="item.type != 1">税号：{{item.taxNumber}}</p>
 						</div>
 						<div class="bottom">
-							<div @click="isdefaultChange(index)">
-								<img :src="item.isdefault == 1 ? './static/images/yuanquan-in.png' : './static/images/yuanquan.png'" /><span>设为默认</span>
+							<div @click="isdefaultChange(item.invoiceTitleId)">
+								<img :src="item.isDefault == 1 ? './static/images/yuanquan-in.png' : './static/images/yuanquan.png'" /><span>设为默认</span>
 							</div>
 							<div class="btn">
-								<div @click="$router.push({path:'/invoice/edit'})">编辑</div><div>删除</div>
+								<div @click="toEdit(item.invoiceTitleId)">编辑</div>
+								<div @click="del(item.invoiceTitleId)">删除</div>
 							</div>
 						</div>
 					</li>
 				</ul>
 				<Loading v-if="showLoading"></Loading>
 				<Nomore v-if="showNomore"></Nomore>
-				<noData v-if="riseList.length == 0" :status="0" stateText="您还没有相关发票"></noData>
+				<Null v-if="!showList && !inloading" status="zwsj" text="您暂无相关发票抬头"></Null>
+				<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
 			</div>
 		</div>
 		<div class="bottom_box">
@@ -48,34 +50,25 @@
 <script>
 	import settingHeader from '@/components/setting_header'
 	import BScroll from 'better-scroll'
-
+	import Loading from '@/components/loading'
+	import Null from '@/components/null'
+	import Nomore from '@/components/noMore'
 	export default {
 		components: {
-			settingHeader
+			settingHeader,
+			Loading,
+			Null,
+			Nomore
 		},
 		data() {
 			return {
 				showLoading: false,
 				showNomore: false,
-				riseList: [{
-						name: '石原里美',
-						type: 0,
-						bq: '个人',
-						isdefault: 1
-					},
-					{
-						name: '石原里美',
-						type: 1,
-						bq: '增值税专用',
-						isdefault: 0
-					},
-					{
-						name: '石原里美',
-						type: 2,
-						bq: '企业',
-						isdefault: 0
-					},
-				]
+				showList: false,
+				inloading: true,
+				riseList: [],
+				curPage: 1,
+				pageSize: 10,
 			}
 		},
 		watch: {
@@ -83,14 +76,77 @@
 		},
 		created() {
 			this.InitScroll()
+			this.getInvoiceLists()
 		},
 		methods: {
-			//设置默认
-			isdefaultChange(index){
-				this.riseList.forEach((value)=>{
-					value.isdefault = 0
+			//编辑
+			toEdit(invoiceTitleId) {
+				var _this = this
+				_this.$router.push({
+					path: '/invoice/edit',
+					query: {
+						'invoiceTitleId': invoiceTitleId
+					}
 				})
-				this.riseList[index].isdefault = 1
+			},
+			//删除发票抬头
+			del(invoiceTitleId) {
+				var _this = this
+				_this.$http.post(_this.url.user.deleteById, {
+					userId: _this.$store.state.user.userId,
+					invoiceTitleId: invoiceTitleId
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '删除成功'
+						})
+
+						_this.curPage = 1
+						_this.showLoading = false
+						_this.showNomore = false
+						_this.getInvoiceLists()
+					}
+				})
+			},
+			//获取发票抬头
+			getInvoiceLists() {
+				var _this = this
+				_this.$http.get(_this.url.user.getInvoiceLists, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						type: -1,
+						curPage: _this.curPage,
+						pageSize: 10
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.showList = res.data.data.list.length > 0 ? true : false
+						_this.inloading = false
+
+						_this.riseList = res.data.data.list
+					}
+				})
+			},
+			//设置默认
+			isdefaultChange(invoiceTitleId) {
+				var _this = this
+				_this.$http.post(_this.url.user.setDefaultById, {
+					userId: _this.$store.state.user.userId,
+					invoiceTitleId: invoiceTitleId
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '已将该项设置为默认'
+						})
+						_this.getInvoiceLists()
+					}
+				})
 			},
 			//初始化滑动组件
 			InitScroll() {
@@ -117,7 +173,28 @@
 			},
 			//上拉加载
 			LoadData() {
-
+				var _this = this
+				_this.curPage++;
+				_this.$http.get(_this.url.user.getInvoiceLists, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						type: -1,
+						curPage: _this.curPage,
+						pageSize: 10,
+						islist: true
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.list.length > 0) {
+							_this.riseList = _this.riseList.concat(res.data.data.list)
+							_this.showLoading = true
+							_this.showNomore = false
+						} else {
+							_this.showLoading = false
+							_this.showNomore = true
+						}
+					}
+				})
 			},
 
 		}
@@ -175,7 +252,17 @@
 			width: 100%;
 			overflow: hidden;
 			.content {
-				padding-bottom: 0.20rem;
+				/*padding-bottom: 0.20rem;*/
+			}
+			.pr_box {
+				height: 100%;
+				background-color: white;
+				.null_box {
+					position: absolute;
+					top: 40%;
+					left: 50%;
+					transform: translate(-50%, -40%);
+				}
 			}
 			.rise_list_box {
 				.item {
@@ -233,10 +320,13 @@
 							div {
 								width: 1.37rem;
 								height: 0.59rem;
-								line-height: 0.59rem;
 								text-align: center;
 								border: 1px solid rgba(225, 225, 225, 1);
 								border-radius: 2px;
+								box-sizing: border-box;
+								display: flex;
+								align-items: center;
+								justify-content: center;
 							}
 							div:nth-child(1) {
 								margin-right: 0.20rem;
