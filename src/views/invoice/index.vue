@@ -276,7 +276,7 @@
 					status: 1
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-						if(res.data.data.list.length > 0) {
+						if(res.data.data.list) {
 							_this.showLoading = true
 							_this.showNomore = false
 							_this.invoiceList = _this.invoiceList.concat(res.data.data.list)
