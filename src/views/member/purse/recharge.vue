@@ -98,16 +98,34 @@
 				},
 				toPay(type) {
 					// alert("发送"+_this.parentOrderSn)
-					_this.$http.post(_this.url.user.rechargeBalance, {
-						userId: _this.$store.state.user.userId,
-						platformId: _this.url.platformId,
-						payConfigId:200000,
-						rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
-						payType: type,
-						openId: sessionStorage['_openid_'],
-						//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
-						parentOrderSn: _this.parentOrderSn
-					}).then((res) => {
+					if(location.host == "health.cgc999.com"){
+						// axios.defaults.baseURL = '//health.cgc999.com/apigw' // 请求默认地址,演示版
+						var params = {
+							userId: _this.$store.state.user.userId,
+							platformId: _this.url.platformId,
+							payConfigId:200002,
+							rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
+							payType: type,
+							openId: sessionStorage['_openid_'],
+							//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
+							parentOrderSn: _this.parentOrderSn
+						}
+					}else{
+						// axios.defaults.baseURL = '//domain.cgc999.com/apigw' // 请求默认地址
+						var params = {
+							userId: _this.$store.state.user.userId,
+							platformId: _this.url.platformId,
+							payConfigId:200000,
+							rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
+							payType: type,
+							openId: sessionStorage['_openid_'],
+							//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
+							parentOrderSn: _this.parentOrderSn
+						}
+					}
+
+		
+					_this.$http.post(_this.url.user.rechargeBalance,params).then((res) => {
 						if(res.data.status == "00000000") {
 							_this.parentOrderSn = res.data.data.parentOrderSn
 							// alert("订单编号"+_this.parentOrderSn)

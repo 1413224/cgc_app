@@ -183,7 +183,7 @@
 				</div>
 			</popup>
 		</div>
-		<payMode :options="payOptions" :orderSn="orderSn"></payMode>
+		<payMode :options="payOptions" :orderSn="orderSn" :cancleSn="cancleSn"></payMode>
 		<addressMode :options="addressOptions" @watch="select"></addressMode>
 
 		<!--企业通用卡-->
@@ -256,7 +256,8 @@
 				ready: false,
 				enterpriseCards: [],
 				totalEnterpriseBalance: 0,
-				orderSn:''   //订单编号
+				orderSn:'',   //订单编号
+				cancleSn:1//区分取消订单
 			}
 		},
 		created() {
@@ -596,7 +597,7 @@
 							_this.orderSn = res.data.data.orderSn
 							_this.payParmars.enterpriseName = _this.goodsInfo.enterpriseName
 
-							console.log(_this.orderSn)
+							// console.log(_this.orderSn)
 						}
 					}
 				})

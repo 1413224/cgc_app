@@ -127,8 +127,8 @@
 
 		},
 		mounted() {
-			// alert(0)
 			// console.log("id"+this.options.data.orderSn)
+			// console.log(this.cancleSn)
 		},
 		props: {
 			options: {
@@ -148,6 +148,10 @@
 			orderSn:{
 				type:String,
 				default:''
+			},
+			cancleSn:{
+				type:Number,
+				default:0
 			}
 		},
 		methods: {
@@ -184,23 +188,28 @@
 				
 				var _this = this
 				// alert(_this.orderSn)
-				var params={
+				if(this.cancleSn == 1){
+					var params={
 						userId:_this.$store.state.user.userId,
 						orderSn:_this.orderSn,
 						cancelReason:"0"
 					}
-				_this.$http.post(_this.url.order.cancelOrderByOrderSn,params).then((res)=>{
-					if(res.data.status=="00000000"){
-						_this.options.showPayMode = !_this.options.showPayMode
-					}else{
-						_this.$vux.toast.show({
-							text: res.data.message,
-							type: 'text',
-							position: 'top',
-							width: '50%'
-						})
-					}
-				});
+					_this.$http.post(_this.url.order.cancelOrderByOrderSn,params).then((res)=>{
+						if(res.data.status=="00000000"){
+							_this.options.showPayMode = !_this.options.showPayMode
+						}else{
+							_this.$vux.toast.show({
+								text: res.data.message,
+								type: 'text',
+								position: 'top',
+								width: '50%'
+							})
+						}
+					});
+				}else{
+					_this.options.showPayMode = !_this.options.showPayMode
+				}
+				
 			},
 			//关闭弹窗
 			hide() {

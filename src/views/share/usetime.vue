@@ -18,7 +18,7 @@
 				</swiper>
 			</div>
 
-			<div class="start" v-show="infoItem.status == 0 || infoItem.status == 2">
+			<div class="start" v-show="infoItem.status == 0 || infoItem.status == 2 || infoItem.status==5">
 
 				<div class="cont">
 					<img src="../../assets/images/share/button0.png" alt="" class="btn0">
@@ -201,7 +201,7 @@
 					id = id,
 					status = status;
 				
-				if(status == 0 || status ==2){
+				if(status == 0 || status == 2 || status == 5){
 					_this.$dialog.show({
 						type:'warning',
 						headMessage:"是否开启设备？",
@@ -236,7 +236,7 @@
 				_this.$http.post(_this.url.share.changeEquipmentStatus, {
 					userId: _this.$store.state.user.userId,
 					itemId: id,
-					status: status == 0 || status == 2 ? 1 : 2
+					status: status == 0 || status == 2 || status == 5 ? 1 : 2
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
