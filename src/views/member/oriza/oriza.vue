@@ -58,6 +58,7 @@
 						localStorage.setItem('_HASH_', base64_encode(hash))
 
 						_this.$store.state.page.isLogin = 'true'
+						_this.$store.state.user.userId = uid
 
 						localStorage.setItem('isLogin', true)
 
