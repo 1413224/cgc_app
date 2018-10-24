@@ -177,18 +177,21 @@
 					})
 					return false;
 				}
-				
-				if(!_this.mainApp.ischeckTax(_this.taxNumber)) {
-					_this.$vux.toast.show({
-						type: 'text',
-						width: '50%',
-						position: 'top',
-						text: '请输入请输入纳税人识别号'
-					})
-					return false;
+
+				if(_this.tabIndex == 1) {
+					if(!_this.mainApp.ischeckTax(_this.taxNumber)) {
+						_this.$vux.toast.show({
+							type: 'text',
+							width: '50%',
+							position: 'top',
+							text: '请输入正确的纳税人识别号'
+						})
+						return false;
+					}
 				}
 
 				if(_this.tabIndex == 2) {
+
 					if(_this.address == '') {
 						_this.$vux.toast.show({
 							width: '60%',
