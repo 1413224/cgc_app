@@ -284,7 +284,7 @@
 					console.log(index)
 				},
 				toPay(type) {
-					//微信支付
+					/*//微信支付
 					if(type == 1) {
 						_this.pay(_this.payParmars)
 						return false;
@@ -297,7 +297,76 @@
 								body: _this.payParmars.body
 							}
 						})
+					}*/
+					var params={
+						body: _this.payParmars.body,
+						feeType: "CNY",
+						outTotalFee: _this.payParmars.payPrice, //金额
+						spbillCreateIp:_this.payParmars.ip,
+						tradeType:"JSAPI",
+						openId:sessionStorage['_openid_'],
+						parentOrderSn: _this.payParmars.parentOrderSn, //订单号
+						userId: _this.$store.state.user.userId
 					}
+					if(location.host == "health.cgc999.com"){
+						params.id="200002"
+					}else{
+						params.id="200000"
+					}
+
+					_this.$http.post(_this.url.zf.pay,params).then((res)=>{
+						if(res.data.status == "00000000"){
+							var data = res.data.data
+							if(type==1){
+								wx.config({
+									debug: false,
+									appId: data.appId,
+									timestamp: data.timeStamp,
+									nonceStr: data.nonceStr,
+									signature: data.signature,
+									jsApiList: [
+										'checkJsApi',
+										'startRecord',
+										'stopRecord',
+										'translateVoice',
+										'scanQRCode',
+										'openCard',
+										'chooseWXPay'
+									]
+								})
+								wx.chooseWXPay({
+									appId: data.appId,
+									timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
+									nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位  
+									package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）  
+									signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
+									paySign: data.paySign, // 支付签名  
+									success: function(res) {
+										router.push({
+											path: '/shop/my_order2'
+										})
+									},
+									error: function() {
+										Vue.$vux.toast.show({
+											text: '支付失败',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
+									},
+									cancel: function() {
+										Vue.$vux.toast.show({
+											text: '您已取消了支付',
+											type: 'text',
+											position: 'top',
+											width: '50%'
+										})
+									}
+								})
+							}
+						}
+					})
+
 				},
 				close() {
 					_this.$dialog.show({
