@@ -12,8 +12,8 @@
 							<div>
 								<span class="name">{{item.title}}</span>
 								<span class="type" v-if="item.type == 1">个人</span>
-								<span class="type" v-if="item.type == 2">增值税专用</span>
-								<span class="type" v-if="item.type == 3">企业</span>
+								<span class="type" v-if="item.type == 2">企业</span>
+								<span class="type" v-if="item.type == 3">增值税专用</span>
 							</div>
 							<p v-if="item.type != 1">税号：{{item.taxNumber}}</p>
 						</div>
