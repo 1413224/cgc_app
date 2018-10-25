@@ -17,7 +17,17 @@ const memberModule = [{
 			navIndex: 0,
 			title: '首页'
 		}
-	}, {
+	},{
+		path:'/custom',
+		name:'custom',
+		component:resolve => require(['@/views/custom'],resolve),
+		meta:{
+			navShow: true,
+			navIndex: 0,
+			title: '首页'
+		}
+	},
+	{
 		path: '/member/test',
 		name: 'test',
 		component: resolve => require(['@/views//member/test'], resolve),
