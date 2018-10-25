@@ -325,6 +325,19 @@
 							text: '暂停设备失败，请稍后重试'
 						})
 					}
+				}).catch((err)=>{
+					var text = '暂停'
+					if(status==1){
+						text = '开启'
+					}
+					_this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'top',
+						text: text+'设备失败，请稍后重试'
+					})	
+
+					
 				})
 				
 			},
