@@ -308,7 +308,7 @@
 						parentOrderSn: _this.payParmars.parentOrderSn, //订单号
 						userId: _this.$store.state.user.userId
 					}
-					if(location.host == "health.cgc999.com"){
+					if(location.host == _this.url.health){
 						params.id="200002"
 					}else{
 						params.id="200000"

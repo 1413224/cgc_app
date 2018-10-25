@@ -9,6 +9,8 @@ var url = {
 	platformId: 2018050800000002, //平台ID
 	client: 'user', //区分那个端登录
 	mapKey: 'XMHBZ-DHFWD-M3P4H-HHVZP-UOKV3-5WBB5',
+	health:'health.cgc999.com',
+	test:'www.cgc999.com',
 
 	user: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //获取第三方应用授权链接接口
