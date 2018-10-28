@@ -36,7 +36,7 @@
 	// import url from '../config/url'
 	// import Qs from 'qs'
 	import searchComp from '@/components/custom/searchComp'  //搜索框
-	import titlebarComp from '@/components/custom/titlebarComp'  //标题栏
+	import titlebarComp from '@/components/custom/titleBarComp'  //标题栏
 	import singleImageComp from '@/components/custom/singleImageComp'  //单图组
 	import blankComp from '@/components/custom/blankComp'  //辅助空白
 	import buttonComp from '@/components/custom/buttonComp'  //按钮组
