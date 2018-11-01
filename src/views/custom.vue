@@ -1,30 +1,16 @@
 <template>
 	<div class="wrap">
-		<search-comp></search-comp>
-		<template v-for="(item,index) in titlebarConfig">
-			<titlebar-comp :titlebarConfig="item"></titlebar-comp>
-		</template>
-
-		<template v-for="(item,index) in singleImageConfig">
-			<single-image-comp :singleImageConfig="item"></single-image-comp>
-		</template>
-
-		<template v-for="(item,index) in blankConfig">
-			<blank-comp :blankConfig="item"></blank-comp>
-		</template>
-
-		<template v-for="(item,index) in buttonConfig">
-			<button-comp :buttonConfig="item"></button-comp>
-		</template>
-
-		<template v-for="(item,index) in noticeConfig">
-			<notice-comp :noticeConfig="item"></notice-comp>
-		</template>
-
-		<template v-for="(item,index) in bannerConfig">
-			<banner-comp :bannerConfig="item"></banner-comp>
-		</template>
-
+		<div class="item" v-for="(item,index) in showList">
+			<!-- <search-comp></search-comp> -->
+			<titlebar-comp v-if="item.typecomp==5" :titlebarConfig="item"></titlebar-comp>
+			<single-image-comp v-if="item.typecomp==11" :singleImageConfig="item"></single-image-comp>
+			<blank-comp v-if="item.typecomp==6" :blankConfig="item"></blank-comp>
+			<button-comp v-if="item.typecomp==7" :buttonConfig="item"></button-comp>
+			<notice-comp v-if="item.typecomp==4" :noticeConfig="item"></notice-comp>
+			<banner-comp v-if="item.typecomp==9" :bannerConfig="item"></banner-comp>
+			<piccase-comp v-if="item.type==10" :piccaseConfig="item"></piccase-comp>
+			<richtext-comp v-if="item.type==8" :richtextConfig="item"></richtext-comp>
+		</div>
 		
 	</div>
 </template>
@@ -42,12 +28,14 @@
 	import buttonComp from '@/components/custom/buttonComp'  //按钮组
 	import noticeComp from '@/components/custom/noticeComp'  //公告
 	import bannerComp from '@/components/custom/bannerComp'  //图片轮播
+	import piccaseComp from '@/components/custom/piccaseComp' //图片橱窗
+	import richtextComp from '@/components/custom/richtextComp' //富文本
 	export default {
 		data() {
 			return {
-				//标题栏
-				titlebarConfig:[
+				showList:[
 					{
+						typecomp:5,//标题栏
 						style:{
 							color:'#f00',
 							background:'#fff',
@@ -58,31 +46,25 @@
 						content:{
 							text:'我是文字'
 						}
-					}
-				],
-				//单图组
-				singleImageConfig:[
+					},
 					{
+						typecomp:11,//单图组
 						style:{
 							padding:'10px 10px'
 						},
 						content:{
 							src:'./static/vip/swiper4.png'
 						}
-					}
-				],
-				//辅助空白
-				blankConfig:[
+					},
 					{
+						typecomp:6,//辅助空白
 						style:{
 							background:'#999',
 							height:'10px'
 						}
-					}
-				],
-				//按钮组
-				buttonConfig:[
+					},
 					{
+						typecomp:7,//按钮组
 						style:{},
 						content:{
 							iconList:[
@@ -134,28 +116,67 @@
 				  			}
 							]
 						}
-					}
-				],
-				//公告
-				noticeConfig:[
+					},
 					{
+						typecomp:4,//公告
 						style:{},
 						content:{
 							imgUrl:'./static/index/index_notice.png',
 							speed:3000,
 							color:'#f00'
 						}
-					}
-				],
-				//轮播图
-				bannerConfig:[
+					},
 					{
+						typecomp:9,//轮播图
 						style:{},
 						content:{
 							imgUrl:'./static/images/mxqy2.png'
 						}
+					},
+					{
+						data:{
+							backgroundColor:'#fff',
+							isPaging:'0',
+							layoutMode:'4',
+							line:1,
+							paddingHorizontal:5,
+							paddingVertical:5,
+							imgList:[
+								{
+									imgurl:'./static/images/mxqy.png',
+									imgHref:''
+								},
+								{
+									imgurl:'./static/images/mxqy2.png',
+									imgHref:''
+								},
+								{
+									imgurl:'./static/images/mxqy2.png',
+									imgHref:''
+								},
+								{
+									imgurl:'./static/images/mxqy2.png',
+									imgHref:''
+								},
+								{
+									imgurl:'./static/images/mxqy2.png',
+									imgHref:''
+								}
+							]
+						},
+						label:'图片橱窗',
+						type:10
+					},
+					{
+						data:{
+							cont:"<div>我是富文本<div>"
+						},
+						type:8
 					}
-				]
+				],
+	
+
+
 			}
 		},
 		created() {
@@ -181,14 +202,16 @@
 			blankComp,
 			buttonComp,
 			noticeComp,
-			bannerComp
+			bannerComp,
+			piccaseComp,
+			richtextComp
 		},
 	}
 </script>
 <style lang="less" scoped>
 	/*@import '~vux/src/styles/1px.less';*/
 	.wrap{
-		padding-bottom: 100px;
+		padding-bottom: 200px;
 		background-color: #F5F6FA;
 	}
 </style>

@@ -1,11 +1,12 @@
 <template>
-	<div class="blankwrap" :style="blankConfig.style"></div>
+	<div v-html="richtextConfig.data.cont">
+	</div>
 </template>
 
 <script>
 	export default {
 		props: {
-			blankConfig:{
+			richtextConfig:{
 				type:Object,
 				default:{}
 			}
@@ -19,7 +20,7 @@
 
 		},
 		mounted() {
-
+			// console.log(this.richtextConfig)
 		},
 		methods: {
 

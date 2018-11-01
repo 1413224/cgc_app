@@ -16,8 +16,8 @@
 	export default {
 		props: {
 			noticeConfig:{
-				type:Array,
-				default:[]
+				type:Object,
+				default:{}
 			}
 		},
 		data() {

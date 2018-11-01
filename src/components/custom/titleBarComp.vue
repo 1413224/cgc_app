@@ -7,8 +7,8 @@
 	export default {
 		props: {
 			titlebarConfig:{
-				type:Array,
-				default:[]
+				type:Object,
+				default:{}
 			}
 		},
 		data() {

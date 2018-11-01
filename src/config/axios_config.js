@@ -72,7 +72,8 @@ axios.interceptors.request.use(config => {
 				form.append(key, config.data[key])
 			}
 			config.data = form
-			config.url = '/datacenter/v1/fileupload/image?name=2&type=user'
+			config.url = '/datacenter/v1/fileupload/image?name='+ config.data.name +'&type=user'
+			
 		} else {
 			let type = 'application/json;charset=utf-8'
 		}

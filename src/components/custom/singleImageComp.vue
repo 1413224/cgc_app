@@ -8,8 +8,8 @@
 	export default {
 		props: {
 			singleImageConfig:{
-				type:Array,
-				default:[]
+				type:Object,
+				default:{}
 			}
 		},
 		data() {

@@ -21,8 +21,8 @@
 	export default {
 		props: {
 			buttonConfig:{
-				type:Array,
-				default:[]
+				type:Object,
+				default:{}
 			}
 		},
 		data() {
