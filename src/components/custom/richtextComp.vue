@@ -1,5 +1,5 @@
 <template>
-	<div v-html="richtextConfig.data.cont">
+	<div class="richtext-comp" v-html="richtextConfig.data.contnet">
 	</div>
 </template>
 
@@ -31,7 +31,12 @@
 	}
 </script>
 
-<style lang="less" scoped>
-
-
+<style lang="less">
+.richtext-comp {
+	width: 100%;
+	overflow: hidden;
+	* {
+		max-width: 100%;
+	}
+}
 </style>

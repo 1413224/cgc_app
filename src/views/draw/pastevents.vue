@@ -6,10 +6,11 @@
 
 				<div class="item">
 					<div class="periodVideo">第{{ info.number}}期 抽奖视频</div>
-					<div class="player">
+					<div class="player" v-if="!isNoVideo">
 						<d-player ref="player" @fullscreen="fs" @pause="stop" @play="playerStop = false" :options="options"></d-player>
 						<img @click="bf" v-if="playerStop" :src="'./static/draw/kongzhi.png'" alt="" />
 					</div>
+					<img style="width: 100%;height: auto;" v-show="isNoVideo" :src="'./static/draw/video_bg.png'" />
 				</div>
 
 				<div class="container">
@@ -31,11 +32,11 @@
 							<div class="set-title">奖品设置</div>
 							<ul class="ul-set">
 								<li v-for="i in info.awardList" :key="i">
+									<div class="jiangx">{{i.awardName}}</div>
 									<div class="flex">
-										<div style="flex: 1">{{i.awardName}}</div>
 										<div>{{i.bonus}}<span class="small">元</span></div>
+										<div class="left num">{{i.number}}名</div>
 									</div>
-									<div class="left num">{{i.number}}名</div>
 								</li>
 							</ul>
 						</div>
@@ -45,8 +46,8 @@
 
 							<div class="period">
 								<swiper :options="swiperOption1" ref="mySwiper">
-									<swiper-slide v-for="(item,index) in data3" :key="index" :class="{'btn-active':act3==index}">
-										<div class="btn0" @click="periodActive(index,item.lotteryId)">
+									<swiper-slide @click.native="periodActive(index,item.lotteryId)" v-for="(item,index) in data3" :key="index" :class="{'btn-active':act3==index}">
+										<div class="btn0">
 											{{item.number}}
 										</div>
 									</swiper-slide>
@@ -75,12 +76,14 @@
 						<!--数据列表-->
 						<div class="item" v-for="(item,index) in personList" v-if="showList">
 							<div class="left">
-								<img src="../../assets/images/draw/photo0.png" alt="">
+								<img v-if="item.thumb" :src="item.thumb.original" alt="">
+								<img v-else :src="'./static/images/mrtx.png'" alt="">
 							</div>
 							<div class="right">
 								<div>
-									<p>{{item.mobile}}</p>
-									<p><span>{{item.orderActualPrice}}</span>元</p>
+									<p v-if="item.nickname != ''">{{item.nickname}}</p>
+									<p v-else style="color: #ccc;">未设置昵称</p>
+									<p><span>{{item.bonus}}</span>元</p>
 								</div>
 								<p class="num">{{item.mobile}}</p>
 								<p class="tip">{{item.message}}</p>
@@ -121,21 +124,7 @@
 		},
 		data() {
 			return {
-				options: {
-					autoplay: false, //自动播放
-					theme: '#FADFA3', //主体颜色
-					loop: false, //循环播放
-					lang: 'zh-cn', //语言
-					screenshot: false, //视频截图
-					hotkey: false, //启动热键
-					logo: './static/images/video.jpg', //左上角logo
-					volume: 0.7, //音量
-					mutex: true, //多个视频同时播放
-					video: {
-						url: './static/video/movie.mp4',
-						pic: './static/draw/video_bg.png'
-					}
-				},
+				options: {},
 				show: false,
 				showNomore: false,
 				swiperOption: {
@@ -149,7 +138,8 @@
 				swiperOption1: {
 					autoHeight: true,
 					slidesPerView: 'auto',
-					spaceBetween: 10
+					spaceBetween: 10,
+					centeredSlides: true,
 				},
 				act1: 0,
 				data1: [],
@@ -172,13 +162,11 @@
 				awardId: '',
 				awardListLength: 0,
 				showList: false,
-				inloading: true
+				inloading: true,
+				isNoVideo: true
 			}
 		},
 		computed: {
-			player() {
-				return this.$refs.videoPlayer.player
-			},
 			swiper() {
 				return this.$refs.mySwiper.swiper
 			}
@@ -188,9 +176,6 @@
 		},
 		mounted() {
 			this.InitScroll()
-
-			this.player = this.$refs.player.dp
-			document.getElementsByClassName('dplayer-full-in-icon')[0].style.display = 'none'
 		},
 		methods: {
 			getInfoById() {
@@ -221,13 +206,37 @@
 						})
 
 						if(res.data.data.awardList.length > 0) {
-							_this.options.video.url = _this.info.videoUrl
-							_this.options.video.pic = _this.info.thumb ? _this.info.thumb.original : './static/draw/video_bg.png'
+							if(_this.info.videoUrl != '') {
+								_this.options = {
+									autoplay: false, //自动播放
+									theme: '#FADFA3', //主体颜色
+									loop: false, //循环播放
+									lang: 'zh-cn', //语言
+									screenshot: false, //视频截图
+									hotkey: false, //启动热键
+									logo: './static/images/video.jpg', //左上角logo
+									volume: 0.7, //音量
+									mutex: true, //多个视频同时播放
+									video: {
+										url: _this.info.videoUrl,
+										pic: _this.info.thumb ? _this.info.thumb.original : './static/draw/video_bg.png'
+									}
+								}
+
+								_this.isNoVideo = false
+								_this.$nextTick(function() {
+									_this.player = _this.$refs.player.dp
+									document.getElementsByClassName('dplayer-full-in-icon')[0].style.display = 'none'
+									console.log(_this.player)
+								})
+							} else {
+								_this.isNoVideo = true
+							}
 
 							_this.awardListLength = _this.info.awardList.length
 
 							_this.actice(0, _this.info.awardList[0].awardId)
-						}else{
+						} else {
 							_this.inloading = false
 							_this.personList = []
 						}
@@ -263,6 +272,7 @@
 				_this.personList = []
 				_this.showList = false
 				_this.inloading = true
+				_this.curPage = 1
 
 				_this.act1 = index
 				_this.awardId = id
@@ -276,13 +286,13 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-					
-						_this.showList = res.data.data.list.length > 0 ? true : false
-						_this.inloading = false
-
-						if(res.data.data.list.length > 0) {
-							_this.personList = res.data.data.list
+						if(res.data.data.list) {
+							_this.showList = res.data.data.list.length > 0 ? true : false
+							if(res.data.data.list.length > 0) {
+								_this.personList = res.data.data.list
+							}
 						}
+						_this.inloading = false
 					}
 				})
 			},
@@ -310,29 +320,35 @@
 
 			},
 			LoadData() {
-				if(this.personList > 0) {
+				if(this.personList.length > 0) {
 					var _this = this
-					_this.curPage++
+					_this.curPage++;
 
-						_this.$http.get(_this.url.lottery.getAwardUserList, {
-							params: {
-								lotteryId: _this.$route.query.lotteryId,
-								awardId: _this.awardId,
-								curPage: _this.curPage,
-								pageSize: _this.pageSize
-							}
-						}).then((res) => {
-							if(res.data.status == "00000000") {
+					_this.$http.get(_this.url.lottery.getAwardUserList, {
+						params: {
+							lotteryId: _this.$route.query.lotteryId,
+							awardId: _this.awardId,
+							curPage: _this.curPage,
+							pageSize: _this.pageSize,
+							islist: true
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							if(res.data.data.list) {
 								if(res.data.data.list.length > 0) {
 									_this.show = true
 									_this.showNomore = false
 									_this.personList = _this.personList.concat(res.data.data.list)
 								} else {
-									_this.show = fasle
+									_this.show = false
 									_this.showNomore = true
 								}
+							} else {
+								_this.show = false
+								_this.showNomore = true
 							}
-						})
+						}
+					})
 				}
 			}
 		}
@@ -422,24 +438,37 @@
 					border-radius: 0.04rem;
 					text-align: center;
 					width: 3.20rem;
-					height: 0.78rem;
-					display: flex;
+					/*height: 0.78rem;*/
+					/*display: flex;*/
 					margin-bottom: 0.1rem;
 					align-items: center;
 					padding: 0 0.18rem;
 					box-sizing: border-box;
+					.jiangx{
+						text-align: left;
+						padding-top: 4px;
+						font-size: .12rem;
+					}
 					.flex {
 						display: flex;
-						flex: 1;
 						div:nth-child(1) {
 							line-height: 0.64rem;
-						}
-						div:nth-child(2) {
+							margin-right: 0.1rem;
 							color: #FFEEB3;
 							font-size: 0.42rem;
+							flex: 2;
+							text-align: left;
 							.small {
-								font-size: 0.2rem;
+								font-size: 0.12rem;
+								padding-left: 2px;
+								display: inline-block;
 							}
+						}
+						div:nth-child(2) {
+							color: #fff;
+							font-size: .12rem;
+							flex: 1;
+							
 						}
 					}
 					.num {
@@ -461,7 +490,6 @@
 				color: #fff;
 				padding-bottom: 0.19rem;
 				.swiper-slide {
-					width: 1.128rem;
 					height: 0.66rem;
 					display: flex;
 					align-items: center;
@@ -469,6 +497,7 @@
 					font-size: 0.3rem;
 					background-color: #E1E1E1;
 					border-radius: 3px;
+					max-width: 2rem;
 				}
 				/* 抽奖期数*/
 				.btn-active {
@@ -501,7 +530,7 @@
 				height: auto;
 			}
 			.wz-award {
-				width: 1.1rem;
+				/*width: 1.1rem;*/
 				color: #1A2642;
 				font-size: 0.3rem;
 				text-align: center;

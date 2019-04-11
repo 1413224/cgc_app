@@ -1,5 +1,6 @@
 <template>
 	<section class="global-box">
+		<div class="wap" @click="zanwei()"></div>
 		<settingHeader :title="title"></settingHeader>
 		<div class="search-box">
 			<img :src="'./static/images/ss.png'" />
@@ -270,11 +271,28 @@
 					}
 				})
 			},
+			zanwei(){
+				this.$vux.toast.show({
+					width: '50%',
+					type: 'text',
+					position: 'top',
+					text: '建设中，敬请期待'
+				});
+			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	.wap{
+		width: 100%;
+		height: 100%;
+		background:#fff;
+		opacity: 0;
+		position: fixed;
+		top: 50px;
+		z-index: 999;
+	}
 	.global-box {
 		background-color: #F5F6FA;
 		.search-box {

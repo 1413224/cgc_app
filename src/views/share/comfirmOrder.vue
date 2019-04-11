@@ -23,7 +23,8 @@
 			</div>
 			<div class="order_bottom">
 				<p>优惠券选择</p>
-				<p @click="showCouponList">{{couponName?couponName:info.availableCouponNums+'张可用'}}<i class="iconfont icon-arrow-right"></i></p>
+				<p @click="showCouponList" v-if="couponName">{{couponName}}<i class="iconfont icon-arrow-right"></i></p>
+				<p @click="showCouponList" v-else>{{info.availableCouponNums ? info.availableCouponNums + '张可用' : '0张可用'}}<i class="iconfont icon-arrow-right"></i></p>
 			</div>
 		</div>
 		<div class="fix-box">
@@ -58,7 +59,7 @@
 				<p class="money">可用：{{info.availableBalance}}</p>
 			</div>
 			<div class="right">
-				<p>已抵用<i class="money">¥ {{Number(info.recommendBalance).toFixed(2)}}</i></p>
+				<p>已抵用<i class="money">¥ {{Number(info.recommendBalance).toFloor(2)}}</i></p>
 				<i class="iconfont icon-arrow-right rj"></i>
 			</div>
 		</div>
@@ -73,7 +74,7 @@
 					</div>
 					<div class="input-div">
 						<p>¥</p>
-						<input type="number" v-model="info.recommendBalance" @input="inputChange" placeholder="请输入通用积分数">
+						<input type="number" v-model="info.recommendBalance" @input="inputChange" @blur="inputBlur" placeholder="请输入通用积分数">
 					</div>
 					<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
 				</div>
@@ -112,7 +113,7 @@
 								</div>
 								<div class="money">
 									<div>
-										<span>{{Number(item.denomination).toFixed(0)}}</span>元
+										<span>{{Number(item.denomination).toFloor(0)}}</span>元
 										<br />
 										<i>满{{item.condition}}元可用</i>
 									</div>
@@ -136,7 +137,6 @@
 
 <script>
 	import settingHeader from '../../components/setting_header'
-	import { XSwitch, Popup } from 'vux'
 	import payMode from '@/components/payMode'
 	export default {
 		data() {
@@ -158,14 +158,12 @@
 				recommendBalance: 0,
 				payParmars: {},
 				showIntegral: false,
-				orderSn:'',//订单编号
-				cancleSn:1
+				orderSn: '', //订单编号
+				cancleSn: 1
 			}
 		},
 		components: {
 			settingHeader,
-			XSwitch,
-			Popup,
 			payMode
 		},
 		created() {
@@ -183,34 +181,28 @@
 					console.log(index)
 				},
 				toPay(type) {
-					/*if(type == 1) {
-						//微信支付
-						_this.pay(_this.payParmars)
-						return false;
-						_this.$router.push({
-							path: '/member/pay/wxgzhpay'
-						})
-					}*/
 					var params = {
-						body:_this.payParmars.body,
-						feeType:'CNY',
-						outTotalFee:_this.payParmars.payPrice,
-						spbillCreateIp:_this.payParmars.ip,
-						tradeType:'JSAPI',
-						openId:sessionStorage['_openid_'],
-						parentOrderSn:_this.payParmars.parentOrderSn,
-						userId:_this.$store.state.user.userId
+						body: _this.payParmars.body,
+						feeType: 'CNY',
+						outTotalFee: _this.payParmars.payPrice,
+						spbillCreateIp: _this.payParmars.ip,
+						tradeType: 'JSAPI',
+						openId: localStorage['_openid_'],
+						parentOrderSn: _this.payParmars.parentOrderSn,
+						userId: _this.$store.state.user.userId
 					}
-					if(location.host == _this.url.health){
-						params.id="200002"
-					}else{
-						params.id="200000"
+					if(location.host == _this.url.health) {
+						params.id = _this.url.IdHealth
+					} else if(location.host == _this.url.cgc) {
+						params.id = _this.url.IdCgc
+					} else if(location.host == _this.url.test) {
+						params.id = _this.url.IdTest
 					}
 
-					_this.$http.post(_this.url.zf.pay,params).then((res)=>{
-						if(res.data.status == "00000000"){
-							var data = res.data.data
-							if(type==1){
+					if(type == 1) {
+						_this.$http.post(_this.url.zf.pay, params).then((res) => {
+							if(res.data.status == "00000000") {
+								var data = res.data.data
 								wx.config({
 									debug: false,
 									appId: data.appId,
@@ -229,14 +221,14 @@
 								})
 								wx.chooseWXPay({
 									appId: data.appId,
-									timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
-									nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位  
-									package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）  
-									signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
-									paySign: data.paySign, // 支付签名  
+									timestamp: data.timeStamp,
+									nonceStr: data.nonceStr,
+									package: data.package,
+									signType: data.signType,
+									paySign: data.paySign,
 									success: function(res) {
-										router.push({
-											path: '/shop/my_order2'
+										router.replace({
+											path: '/share/usetime'
 										})
 									},
 									error: function() {
@@ -257,10 +249,49 @@
 									}
 								})
 							}
+						})
+					} else if(type == 2) {
+						if(location.host == _this.url.test) {
+							var cgcPayId = 500003,
+								returnUrl = "http://www.cgc999.com/new/index.html#/shop/my_order2";
+						} else if(location.host == _this.url.health) {
+							var cgcPayId = 500000,
+								returnUrl = "https://health.cgc999.com/web/new/index.html#/shop/my_order2";
+						} else if(location.host == _this.url.cgc) {
+							var cgcPayId = 500000,
+								returnUrl = "https://health.cgc999.com/web/new/index.html#/shop/my_order2";
 						}
-					})
 
-
+						_this.$http.post(_this.url.zf.alipay, {
+							cgcPayId: cgcPayId,
+							parentOrderSn: _this.payParmars.parentOrderSn,
+							body: _this.payParmars.body,
+							goodsType: "1",
+							subject: _this.payParmars.body,
+							outTotalAmount: Number(_this.payParmars.payPrice).toFloor(2),
+							userId: _this.$store.state.user.userId,
+							returnUrl: returnUrl
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								_this.tradeNo = res.data.data.tradeNo
+								document.write(res.data.data.orderStr);
+							} else if(res.data.status == "ALIPAY_0002") {
+								_this.$router.replace({
+									path: '/index',
+									query: {
+										no: sessionStorage['_cno_']
+									}
+								})
+							} else if(res.data.status == "ALIPAY_1004") {
+								_this.$router.replace({
+									path: '/index',
+									query: {
+										no: sessionStorage['_cno_']
+									}
+								})
+							}
+						})
+					}
 				},
 				hide() {
 					console.log('hide')
@@ -269,6 +300,13 @@
 					console.log('show')
 				}
 			}
+		},
+		beforeRouteEnter(to,from,next){
+			next(vm =>{
+				if(from.path=="/share/instrumentCode" && vm.$store.state.page.isLogin != 'true'){
+					localStorage.setItem('_fullPath_',from.fullPath)
+				}
+			})
 		},
 		mounted() {
 
@@ -287,6 +325,9 @@
 			}
 		},
 		methods: {
+			inputBlur() {
+				document.body.scrollTop = document.body.scrollTop - 1
+			},
 			submit() {
 				var _this = this
 
@@ -341,7 +382,7 @@
 					var reg = /^(([0-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/
 					if(!reg.test(this.info.recommendBalance)) {
 						if(Number(this.info.recommendBalance) > 0) {
-							this.info.recommendBalance = Number(this.info.recommendBalance).toFixed(2)
+							this.info.recommendBalance = Number(this.info.recommendBalance).toFloor(2)
 						} else {
 							this.info.recommendBalance = ''
 						}
@@ -369,7 +410,7 @@
 					this.info.payPrice = Number(this.info.price)
 				}
 
-				var minAllMoney = Number(this.info.payPrice).toFixed(2)
+				var minAllMoney = Number(this.info.payPrice).toFloor(2)
 
 				//可用通用积分大于商品价格
 				if(Number(this.info.availableBalance) >= Number(minAllMoney)) {
@@ -378,7 +419,7 @@
 						recommendBalance = minAllMoney
 					}
 
-					this.info.payPrice = (Number(minAllMoney) - Number(recommendBalance)).toFixed(2)
+					this.info.payPrice = (Number(minAllMoney) - Number(recommendBalance)).toFloor(2)
 				}
 
 				//可用通用积分小于商品价格
@@ -440,7 +481,16 @@
 			},
 			showCouponList() {
 				var _this = this
-				_this.show = true
+				if(_this.info.availableCouponNums > 0) {
+					_this.show = true
+				} else {
+					_this.$vux.toast.show({
+						width: '50%',
+						type: 'text',
+						position: 'middle',
+						text: '暂无可用优惠券'
+					})
+				}
 			},
 			//  优惠券  下标 名字 减去金额 类型  使用门槛 
 			sure(index, item) {

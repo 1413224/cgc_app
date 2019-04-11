@@ -22,7 +22,6 @@
 </template>
 
 <script>
-	import { Cell, Group, XSwitch, Scroller } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -42,8 +41,6 @@
 		},
 		components: {
 			settingHeader,
-			XSwitch,
-			Scroller
 		}
 	}
 </script>

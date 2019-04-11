@@ -15,17 +15,16 @@
 
 					<div class="new">
 						<img class="banner-img" @click="$router.push({path: '/draw/rule'})" :src="'./static/draw/banner4.png'" />
-
 						<div class="pd-box">
 							<div class="bw-box">
 								<div class="top">
 									<img class="left-img" :src="'./static/draw/left.png'" />
-									<p>截止2018年3月，在e消费平台</p>
+									<p>截止{{nowDay}}，在CGC联盟平台</p>
 									<img class="right-img" :src="'./static/draw/left.png'" />
 								</div>
 								<div class="middle">
 									<div class="left">
-										<p>累计中奖人数（人）</p>
+										<p>累计中奖人次（人）</p>
 										<p>{{tweenedNumber1}}</p>
 									</div>
 									<div>
@@ -52,7 +51,7 @@
 						</div>
 					</div>
 
-					<div class="head" >
+					<div class="head">
 						<!-- <img src="../../assets/images/draw/lottery_index1.png"> -->
 						<div class="list">
 							<p class="has">我的中奖</p>
@@ -166,15 +165,17 @@
 				pageSize: 10,
 				userLottery: {},
 				recommendLottery: [],
-				recommendMessage: []
+				recommendMessage: [],
+				nowDay:''
 			}
 		},
 		created() {
+			this.nowDay = this.mainApp.frDateTimehp.getFormatDateTamp(Date.parse(new Date()),'noDay')
 			this.getStatInfo()
 			this.getRecommendLottery()
 		},
 		mounted() {
-			
+
 		},
 		computed: {
 			tweenedNumber1: function() {
@@ -204,7 +205,7 @@
 						TweenMax.to(_this.$data, 1.5, {
 							animatedNumber2: _this.info.totalBonus //累计奖金金额
 						})
-						
+
 						_this.InitScroll()
 					}
 				})
@@ -296,8 +297,8 @@
 </script>
 
 <style lang="less">
-	.draw_index{
-		.weui-loadmore{
+	.draw_index {
+		.weui-loadmore {
 			margin: 0 auto!important;
 		}
 	}
@@ -422,8 +423,8 @@
 								align-items: center;
 								justify-content: center;
 								font-size: 0.22rem;
-									font-family: PingFangSC-Semibold;
-									color: rgba(242, 48, 48, 1);
+								font-family: PingFangSC-Semibold;
+								color: rgba(242, 48, 48, 1);
 							}
 						}
 					}
@@ -435,22 +436,22 @@
 	.settingHeader~.wrapper {
 		position: absolute;
 		top: .9rem;
-		left: 0;
-		right: 0;
 		bottom: 0;
 		overflow: hidden;
 		background: #E32921;
+		width: 100%;
+		max-width: 640px;
 	}
 	
 	.wrapper {
 		// height: 100%;
 		position: absolute;
 		top: 0;
-		left: 0;
-		right: 0;
 		bottom: 0;
 		overflow: hidden;
 		background: #E32921;
+		width: 100%;
+		max-width: 640px;
 	}
 	
 	.head {

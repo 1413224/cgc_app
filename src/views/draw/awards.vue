@@ -47,15 +47,11 @@
 </template>
 
 <script>
-	import { XInput, XDialog, CheckIcon } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import BScroll from 'better-scroll'
 	export default {
 		components: {
-			XInput,
 			settingHeader,
-			XDialog,
-			CheckIcon
 		},
 		data() {
 			return {

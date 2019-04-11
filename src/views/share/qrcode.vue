@@ -6,7 +6,6 @@
 </template>
 
 <script>
-	import { Qrcode } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -16,12 +15,10 @@
 			}
 		},
 		components: {
-			settingHeader,
-			Qrcode
+			settingHeader
 		},
 		created() {
 			this.qrcodeVal = 'http://192.168.3.145:8080/#/user/reg?parentId=' + this.$store.state.user.userId
-			
 		}
 	}
 </script>

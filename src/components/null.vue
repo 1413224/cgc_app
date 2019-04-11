@@ -1,7 +1,7 @@
 <template>
 	<section class="null_box">
 		<img :src="'./static/null/'+ status +'.png'" alt="">
-		<p>{{ text}}</p>
+		<p>{{text}}</p>
 	</section>
 </template>
 

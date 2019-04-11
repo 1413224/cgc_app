@@ -1,11 +1,11 @@
 <template>
 	<section class="invoice_index_box">
 		<settingHeader title="我的发票"></settingHeader>
-		<div class="tab_box">
+		<div class="tab_box invoicewap">
 			<div class="top">
 				<div class="item" :class="{'blue':tabIndex == index}" v-for="(item,index) in tabList" :key="index" @click="tabClick(index)">
 					<span>{{item.type}}</span>
-					<i :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-shixinjiantou-copy"></i>
+					<i :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-triangledownfill"></i>
 				</div>
 			</div>
 			<!--type-->
@@ -28,7 +28,8 @@
 			<!--遮罩层-->
 			<div class="masker" v-if="maskerShow" @click="maskerShow = false"></div>
 		</div>
-		<div class="wrapper" ref="wrapper" :class="[{'top46':!$store.state.page.isWx},{'bg_white':invoiceList.length == 0}]">
+		<!-- {'top46':!$store.state.page.isWx}, -->
+		<div class="wrapper" ref="wrapper" :class="[{'bg_white':invoiceList.length == 0}]">
 			<div class="content" :class="{'pr_box':!showList}">
 				<ul class="invoice_list_box" v-if="showList">
 					<li class="item" v-for="(item,index) in invoiceList" :key="index" @click="toDetail(item.invoiceNum)">
@@ -273,7 +274,8 @@
 					//userId: _this.$store.state.user.userId,
 					pageSize: _this.pageSize,
 					curPage: _this.curPage,
-					status: 1
+					status: 1,
+					islist:true
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						if(res.data.data.list) {
@@ -292,13 +294,20 @@
 		}
 	}
 </script>
+<style>
+.settingHeader + .invoicewap + .wrapper{
+	top: 1.6rem !important;
+}
+</style>
 
 <style lang="less" scoped>
+	@import '//at.alicdn.com/t/font_912483_lcojf3qe8m.css';
 	.invoice_index_box {
 		.bottom_box {
 			position: fixed;
 			bottom: 0;
-			left: 0;
+			/*left: 0;*/
+			max-width: 640px;
 			width: 100%;
 			display: flex;
 			height: 0.90rem;
@@ -447,9 +456,11 @@
 		}
 		.wrapper {
 			position: fixed;
-			top: 0.87rem;
+			/*top: 0.87rem;*/
+			top: 60px;
 			bottom: 0.9rem;
 			width: 100%;
+			max-width: 640px;
 			overflow: hidden;
 			.pr_box {
 				height: 100%;

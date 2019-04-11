@@ -12,7 +12,9 @@
 </template>
 
 <script>
+
 	export default {
+		
 		data() {
 			return {}
 		},
@@ -27,6 +29,7 @@
 							iconIn: './static/images/e_active.png',
 							title: 'e消费',
 							url: '/index'
+							// url:'/custom?id=alDiypage660352377100000001'
 						},
 						/*{
 							icon: './static/images/xysc.png',
@@ -48,7 +51,7 @@
 						{
 							icon: './static/images/cylm.png',
 							iconIn: './static/images/cylm_active.png',
-							title: '产业联盟',
+							title: '联营企业',
 							url: '/share/storelist'
 						},
 						{
@@ -75,6 +78,7 @@
 		position: fixed;
 		bottom: 0;
 		width: 100%;
+		max-width: 640px;
 		z-index: 9999;
 		background: rgba(255, 255, 255, 1);
 		font-family: PingFangSC-Regular;

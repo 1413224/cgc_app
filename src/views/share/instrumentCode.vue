@@ -61,7 +61,8 @@
 				title: "仪器扫码",
 				infoData: {},
 				equipNumber: '',
-				enterpriseId: ''
+				enterpriseId: '',
+				allianceId:''
 			}
 
 		},
@@ -70,9 +71,12 @@
 		},
 		created() {
 			this.equipNumber = this.mainApp.getCs('n') ? this.mainApp.getCs('n') : ''
+
+			this.getEquipmentInfo()
+			// localStorage.setItem("_chaineid_",_this.enterpriseId)
 		},
 		mounted() {
-			this.getEquipmentInfo()
+			
 		},
 		computed: {
 
@@ -88,7 +92,8 @@
 				})
 			},
 			getEquipmentInfo() {
-				var _this = this
+				var _this = this,
+						offLine = _this.mainApp.getCs('offLine');
 
 				_this.$http.get(_this.url.share.getEquipmentInfo, {
 					params: {
@@ -101,9 +106,24 @@
 						for(var i = 0; i < res.data.data.list.length; i++) {
 							res.data.data.list[i].serviceTime = _this.setServiceTime(res.data.data.list[i].serviceTime)
 						}
-
 						_this.infoData = res.data.data
 						_this.enterpriseId = res.data.data.enterpriseId
+						
+						_this.$http.get(_this.url.qy.getBasicInfo, {
+                 params: {
+                    enterpriseId: _this.enterpriseId
+                 }
+             }).then((res) => {
+                 if(res.data.status == "00000000") {
+                     if(res.data.data.allianceId) {
+                        _this.allianceId = res.data.data.allianceId
+                        if(offLine){
+                        	localStorage.setItem("_chainsid_",_this.allianceId)
+                        }
+                     }
+                 }
+             })
+
 					}
 				})
 			},
@@ -126,7 +146,7 @@
 				this.$router.push({
 					path: '/multi_user_mall',
 					query: {
-						id: _this.enterpriseId,
+						eid: _this.enterpriseId,
 						index: 3
 					}
 				})

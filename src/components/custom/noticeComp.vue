@@ -1,13 +1,39 @@
 <template>
-	<div class="notice-wrap">
-		<img :src="noticeConfig.content.imgUrl" alt="">
-		<div class="wap" style="padding-left: 0.16rem">
-			<marquee>
-				<marquee-item :duration='3000' class="align-middle"><span :style="{color:noticeConfig.content.color}">滚动的快讯</span></marquee-item>
-				<marquee-item :duration='3000' class="align-middle"><span>滚动的快讯3</span></marquee-item>
-				<marquee-item :duration='3000' class="align-middle"><span>滚动的快讯2</span></marquee-item>
+<!-- {background:noticeConfig.data.backgroundColor} -->
+	<div class="notice-wrap" :style="noticeBgcolor">
+		<img :src="noticeConfig.data.icon ? noticeConfig.data.icon : './static/index/index_notice.png'" alt="">
+		<div class="wap">
+			<marquee 
+				v-if="noticeConfig.data.contentType==1" 
+				:duration='noticeConfig.data.speed * 1000'
+				>
+				<template v-for="(item,index) in noticeConfig.data.noticeList">
+					<marquee-item
+						@click.native="goDetail(item)" 
+						 class="align-middle">
+						<span :style="styleObject">{{item.text}}</span>
+					</marquee-item>
+				</template>
+			</marquee>
+
+			<marquee 
+				v-if="noticeConfig.data.contentType==0" 
+				:duration='noticeConfig.data.speed * 1000'
+				>
+				<template v-for="(item,index) in articleList">
+					<marquee-item 
+						@click.native="goDetail(item.articleId)" 
+						class="align-middle">
+						<span :style="styleObject">{{item.title}}</span>
+					</marquee-item>
+				</template>
 			</marquee>
 		</div>
+		<!-- /member/generalize/index -->
+		<!-- /member/article/index 快讯列表 -->
+		<router-link to="/member/generalize/index" v-if="noticeConfig.data.contentType==0">
+			<i class="icon iconfont icon-arrow-right "></i>
+		</router-link>
 	</div>
 </template>
 
@@ -22,6 +48,10 @@
 		},
 		data() {
 			return {
+				styleObject:{
+					color:this.noticeConfig.data.color
+				},
+				articleList:[],
 
 			}
 		},
@@ -30,10 +60,58 @@
 		},
 		mounted() {
 			// console.log(this.noticeConfig)
+			if(this.noticeConfig.data.contentType=='0'){
+				this.getShopNotice()
+			}
 		},
 		methods: {
+			goDetail(uri){
+				this.$router.push({
+					path:'/member/article/detail',
+					query:{
+						id:uri
+					}
+				})
+			},
+			//判断是否是商城公告
+			getShopNotice(){
+				var _this = this;
+				if(_this.noticeConfig.data.contentType == '0'){
+					_this.$http.get(_this.url.user.getLists,{
+						params:{
+							type:1,
+							curPage:1,
+							pageSize:10
+						}
+					}).then((res)=>{
+						if(res.status == 200) {
 
-
+						_this.articleList = res.data.data.list
+							// console.log(_this.articleList)
+						} else {
+							Vue.$vux.toast.show({
+								text: "请求快讯失败",
+								type: 'text',
+								position: 'middle',
+								width: '50%'
+							})
+						}
+					})
+				}
+			}
+		},
+		computed:{
+			noticeBgcolor(){
+				if(this.noticeConfig.data.isInheritBackgroundColor=="1"){
+					return {
+						backgroundColor:this.noticeConfig.data.backgroundColor
+					}
+				}else{
+					return {
+						backgroundColor:this.noticeConfig.data.allBackgroundColor
+					}
+				}
+			}
 		},
 		components: {
 			MarqueeItem,
@@ -50,20 +128,23 @@
 	background-color: #fff;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 0.2rem;
-	font-family: PingFangSC-Light;
 	color: #425884;
 	font-size: 0.24rem;
 	box-sizing: border-box;
+	overflow: hidden;
+	.wap{
+
+	}
 	.vux-marquee {
 		width: 5rem !important;
+		/*border:1px solid #333;*/
+		padding-left: 5px;
 		line-height: 32px;
 		font-size: 0.26rem;
 		font-family: PingFangSC-Regular;
 		color: rgba(26, 38, 66, 1);
 		.align-middle {
-			// display: inline-block;
+			/*// display: inline-block;*/
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;

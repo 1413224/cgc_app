@@ -15,7 +15,6 @@
 </template>
 
 <script>
-	import { Cell, Group } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -47,7 +46,7 @@
 							platformId: _this.url.platformId
 						}
 
-						var unionid = sessionStorage['_openid_']
+						var unionid = localStorage['_openid_']
 
 						if(unionid) {
 							params.unionid = unionid

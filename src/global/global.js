@@ -1,3 +1,6 @@
+import Vue from 'vue'
+// console.log(Vue)
+
 var mainApp = {
 	frDateTimehp: {
 
@@ -37,7 +40,7 @@ var mainApp = {
 		},
 
 		//时间戳转为日期 不需要时间字段
-		getFormatDateTamp: function(val) {
+		getFormatDateTamp: function(val, noDay) {
 			if(val > 2554431132000) return '-';
 
 			var date = new Date(val);
@@ -51,8 +54,11 @@ var mainApp = {
 			if(strDate >= 0 && strDate <= 9) {
 				strDate = "0" + strDate;
 			}
-
-			var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+			if(noDay) {
+				var currentdate = date.getFullYear() + '年' + month + '月'
+			} else {
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+			}
 
 			return currentdate;
 		},
@@ -247,6 +253,57 @@ var mainApp = {
 			}
 		}
 	},
+
+	getTrueUrl(){
+		let trueUrl;
+		if(location.host == "health.cgc999.com") {
+      trueUrl = '//health.cgc999.com/web' // 演示环境
+    } else if(location.host == "www.cgc999.com") {
+      trueUrl = '//www.cgc999.com' // 测试环境
+    } else if(location.host == "cgc.cgc999.com") {
+      trueUrl = '//cgc.cgc999.com/web' // 线上环境
+    }
+    return trueUrl;
+	},
+	//获取授权链接
+	getOrizaUrl() {
+		let trueUrl = this.getTrueUrl();
+		let orizaUrl = trueUrl+'/oriza/index.html#/member/oriza';
+		return orizaUrl;
+	},
+	saveRegInfo(info){
+		//默认注册信息仅保存30s
+		info.expireTime = new Date()+30*1000;
+		info.type = 'reg';
+		localStorage.setItem('_regOrLoginInfo_', info);
+	},
+	saveLoginInfo(info){
+		//默认登录信息仅保存30s
+		info.expireTime = new Date()+30*1000;
+		info.type = 'login';
+		localStorage.setItem('_regOrLoginInfo_', info);
+	},
+	getRegOrLoginInfo(){
+		let info = localStorage['_regOrLoginInfo_'];
+		if(info && info.expireTime>=new Date()){
+			//补充授权获取的openid
+			info.unionid = localStorage['_openid_'];
+			//去除对应的expireTime
+			
+		}
+		else{
+			localStorage.removeItem('_regOrLoginInfo_');
+		}
+		return '';
+	},
+	showMessage(text,position){
+		Vue.$vux.toast.show({
+			width: '50%',
+			type: 'text',
+			position: position ? position : 'top',
+			text: text
+		})
+	},
 	ischeckTax(number) {
 		var reg = /^[A-Z0-9]{15}$|^[A-Z0-9]{17}$|^[A-Z0-9]{18}$|^[A-Z0-9]{20}$/
 		if(!reg.test(number)) {
@@ -316,15 +373,15 @@ var mainApp = {
 		},
 		escapeForJs: function(str) {
 			if(!str) return '';
-			str = str.replace(/\\/g,'\\\\');
-			str = str.replace(/"/g,'\\"');
+			str = str.replace(/\\/g, '\\\\');
+			str = str.replace(/"/g, '\\"');
 			return str;
 		},
-		xssFilter:function(html){
+		xssFilter: function(html) {
 			if(!html) return "";
-			html = html.replace(/<\s*\/?script\s*>/g,'');
-			html = html.replace(/javascript:[^'"]*/g,'');
-			html = html.replace(/onerror\s*=\s*['"]?[^'"]*['"]?/g,'');
+			html = html.replace(/<\s*\/?script\s*>/g, '');
+			html = html.replace(/javascript:[^'"]*/g, '');
+			html = html.replace(/onerror\s*=\s*['"]?[^'"]*['"]?/g, '');
 			return html;
 		}
 	},
@@ -339,10 +396,19 @@ var mainApp = {
 		xhr.open("GET", "/", false) //false不可变
 		xhr.send(null);
 		var date = xhr.getResponseHeader("Date");
-		
+
 		var time = Date.parse(new Date(date))
-		
-		return Number(time/1000);
-	}
+
+		return Number(time / 1000);
+	},
+	isBackspace(keyValue) {
+		return keyValue === 'Backspace';
+	},
+	isDot(keyValue) {
+		return keyValue === '.';
+	},
+	isNumber(keyValue) {
+		return(keyValue >= 0 && keyValue <= 9);
+	},
 }
 export default mainApp

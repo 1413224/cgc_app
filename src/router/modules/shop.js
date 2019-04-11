@@ -7,25 +7,27 @@ const shopModule = [
 		meta: {
 			navShow: true,
 			// navIndex:1,
-			title:'信用商城'
+			title: '信用商城',
+			isNoLogin:true
 		}
 	},
 	{
 		path: '/shop/index', //首页
 		name: 'shop',
-		component:  resolve => require(['@/views/shop/temporarily'], resolve),
+		component: resolve => require(['@/views/shop/temporarily'], resolve),
 		meta: {
 			navShow: true,
 			// navIndex:1,
-			title:'信用商城'
+			title: '信用商城',
+			isNoLogin:true
 		}
 	},
 	{
 		path: '/shop/my_order2', //我的订单
 		name: 'my_order2',
-		component:  resolve => require(['@/views/shop/my_order2'], resolve),
+		component: resolve => require(['@/views/shop/my_order2'], resolve),
 		meta: {
-			title:'我的订单'
+			title: '我的订单'
 		}
 	},
 	{
@@ -33,7 +35,8 @@ const shopModule = [
 		name: 'shop_product',
 		component: resolve => require(['@/views/shop/product'], resolve),
 		meta: {
-			title:'商品分类'
+			title: '商品分类',
+			isNoLogin:true
 		}
 	},
 	{
@@ -41,7 +44,8 @@ const shopModule = [
 		name: 'all_shops',
 		component: resolve => require(['@/views/shop/all_shops'], resolve),
 		meta: {
-			title:'所有商品'
+			title: '所有商品',
+			isNoLogin:true
 		}
 	},
 	{
@@ -49,7 +53,7 @@ const shopModule = [
 		name: 'order_details',
 		component: resolve => require(['@/views/shop/order_details'], resolve),
 		meta: {
-			title:'订单详情'
+			title: '订单详情'
 		}
 	},
 	{
@@ -57,7 +61,7 @@ const shopModule = [
 		name: 'fisOrderDetail',
 		component: resolve => require(['@/views/shop/fisOrderDetail'], resolve),
 		meta: {
-			title:'订单详情'
+			title: '订单详情'
 		}
 	},
 	{
@@ -65,7 +69,7 @@ const shopModule = [
 		name: 'theme_goods',
 		component: resolve => require(['@/views/shop/theme_goods'], resolve),
 		meta: {
-			title:'主题商品'
+			title: '主题商品'
 		}
 	},
 	{
@@ -73,7 +77,8 @@ const shopModule = [
 		name: 'shop_details',
 		component: resolve => require(['@/views/shop/shop_details'], resolve),
 		meta: {
-			title:'商品详情'
+			title: '商品详情',
+			isNoLogin:true
 		}
 	},
 	{
@@ -81,7 +86,7 @@ const shopModule = [
 		name: 'write_comments',
 		component: resolve => require(['@/views/shop/write_comments'], resolve),
 		meta: {
-			title:'商品评论'
+			title: '商品评论'
 		}
 	},
 	{
@@ -89,7 +94,7 @@ const shopModule = [
 		name: 'shop_cart',
 		component: resolve => require(['@/views/shop/shop_cart'], resolve),
 		meta: {
-			title:'购物车'
+			title: '购物车'
 		}
 	},
 	{
@@ -97,7 +102,7 @@ const shopModule = [
 		name: 'confirm',
 		component: resolve => require(['@/views/shop/confirm'], resolve),
 		meta: {
-			title:'确认订单'
+			title: '确认订单'
 		}
 	},
 	{
@@ -105,7 +110,7 @@ const shopModule = [
 		name: 'o_success',
 		component: resolve => require(['@/views/shop/o_success'], resolve),
 		meta: {
-			title:'支付成功'
+			title: '支付成功'
 		}
 	},
 	{
@@ -113,24 +118,33 @@ const shopModule = [
 		name: 't_success',
 		component: resolve => require(['@/views/shop/t_success'], resolve),
 		meta: {
-			title:'交易成功'
+			title: '交易成功'
 		}
 	},
-	
+
 	{
 		path: '/shop/logistics', //物流
 		name: 'logistics',
 		component: resolve => require(['@/views/shop/logistics'], resolve),
 		meta: {
-			title:'物流动态'
+			title: '物流动态'
 		}
 	},
+	{
+		path: '/shop/logistics_detail', //物流详情
+		name: 'logistics',
+		component: resolve => require(['@/views/shop/logistics_detail'], resolve),
+		meta: {
+			title: '物流详情'
+		}
+	},
+
 	{
 		path: '/shop/refund', //退货
 		name: 'refund',
 		component: resolve => require(['@/views/shop/refund'], resolve),
 		meta: {
-			title:'申请退货'
+			title: '申请退货'
 		}
 	},
 	{
@@ -138,11 +152,11 @@ const shopModule = [
 		name: 'refund_details',
 		component: resolve => require(['@/views/shop/refund_details'], resolve),
 		meta: {
-			title:'退款详情'
+			title: '退款详情'
 		}
 	},
 	{
-		path: '/shop/shop_log',//商品浏览
+		path: '/shop/shop_log', //商品浏览
 		name: 'shop_log',
 		component: resolve => require(['@/views/shop/shop_log'], resolve),
 		meta: {
@@ -152,17 +166,61 @@ const shopModule = [
 	{
 		path: '/multi_user_mall', //多用户商城店铺页
 		name: 'multi_user_mall',
+		// redirect: '/multi_user_mall/components/introduce',
 		component: resolve => require(['@/views/multi_user_mall'], resolve),
 		meta: {
-			title:'店铺首页'
-		}
+			title: '店铺首页',
+			// navShow: true,
+			isNoLogin:true
+		},
+		children: [ //二级路由
+			{
+				path:'components/shopindex',
+				name:'shopIndex',
+				component:resolve => require(['@/views/diypage/shopindex'],resolve),
+				meta:{
+					isNoLogin:true
+				}
+			},
+			{
+				path: 'components/goods',
+				name: 'Goods',
+				component: resolve => require(['@/views/multi_user_mall/components/goods'], resolve),
+				meta:{
+					isNoLogin:true
+				}
+			},
+			{
+				path: 'components/fuwu',
+				name: 'Fuwu',
+				component: resolve => require(['@/views/multi_user_mall/components/fuwu'], resolve),
+				meta:{
+					isNoLogin:true
+				}
+			},
+			{
+				path: 'components/introduce',
+				name: 'Introduce',
+				component: resolve => require(['@/views/multi_user_mall/components/introduce'], resolve),
+				meta:{
+					isNoLogin:true
+				}
+			},
+			{
+				path: 'components/productList',
+				name: 'ProductList',
+				component: resolve => require(['@/views/multi_user_mall/components/productList'], resolve),
+				isNoLogin:true
+			}
+		]
 	},
 	{
 		path: '/multi_user_mall/search', //多用户商城搜索页
 		name: 'search',
 		component: resolve => require(['@/views/multi_user_mall/search'], resolve),
 		meta: {
-			title:'商城搜索'
+			title: '商城搜索',
+			isNoLogin:true
 		}
 	},
 	{
@@ -170,38 +228,41 @@ const shopModule = [
 		name: 'write_logistics',
 		component: resolve => require(['@/views/shop/write_logistics'], resolve),
 		meta: {
-			title:'填写退货物流'
+			title: '填写退货物流'
 		}
 	},
 	{
-		path: '/multi_user_mall/shop_details',//多用户商城商品详情页
+		path: '/multi_user_mall/shop_details', //多用户商城商品详情页
 		name: 'multi_shop_details',
 		component: resolve => require(['@/views/multi_user_mall/shop_details'], resolve),
 		meta: {
-			title:'商品详情'
+			title: '商品详情',
+			isNoLogin:true
 		}
-	},{
-		path: '/multi_user_mall/confirm_order',//确认订单
+	}, {
+		path: '/multi_user_mall/confirm_order', //确认订单
 		name: 'multi_confirm_order',
 		component: resolve => require(['@/views/multi_user_mall/confirm_order'], resolve),
 		meta: {
-			title:'确认订单'
+			title: '确认订单'
 		}
 	},
 	{
-		path: '/multi_user_mall/commodity_details',//商品详情页
+		path: '/multi_user_mall/commodity_details', //商品详情页
 		name: 'multi_commodity_details',
 		component: resolve => require(['@/views/multi_user_mall/commodity_details'], resolve),
 		meta: {
-			title:'商品详情'
+			title: '商品详情',
+			isNoLogin:true
 		}
 	},
 	{
-		path: '/multi_user_mall/album',//商品详情页
+		path: '/multi_user_mall/album', //商品详情页
 		name: 'multi_album',
 		component: resolve => require(['@/views/multi_user_mall/album'], resolve),
 		meta: {
-			title:'店铺图册'
+			title: '店铺图册',
+			isNoLogin:true
 		}
 	},
 	{
@@ -209,24 +270,53 @@ const shopModule = [
 		name: 'summary',
 		component: resolve => require(['@/views/multi_user_mall/summary'], resolve),
 		meta: {
-			title:'多用户商城首页'
+			title: '多用户商城首页',
+			isNoLogin:true
 		}
 	},
 	{
-		path: '/multi_user_mall/store_qrcode',//店铺二维码
+		path: '/multi_user_mall/store_qrcode', //店铺二维码
 		name: 'store_qrcode',
 		component: resolve => require(['@/views/multi_user_mall/store_qrcode'], resolve),
 		meta: {
-			title:'店铺二维码'
+			title: '店铺二维码',
+			isNoLogin:true
 		}
 	},
 	{
-		path:'/tsuen',
-		name:'tsuen',
-		component: resolve => require(['@/views/tsuen/tsuen'],resolve),
-		meta:{
-			title:'荃优品专题页'
+		path: '/tsuen',
+		name: 'tsuen',
+		component: resolve => require(['@/views/tsuen/tsuen'], resolve),
+		meta: {
+			title: '荃优品专题页',
+			isNoLogin:true
 		}
+	},
+	{
+		path:'/multi_user_mall/text',
+		name:'text',
+		component: resolve => require(['@/views/multi_user_mall/text'],resolve),
+		meta:{
+			title:'测试子路由'
+		},
+		children:[
+			{
+				path:'',
+				name:'text1',
+				component:resolve => require(['@/views/multi_user_mall/text1'],resolve),
+				meta:{
+					title:'子路由1'
+				}
+			},
+			{
+				path:'text2',
+				name:'text2',
+				component:resolve => require(['@/views/multi_user_mall/text2'],resolve),
+				meta:{
+					title:'子路由2'
+				}
+			}
+		]
 	}
 ];
 

@@ -26,8 +26,7 @@
 						</a>
 					</div> -->
 					<template v-for="(item,index) in articleList">
-						<div v-if="item.thumb && item.thumb.length>1" class="new" :key="index"
-							 @click="goDetail(item.articleId)">
+						<div v-if="item.thumb && item.thumb.length>1" class="new" :key="index" @click="goDetail(item.articleId)">
 							<p class="newTitle">{{item.title}}</p>
 							<div class="tuwap clearfix">
 								<div class="imgs" v-for="(itemimg,index) in item.thumb">
@@ -98,8 +97,11 @@
 			Null
 		},
 		mounted() {
+
+			this.actTab = this.$route.query.tabIndex ? this.$route.query.tabIndex : 0
+
 			this.InitScroll();
-			this.getArticleCategory();//获取分类
+			this.getArticleCategory(); //获取分类
 		},
 		methods: {
 
@@ -133,49 +135,9 @@
 			onLoadData(index, id) {
 				var _this = this
 				_this.show = true
-
-				/*if(_this.showNomore){
-					_this.show = false;
-				}else{
-					var params={
-							cateid:id,
-							page:_this.page,
-							pagesize:10
-						}
-						let par = Qs.stringify(params)
-
-						_this.$http.post(url.article.getArticleLists,par).then((res) => {
-							_this.show = false
-							if(res.status == 200 && res.data != null){
-
-								_this.show = false
-
-								_this.articleList = _this.articleList.concat(res.data.result.lists)
-
-								if(_this.articleList.length == 0){
-									_this.showNull = true
-								}else{
-									_this.showNull = false
-								}
-
-								// if(len == _this.articleList.length){
-								// 	_this.showNomore = true;
-								// }
-								if(res.data.result.lists.length < 10){
-									// _this.show = false
-									_this.showNomore = true
-								}
-
-							}
-						}).catch((error)=>{
-							console.log(error)
-						});
-					_this.flage = true
-				}*/
 				if(_this.showNomore) {
-					_this.show = false;
+					_this.show = false
 				} else {
-
 					_this.$http.get(_this.url.user.getLists, {
 						params: {
 							type: 2,
@@ -190,13 +152,7 @@
 							_this.show = false
 
 							_this.articleList = _this.articleList.concat(res.data.data.list)
-
-							// if(len == _this.articleList.length){
-							// 	_this.showNomore = true;
-							// }
-							// console.log(res.data.data.list.length)
 							if(res.data.data.list.length < 10) {
-								// _this.show = false
 								_this.showNomore = true
 							}
 
@@ -209,15 +165,6 @@
 			},
 			getArticleCategory() {
 				var _this = this
-				/*_this.$http.post(url.article.getArticleCategory).then((res) => {
-					if(res.status == 200 && res.data != null){
-						_this.tabData = res.data.result.lists
-						_this.firseId = JSON.parse(res.data.result.lists[0].cateid)
-						// alert(_this.firseId)
-						_this.onLoadDataFirst(0,_this.firseId)
-						// console.log(res)
-					}
-				});*/
 				_this.$http.get(_this.url.user.getCategoryLists, {
 					params: {
 						level: 1,
@@ -226,13 +173,9 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
-
 						if(res.data.data.list.length > 0) {
-
 							_this.tabData = res.data.data.list
-							_this.firseId = res.data.data.list[0].cateId
-
-							_this.onLoadDataFirst(0, _this.firseId)
+							_this.onLoadDataFirst(_this.actTab, res.data.data.list[_this.actTab].cateId)
 						}
 					}
 				})
@@ -240,7 +183,7 @@
 			onLoadDataFirst(index, id) {
 				let _this = this
 				_this.flage = true
-				_this.actTab = index  //控制默认选中
+				_this.actTab = index //控制默认选中
 				_this.show = false
 				_this.showNomore = false
 				_this.page = 1
@@ -249,25 +192,12 @@
 				_this.showNull = false
 				_this.inloading = true
 
-				/*var params={
-					cateid:id,
-					curPage:1,
-					pageSize:10
-				}*/
+				_this.$router.replace({
+					query: _this.merge(_this.$route.query, {
+						'tabIndex': index
+					})
+				})
 
-				// let par = Qs.stringify(params)
-				/*_this.$http.post(url.article.getArticleLists,par).then((res) => {
-					if(res.status == 200 && res.data != null){
-						_this.articleList = res.data.result.lists
-
-						if(_this.articleList.length == 0){
-							_this.showNull = true
-						}else{
-							_this.showNull = false
-						}
-
-					}
-				});*/
 				_this.$http.get(_this.url.user.getLists, {
 					params: {
 						type: 2,
@@ -319,6 +249,8 @@
 			right: 0;
 			bottom: 0;
 			overflow: hidden;
+			max-width: 640px;
+			margin:0 auto;
 			/*padding-bottom: 1rem;*/
 			.pr_box {
 				position: relative;
@@ -404,10 +336,10 @@
 					line-height: 0.45rem;
 					width: 100%;
 					overflow: hidden;
-					text-overflow:ellipsis;
-		            display: -webkit-box;
-		            -webkit-box-orient: vertical;
-		            -webkit-line-clamp: 2;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2;
 				}
 				.newBottom {
 					color: #7386AD;
@@ -418,15 +350,15 @@
 						color: #7386AD;
 					}
 				}
-				.left{
+				.left {
 					float: left;
 					width: 4.4rem;
 				}
-				.right{
+				.right {
 					float: right;
 					width: 2.3rem;
 					height: 1.64rem;
-					img{
+					img {
 						width: 100%;
 						height: 100;
 					}
@@ -439,7 +371,7 @@
 						width: 2.3rem;
 						height: 1.64rem;
 						float: left;
-						margin-right:.05rem;
+						margin-right: .05rem;
 						img {
 							width: 95%;
 							height: 100%;

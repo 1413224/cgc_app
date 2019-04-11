@@ -121,7 +121,6 @@
 <script>
 	import BScroll from 'better-scroll'
 	import Loading from '../../components/loading'
-	import { XDialog } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -218,7 +217,6 @@
 		},
 		components: {
 			settingHeader,
-			XDialog,
 			Loading
 		}
 	}

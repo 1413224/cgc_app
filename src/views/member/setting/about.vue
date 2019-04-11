@@ -13,7 +13,6 @@
 
 <script>
 	import scoreheader from '../../../components/setting_header'
-	import { Group, Cell } from 'vux'
 	export default {
 		components: {
 			scoreheader,

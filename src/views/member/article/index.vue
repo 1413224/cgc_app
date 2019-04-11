@@ -205,6 +205,8 @@
 
 						_this.articleList = res.data.data.list
 
+						console.log(_this.articleList)
+
 						if(_this.articleList.length == 0){
 							_this.showNull = true
 						}else{

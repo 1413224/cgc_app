@@ -64,7 +64,7 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import { Datetime, XProgress, Box, Scroller, Card } from 'vux'
+	import { Datetime, XProgress } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	import Loading from '../../../components/loading'
 	export default {
@@ -176,9 +176,6 @@
 			settingHeader,
 			Datetime,
 			XProgress,
-			Box,
-			Scroller,
-			Card,
 			Loading
 		},
 		watch: {

@@ -12,7 +12,8 @@ const page = {
 		isLogin: isLogin,
 		includeList:[],
 		isWx:true,
-		userInfo:userInfo
+		userInfo:userInfo,
+		toPath:{}
 	},
 	mutations: {
 		UPDATE_DIRECTION(state, payload) {
@@ -29,6 +30,9 @@ const page = {
 		},
 		setIsLogin(state,isLogin){
 			state.isLogin = isLogin
+		},
+		setToPath(state,toPath){
+			state.toPath = toPath
 		}
 	}
 }

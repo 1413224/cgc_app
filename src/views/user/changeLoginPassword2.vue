@@ -14,7 +14,6 @@
 </template>
 
 <script>
-	import { XInput, Group, XButton, Cell, } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -34,32 +33,17 @@
 				var _this = this
 
 				if(_this.password.length < 6 || _this.password1.length < 6) {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '密码不能少于六位'
-					})
+					_this.mainApp.showMessage('密码不能少于六位','middle')
 					return false
 				}
 
 				if(_this.password.length > 25 || _this.password1.length > 25) {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '密码不能超过25位'
-					})
+					_this.mainApp.showMessage('密码不能超过25位','middle')
 					return false
 				}
 
 				if(_this.password != _this.password1) {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '两次密码输入不一致'
-					})
+					_this.mainApp.showMessage('两次密码输入不一致','middle')
 					return false
 				}
 				_this.$http.post(_this.url.user.forgetPassword, {
@@ -75,43 +59,49 @@
 							platformId: _this.url.platformId
 						}
 
-						var unionid = sessionStorage['_openid_']
+						var unionid = localStorage['_openid_']
 
 						if(unionid) {
 							params.unionid = unionid
 							params.type = 1
 						}
 
-						_this.$http.post(_this.url.user.logout, params).then((res) => {
-							if(res.data.status == '00000000') {
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '密码保存成功'
-								})
-								_this.$router.replace({
-									path: '/user/reg',
-									query: {
-										mobile: _this.mobile
-									}
-								})
-								localStorage.removeItem('userInfo')
-								localStorage.setItem('isLogin', false)
-								_this.$store.state.page.isLogin = false
-								localStorage.removeItem('_HASH_')
-							}
-						})
+						if(this.$store.state.page.isLogin == 'true') {
+							// alert(this.$store.state.page.isLogin)
+							_this.$http.post(_this.url.user.logout, params).then((res) => {
+								if(res.data.status == '00000000') {
+									_this.mainApp.showMessage('密码保存成功','middle')
+									_this.$router.replace({
+										path: '/user/login',
+										query: {
+											mobile: _this.mobile
+										}
+									})
+									localStorage.removeItem('userInfo')
+									localStorage.setItem('isLogin', false)
+									_this.$store.state.page.isLogin = false
+									localStorage.removeItem('_HASH_')
+								}
+							})
+						} else {
+							_this.mainApp.showMessage('密码保存成功','middle')
+							_this.$router.replace({
+								path: '/user/login',
+								query: {
+									mobile: _this.mobile
+								}
+							})
+							localStorage.removeItem('userInfo')
+							localStorage.setItem('isLogin', false)
+							_this.$store.state.page.isLogin = false
+							localStorage.removeItem('_HASH_')
+						}
 					}
 				})
 			}
 		},
 		components: {
 			settingHeader,
-			XInput,
-			Group,
-			XButton,
-			Cell
 		}
 	}
 </script>

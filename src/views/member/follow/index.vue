@@ -4,8 +4,7 @@
 			<div class="tar-box">
 				<tab v-model="index" :line-width="2" active-color="#397df8" custom-bar-width="1.1rem">
 					<tab-item :selected="index==0" @on-item-click="active">联盟企业</tab-item>
-					<tab-item :selected="index==1" @on-item-click="active">联营企业</tab-item>
-					<tab-item :selected="index==2" @on-item-click="active">商品</tab-item>
+					<tab-item :selected="index==1" @on-item-click="active">商品</tab-item>
 				</tab>
 			</div>
 			<div class="edit-btn" @click="edit" slot="right" v-if="hasLe">{{isBj?'完成':'编辑'}}</div>
@@ -45,36 +44,6 @@
 				</div>
 			</div>
 			<div v-show="index == 1">
-				<div class="store-list">
-					<div class="wrapper2" ref="wrapper2">
-						<div class="content" :class="{'pr_box':!showList}">
-							<div class="list-item" v-for="(item,index) in lyList" v-if="showList" @click="toDetail(item.enterpriseId)">
-								<div @click="changelyStore()">
-									<check-icon v-if="storeShow" class="check-btn" :value.sync="item.ischeck"></check-icon>
-								</div>
-								<div class="img-box"><img v-if="item.logo" :src="item.logo.original" /></div>
-								<div class="pro-box">
-									<div>
-										<p>{{item.name}}</p>
-										<div class="storbtn-box">
-											<!-- <span>标签</span> --><span>关注人数：{{item.concernSum}} 人</span>
-										</div>
-									</div>
-									<div class="go" v-if="!isBj">
-										<span>进入店铺</span>
-										<i class="icon iconfont icon-arrow-right"></i>
-									</div>
-								</div>
-							</div>
-							<Loading v-if="show2"> </Loading>
-							<Nomore v-if="showNo2"></Nomore>
-							<Null v-if="!showList && !inloading" status="zwgz" :text="noly"></Null>
-							<Null v-if="!showList && inloading" status="loading" text="加载中"></Null>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div v-show="index == 2">
 				<div class="pro-list">
 					<div class="wrapper" ref="wrapper">
 						<div class="content" :class="{'pr_box':!showList}">
@@ -118,8 +87,7 @@
 			<popup v-model="isBj" position="bottom" height="0.94rem" :show-mask="false">
 				<div class="bjBtn-box">
 					<div style="flex: 1;" @click="isallcheck">
-						<check-icon v-if="isBj && index==2" class="check-btn" :value.sync="allprCheck">全部商品 <span v-if="!allprCheck">已选 <i>{{proidList.length}}</i> 个商品</span></check-icon>
-						<check-icon v-if="isBj && index==1" class="check-btn" :value.sync="allstCheck">全部店铺<span v-if="!allstCheck">已选 <i>{{lyidList.length}}</i> 间店铺</span></check-icon>
+						<check-icon v-if="isBj && index==1" class="check-btn" :value.sync="allprCheck">全部商品 <span v-if="!allprCheck">已选 <i>{{proidList.length}}</i> 个商品</span></check-icon>
 						<check-icon v-if="isBj && index==0" class="check-btn" :value.sync="allstCheck2">全部店铺<span v-if="!allstCheck2">已选 <i>{{lmidList.length}}</i> 间店铺</span></check-icon>
 					</div>
 					<div class="qx-box">
@@ -134,7 +102,9 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import { Tab, TabItem, Swiper, SwiperItem, CheckIcon, Scroller, Search, Popup, XButton, XHeader } from 'vux'
+	import { Swiper, 
+		SwiperItem,Scroller, 
+		Search } from 'vux'
 	import settingHeader from '@/components/setting_header'
 	import Loading from '@/components/loading'
 	import Null from '@/components/null'
@@ -165,7 +135,6 @@
 				proState: 0,
 				storeState: 0,
 				noPro: '暂无关注商品',
-				noly: '暂无关注联营企业',
 				nolm: '暂无关注联盟企业',
 				pageSize: 20,
 				curPage: 1,
@@ -186,11 +155,8 @@
 			if(this.index == 0) {
 				this.type = 2 //联盟企业
 			} else if(this.index == 1) {
-				this.type = 3 //联营企业
-			} else {
 				this.type = 1 //商品
 			}
-
 			this.getFollow()
 		},
 		mounted() {
@@ -231,13 +197,7 @@
 							_this.lmList.forEach((value) => {
 								value.ischeck = false
 							})
-						} else if(_this.type == 3) {
-							_this.lyList = res.data.data.list
-							_this.lyList.forEach((value) => {
-								value.ischeck = false
-							})
-
-						} else if(_this.type == 1) {
+						}else if(_this.type == 1) {
 							_this.proList = res.data.data.list
 							_this.lyList.forEach((value) => {
 								value.ischeck = false
@@ -280,19 +240,7 @@
 						})
 						return false
 					}
-				} else if(_this.type == 3) {
-					if(_this.lyidList != '') {
-						concernIds = _this.lyidList.join(',')
-					} else {
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '未选择任何联营企业'
-						})
-						return false
-					}
-				} else if(_this.type == 1) {
+				}else if(_this.type == 1) {
 					if(_this.proidList != '') {
 						concernIds = _this.proidList.join(',')
 					} else {
@@ -340,22 +288,6 @@
 							});
 						})
 
-						this.scroll2 = new BScroll(this.$refs.wrapper2, {
-							click: true,
-							scrollY: true,
-							pullUpLoad: {
-								threshold: 10,
-							}
-						})
-						this.scroll2.on('pullingUp', (pos) => {
-							this.show2 = true;
-							this.LoadData2()
-							this.$nextTick(function() {
-								this.scroll2.finishPullUp();
-								this.scroll2.refresh();
-							});
-						})
-
 						this.scroll3 = new BScroll(this.$refs.wrapper3, {
 							click: true,
 							scrollY: true,
@@ -373,7 +305,6 @@
 						})
 					} else {
 						this.scroll.refresh()
-						this.scroll2.refresh()
 						this.scroll3.refresh()
 					}
 				})
@@ -402,34 +333,6 @@
 							} else {
 								_this.show3 = false
 								_this.showNo3 = true
-							}
-
-						}
-					})
-			},
-			LoadData2() {
-				var _this = this
-				_this.curPage++
-					_this.$http.get(_this.url.user.getConcernLists, {
-						params: {
-							userId: _this.$store.state.user.userId,
-							type: _this.type,
-							pageSize: _this.pageSize,
-							curPage: _this.curPage,
-							islist: true
-						}
-					}).then((res) => {
-						if(res.data.status == "00000000") {
-							if(res.data.data.list.length > 0) {
-								_this.lyList = _this.lyList.concat(res.data.data.list)
-								_this.show2 = true
-								_this.showNo2 = false
-								_this.lyList.forEach((value) => {
-									value.ischeck = false
-								})
-							} else {
-								_this.show2 = false
-								_this.showNo2 = true
 							}
 
 						}
@@ -466,10 +369,9 @@
 			//点击全选
 			isallcheck() {
 				this.lmidList = [] //重置商品id数组
-				this.lyidList = [] //重置店铺id数组
 				this.proidList = [] //重置店铺id数组
 
-				if(this.index == 2) {
+				if(this.index == 1) {
 					if(this.allprCheck == true) {
 						for(var i = 0; i < this.proList.length; i++) {
 							this.proList[i].ischeck = true
@@ -495,19 +397,6 @@
 						}
 					}
 					console.log(this.lmidList, 'lm')
-				} else if(this.index == 1) {
-					if(this.allstCheck == true) {
-						for(var i = 0; i < this.lyList.length; i++) {
-							this.lyList[i].ischeck = true
-							this.lyidList.push(this.lyList[i].objectId)
-						}
-					} else {
-						for(var i = 0; i < this.lyList.length; i++) {
-							this.lyList[i].ischeck = false
-							this.lyidList = []
-						}
-					}
-					console.log(this.lyidList, 'ly')
 				}
 			},
 			//商品  店铺切换
@@ -533,12 +422,9 @@
 				this.inloading = true
 
 				if(index == 1) {
-					_this.type = 3
-				} else
-				if(index == 0) {
-					_this.type = 2
-				} else if(index == 2) {
 					_this.type = 1
+				} else if(index == 0) {
+					_this.type = 2
 				}
 				_this.index = index
 
@@ -547,6 +433,8 @@
 						'index': _this.index
 					})
 				})
+				
+				_this.getFollow()
 			},
 			//点击编辑
 			edit() {
@@ -564,17 +452,11 @@
 				for(var i = 0; i < this.lmList.length; i++) {
 					this.lmList[i].ischeck = false
 				}
-				for(var i = 0; i < this.lyList.length; i++) {
-					this.lyList[i].ischeck = false
-				}
 
-				if(this.index == 2 && this.proList.length > 0) {
+				if(this.index == 1 && this.proList.length > 0) {
 					this.isBj = !this.isBj
 					this.proShow = !this.proShow
-				} else if(this.index == 1 && this.lyList.length > 0) {
-					this.isBj = !this.isBj
-					this.storeShow = !this.storeShow
-				} else if(this.index == 0 && this.lmList.length > 0) {
+				}else if(this.index == 0 && this.lmList.length > 0) {
 					this.isBj = !this.isBj
 					this.storeShow2 = !this.storeShow2
 				}
@@ -589,16 +471,6 @@
 				}
 				this.proidList = idList
 				console.log(this.proidList, 'pro')
-			},
-			//店铺选择
-			changelyStore() {
-				var idList = []
-				for(var i = 0; i < this.lyList.length; i++) {
-					if(this.lyList[i].ischeck == true) {
-						idList.push(this.lyList[i].objectId)
-					}
-				}
-				this.lyidList = idList
 			},
 			//店铺选择
 			changelmStore() {
@@ -629,13 +501,6 @@
 					this.allprCheck = false
 				}
 			},
-			lyidList() {
-				if(this.lyidList.length == this.lyList.length) {
-					this.allstCheck = true
-				} else {
-					this.allstCheck = false
-				}
-			},
 			lmidList() {
 				if(this.lmidList.length == this.lmList.length) {
 					this.allstCheck2 = true
@@ -647,9 +512,7 @@
 				if(this.index == 0) {
 					this.type = 2 //联盟企业
 				} else if(this.index == 1) {
-					this.type = 3 //联营企业
-				} else {
-					this.type = 1 //商品
+					this.type = 1  //商品
 				}
 
 				this.curPage = 1
@@ -659,15 +522,9 @@
 			}
 		},
 		components: {
-			Tab,
-			TabItem,
 			Swiper,
 			SwiperItem,
-			CheckIcon,
 			Search,
-			Popup,
-			XButton,
-			XHeader,
 			Loading,
 			Null,
 			Nomore
@@ -783,6 +640,7 @@
 				bottom: 0px;
 				overflow: hidden;
 				width: 100%;
+				max-width: 640px;
 				/*.vux-loadmore {
 					display: inline-block;
 					width: 100%;

@@ -1,203 +1,233 @@
 <template>
 	<section class="commodity_order_box">
 		<settingHeader :title="title"></settingHeader>
-		<div v-if="address" class="address-box" @click="selectAddress">
-			<img class="left-img" :src="'./static/images/dibiao.png'">
-			<div>
-				<p class="user-tip"><span>{{address.name}}</span><span>{{address.mobile}}</span></p>
-				<p class="user-address">{{address.province+address.city+address.area+address.address}}</p>
-			</div>
-			<img class="right-img" :src="'./static/images/b-right.png'" />
-		</div>
-		<div v-else class="address-box" @click="addAddress">
-			<img class="left-img" :src="'./static/images/dibiao.png'">
-			<div class="null_address">
-				<p>暂无收货地址</p>
-				<p>去设置</p>
-			</div>
-			<img class="right-img" :src="'./static/images/b-right.png'" />
-		</div>
-		<img class="fenjiexian" :src="'./static/images/fenjiexian.png'" />
-		<div class="pay_type">
-			<span>支付方式</span>
-			<span>在线支付</span>
-		</div>
-		<div class="order_item">
-			<div class="order_top">
-				<div class="left">
-					<img :src="'./static/images/shopLogo.png'" alt="" />
-					<p>{{goodsInfo.enterpriseName}}</p>
+		<div v-if="showPage==1">
+			<div v-if="address" class="address-box" @click="selectAddress">
+				<img class="left-img" :src="'./static/images/dibiao.png'">
+				<div>
+					<p class="user-tip"><span>{{address.name}}</span><span>{{address.mobile}}</span></p>
+					<p class="user-address">{{address.province+address.city+address.area+address.address}}</p>
 				</div>
+				<img class="right-img" :src="'./static/images/b-right.png'" />
 			</div>
-			<div class="order_middle">
-				<div class="left">
-					<img v-if="goodsInfo.goodsLogo" :src="goodsInfo.goodsLogo" />
-					<img v-else :src="'./static/images/pr.png'" />
+			<div v-else class="address-box" @click="addAddress">
+				<img class="left-img" :src="'./static/images/dibiao.png'">
+				<div class="null_address">
+					<p>暂无收货地址</p>
+					<p>去设置</p>
 				</div>
-				<div class="middle">
-					<p class="name">{{goodsInfo.goodsName}}</p>
-					<p class="pinfo">{{goodsInfo.skuName}}</p>
-					<!--<p class="tip">信用积分最多可抵40元</p>-->
-				</div>
-				<div class="right">
-					<p class="price">¥{{goodsInfo.minPrice}}</p>
-					<p class="oldprice">¥{{goodsInfo.minOriginPrice}}</p>
-					<p class="num">x {{goodsInfo.goodsNum}}</p>
-				</div>
+				<img class="right-img" :src="'./static/images/b-right.png'" />
 			</div>
-		</div>
-		<div class="number-box pr">
-			<p>购买数量</p>
-			<x-number v-model="goodsInfo.goodsNum" :min="1" width="50px" button-style="round" @on-change="numC"></x-number>
-		</div>
-		<div class="goods-spec pr">
-			<div>优惠券</div>
-			<div @click="show = true">
-				<p v-if="couponName">{{couponName}}</p>
-				<p v-else>{{availableCoupon.length}}张可用</p>
-				<img :src="'./static/images/b-right.png'" />
+			<img class="fenjiexian" :src="'./static/images/fenjiexian.png'" />
+			<div class="pay_type">
+				<span>支付方式</span>
+				<span>在线支付</span>
 			</div>
-		</div>
-		<div class="goods-spec pr">
-			<div>发票</div>
-			<div>
-				<p>不需要</p>
-				<img :src="'./static/images/b-right.png'" />
-			</div>
-		</div>
-		<div class="goods-spec">
-			<div>卖家留言</div>
-			<div class="input-box">
-				<input type="text" v-model="remark" class="input" placeholder="选填:填写内容已和卖家协商确认" />
-			</div>
-		</div>
-		<div class="integral-box">
-			<div class="top pr" v-if="1>2">
-				<div class="left">
-					<div class="one">
-						<div>信用积分</div><span>可用：10000.00</span><img :src="'./static/images/taihao.png'" />
+			<div class="order_item">
+				<div class="order_top">
+					<div class="left">
+						<img :src="'./static/images/shopLogo.png'" alt="" />
+						<p>{{goodsInfo.enterpriseName}}</p>
 					</div>
-					<p>信用积分最多可抵40元</p>
 				</div>
-				<div class="right">
-					<p>已抵用<i>¥ 40.00</i></p>
+				<div class="order_middle">
+					<div class="left">
+						<img v-if="goodsInfo.goodsLogo" :src="goodsInfo.goodsLogo.original" />
+						<img v-else :src="'./static/images/pr.png'" />
+					</div>
+					<div class="middle">
+						<p class="name">{{goodsInfo.goodsName}}</p>
+						<p class="pinfo">{{goodsInfo.skuName}}</p>
+						<!--<p class="tip">信用积分最多可抵40元</p>-->
+					</div>
+					<div class="right">
+						<p class="price">￥{{goodsInfo.minPrice}}</p>
+						<p class="oldprice">￥{{goodsInfo.minOriginPrice}}</p>
+						<p class="num">x {{goodsInfo.goodsNum}}</p>
+					</div>
+				</div>
+			</div>
+			<div class="number-box pr">
+				<p>购买数量</p>
+				<x-number v-model="goodsInfo.goodsNum" :min="1" width="50px" button-style="round" @on-change="numC"></x-number>
+			</div>
+			<div class="goods-spec pr">
+				<div>优惠券</div>
+				<div @click="show = true">
+					<p v-if="couponName">{{couponName}}</p>
+					<p v-else>{{availableCoupon.length}}张可用</p>
 					<img :src="'./static/images/b-right.png'" />
 				</div>
 			</div>
-			<!--企业通用积分-->
-			<div class="enterprise-integral-box pr" @click="useIntegral">
-				<div class="left">企业通用积分</div>
-				<div class="right">
-					<p>- ¥{{Number(enterpriseIntegral).toFixed(2)}}</p>
-					<!--<p class="no" v-if="coupon.length==0">暂无可用优惠券</p>-->
-					<!--<p v-if="denomination != ''">- ¥{{denomination}}</p>-->
-					<img class="right-img" :src="'./static/images/b-right.png'" />
-				</div>
-			</div>
-			<div class="middle" @click="showIntegral = true">
-				<div class="left">
-					<div>
-						<img :src="'./static/images/qian.png'" />
-						<p>通用积分</p>
-					</div>
-					<p class="money">可用：{{availableBalance}}</p>
-				</div>
-				<div class="right">
-					<p>已抵用<i>¥ {{Number(integralNum).toFixed(2)}}</i></p>
+			<div class="goods-spec pr">
+				<div>发票</div>
+				<div>
+					<p>不需要</p>
 					<img :src="'./static/images/b-right.png'" />
 				</div>
 			</div>
-		</div>
-		<div class="fixed_box">
-			<div class="bottom-btn">
-				<div class="left">
-					共 <i>{{goodsInfo.goodsNum}}</i> 件，总计 <span>¥ {{payMoney}}</span>
+			<div class="goods-spec pr" v-if="freight > 0">
+				<div>运费</div>
+				<div>
+					<p>￥ {{freight}}</p>
 				</div>
-				<div class="right" @click="payNow">立即支付</div>
 			</div>
-		</div>
-		<div v-transfer-dom>
-			<popup class="coupon-popup" v-model="show">
-				<div class="pr-box">
-					<div class="header">
-						<div class="all">
-							<p>优惠券</p>
-							<img @click="show = false" :src="'./static/images/guanbi.png'" />
+			<div class="goods-spec">
+				<div>卖家留言</div>
+				<div class="input-box">
+					<input type="text" v-model="remark" class="input" placeholder="选填:填写内容已和卖家协商确认" />
+				</div>
+			</div>
+			<div class="integral-box">
+				<div class="top pr" @click="showAvailablePoints = true" v-if="goodsInfo.type == 3">
+					<div class="left">
+						<div class="one">
+							<div>信用积分</div><span>可用：{{availablePoints}}</span><img :src="'./static/images/taihao.png'" />
 						</div>
+						<p>信用积分最多可抵{{usePoints}}元</p>
 					</div>
-					<div class="couponlist-box">
-						<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item,'active')">
-							<div class="blue" v-if="sureIndex == index && item.show">
-								<div class="pr-box">
-									<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
-								</div>
+					<div class="right">
+						<p>已抵用<i>￥ {{Number(pointsNum).toFloor(2)}}</i></p>
+						<img :src="'./static/images/b-right.png'" />
+					</div>
+				</div>
+				<!--企业通用积分-->
+				<div class="enterprise-integral-box pr" @click="useIntegral" v-if="goodsInfo.type != 3">
+					<div class="left">企业通用积分</div>
+					<div class="right">
+						<p>- ￥{{Number(enterpriseIntegral).toFloor(2)}}</p>
+						<!--<p class="no" v-if="coupon.length==0">暂无可用优惠券</p>-->
+						<!--<p v-if="denomination != ''">- ￥{{denomination}}</p>-->
+						<img class="right-img" :src="'./static/images/b-right.png'" />
+					</div>
+				</div>
+				<div class="middle" @click="showIntegral = true">
+					<div class="left">
+						<div>
+							<img :src="'./static/images/qian.png'" />
+							<p>通用积分</p>
+						</div>
+						<p class="money">可用：{{availableBalance}}</p>
+					</div>
+					<div class="right">
+						<p>已抵用<i>￥ {{Number(integralNum).toFloor(2)}}</i></p>
+						<img :src="'./static/images/b-right.png'" />
+					</div>
+				</div>
+			</div>
+			<div class="fixed_box">
+				<div class="bottom-btn">
+					<div class="left">
+						共 <i>{{goodsInfo.goodsNum}}</i> 件，总计 <span>￥ {{payMoney2}}</span>
+					</div>
+					<div class="right" @click="payNow">立即支付</div>
+				</div>
+			</div>
+			<div v-transfer-dom>
+				<popup class="coupon-popup" v-model="show">
+					<div class="pr-box">
+						<div class="header">
+							<div class="all">
+								<p>优惠券</p>
+								<img @click="show = false" :src="'./static/images/guanbi.png'" />
 							</div>
-							<div class="bg">
-								<div class="top">
-									<div>
-										<div class="one">
-											<div class="type-btn" v-if="item.type == 0">满减券</div>
-											<div class="type-btn" v-if="item.type == 10">体验券</div>
-											<div class="type-btn" v-if="item.type == 20">满减券</div>
-											<div class="type-btn" v-if="item.type == 30">折扣券</div>
-											<div class="type-btn" v-if="item.type == 40">运费券</div>
-											<div class="type-btn" v-if="item.type == 50">现金券</div>
-											<span>{{item.name}}</span>
-										</div>
-										<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
+						</div>
+						<div class="couponlist-box">
+							<div v-for="(item,index) in availableCoupon" :key="index" class="bs" @click="sure(index,item,'active')">
+								<div class="blue" v-if="sureIndex == index && item.show">
+									<div class="pr-box">
+										<img class="sureImg" v-if="sureIndex == index && item.show" :src="'./static/share/gou.png'" />
 									</div>
-									<div class="money">
+								</div>
+								<div class="bg">
+									<div class="top">
 										<div>
-											<span>{{item.denomination}}</span>元
-											<br />
-											<i>满{{item.condition}}元可用</i>
+											<div class="one">
+												<div class="type-btn" v-if="item.type == 0">满减券</div>
+												<div class="type-btn" v-if="item.type == 10">体验券</div>
+												<div class="type-btn" v-if="item.type == 20">满减券</div>
+												<div class="type-btn" v-if="item.type == 30">折扣券</div>
+												<div class="type-btn" v-if="item.type == 40">运费券</div>
+												<div class="type-btn" v-if="item.type == 50">现金券</div>
+												<span>{{item.name}}</span>
+											</div>
+											<p>使用期限：{{item.startTime | getDate2}} 至 {{item.endTime | getDate2}}</p>
+										</div>
+										<div class="money">
+											<div>
+												<span>{{item.denomination}}</span>元
+												<br />
+												<i>满{{item.condition}}元可用</i>
+											</div>
 										</div>
 									</div>
 								</div>
+								<div class="bottom show">
+									<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
+									<img class="r180" :src="'./static/images/xia.png'" alt="" />
+								</div>
 							</div>
-							<div class="bottom show">
-								<span class="shang">{{item.content?item.content:'暂无详细说明'}}</span>
-								<img class="r180" :src="'./static/images/xia.png'" alt="" />
+
+						</div>
+						<div class="btn" @click="show = false">确定</div>
+					</div>
+				</popup>
+				<popup v-model="showIntegral" width="100%">
+					<div class="integral_popup">
+						<div class="pd">
+							<p class="title">通用积分使用</p>
+							<div class="tip">
+								<p>使用金额</p>
+								<p>可用：{{availableBalance}}</p>
 							</div>
+							<div class="input-div">
+								<p>￥</p>
+								<input type="number" v-model="integralNum" @input="integralNumChange" @blur="inputBlur" placeholder="请输入通用积分数">
+							</div>
+							<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
 						</div>
-
+						<div class="btn" @click="showIntegral = false">确定</div>
 					</div>
-					<div class="btn" @click="show = false">确定</div>
-				</div>
-			</popup>
-			<popup v-model="showIntegral">
-				<div class="integral_popup">
-					<div class="pd">
-						<p class="title">通用积分使用</p>
-						<div class="tip">
-							<p>使用金额</p>
-							<p>可用：{{availableBalance}}</p>
+				</popup>
+				<!--信用积分-->
+				<popup v-model="showAvailablePoints">
+					<div class="integral_popup">
+						<div class="pd">
+							<p class="title">信用积分使用</p>
+							<div class="tip">
+								<p>使用金额</p>
+								<p>可用：{{availablePoints}}</p>
+							</div>
+							<div class="input-div">
+								<p>￥</p>
+								<input type="number" v-model="pointsNum" @input="pointsNumChange" @blur="inputBlur" placeholder="请输入信用积分数">
+							</div>
+							<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">信用积分规则</p>
 						</div>
-						<div class="input-div">
-							<p>¥</p>
-							<input type="number" v-model="integralNum" @input="integralNumChange" placeholder="请输入通用积分数">
-						</div>
-						<p class="gz" @click="$router.push({path:'/member/earnings/rule'})">通用积分规则</p>
+						<div class="btn" @click="showAvailablePoints = false">确定</div>
 					</div>
-					<div class="btn" @click="showIntegral = false">确定</div>
-				</div>
-			</popup>
-		</div>
-		<payMode :options="payOptions" :orderSn="orderSn" :cancleSn="cancleSn"></payMode>
-		<addressMode :options="addressOptions" @watch="select"></addressMode>
-
-		<!--企业通用卡-->
-		<div class="bottom_box" v-if="integralOptions.showIntegralMode">
-			<div>
-				<span>使用金额：</span><span><i>¥ </i>{{enterpriseIntegral}}</span>
+				</popup>
 			</div>
-			<!-- integralOptions.showIntegralMode = false -->
-			<div class="btn" @click="integralOptions.showIntegralMode = false">确认 </div>
+			<payMode :options="payOptions" :orderSn="orderSn" :cancleSn="cancleSn"></payMode>
+			<addressMode :options="addressOptions" @watch="select"></addressMode>
+
+			<!--企业通用卡-->
+			<div class="bottom_box" v-if="integralOptions.showIntegralMode">
+				<div>
+					<span>使用金额：</span><span><i>￥ </i>{{enterpriseIntegral}}</span>
+				</div>
+				<!-- integralOptions.showIntegralMode = false -->
+				<div class="btn" @click="integralOptions.showIntegralMode = false">确认 </div>
+			</div>
+			<solt v-if="ready">
+				<integral :options="integralOptions" :topIntegral="topIntegral" @watch="setIntegral" @set="watchIn"></integral>
+			</solt>
 		</div>
-		<solt v-if="ready">
-			<integral :options="integralOptions" :topIntegral="topIntegral" @watch="setIntegral" @set="watchIn"></integral>
-		</solt>
+
+		<buyNow v-if="showPage==2" :goodsConsumer="goodsConsumer"></buyNow>
+
 	</section>
+
 </template>
 
 <script>
@@ -206,6 +236,8 @@
 	import payMode from '@/components/payMode'
 	import addressMode from '@/views/member/address/select_address'
 	import Integral from '../multi_user_mall/components/integral'
+	import buyNow from '../multi_user_mall/components/buy_now'
+
 	export default {
 		components: {
 			settingHeader,
@@ -216,7 +248,8 @@
 			XInput,
 			payMode,
 			addressMode,
-			Integral
+			Integral,
+			buyNow
 		},
 		data() {
 			return {
@@ -228,6 +261,7 @@
 				address: {},
 				addressId: '',
 				goodsInfo: {},
+				goodsConsumer: {}, //即时消费数据
 				availableCoupon: [],
 				show: false,
 				showIntegral: false,
@@ -256,22 +290,24 @@
 				ready: false,
 				enterpriseCards: [],
 				totalEnterpriseBalance: 0,
-				orderSn:'',   //订单编号
-				cancleSn:1//区分取消订单
+				orderSn: '', //订单编号
+				cancleSn: 1, //区分取消订单
+				showAvailablePoints: false,
+				availablePoints: 0,
+				pointsNum: 0,
+				usePoints: 0,
+				payMoney2: 0,
+				type: 2,
+				showPage: 0,
+				freight: 0
 			}
 		},
 		created() {
 			var _this = this
 			//商品信息
 			_this.goodsInfo = {
-				'enterpriseName': _this.$route.query.enterpriseName,
-				'goodsLogo': _this.$route.query.goodsLogo,
-				'goodsName': _this.$route.query.goodsName,
-				'skuName': _this.$route.query.skuName,
-				'minPrice': _this.$route.query.minPrice,
-				'minOriginPrice': _this.$route.query.minOriginPrice,
-				'goodsNum': _this.$route.query.goodsNum,
-				'skuId': _this.$route.query.skuId
+				'goodsNum': _this.mainApp.getCs("goodsNum"),
+				'skuId': _this.mainApp.getCs("skuId")
 			}
 
 			_this.payOptions = {
@@ -284,40 +320,28 @@
 					console.log(index)
 				},
 				toPay(type) {
-					/*//微信支付
-					if(type == 1) {
-						_this.pay(_this.payParmars)
-						return false;
-						_this.$router.push({
-							name: "wxpay",
-							params: {
-								outTotalFee: _this.payParmars.payPrice, //金额
-								parentOrderSn: _this.payParmars.parentOrderSn, //订单号
-								ip: _this.payParmars.ip,
-								body: _this.payParmars.body
-							}
-						})
-					}*/
-					var params={
+					var params = {
 						body: _this.payParmars.body,
 						feeType: "CNY",
 						outTotalFee: _this.payParmars.payPrice, //金额
-						spbillCreateIp:_this.payParmars.ip,
-						tradeType:"JSAPI",
-						openId:sessionStorage['_openid_'],
+						spbillCreateIp: _this.payParmars.ip,
+						tradeType: "JSAPI",
+						openId: localStorage['_openid_'],
 						parentOrderSn: _this.payParmars.parentOrderSn, //订单号
 						userId: _this.$store.state.user.userId
 					}
-					if(location.host == _this.url.health){
-						params.id="200002"
-					}else{
-						params.id="200000"
+					if(location.host == _this.url.health) {
+						params.id = _this.url.IdHealth
+					} else if(location.host == _this.url.cgc) {
+						params.id = _this.url.IdCgc
+					} else if(location.host == _this.url.test) {
+						params.id = _this.url.IdTest
 					}
 
-					_this.$http.post(_this.url.zf.pay,params).then((res)=>{
-						if(res.data.status == "00000000"){
-							var data = res.data.data
-							if(type==1){
+					if(type == 1) {
+						_this.$http.post(_this.url.zf.pay, params).then((res) => {
+							if(res.data.status == "00000000") {
+								var data = res.data.data
 								wx.config({
 									debug: false,
 									appId: data.appId,
@@ -336,13 +360,13 @@
 								})
 								wx.chooseWXPay({
 									appId: data.appId,
-									timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符  
-									nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位  
-									package: data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）  
-									signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'  
-									paySign: data.paySign, // 支付签名  
+									timestamp: data.timeStamp,
+									nonceStr: data.nonceStr,
+									package: data.package,
+									signType: data.signType,
+									paySign: data.paySign,
 									success: function(res) {
-										router.push({
+										_this.$router.replace({
 											path: '/shop/my_order2'
 										})
 									},
@@ -364,8 +388,49 @@
 									}
 								})
 							}
+						})
+					} else if(type == 2) {
+						if(location.host == _this.url.test) {
+							var cgcPayId = 500003,
+								returnUrl = "http://www.cgc999.com/new/index.html#/shop/my_order2";
+						} else if(location.host == _this.url.health) {
+							var cgcPayId = 500000,
+								returnUrl = "https://health.cgc999.com/web/new/index.html#/shop/my_order2";
+						} else if(location.host == _this.url.cgc) {
+							var cgcPayId = 500000,
+								returnUrl = "https://health.cgc999.com/web/new/index.html#/shop/my_order2";
 						}
-					})
+
+						_this.$http.post(_this.url.zf.alipay, {
+							cgcPayId: cgcPayId,
+							parentOrderSn: _this.payParmars.parentOrderSn,
+							body: _this.payParmars.body,
+							goodsType: "1",
+							subject: _this.payParmars.body,
+							outTotalAmount: Number(_this.payParmars.payPrice).toFloor(2),
+							userId: _this.$store.state.user.userId,
+							returnUrl: returnUrl
+						}).then((res) => {
+							if(res.data.status == "00000000") {
+								_this.tradeNo = res.data.data.tradeNo
+								document.write(res.data.data.orderStr);
+							} else if(res.data.status == "ALIPAY_0002") {
+								_this.$router.replace({
+									path: '/index',
+									query: {
+										no: sessionStorage['_cno_']
+									}
+								})
+							} else if(res.data.status == "ALIPAY_1004") {
+								_this.$router.replace({
+									path: '/index',
+									query: {
+										no: sessionStorage['_cno_']
+									}
+								})
+							}
+						})
+					}
 
 				},
 				close() {
@@ -395,13 +460,44 @@
 
 				}
 			}
-
-			this.getGoodsOrderConfirmUseBalances()
+			_this.getGoodsSkuInfo()
 		},
 		mounted() {
 
 		},
 		methods: {
+			inputBlur() {
+				document.body.scrollTop = document.body.scrollTop - 1
+			},
+			//获取供应链商品详情
+			getGoodsSkuInfo() {
+				var _this = this,
+					uid = _this.$store.state.user.userId
+				if(!uid || uid == " ") {
+					_this.$router.push({
+						path: '/user/login'
+					})
+					return;
+				}
+
+				_this.$http.get(_this.url.goods.getGoodsSkuInfo, {
+					params: {
+						userId: _this.$store.state.user.userId,
+						// skuId: _this.$route.query.skuId
+						skuId: _this.goodsInfo.skuId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.goodsType == 14) {
+							_this.showPage = 2
+							_this.goodsConsumer = Object.assign(_this.goodsInfo, res.data.data)
+						} else {
+							_this.showPage = 1
+							_this.goodsInfo = Object.assign(_this.goodsInfo, res.data.data)
+						}
+					}
+				})
+			},
 			useIntegral() {
 				if(this.totalEnterpriseBalance > 0) {
 					this.integralOptions.showIntegralMode = true
@@ -417,19 +513,25 @@
 			watchIn(data) {
 				this.enterpriseIntegral = data.totalUseEnterpriseBalance
 				this.enterpriseCards = data.enterpriseCards
-
-				this.allMoney = (Number(this.price) - Number(this.enterpriseIntegral)).toFixed(2)
-				this.integralNumChange()
+				this.pointsNumChange()
 			},
 			setIntegral(data) {
 				this.enterpriseIntegral = data.balance
 				this.enterpriseCards = data.enterpriseCards
 
-				this.integralNumChange()
+				this.pointsNumChange()
 			},
 			//获取积分 优惠券
 			getGoodsOrderConfirmUseBalances() {
-				var _this = this
+				var _this = this,
+					uid = _this.$store.state.user.userId
+
+				if(!uid) {
+					_this.$router.push({
+						path: '/user/login'
+					})
+					return;
+				}
 
 				this.ready = false
 
@@ -439,14 +541,16 @@
 						platformId: _this.url.platformId,
 						nums: _this.goodsInfo.goodsNum,
 						skuId: _this.goodsInfo.skuId,
-						couponId: _this.userCouponIds[0] || ''
+						couponId: _this.userCouponIds[0] || '',
+						addressId: _this.addressId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 
-						this.allMoney = res.data.data.price
+						this.allMoney = Number(res.data.data.price) + Number(res.data.data.usePoints)
 						this.price = res.data.data.price
 						this.totalEnterpriseBalance = res.data.data.totalEnterpriseBalance
+						this.freight = Number(res.data.data.freight)
 
 						//优惠券
 						if(res.data.data.availableCoupon) {
@@ -467,21 +571,96 @@
 						_this.ready = true
 						_this.integralOptions.data = res.data.data //返回的所有数据
 
+						//信用积分
+						if(res.data.data.availablePoints) {
+							_this.availablePoints = res.data.data.availablePoints
+							_this.usePoints = res.data.data.usePoints
+							_this.pointsNum = Number(_this.usePoints) > Number(_this.allMoney) ? Number(_this.allMoney) : Number(_this.usePoints)
+							_this.type = 3
+						}
+						//_this.allMoney = (Number(_this.allMoney) - Number(_this.usePoints)).toFixed(2)
+
 						//初始化总价-企业通用积分
 						_this.enterpriseIntegral = res.data.data.totalUseEnterpriseBalance
-						_this.allMoney = (Number(_this.allMoney) - Number(_this.enterpriseIntegral)).toFixed(2)
 
 						//通用积分
 						_this.availableBalance = res.data.data.availableBalance
 
-						if(Number(_this.allMoney) > 0) {
-							//初始化总价-通用积分
-							_this.integralNum = Number(_this.availableBalance) > Number(_this.allMoney) ? Number(_this.allMoney) : Number(_this.availableBalance)
-						} else {
-							_this.integralNum = ''
-						}
+						_this.pointsNumChange()
+
 					}
 				})
+			},
+			pointsNumChange(e) {
+
+				this.payMoney = this.allMoney
+				var minAllMoney = Number(this.payMoney)
+				console.log(this.payMoney, 0)
+
+				if(this.type == 3) {
+					if(Number(this.pointsNum) < 0) {
+						this.pointsNum = 0
+					} else {
+						var reg = /^(([0-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/
+						if(!reg.test(this.pointsNum)) {
+							if(Number(this.pointsNum) > 0) {
+								this.pointsNum = Number(this.pointsNum).toFixed(2)
+							} else {
+								this.pointsNum = ''
+							}
+						}
+					}
+					var pointsNum = this.pointsNum == '' ? 0 : this.pointsNum
+
+					if(Number(minAllMoney) > 0) {
+						if(Number(minAllMoney) <= Number(this.usePoints)) {
+							if(Number(this.pointsNum) > Number(this.usePoints)) {
+								this.pointsNum = Number(minAllMoney)
+								pointsNum = Number(minAllMoney)
+							}
+
+							this.payMoney = Number(minAllMoney) - Number(pointsNum)
+						}
+						if(Number(minAllMoney) > Number(this.usePoints)) {
+
+							if(Number(this.pointsNum) > Number(this.usePoints)) {
+								this.pointsNum = Number(this.usePoints)
+								pointsNum = Number(this.usePoints)
+							}
+
+							this.payMoney = Number(minAllMoney) - Number(pointsNum)
+
+							console.log(this.payMoney, 1)
+						}
+
+						//已经使用通用积分  设置企业通用积分上限
+						if(e) {
+							this.topIntegral = Number(this.price) - Number(pointsNum)
+						}
+					} else {
+						//this.pointsNum = ''
+						this.topIntegral = ''
+					}
+				}
+
+				minAllMoney = Number(this.payMoney)
+				console.log(this.payMoney, 2)
+
+				if(Number(minAllMoney) > 0) {
+					this.payMoney = (Number(minAllMoney) - Number(this.enterpriseIntegral)).toFloor(2)
+				}
+
+				minAllMoney = Number(this.payMoney)
+				console.log(this.payMoney, 3)
+
+				if(Number(minAllMoney) > 0) {
+					//初始化总价-通用积分
+					this.integralNum = Number(this.availableBalance) > Number(minAllMoney) ? Number(minAllMoney) : Number(this.availableBalance)
+				} else {
+					this.integralNum = ''
+				}
+
+				this.integralNumChange()
 			},
 			//数量加减
 			numC() {
@@ -498,14 +677,14 @@
 			},
 			//计算最后价格
 			integralNumChange(e) {
-				
+
 				if(Number(this.integralNum) < 0) {
 					this.integralNum = 0
 				} else {
 					var reg = /^(([0-9][0-9]*)|(([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2})))$/
 					if(!reg.test(this.integralNum)) {
 						if(Number(this.integralNum) > 0) {
-							this.integralNum = Number(this.integralNum).toFixed(2)
+							this.integralNum = Number(this.integralNum).toFloor(2)
 						} else {
 							this.integralNum = ''
 						}
@@ -513,10 +692,8 @@
 				}
 				var inputNum = this.integralNum == '' ? 0 : this.integralNum
 
-
-				this.payMoney = this.allMoney
-				//console.log(this.payMoney, 3)
-
+				console.log(this.integralNum)
+				console.log(this.payMoney, 4)
 				var minAllMoney = Number(this.payMoney)
 
 				if(Number(minAllMoney) > 0) { //再减去通用积分
@@ -526,7 +703,7 @@
 							inputNum = Number(minAllMoney)
 						}
 
-						this.payMoney = Number(minAllMoney) - Number(inputNum)
+						this.payMoney2 = Number(minAllMoney) - Number(inputNum)
 					}
 
 					if(Number(minAllMoney) > Number(this.availableBalance)) {
@@ -536,7 +713,7 @@
 							inputNum = Number(this.availableBalance)
 						}
 
-						this.payMoney = Number(minAllMoney) - Number(inputNum)
+						this.payMoney2 = Number(minAllMoney) - Number(inputNum)
 					}
 
 					//已经使用通用积分  设置企业通用积分上限
@@ -544,10 +721,14 @@
 						this.topIntegral = Number(this.price) - Number(inputNum)
 					}
 				} else {
-					this.integralNum = ''
+					if(e) {
+						this.integralNum = ''
+					}
 				}
 
-				this.payMoney = this.payMoney.toFixed(2)
+				this.payMoney2 = Number(this.payMoney2).toFixed(2)
+
+				console.log(this.payMoney2, 5)
 
 			},
 
@@ -608,6 +789,8 @@
 					this.addressId = ''
 				}
 
+				this.getGoodsOrderConfirmUseBalances()
+
 			},
 			addAddress() {
 				this.$router.push({
@@ -640,7 +823,8 @@
 					skuId: _this.goodsInfo.skuId,
 					userCouponIds: _this.userCouponIds,
 					remark: _this.remark,
-					enterpriseCards: _this.enterpriseCards
+					enterpriseCards: _this.enterpriseCards,
+					points: _this.pointsNum != '' ? _this.pointsNum : 0
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						if(res.data.data.status == 1) {

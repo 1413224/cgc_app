@@ -14,7 +14,6 @@
 </template>
 
 <script>
-	import { XInput, Group, XButton, Cell, } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -131,10 +130,6 @@
 		},
 		components: {
 			settingHeader,
-			XInput,
-			Group,
-			XButton,
-			Cell
 		}
 	}
 </script>

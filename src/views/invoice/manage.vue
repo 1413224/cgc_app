@@ -222,7 +222,8 @@
 		.bottom_box {
 			position: fixed;
 			bottom: 0;
-			left: 0;
+			/*left: 0;*/
+			max-width: 640px;
 			width: 100%;
 			display: flex;
 			height: 0.90rem;
@@ -250,6 +251,7 @@
 			top: 1.07rem;
 			bottom: 0.9rem;
 			width: 100%;
+			max-width: 640px;
 			overflow: hidden;
 			.content {
 				/*padding-bottom: 0.20rem;*/

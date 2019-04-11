@@ -40,6 +40,14 @@ i,em{font-style:normal;}
 .mb10{margin-bottom: 10px;}
 .mt10{margin-top: 10px;}
 .ellipsis{    white-space: nowrap; overflow: hidden;text-overflow: ellipsis;}
+.ellipsis2{ 
+	white-space: nowrap; 
+	overflow: hidden;
+	text-overflow:ellipsis;
+	display:-webkit-box; 
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:2; 
+}
 /*placeholder css*/
 ::-moz-placeholder{ font-family: "Microsoft YaHei"} 
 ::-webkit-input-placeholder{ font-family: "Microsoft YaHei"} 

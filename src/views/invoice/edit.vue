@@ -73,12 +73,9 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Tab, TabItem } from 'vux'
 	export default {
 		components: {
-			settingHeader,
-			Tab,
-			TabItem
+			settingHeader
 		},
 		data() {
 			return {

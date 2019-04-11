@@ -13,23 +13,31 @@
 		},
 		created() {
 			this.updateRouter()
-
-			var url = localStorage['beforeLoginUrl'].split('?')[0]
-			this.url2 = url.split('?')[0]
+			// var url = localStorage['beforeLoginUrl'].split('?')[0]
+			// this.url2 = url.split('?')[0]
 		},
 		methods: {
 			grant() {
 				let _this = this
 				// 跳转到微信授权页面
+				/*alert(_this.url.platformId)
+				alert(localStorage['_parentid_'])
+				alert(localStorage['_parentid_'])
+				alert(localStorage['_enterpriseId_'])
+				alert(localStorage['_code_'])*/
 				_this.$http.get(_this.url.origin.getAuthorizationUrl, {
 					params: {
 						platformId: _this.url.platformId, //2018050800000002
-						type: 1
+						type: 1,
+						parentUserId:localStorage['_parentid_'],
+						eId:localStorage['_enterpriseId_'],
+						code:localStorage['_code_']
 					}
 				}).then((res) => {
 					if(res.data.status == '00000000') {
 						let data = res.data
-						window.location.href = data.data
+							// alert(data.data)
+							window.location.href = data.data
 					}
 				})
 			},
@@ -41,26 +49,31 @@
 				let uid = this.$route.query.userId
 				let acscode = this.$route.query.randomAccessCode
 				let token = this.$route.query.token
-
+				// alert(accessCode)
 				if(openid) {
 					this.$store.commit('getOpenId', openid)
-				
-					sessionStorage.setItem('_openid_', openid)
-					sessionStorage.setItem('_accessCode_', accessCode)
+					// alert("openid"+ openid)
+					localStorage.setItem('_openid_', openid)
+					// alert(localStorage['_openid_'])
 
 					if(uid && acscode && token) {
 						let hash = {
 							id: uid,
+							userId:uid,
 							randomAccessCode: acscode,
 							token: token
 						}
-
+						// alert('uid'+uid)
+						localStorage.setItem('_accessCode_', accessCode) 
+						
 						localStorage.setItem('_HASH_', base64_encode(hash))
 
 						_this.$store.state.page.isLogin = 'true'
+
+						// alert('测试'+_this.$store.state.page.isLogin)
 						_this.$store.state.user.userId = uid
 
-						localStorage.setItem('isLogin', true)
+						localStorage.setItem('isLogin', _this.$store.state.page.isLogin)
 
 						//获取用户信息
 						_this.$http.get(_this.url.user.getBasicInfo, {
@@ -71,9 +84,19 @@
 							if(res.data.status == "00000000") {
 								_this.$store.commit('UPDATE_USER_INFO', res.data.data)
 								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-								_this.$router.push({
+								// alert("公众号授权"+localStorage['beforeLoginUrl'])
+								// 为了分离登录注册准备的代码
+								if(localStorage['beforeLoginUrl']){
+									window.location.href = localStorage['beforeLoginUrl']
+								}else{
+									_this.$router.push({
+										path: localStorage['wechartBeforeLoginUrl']
+									})
+								}
+								// 为了分离登录注册准备的代码
+								/*_this.$router.push({
 									path: localStorage['beforeLoginUrl']
-								})
+								})*/
 								//								if(_this.url2 == '/share/instrumentCode' || _this.url2 == '/multi_user_mall') {
 								//									_this.$router.push({
 								//										path: localStorage['beforeLoginUrl']
@@ -88,7 +111,7 @@
 						})
 
 					} else {
-						var url = localStorage['beforeLoginUrl'].split('?')[0]
+						// var url = localStorage['beforeLoginUrl'].split('?')[0]
 						//						if(url == '/share/instrumentCode' || url == '/multi_user_mall') {
 						//							_this.$router.push({
 						//								path: localStorage['beforeLoginUrl']
@@ -98,9 +121,30 @@
 						//								path: '/index'
 						//							})
 						//						}
-						_this.$router.push({
-							path: localStorage['beforeLoginUrl']
-						})
+						// alert("仅有openid时"+localStorage['beforeLoginUrl'])
+						//为了分离登录注册准备的代码
+							/*if(localStorage['beforeLoginUrl']){
+								window.location.href = localStorage['beforeLoginUrl']
+							}else{
+								_this.$router.push({
+									path: localStorage['wechartBeforeLoginUrl']
+								})
+							}*/
+							if(localStorage['beforeLoginUrl']){
+								//存在beforeLoginUrll
+								var strUrl = localStorage['beforeLoginUrl']
+								// var hostUrl = strUrl.substr(0,strUrl.indexOf('.')) // //www
+								if(strUrl.substr(0,2)!='//'){
+									_this.$router.push({
+										path:localStorage['beforeLoginUrl']
+									})
+								}else{
+									window.location.href = localStorage['beforeLoginUrl']
+								}
+							}else{
+								localStorage.setItem('beforeLoginUrl',to.fullPath)
+							}
+						
 					}
 
 				} else {

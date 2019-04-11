@@ -56,7 +56,7 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import { LoadMore, Datetime, Popup, Card } from 'vux'
+	import { LoadMore, Datetime } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	import Loading from '../../../components/loading'
 	export default {
@@ -141,8 +141,7 @@
 			settingHeader,
 			LoadMore,
 			Datetime,
-			Popup,
-			Card,Loading
+			Loading
 		},
 		watch: {
 			twoIndex() {

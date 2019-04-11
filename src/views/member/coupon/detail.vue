@@ -31,7 +31,6 @@
 </template>
 
 <script>
-	import { Badge, Cell, Group, Scroller, Masker, Drawer, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {

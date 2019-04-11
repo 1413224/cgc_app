@@ -1,12 +1,23 @@
 <template>
-	<div id="app" ref="fBox" v-cloak>
+	<div id="app" ref="fBox">
 		<!--动画  页面缓存-->
 		<transition :name="viewTransition" :css="!!direction">
 			<keep-alive :include="includeList">
-				<router-view></router-view>
+				<router-view @getPlatformId="getPlatformId"></router-view>
 			</keep-alive>
 		</transition>
-		<settingFooter v-if="$route.meta.navShow"></settingFooter>
+
+		<!-- <settingFooter v-if="$route.meta.navShow && showDefaultNav"></settingFooter> -->
+		<settingFooter v-if="$route.meta.navShow && showDefaultNav"></settingFooter>
+
+		<!-- 自定义底部菜单 -->
+		<footnav-comp 
+			v-if="$route.meta.navShow && platformId" 
+			:codeArrya="codeArrya" 
+			:platformId="platformId">
+		</footnav-comp>
+		<!-- 自定义底部菜单end -->
+
 		<div v-transfer-dom class="dia">
 			<x-dialog v-model="orientation" class="dialog-demo" hide-on-blur>
 				<div class="img-box">
@@ -57,25 +68,35 @@
 </template>
 
 <script>
+	import codeArrya from '@/global/code.js'
 	import settingFooter from '@/components/setting_footer'
-	import { ButtonTab, ButtonTabItem, Masker } from 'vux'
+	import footnavComp from '@/components/custom/footnavComp'
+	// import { ButtonTab, ButtonTabItem, Masker } from 'vux'
 	import { mapState } from 'vuex'
+	import equipment from '@/mixin/equipment'
+	import fastnav from '@/mixin/fastnav'
 	export default {
 		name: 'App',
+		mixins:[equipment,fastnav],
 		computed: {
 			...mapState({
 				direction: state => state.page.direction,
 				includeList: state => state.page.includeList,
 				isWx: state => state.page.isWx,
-				isLogin: state => state.page.isLogin
+				userid: state => state.user.userId,
+				isLogin: state => state.page.isLogin,
+				showDefaultNav: state => state.user.showDefaultNav,
+				platformMenuId: state => state.user.platformMenuId,
+				shoePlatformMenu: state => state.user.shoePlatformMenu
 			}),
 			viewTransition() {
 				if(!this.direction) return ''
 				return 'vux-pop-' + (this.direction === 'forward' ? 'in' : 'out')
-			}
+			},
 		},
 		data() {
 			return {
+				id: '001',
 				orientation: false,
 				flags: false,
 				position: {
@@ -109,12 +130,15 @@
 						title: '个人中心',
 						logo: './static/images/nav-four.png'
 					}
-				]
+				],
+				footnavConfig: {},
+				codeArrya: codeArrya,
+				platformId: '',
+				href: ''
 			}
 		},
 		created() {
 			var _this = this
-
 			window.onorientationchange = function() {
 				if(window.orientation == 90 || window.orientation == -90) {
 					_this.orientation = true;
@@ -127,13 +151,91 @@
 				document.title = this.$router.app._route.meta.title
 			}
 		},
+		mounted() {
+			// 关闭浏览器窗口的时候清空浏览器缓存在localStorage的数据
+			/*window.onbeforeunload = function(e){
+				// alert(localStorage['beforeLoginUrl'])
+				if(localStorage['beforeLoginUrl']){
+					var storage = window.localStorage;
+					// storage.removeItem('beforeLoginUrl')
+					// storage.removeItem('_openid_')
+					// console.log(localStorage['beforeLoginUrl'])
+				}
+			}*/
+			window.onunload = function(e){
+				if(localStorage['_chainsid_']){
+					localStorage.removeItem('_chainsid_')
+				}
+				if(localStorage['_allianceid_']){
+					localStorage.removeItem('_allianceid_')
+				}
+				if(localStorage['_buyCommodityFullPath_']){
+					localStorage.removeItem('_buyCommodityFullPath_')
+				}
+			}
+		},
 		components: {
-			ButtonTab,
-			ButtonTabItem,
+			// ButtonTab,
+			// ButtonTabItem,
 			settingFooter,
-			Masker
+			// Masker,
+			// XDialog,
+			footnavComp
 		},
 		methods: {
+			fx() {
+				var _this = this,
+					appId = '',
+					uri = window.location.href.split('#')[0], //截取#前面的路径
+					params = {
+						url: uri
+					};
+
+				if(location.host == _this.url.health) {
+					params.mchId = _this.url.mchIdHealth
+					appId = _this.url.appIdHealth
+				} else if(location.host == _this.url.cgc) {
+					params.mchId = _this.url.mchIdCgc
+					appId = _this.url.appIdCgc
+				} else if(location.host == _this.url.test) {
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				} else {
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}
+				_this.$http.post(_this.url.zf.wxScan, params).then((res) => {
+
+					wx.config({
+						debug: false,
+						appId: appId,
+						timestamp: res.data.data.timestamp,
+						nonceStr: res.data.data.nonceStr,
+						signature: res.data.data.signature,
+						jsApiList: ['checkJsApi', 'scanQRCode', 'onMenuShareTimeline', 'onMenuShareAppMessage']
+					})
+
+					wx.ready(function() {
+						//分享给好友
+						wx.onMenuShareAppMessage({
+							title: 'CGC全球智慧产业联盟', // 分享标题
+							desc: '注册即可获1000信用积分，1：1当钱花', // 分享描述
+							link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: 'http://domain.cgc999.com:8080/group1/M00/00/6D/rBL0CVv7wamAIl75AAAsglR_VP0222.png', // 自定义图标
+							type: 'link', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function() {
+								// 用户确认分享后执行的回调函数
+								//alert('分享给朋友成功')
+							},
+							cancel: function() {
+								// 用户取消分享后执行的回调函数
+								//alert('取消分享')
+							}
+						});
+					})
+				})
+			},
 			open() {
 				this.isOpen = !this.isOpen
 			},
@@ -152,13 +254,14 @@
 				} else if(index == 1) {
 					if(_this.equipmentNum == 0) {
 						if(this.$store.state.page.isLogin == 'false') {
-							this.$vux.toast.text('请登录管理设备', 'top')
+							_this.mainApp.showMessage('请登录管理设备')
 
 							_this.$router.push({
 								path: '/user/login'
 							})
 						} else {
-							this.$vux.toast.text('暂无设备', 'top')
+							_this.mainApp.showMessage('暂无设备')
+
 						}
 					} else {
 						_this.$router.push({
@@ -179,49 +282,28 @@
 				}
 			},
 			//检测是否设置支付密码
-			getUserPayPassword() {
-				var _this = this
-				_this.$http.get(_this.url.user.getUserPayPassword, {
-					params: {
-						userId: _this.$store.state.user.userId
-					}
-				}).then((res) => {
-					if(res.data.status == "00000000") {
-						if(res.data.data == 2) {
-							sessionStorage.setItem('isPay', 1)
-							_this.$popup.show({
-								showPay: true
-							})
-						}
-					}
-				})
-			},
-			getEquipment() {
-				var _this = this
-				if(_this.$store.state.page.isLogin == 'true') {
-					_this.$http.get(_this.url.share.getMyEquipmentNotice, {
-						params: {
-							userId: _this.$store.state.user.userId
-						}
-					}).then((res) => {
-						if(res.data.status == "00000000") {
-							if(res.data.data) {
-								_this.equipmentNum = res.data.data.num
-								_this.equipmentShow = res.data.data.num > 0 ? true : false
-
-								_this.navList[1].tip = res.data.data.num
-							}
-						}
-					})
-				} else {
-					_this.equipmentShow = false
-				}
-
-			},
+			//			getUserPayPassword() {
+			//				var _this = this
+			//				_this.$http.get(_this.url.user.getUserPayPassword, {
+			//					params: {
+			//						userId: _this.$store.state.user.userId
+			//					}
+			//				}).then((res) => {
+			//					if(res.data.status == "00000000") {
+			//						if(res.data.data == 2) {
+			//							sessionStorage.setItem('isPay', 1)
+			//							_this.$popup.show({
+			//								showPay: true
+			//							})
+			//						}
+			//					}
+			//				})
+			//			},
+			
 			goDetail() {
 				var _this = this
 				if(_this.equipmentNum == 0) {
-					this.$vux.toast.text('暂无设备', 'top')
+					_this.mainApp.showMessage('暂无设备')
 				} else {
 					this.$router.push({
 						path: '/share/usetime',
@@ -232,110 +314,72 @@
 				}
 
 			},
-			// 实现移动端拖拽   设备按钮
-			down() {
-				this.flags = true;
-				var touch;
-				if(event.touches) {
-					touch = event.touches[0];
-				} else {
-					touch = event;
+			//获取行业平台menuid
+			getPlatformId(id) {
+				// console.log(id+'gggg')
+				this.platformId = id
+			},
+			getPublicNotice() {
+				var _this = this
+				if(_this.$store.state.page.isLogin == 'true') {
+					_this.$http.get(_this.url.user.getPublicNotice, {
+						params: {
+							userId: _this.$store.state.user.userId
+						}
+					}).then((res) => {
+						if(res.data.status == "00000000") {
+							//控制新人奖励弹窗
+							if(res.data.data.type == 1) {
+								_this.$popup.show({
+									showZj: true,
+									showData: res.data.data
+								})
+							} else if(res.data.data.type == 2 && (res.data.data.points > 0 || res.data.data.balance > 0)) {
+								_this.$popup.show({
+									showSr: true,
+									showData: res.data.data
+								})
+							}
+						}
+					})
 				}
-				this.position.x = touch.clientX;
-				this.position.y = touch.clientY;
-				this.dx = this.$refs.moveDiv.offsetLeft;
-				this.dy = this.$refs.moveDiv.offsetTop;
-			},
-			move() {
-				if(this.flags) {
-					var touch;
-					if(event.touches) {
-						touch = event.touches[0];
-					} else {
-						touch = event;
-					}
-					this.nx = touch.clientX - this.position.x;
-					this.ny = touch.clientY - this.position.y;
-					this.xPum = this.dx + this.nx;
-					this.yPum = this.dy + this.ny;
-
-					if(this.xPum >= Number(document.body.clientWidth / 6) && this.xPum < Number(document.body.clientWidth - 70)) {
-						this.$refs.moveDiv.style.left = this.xPum + "px";
-					} else if(this.xPum < 0) {
-						this.$refs.moveDiv.style.left = Number(document.body.clientWidth / 6) + "px";
-					}
-					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 140) : Number(document.body.clientHeight - 70)
-					if(this.yPum >= 0 && this.yPum < h) {
-						this.$refs.moveDiv.style.top = this.yPum + "px";
-					} else if(this.yPum < 0) {
-						this.$refs.moveDiv.style.top = 0 + "px";
-					}
-					//阻止页面的滑动默认事件
-					//					document.addEventListener("touchmove", function() {
-					event.preventDefault();
-					//					}, false);
-				}
-			},
-			//鼠标释放时候的函数
-			end() {
-				this.flags = false;
-			},
-
-			//快速导航 
-
-			down2() {
-				this.flags = true;
-				var touch;
-				if(event.touches) {
-					touch = event.touches[0];
-				} else {
-					touch = event;
-				}
-				this.position.x = touch.clientX;
-				this.position.y = touch.clientY;
-				this.dx = this.$refs.moveDiv2.offsetLeft;
-				this.dy = this.$refs.moveDiv2.offsetTop;
-			},
-			move2() {
-				if(this.flags) {
-					var touch;
-					if(event.touches) {
-						touch = event.touches[0];
-					} else {
-						touch = event;
-					}
-					this.nx = touch.clientX - this.position.x;
-					this.ny = touch.clientY - this.position.y;
-					this.xPum = document.body.scrollWidth
-					this.yPum = this.dy + this.ny;
-					if(this.xPum == 0) {
-						this.$refs.moveDiv2.style.left = this.xPum + "px";
-					} else if(this.xPum < 0) {
-						this.$refs.moveDiv2.style.left = document.body.scrollWidth + "px";
-					}
-					var h = this.$route.meta.navShow ? Number(document.body.clientHeight - 140) : Number(document.body.clientHeight - 70)
-					if(this.yPum >= 0 && this.yPum < h) {
-						this.$refs.moveDiv2.style.top = this.yPum + "px";
-					} else if(this.yPum < 0) {
-						this.$refs.moveDiv2.style.top = 0 + "px";
-					}
-					//阻止页面的滑动默认事件
-					event.preventDefault();
-				}
-			},
-			//鼠标释放时候的函数
-			end2() {
-				this.flags = false;
 			}
 		},
 		watch: {
 			'$route' (to, from, next) {
 				var _this = this
-
+				// 排除文章详情页
+				if(to.path != '/member/article/detail') {
+					_this.fx()
+				}
 				//判断是否微信端   奖励弹窗  
 				if(_this.isWx) {
 
-					if(sessionStorage['_openid_']) {
+					if(localStorage['_openid_']) {
+
+						if((sessionStorage['parentUserId'] == undefined 
+							|| sessionStorage['parentUserId'] == null) 
+							&& (_this.$store.state.user.userId != _this.mainApp.getCs('parentId'))) 
+						{
+							sessionStorage.setItem('parentUserId', _this.mainApp.getCs('parentId'))
+						}
+
+						if(_this.$store.state.page.isLogin == 'true') {
+							/*_this.$router.replace({
+								query: _this.merge(_this.$route.query, {
+									'parentId': _this.$store.state.user.userId
+								})
+							})*/
+							var pid = _this.mainApp.getCs('parentId')
+							if(!pid){
+								_this.$router.replace({
+									query: _this.merge(_this.$route.query, {
+										'parentId': _this.$store.state.user.userId
+									})
+								})
+							}
+							
+						}
 
 						//显示快速导航
 						if(!_this.$route.meta.navShow && _this.$route.path != "/user/login") {
@@ -346,17 +390,23 @@
 							_this.isOpen = false
 						}
 
-						if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
+						if(
+							_this.$store.state.page.isLogin == 'true' 
+							&& _this.$route.path != "/share/usetime"
+							&& _this.$route.path != "/user/login") {
 							_this.getEquipment()
 						} else {
 							_this.equipmentShow = false
 						}
-
+						//控制弹窗
+						if(to.path == '/index' && from.path == "/index") {
+							_this.getPublicNotice()
+						}
 						//控制新人奖励弹窗
 						if(sessionStorage.getItem('isZc')) {
 							_this.$popup.hide()
 						} else {
-							if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/login') {
+							if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/login' && to.path != '/custom' && to.path != '/multi_user_mal') {
 								sessionStorage.setItem('isZc', 1)
 								_this.$popup.show({
 									showZc: true
@@ -369,11 +419,28 @@
 						} else {
 							if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/login') {
 								sessionStorage.setItem('isPay', 1)
-								_this.getUserPayPassword()
+								//_this.getUserPayPassword()
 							}
 						}
+
 					}
 				} else {
+					if((sessionStorage['parentUserId'] == undefined || sessionStorage['parentUserId'] == null) && (_this.$store.state.user.userId != _this.mainApp.getCs('parentId'))) {
+						sessionStorage.setItem('parentUserId', _this.mainApp.getCs('parentId'))
+					}
+
+					if(_this.$store.state.page.isLogin == 'true') {
+
+						var pid = _this.mainApp.getCs('parentId')
+						if(!pid){
+							_this.$router.replace({
+								query: _this.merge(_this.$route.query, {
+									'parentId': _this.$store.state.user.userId
+								})
+							})
+						}
+					}
+
 					//显示快速导航
 					if(!_this.$route.meta.navShow && _this.$route.path != "/user/login") {
 						_this.show = true
@@ -382,12 +449,13 @@
 						_this.show = false
 						_this.isOpen = false
 					}
-
+					//控制弹窗
+					_this.getPublicNotice()
 					//控制新人奖励弹窗
 					if(sessionStorage.getItem('isZc')) {
 						_this.$popup.hide()
 					} else {
-						if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/login') {
+						if(_this.$store.state.page.isLogin != 'true' && to.path != '/user/login' && to.path != '/custom') {
 							sessionStorage.setItem('isZc', 1)
 							_this.$popup.show({
 								showZc: true
@@ -400,15 +468,18 @@
 					} else {
 						if(_this.$store.state.page.isLogin == 'true' && to.path != '/user/login') {
 							sessionStorage.setItem('isPay', 1)
-							_this.getUserPayPassword()
+							//_this.getUserPayPassword()
 						}
 					}
 
-					if(_this.$store.state.page.isLogin == 'true' && _this.$route.path != "/share/usetime") {
+					if(_this.$store.state.page.isLogin == 'true' 
+						&& _this.$route.path != "/share/usetime" 
+						&&_this.$route.path != "/user/login") {
 						_this.getEquipment()
 					} else {
 						_this.equipmentShow = false
 					}
+
 				}
 
 				//路由切换返回顶部
@@ -419,7 +490,7 @@
 				if(this.$route.meta.title) {
 					document.title = this.$route.meta.title
 				} else {
-					document.title = '大健康App'
+					document.title = 'CGC全球智慧产业联盟'
 				}
 
 				//自定义组件关闭
@@ -432,12 +503,20 @@
 				if(this.isLogin == false) {
 					localStorage.removeItem('userInfo')
 				}
-			}
-		}
+			},
+
+		},
+
 	}
 </script>
 
 <style lang='less'>
+	.skeleton-wrapper {
+		background: #ccc;
+		width: 100%;
+		height: 100px;
+	}
+	
 	* {
 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	}

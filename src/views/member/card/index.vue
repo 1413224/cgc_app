@@ -171,13 +171,14 @@
 		bottom: 0;
 		overflow: hidden;
 		width: 100%;
+		max-width: 640px;
 		box-sizing: border-box;
 	}
 	.b_white{
 		background-color: white;
 	}
 	.top46 {
-		top: 46px!important;
+		/*top: 46px!important;*/
 	}
 	.card_list {
 		width: 100%;

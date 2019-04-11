@@ -42,27 +42,9 @@
 					return false;
 				}
 
-				_this.$http.post(_this.url.user.openInvoice, {
-					number: _this.info.invoiceNum,
-					name: _this.info.name,
-					phone: _this.info.phone,
-					flag: _this.info.flag,
-					invoiceCustomersName: _this.info.invoiceCustomersName,
-					invoiceIdentifyNo: _this.info.invoiceIdentifyNo,
-					invoiceCheckName: _this.info.invoiceCheckName,
-					invoiceCheckPhone: _this.info.invoiceCheckPhone,
-					invoiceCheckEmail: _this.invoiceCheckEmail,
-					invoiceAddress: _this.info.invoiceAddress,
-					invoicePhone: _this.info.invoicePhone,
-					invoiceDeposit: _this.info.invoiceDeposit,
-					invoiceBankAccount: _this.info.invoiceBankAccount,
-					invoicePayee: _this.info.invoicePayee,
-					invoiceChecher: _this.info.invoiceChecher,
-					money: _this.info.money,
-					noTaxAmount: _this.info.noTaxAmount,
-					taxAmount: _this.info.taxAmount,
-					itemList: _this.info.itemList,
-					flag: 1
+				_this.$http.post(_this.url.user.sendElectronInvoiceMail, {
+					email: _this.invoiceCheckEmail,
+					invoiceId:_this.info.invoiceId
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.$vux.toast.show({
@@ -70,6 +52,9 @@
 							width: '50%',
 							position: 'top',
 							text: '发送成功'
+						})
+						_this.$router.push({
+							path:'/invoice/index'
 						})
 					}
 				})

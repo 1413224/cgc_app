@@ -87,7 +87,7 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Popup, Sticky } from 'vux'
+	import { Sticky } from 'vux'
 	import Loading from '../../../components/loading'
 	import Nomore from '../../../components/noMore'
 	import noData from '../../../components/noData'
@@ -120,6 +120,9 @@
 				}, {
 					title: '任务奖励',
 					type: 7
+				},{
+					title: '其他',
+					type: 8
 				}],
 
 				type: 1,
@@ -132,16 +135,16 @@
 				//头部详情
 				cardDetail:'',
 				styleObject:{
-					backgroundImage:'url("../../../../static/member/khh.png")',
+					// backgroundImage:'url("../../../../static/member/khh.png")',
+					
 					// backgroundImage:'url("https://gw.alicdn.com/bao/uploaded/i3/1834710611/TB2CgnphqagSKJjy0FaXXb0dpXa_!!1834710611.jpg")',
-					backgroundSize:'100%'
+					backgroundSize:'100% 100%'
 				},
 
 			}
 		},
 		components: {
 			settingHeader,
-			Popup,
 			Loading,
 			Nomore,
 			noData,
@@ -172,6 +175,9 @@
 			} else if(this.$route.query.type == 2) {
 				this.twoIndex = 1
 				this.typeTitle = '消费'
+			} else if(this.$route.query.type == 8){
+				this.twoIndex = 7
+				this.typeTitle = '其他'
 			}
 
 			this.getMyBalanceList()
@@ -201,7 +207,7 @@
 					if(res.data.status == "00000000") {
 						if(res.data.data.list.length > 0) {
 							_this.list = res.data.data.list
-							console.log(_this.list)
+							// console.log(_this.list)
 							var length = res.data.data.list.length - 1
 							_this.lastCreateTime = res.data.data.list[length].createTime
 						}
@@ -321,9 +327,10 @@
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
-						console.log(res.data.data)
+						// console.log(res.data.data)
 						_this.cardDetail = res.data.data
 						// _this.styleObject.backgroundImage = 'url(' + res.data.data.logo.middle + ')'
+						_this.styleObject.backgroundImage = 'url(' + res.data.data.logo.original + ')'
 					}
 				})
 			},
@@ -519,10 +526,11 @@
 			top: 0rem;
 			bottom: 0rem;
 			width: 100%;
+			max-width: 640px;
 			overflow: hidden;
 		}
 		.top46 {
-			top: 46px!important;
+			/*top: 46px!important;*/
 		}
 		.b_white {
 			background-color: white;

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-	import { Group, Cell, XInput, XAddress, ChinaAddressV4Data, XButton, XTextarea } from 'vux'
+	import {XAddress, ChinaAddressV4Data } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -197,12 +197,7 @@
 		},
 		components: {
 			settingHeader,
-			Group,
-			Cell,
-			XInput,
 			XAddress,
-			XButton,
-			XTextarea
 		},
 		watch: {
 			vPhone() {

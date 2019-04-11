@@ -60,7 +60,7 @@
 
 <script>
 	//上传组件
-	import { Cell, Group, XInput, Actionsheet, Datetime } from 'vux'
+	import { Actionsheet, Datetime } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -343,7 +343,6 @@
 		},
 		components: {
 			settingHeader,
-			XInput,
 			Actionsheet,
 			Datetime
 		}

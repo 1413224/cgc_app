@@ -74,7 +74,7 @@
 </template>
 
 <script>
-	import { Popup, CheckIcon, Countup } from 'vux'
+	import {Countup } from 'vux'
 	export default {
 		data() {
 			return {
@@ -110,8 +110,6 @@
 			}
 		},
 		components: {
-			Popup,
-			CheckIcon,
 			Countup
 		},
 		created() {

@@ -16,7 +16,7 @@
 
 		<div class="title-box" ref="one">
 			<img :src="'./static/vip/title-img.png'" />
-			<p>会员六大增值好处</p>
+			<p>会员六大增值服务</p>
 			<img :src="'./static/vip/title-img.png'" />
 		</div>
 		<div class="swiper-inner">
@@ -24,6 +24,7 @@
 				<swiper-slide v-for="(item,index) in swiperList" :key="index">
 					<img :src="item" alt="" />
 				</swiper-slide>
+				<div class="swiper-pagination" slot="pagination"></div>
 			</swiper>
 		</div>
 		<div class="pad-box" ref="two">
@@ -59,14 +60,14 @@
 					<p class="two">在安卓各大应用市场及App store下载注册官方app</p>
 				</div>
 			</div>
-			<div class="btn-box">
+			<!--<div class="btn-box">
 				<div v-if="$store.state.page.isLogin == 'false'" class="left" @click="$router.push({path:'/user/login'})">
 					<img :src="'./static/vip/reg-img.png'" /> 立即注册
 				</div>
 				<div class="right">
 					<img :src="'./static/vip/app-img.png'" /> APP下载
 				</div>
-			</div>
+			</div>-->
 			<div class="title-box" ref="three">
 				<img :src="'./static/vip/title-img.png'" />
 				<p>会员好处</p>
@@ -74,8 +75,8 @@
 			</div>
 			<div class="join-box2">
 				<div class="benefit">
-					<p class="one-title">注册赠送200信用积分</p>
-					<img class="one-img" :src="'./static/vip/200.png'" />
+					<p class="one-title">注册赠送1000信用积分</p>
+					<img class="one-img" :src="'./static/vip/1000.png'" />
 					<p class="zhu">注：信用积分可在商城部分商品抵现金用</p>
 				</div>
 			</div>
@@ -130,27 +131,22 @@
 			return {
 				title: "会员权益",
 				tabIndex: 0,
-				swiperOption: {
-					// 所有的参数同 swiper 官方 api 参数
-					autoplay: {
-						delay: 5000,
-					},
-					effect: 'coverflow', //3D翻转效果
-					centeredSlides: true, //active slide会居中，而不是默认状态下的居左。
+				swiperOption:{
+					loop:true,
+					autoplay:true,
+					/*effect: 'coverflow',
+					grabCursor: true,
+					centeredSlides: true,
 					slidesPerView: 'auto',
-					loop: true,
-					loopedSlides: 6,
-					coverflowEffect: {
-						rotate: 50,
-						stretch: 0,
-						depth: 100,
-						modifier: 1,
-						slideShadows: false //开启阴影效果
-					},
-					on: {
-						slideChange: function() {
-							//console.log(this.realIndex) //设置循环需要使用realIndex获取真实下标
-						}
+					coverflowEffect:{
+						rotate:50,
+						stretch:0,
+						depth:100,
+						modifier:1,
+						slideShadows:false
+					},*/
+					pagination:{
+						el:'.swiper-pagination'
 					}
 				},
 				isfix: false,
@@ -220,8 +216,12 @@
 </script>
 
 <style lang='less' scoped>
+
 	.vip-box {
 		background: rgba(255, 255, 255, 1);
+		.vux-fixed{
+			max-width: 640px;
+		}
 		.banner-img {
 			img {
 				width: 100%;
@@ -230,8 +230,9 @@
 			}
 		}
 		.swiper-inner {
-			width: 100%;
-			height: 3.5rem;
+			width: 95%;
+			/*height: 3.5rem;*/
+			margin:0 auto;
 		}
 		.swiper-slide {
 			width: 5.62rem;

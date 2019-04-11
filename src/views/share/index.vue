@@ -94,7 +94,6 @@
 </template>
 
 <script>
-	import { Scroller, XButton } from 'vux'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	import settingHeader from '../../components/setting_header'
 	import Qs from 'qs'
@@ -131,7 +130,8 @@
 				},*/
 				swiperOption:{
 					loop:true,
-					effect: 'coverflow',
+					autoplay:true,
+					/*effect: 'coverflow',
 					grabCursor: true,
 					centeredSlides: true,
 					slidesPerView: 'auto',
@@ -141,7 +141,7 @@
 						depth:100,
 						modifier:1,
 						slideShadows:true
-					},
+					},*/
 					pagination:{
 						el:'.swiper-pagination'
 					}
@@ -151,8 +151,6 @@
 		},
 		components: {
 			settingHeader,
-			Scroller,
-			XButton,
 			swiper,
 			swiperSlide
 		},
@@ -162,15 +160,31 @@
 				//微信扫一扫
 				var _this = this
 
-				var uri = window.location.href.split('#')[0] //截取#前面的路径
-
-				_this.$http.post(_this.url.zf.wxScan, {
-					mchId: '1388332102',
+				var _this = this,
+				appId='',
+				uri = window.location.href.split('#')[0], //截取#前面的路径
+				params={
 					url: uri
-				}).then((res) => {
+				};
+
+				if(location.host == _this.url.health) {
+					params.mchId = _this.url.mchIdHealth
+					appId = _this.url.appIdHealth
+				} else if(location.host == _this.url.cgc) {
+					params.mchId =_this.url.mchIdCgc
+					appId = _this.url.appIdCgc
+				} else if(location.host == _this.url.test) {
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}else{
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}
+
+				_this.$http.post(_this.url.zf.wxScan, params).then((res) => {
 					wx.config({
 						debug: false,
-						appId: 'wx7a4933a7a3c33ec8',
+						appId: appId,
 						timestamp: res.data.data.timestamp,
 						nonceStr: res.data.data.nonceStr,
 						signature: res.data.data.signature,
@@ -498,7 +512,8 @@
 	}
 	.wrapswiper{
 		margin-top: .5rem;
-		width: 100%;
+		margin:.5rem auto 0;
+		width: 95%;
 		overflow: hidden;
 		.swiper-slide{
 			text-align: center;

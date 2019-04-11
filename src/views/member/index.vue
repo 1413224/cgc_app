@@ -1,13 +1,14 @@
 <template>
 	<div class="info-box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="content">
-			<section>
+		<div class="content1">
+			<div>
 				<div class="info-bg" v-if="isLogin">
 					<router-link to="/member/setting/index"><img class="setting-img" :src="'./static/member/shezi.png'" /></router-link>
 					<div class="avatar">
+						<!-- userInfo.avatar.original -->
 						<img v-if="userInfo.avatar" :src="userInfo.avatar.original" @click="$router.push({path:'/member/info/index'})" alt="" />
-						<img v-else :src="'./static/images/mrtx.png'" @click="$router.push({path:'/member/info/index'})"  alt="">
+						<img v-else :src="'./static/images/mrtx.png'" @click="toLogin" alt="">
 						<p class="nickname">{{userInfo.nickname?userInfo.nickname:userInfo.mobile}}</p>
 						<!--<p class="status">{{info.levelName?info.levelName:'暂无等级'}}</p>-->
 						<p class="bj" @click="$router.push({path:'/member/info/data'})">编辑个人资料 <i class="icon iconfont icon-arrow-right"></i></p>
@@ -47,8 +48,8 @@
 						</router-link>
 					</div>
 				</div>
-			</section>
-			<section>
+			</div>
+			<div>
 				<div class="navigation">
 					<ul>
 						<li>
@@ -66,7 +67,7 @@
 									<img src="../../assets/images/member/member-team.png">
 									<!--<badge class="new"></badge>-->
 								</div>
-								<p>我的团队</p>
+								<p>我的粉丝</p>
 							</router-link>
 						</li>
 						<li>
@@ -89,8 +90,8 @@
 						</li>
 					</ul>
 				</div>
-			</section>
-			<section v-if="isLogin">
+			</div>
+			<div v-if="isLogin">
 				<div class="order-box">
 					<p>我的订单</p>
 					<p @click="$router.push({path:'/shop/my_order2'})">查看更多订单<i class="icon iconfont icon-arrow-right"></i></p>
@@ -131,7 +132,7 @@
 						</li>
 					</ul>
 				</div>
-			</section>
+			</div>
 			<!--<section>
 				<router-link to="/draw">
 					<div class="banner">
@@ -140,13 +141,13 @@
 					</div>
 				</router-link>
 			</section>-->
-			<section>
-				<group gutter="0" class="infoList2">
+			<div>
+				<!-- <group gutter="0" class="infoList2">
 					<cell v-for="(item,index) in infoList2" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
 						<img slot="icon" :src="item.img">
 						<badge text="8" v-if="item.red"></badge>
 					</cell>
-				</group>
+				</group> -->
 				<group gutter="0" class="infoList1">
 					<cell v-for="(item,index) in infoList" :key="index" class="info-item" :title="item.text" :value="item.tip" is-link :link="item.url">
 						<img slot="icon" :src="item.img">
@@ -157,13 +158,12 @@
 						<img slot="icon" :src="item.img">
 					</cell>
 				</group>
-			</section>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-	import { Badge, Cell, Group } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import { setTimeout } from 'timers';
 	export default {
@@ -184,10 +184,20 @@
 						url: '/member/follow/index',
 					},
 					{
+						img: './static/member/m-index4.png',
+						text: '供应链云商城',
+						url: '/member/supply/productList' //shop
+					},
+					{
+						img: './static/member/m-index6.png',
+						text: '幸运大抽奖',
+						url: '/draw',
+						//tip: '您有一条中奖消息'
+					},
+					{
 						img: './static/member/member_5.png',
-						text: '我的房卡',
-						url: '/shop',
-						tip: ''
+						text: '授权管理',
+						url: '/authList'
 					}
 				],
 				infoList2: [{
@@ -195,7 +205,7 @@
 						text: '幸运大抽奖',
 						url: '/draw',
 						//tip: '您有一条中奖消息'
-					},{
+					}, {
 						img: './static/member/m-index4.png',
 						text: '供应链云商城',
 						url: '/shop'
@@ -216,7 +226,6 @@
 						url: '/shop/my_order'
 					},*/
 
-					
 					/*{
 						img: './static/member/m_index13.png',
 						text: '我的卡包',
@@ -245,11 +254,11 @@
 						url: '/member/address/index',
 						tip: ''
 					},
-					{
+					/*{
 						img: './static/member/fapiao.png',
 						text: '发票管理',
 						url: '/invoice/index'
-					},
+					},*/
 				],
 				yhqTip: '5张快过期',
 				isLogin: false,
@@ -276,23 +285,30 @@
 			this.getCardStat()
 		},
 		methods: {
+			toLogin() {
+				alert(123)
+				console.log(123)
+				this.$router.push({
+					path: '/member/info/index'
+				})
+			},
 			toOrder(index) {
 				var _this = this
-				if(index == 1 || index ==2){
+				if(index == 1 || index == 2) {
 					_this.$router.push({
 						path: '/shop/my_order2',
 						query: {
 							// 'tabNo': true,
-							'status':index,
-							'tabIndex':index
+							'status': index,
+							'tabIndex': index
 						}
 					})
-				}else{
+				} else {
 					_this.$router.push({
 						path: '/shop/my_order2',
 						query: {
 							// 'tabNo': true,
-							'status':index,
+							'status': index,
 						}
 					})
 				}
@@ -310,7 +326,7 @@
 						if(_this.userInfo != res.data.data) {
 							_this.userInfo = res.data.data
 						}
-					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401' || res.data.status == 'user-0009') {
+					} else if(res.data.status == 'utils007' || res.data.status == 'utils010' || res.data.status == '401' || res.data.status == 'user-0009' || res.data.status == 'user-0010') {
 						_this.isLogin = false
 						localStorage.removeItem('userInfo')
 					}
@@ -325,19 +341,19 @@
 					}
 				})
 			},
-			getCardStat(){
+			getCardStat() {
 				var _this = this,
 					uid = _this.$store.state.user.userId;
-				if(uid){
-					_this.$http.get(_this.url.user.getMyEnterpriseCardStat,{
-						params:{
-							userId:uid
+				if(uid) {
+					_this.$http.get(_this.url.user.getMyEnterpriseCardStat, {
+						params: {
+							userId: uid
 						}
 					}).then((res) => {
-						if(res.data.status == "00000000"){
+						if(res.data.status == "00000000") {
 							// console.log(res.data.data)
 							var data = res.data.data
-							_this.infoList[0].tip = data.cardNums=='' || data.cardNums == null ? '' : "共"+data.cardNums+"张通用卡"
+							_this.infoList[0].tip = data.cardNums == '' || data.cardNums == null ? '' : "共" + data.cardNums + "张通用卡"
 						}
 					})
 				}
@@ -345,9 +361,6 @@
 		},
 		components: {
 			settingHeader,
-			Badge,
-			Cell,
-			Group
 		}
 	}
 </script>

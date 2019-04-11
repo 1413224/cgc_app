@@ -30,7 +30,7 @@
 				</group>
 			</section>
 			<div class="lw-box">
-				<div class="all-h" @click="$router.push({path:'/shop'})">
+				<div class="all-h" @click="$router.push({path:'/member/supply/productList'})">
 					<img src="../../../../static/member/lw1.png" />
 					<div>
 						<p>更多惊喜礼品兑换</p>

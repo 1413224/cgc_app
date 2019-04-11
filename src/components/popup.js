@@ -22,11 +22,18 @@ export default {
 				if(obj.showPay) {
 					$popup.showPay = obj.showPay
 				}
+				if(obj.showZj) {
+					$popup.showZj = obj.showZj
+				}
+				if(obj.showData) {
+					$popup.showData = obj.showData
+				}
 			},
 			hide() {
 				$popup.showSr = false
 				$popup.showZc = false
 				$popup.showPay = false
+				$popup.showZj = false
 			}
 		}
 

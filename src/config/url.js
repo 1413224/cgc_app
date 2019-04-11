@@ -9,8 +9,19 @@ var url = {
 	platformId: 2018050800000002, //平台ID
 	client: 'user', //区分那个端登录
 	mapKey: 'XMHBZ-DHFWD-M3P4H-HHVZP-UOKV3-5WBB5',
-	health:'health.cgc999.com',
-	test:'www.cgc999.com',
+	health: 'health.cgc999.com',
+	cgc: 'cgc.cgc999.com',
+	test: 'www.cgc999.com',
+	// cgc: 'cgc.cgc999.com',
+	mchIdTest: '1388332102',
+	mchIdHealth: '1388332102',
+	mchIdCgc: '1490285992',
+	appIdTest: 'wx7a4933a7a3c33ec8',
+	appIdHealth: 'wx7a4933a7a3c33ec8',
+	appIdCgc: 'wx957ff39bdac082af',
+	IdHealth: 200000,
+	IdCgc: 200002,
+	IdTest: 600000,
 
 	user: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //获取第三方应用授权链接接口
@@ -21,6 +32,7 @@ var url = {
 		fileuploadImage: uri2 + '/v1/fileupload/image', //上传图片
 		login: uri2 + '/public/v1/login', //云中心登录
 		userLogin: uri1 + '/public/v1/user/login', //用户登录
+		loginPAS: uri1 + '/public/v1/user/loginPAS', //使用密码登录
 		loginByUnionId: uri1 + '/public/v1/user/loginByUnionId',
 		logout: uri1 + '/logout/v1', //用户登出
 		userRegister: uri1 + '/public/v1/user/register', //用户注册
@@ -79,7 +91,19 @@ var url = {
 		invoiceList: uri6 + '/body/v1/invoiceFunction/invoiceList', //发票列表查询接口
 		queryInvoiceInfoByNum: uri6 + '/body/v1/invoiceFunction/queryInvoiceInfoByNum', //发票详情
 		checkBlueInvoice: uri6 + '/body/v1/invoiceFunction/checkBlueInvoice', //查看发票pdf
-		openInvoice: uri6 + '/body/v1/invoiceFunction/openInvoice',//发送pdf到邮箱
+		sendElectronInvoiceMail: uri6 + '/body/v1/invoiceFunction/sendElectronInvoiceMail', //发送pdf到邮箱
+		diyPage: uri1 + '/public/v1/diyPage/alliance', //自定义页面
+		diyMenu: uri1 + '/public/v1/diyMenu/alliance', //自定义菜单
+		getGroupGoods: uri1 + '/public/v1/diyPage/getGroupGoods', // 2.2.	获取自定义页面商品组商品
+		getRecommendGoods: uri1 + '/public/v1/diyPage/getRecommendGoods', // 2.1.	获取自定义页面推荐商品
+		platformDiypage: uri1 + '/public/v1/diyPage/platform', //获取行业平台自定义页面
+		platformDiymenu: uri1 + '/public/v1/diyMenu/platform', //获取行业平台自定义菜单
+		getSellerInfoByUserId: uri1 + '/param/v1/seller/getSellerInfoByUserId', //2.1.	获取会员绑定企业信息
+		bindSeller: uri1 + '/body/v1/seller/bindSeller', //2.2.	绑定店员
+		getPublicNotice: uri1 + '/param/v1/notice/getPublicNotice', //2.1.	获取弹窗通知信息接口
+		getOrderExpressInfo: uri1 + '/param/v1/order/getOrderExpressInfo', //查看物流信息
+		getNotificationInfo: uri1 + '/param/v1/notification/getNotificationInfo', //2.1.	获取绑定通知人相关信息
+		bindNotificationUser: uri1 + '/body/v1/notification/bindNotificationUser', //2.2.	绑定通知人
 	},
 	qy: {
 		getBasicInfo: uri1 + '/public/v1/enterprise/getBasicInfo', //获取企业基本信息
@@ -91,10 +115,19 @@ var url = {
 	},
 	origin: {
 		getAuthorizationUrl: uri1 + '/public/v1/user/getAuthorizationUrl', //微信授权
+		addOrUpdateUserWithThirdAuthInfo: uri1 + '/body/v1/addOrUpdateUserWithThirdAuthInfo', //13.用户授权业务(用户和第三方的关系)接口
+		addOrUpdateUserWithCgcAuthInfo: uri1 + '/body/v1/addOrUpdateUserWithCgcAuthInfo', //14.用户授权业务（用户和CGC的关系)
+		obtainAllAuthInfo: uri1 + '/param/v1/obtainAllAuthInfo', //15.获取所有用户授权信息(第三方可供选择)
+		checkUserAccreditBz: uri1 + '/body/v1/checkUserAccreditBz', //16.检验用户是否与cgc授权某项业务
+		obtainUserThirdAuthInfo: uri1 + '/param/v1/obtainUserThirdAuthInfo', //17.获取用户第三方已经授权信息
+		loginAuthCode: uri1 + '/param/v1/user/loginAuthCode', //
 	},
 	draw: {
 		getReviewLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=copy.getReviewLists', //往期回顾
-		getLuckRankLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=copy.getLuckyRankLists' //幸运排行
+		getLuckRankLists: 'http://www.cgc999.com/app/public.php?i=7&c=entry&m=mx_shop&do=mobile&r=copy.getLuckyRankLists', //幸运排行
+		getShopListWWW: 'http://www.cgc999.com/tempdata2.php',
+		getShopList: 'https://health.cgc999.com/crshop/tempdata.php',
+		getShopListCgc: 'https://cgc.cgc999.com/crshop/tempdata.php'
 	},
 	zone: {
 		area: '/area/public/v1/area/level', //区域地址
@@ -107,7 +140,8 @@ var url = {
 	},
 	zf: {
 		wxScan: '/pay/public/v1/wechat/wxScan',
-		pay: '/pay/body/v1/wechat/pay'
+		pay: '/pay/body/v1/wechat/pay',
+		alipay: '/pay/body/v1/alipay/wapPay',
 	},
 	order: {
 		getOrderList: uri3 + '/param/v1/order/getOrderList', //获取订单列表
@@ -115,6 +149,8 @@ var url = {
 		getOrderDetail: uri3 + '/param/v1/order/getOrderDetail', //获取订单详情
 		deleteOrderByOrderSn: uri3 + '/body/v1/order/deleteOrderByOrderSn', //删除订单
 		cancelOrderByOrderSn: uri3 + '/body/v1/order/cancelOrderByOrderSn', //取消订单
+		confirmReceipt: uri3 + '/bodyIds/v1/order/confirmReceipt',
+		createConsumerOrder: '/order/bodyIds/v1/order/createConsumerOrder', //即时消费订单
 	},
 	share: {
 		getEquipmentInfo: uri4 + '/public/v1/goods/getEquipmentInfo', //获取设备详细信息接口
@@ -122,7 +158,7 @@ var url = {
 		getMyEquipmentInfo: uri4 + '/param/v1/goods/getMyEquipmentInfo', //获取设备列表信息接口
 		finishEquipmentOrder: uri4 + '/body/v1/goods/finishEquipmentOrder', //完成设备订单信息接口
 		changeEquipmentStatus: uri4 + '/body/v1/goods/changeEquipmentStatus', //变更设备状态信息接口
-		createEquipmentOrder: uri3 + '/body/v1/goods/createEquipmentOrder', //创建设备订单信息接口
+		createEquipmentOrder: uri3 + '/bodyIds/v1/order/createEquipmentOrder', //创建设备订单信息接口
 		getMyEquipmentNotice: uri4 + '/param/v1/goods/getMyEquipmentNotice', //
 		getEquipmentInfo2: uri1 + '/public/v1/enterprise/getEquipmentInfo' //获取企业提供的服务列表信息
 	},
@@ -130,6 +166,8 @@ var url = {
 		getGoodsInfo: uri4 + '/public/v1/goods/getGoodsInfo', //获取商品信息接口
 		buynow: uri3 + '/bodyIds/v1/order/buynow',
 		getGoodsOrderConfirmUseBalances: uri4 + '/param/v1/goods/getGoodsOrderConfirmUseBalances', //商品下单
+		getGoodsList: uri4 + '/public/v1/supplyGoods/getGoodsList', //2.1.	获取供应链云商城商品列表信息接口
+		getGoodsSkuInfo: uri4 + '/public/v1/goods/getGoodsSkuInfo',
 	},
 	lottery: {
 		getStatInfo: uri5 + '/public/v1/lottery/getStatInfo', //获取抽奖首页接口
@@ -144,12 +182,31 @@ var url = {
 		getMessage: uri5 + '/uparam/v1/lottery/getMessage', //2.13.获取会员中奖感言接口
 		writeMessage: uri5 + '/ubody/v1/lottery/writeMessage', //2.14.提交会员填写中奖感言接口
 		getAwardCode: uri5 + '/uparam/v1/lottery/getAwardCode', //2.12.获取会员领取线下奖品信息接口
+		addLottery: uri5 + '/body/v1/lotteryManage/addLottery', //2.1.	发起抽奖信息接口
+		getLotteryList: uri5 + '/param/v1/lotteryManage/getLotteryList', //2.2.	获取抽奖列表接口
+		changeLotteryPasswordById: uri5 + '/body/v1/lotteryManage/changeLotteryPasswordById', //2.4. 修改抽奖开屏密码接口
+		getLotteryUrlById: uri5 + '/param/v1/lotteryManage/getLotteryUrlById', //2.3.	获取抽奖大屏链接接口
+		getBonusPool: uri5 + '/param/v1/lotteryManage/getBonusPool', //2.5.	获取当前奖金池金额
 	},
 	ocr: {
 		getOCR: uri1 + '/param/v1/user/getOCR',
 		getOCRResult: uri1 + '/param/v1/user/getOCRResult'
+	},
+	changeClient() {
+		let ua = window.navigator.userAgent.toLowerCase()
+		if(/MicroMessenger/.test(window.navigator.userAgent)) {
+			this.client = 'user'
+		} else if(/AlipayClient/.test(window.navigator.userAgent)) {
+			this.client = 'user.alipay'
+		} else {
+			// console.log(this.client)
+			this.client = 'user.wap'
+		}
 	}
 
 }
+url.changeClient()
+
+// alert(url.client+'端口')
 
 export default url

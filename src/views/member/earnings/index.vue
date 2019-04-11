@@ -75,7 +75,7 @@
 </template>
 
 <script>
-	import { Card, Cell, Group, Popover, XDialog, Marquee, MarqueeItem } from 'vux'
+	import {Marquee, MarqueeItem } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -126,10 +126,6 @@
 		},
 		components: {
 			settingHeader,
-			Card,
-			Cell,
-			Group,
-			XDialog,
 			Marquee,
 			MarqueeItem
 		}

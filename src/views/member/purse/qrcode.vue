@@ -47,7 +47,7 @@
 						<p class="name">{{userInfo.mobile}}</p>
 					</div>
 				</div>
-				<p class="tip">让好友扫二维码或长按保存图片后发送给好友</p>
+				<p class="tip">邀请好友各赠送1000信用积分</p>
 			</div>
 		</div>
 
@@ -73,7 +73,6 @@
 </template>
 
 <script>
-	import { Qrcode } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	import VueBarcode from '@xkeshi/vue-barcode'
 	export default {
@@ -106,6 +105,7 @@
 		created() {
 
 			if(this.$store.state.page.isLogin == 'false') {
+				console.log(this.$store.state.page.isLogin)
 				this.$vux.toast.show({
 					width: '60%',
 					type: 'text',
@@ -121,11 +121,12 @@
 			document.title = this.$route.query.text ? this.$route.query.text : '会员码'
 			this.title = this.$route.query.text ? this.$route.query.text : '会员码'
 
-
-			if(location.host == "health.cgc999.com"){
-				this.qrcodeVal = 'http://health.cgc999.com/new/index.html#/user/login?parentId=' + this.$store.state.user.userId
+			if(location.host == "health.cgc999.com") {
+				this.qrcodeVal = 'https://health.cgc999.com/web/new/index.html#/?parentId=' + this.$store.state.user.userId + '&login=1'
+			} else if(location.host == "cgc.cgc999.com"){
+				this.qrcodeVal = 'https://cgc.cgc999.com/web/new/index.html#/?parentId=' + this.$store.state.user.userId + '&login=1'
 			}else{
-				this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/user/login?parentId=' + this.$store.state.user.userId
+				this.qrcodeVal = 'http://www.cgc999.com/new/index.html#/?parentId=' + this.$store.state.user.userId + '&login=1'
 			}
 
 			this.width = Number(document.body.clientWidth * 0.5866666666666666)
@@ -139,17 +140,31 @@
 			},
 			scan() {
 				//微信扫一扫
-				var _this = this
+				var _this = this,
+					appId = '',
+					uri = window.location.href.split('#')[0], //截取#前面的路径
+					params = {
+						url: uri
+					};
 
-				var uri = window.location.href.split('#')[0] //截取#前面的路径
+				if(location.host == _this.url.health) {
+					params.mchId = _this.url.mchIdHealth
+					appId = _this.url.appIdHealth
+				} else if(location.host == _this.url.cgc) {
+					params.mchId =_this.url.mchIdCgc
+					appId = _this.url.appIdCgc
+				} else if(location.host == _this.url.test) {
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}else{
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}
 
-				_this.$http.post(_this.url.zf.wxScan, {
-					mchId: '1388332102',
-					url: uri
-				}).then((res) => {
+				_this.$http.post(_this.url.zf.wxScan, params).then((res) => {
 					wx.config({
 						debug: false,
-						appId: 'wx7a4933a7a3c33ec8',
+						appId: appId,
 						timestamp: res.data.data.timestamp,
 						nonceStr: res.data.data.nonceStr,
 						signature: res.data.data.signature,
@@ -212,7 +227,6 @@
 		},
 		components: {
 			settingHeader,
-			Qrcode,
 			'barcode': VueBarcode
 		},
 		watch: {
@@ -418,11 +432,12 @@
 					align-items: center;
 					justify-content: space-between;
 					flex-direction: column;
-					padding: 0.39rem 0.46rem;
-					width: 6.08rem;
+					padding: 0.3rem 0.46rem;
+					width: 5.4rem;
 					background: rgba(255, 255, 255, 1);
 					border-radius: 5px;
 					box-sizing: border-box;
+					margin-top: .3rem;
 					.bottom {
 						width: 100%;
 						display: flex;

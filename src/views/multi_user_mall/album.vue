@@ -16,19 +16,23 @@
 		<div v-transfer-dom>
 			<previewer :list="photoList" ref="previewer" :options="options" @on-index-change="logIndexChange"></previewer>
 		</div>
+		<Null class="nulls" v-if="load" status="zwsj" text="暂无企业相册"></Null>
 	</section>
 </template>
 
 <script>
 	import settingHeader from '@/components/setting_header'
 	import { Tab, TabItem, Previewer, Sticky } from 'vux'
+	import Null from '@/components/null'
+
 	export default {
 		components: {
 			settingHeader,
 			Tab,
 			TabItem,
 			Previewer,
-			Sticky
+			Sticky,
+			Null
 		},
 		data() {
 			return {
@@ -38,7 +42,8 @@
 				doorhead: [],
 				thumb: [],
 				options: {},
-				list: []
+				list: [],
+				load:false
 			}
 		},
 		created() {
@@ -66,6 +71,11 @@
 					_this.list = _this.thumb
 				}
 
+				if(!_this.list){
+					_this.load = true
+					return;
+				}
+
 				_this.list.forEach((value) => {
 					var item = {}
 					item.src = value.original
@@ -77,7 +87,8 @@
 				var _this = this
 				_this.$http.get(_this.url.qy.getThumbInfo, {
 					params: {
-						enterpriseId: _this.$route.query.enterpriseId
+						// enterpriseId: _this.$route.query.enterpriseId
+						enterpriseId: _this.$route.query.eid
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
@@ -86,6 +97,11 @@
 						_this.thumb = res.data.data.thumb
 
 						_this.list = _this.storePhoto
+
+						if(!_this.list){
+							_this.load = true
+							return;
+						}
 
 						_this.list.forEach((value) => {
 							var item = {}
@@ -99,6 +115,17 @@
 	}
 </script>
 <style lang="less" scoped>
+	.nulls{
+		/*border:1px solid #333;*/
+		width: 3rem;
+		height: 4rem;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin:auto;
+	}
 	.album_box {
 		height: 100%;
 		background-color: white;

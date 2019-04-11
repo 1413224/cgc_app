@@ -125,7 +125,7 @@
 						img: './static/benefits/zf-1.png',
 						text: '消费购物',
 						url: '/share/storelist',
-						text2: '交易成功后，获得实付金额20%的通用积分'
+						text2: '交易成功后，获得平台收取服务费的20%的通用积分'
 					},
 					{
 						img: './static/benefits/zf-2.png',

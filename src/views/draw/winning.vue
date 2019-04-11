@@ -27,8 +27,12 @@
 					<div class="bottom">
 						<ul>
 							<li>
+								<span>领奖截止时间</span>
+								<span>{{item.getAwardDeadline | getDate}}</span>
+							</li>
+							<li>
 								<span>开奖时间</span>
-								<span>{{item.orderCreateTime | getDate}}</span>
+								<span>{{item.lotteryTime | getDate}}</span>
 							</li>
 							<li class="bg_red">
 								<span>参与人数</span>
@@ -53,7 +57,7 @@
 							<p>您还没有中奖记录</p>
 						</div>
 						<div>
-							<div @click="$router.push({path:'/share/storelist'})">我要抽奖</div>
+							<div @click="$router.push({path:'/share/storelist'})">马上消费 参与抽奖</div>
 							<p class="tip1">温馨提示：</p>
 							<p class="tip2">只要在平台上消费任意一笔订单，就能参加周末幸运大抽奖</p>
 						</div>
@@ -88,11 +92,6 @@
 </template>
 
 <script>
-	import {
-		ButtonTab,
-		ButtonTabItem,
-		XDialog
-	} from 'vux'
 	import BScroll from 'better-scroll'
 	import Loading from '@/components/loading'
 	import noMore from '@/components/noMore'
@@ -101,12 +100,9 @@
 
 	export default {
 		components: {
-			ButtonTab,
-			ButtonTabItem,
 			Loading,
 			noMore,
 			settingHeader,
-			XDialog,
 			Null
 		},
 		data() {
@@ -346,85 +342,6 @@
 
 	}
 </script>
-<style lang="less">
-	.win-tc-box {
-		.weui-dialog {
-			width: 5.90rem;
-			max-width: 5.90rem;
-			.tc-box {
-				width: 5.90rem;
-				height: 6.95rem;
-				background: url(../../../static/draw/zhongjiang-bg.png) no-repeat;
-				background-size: 100% 100%;
-				display: flex;
-				flex-direction: column;
-				.top {
-					height: 1.44rem;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					flex-direction: column;
-					p:nth-child(1) {
-						font-size: 0.3rem;
-						font-family: PingFang-SC-Medium;
-						color: rgba(255, 255, 255, 1);
-					}
-					p:nth-child(2) {
-						font-size: 0.42rem;
-						font-family: PingFang-SC-Bold;
-						color: rgba(255, 255, 255, 1);
-						font-weight: bold;
-					}
-				}
-				.bottom {
-					flex: 1;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					flex-direction: column;
-					padding: 0.75rem 0.37rem 0.92rem;
-					img {
-						width: 3.16rem;
-						height: 0.04rem;
-					}
-					p:nth-child(1) {
-						font-size: 0.32rem;
-						font-family: PingFang-SC-Medium;
-						color: rgba(51, 51, 51, 1);
-					}
-					.money {
-						font-size: 0.28rem;
-						font-family: PingFang-SC-Bold;
-						color: rgba(227, 41, 33, 1);
-						span {
-							font-size: 1.1rem;
-							font-family: PingFang SC;
-						}
-					}
-					div {
-						width: 5.17rem;
-						height: 0.79rem;
-						line-height: 0.79rem;
-						text-align: center;
-						background: linear-gradient(45deg, rgba(255, 92, 52, 1), rgba(255, 42, 75, 1));
-						border-radius: 40px;
-						box-shadow: 7px 9px 27px rgba(255, 53, 70, 0.4);
-						font-size: 0.28rem;
-						font-family: PingFang-SC-Medium;
-						color: rgba(255, 255, 255, 1);
-					}
-				}
-			}
-			.close {
-				text-align: center;
-				img {
-					width: 0.75rem;
-					height: 1.25rem;
-				}
-			}
-		}
-	}
-</style>
 <style lang="less" scoped>
 	.win-box {
 		.wrapper-top {
@@ -558,7 +475,7 @@
 								padding: 0 .43rem;
 								box-sizing: border-box;
 								span:nth-child(1) {
-									width: 1.2rem;
+									width: 2.0rem;
 									font-size: 0.26rem;
 									font-family: PingFang-SC-Medium;
 									color: rgba(160, 160, 160, 1);

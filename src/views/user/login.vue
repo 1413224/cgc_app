@@ -2,44 +2,65 @@
 	<div class="login_box">
 		<settingHeader title="大健康产业联盟"></settingHeader>
 		<div class="bg_white">
-			<div class="title" v-if="isReg == 1">{{isCp?'登录':'登录 / 注册'}}</div>
+			<div class="title" v-if="isReg == 1 || isReg == 3">{{isCp?'登录':'登录 / 注册'}}</div>
 			<div class="title" v-if="isReg == 0">注册</div>
+
 			<div class="input_box">
 				<div class="label">手机号</div>
 				<div class="input">
-					<input type="tel" ref="phone" v-model="mobile" :max="11" @input="nameChange" placeholder="请输入手机号" />
+					<input type="tel" ref="phone" v-model="mobile" maxlength="11" @input="nameChange" placeholder="请输入手机号" />
 				</div>
 			</div>
-			<div class="input_box">
+
+			<div class="input_box" v-if="usepass">
 				<div class="label">密码</div>
 				<div class="input">
-					<input ref="password" v-model="password" :max="25" :placeholder="isReg == 0 || isReg == 3?'请输入6~25位数的登录密码':'请输入登录密码'" type="password" />
+					<input ref="password" v-model="password" maxlength="25" :placeholder="isReg == 0 || isReg == 3?'请输入6~25位数的登录密码':'请输入登录密码'" type="password" />
 				</div>
 			</div>
-			<div class="input_box fadeInDown animated" v-if="isReg == 0 || posReg">
-				<div class="label">验证码</div>
-				<div class="input">
-					<input type="tel" ref="code" v-model="code" @input="codeChange" placeholder="请输入4位验证码" />
-					<x-button class="set_code_btn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
+
+			<!-- 升级登录注册 -->
+			<div v-if="!usepass">
+				<div class="input_box fadeInDown animated aaa" v-if="isReg == 1 && !posReg">
+					<div class="label">验证码</div>
+					<div class="input">
+						<input type="tel" ref="code" maxlength="4" v-model="code" @input="codeChange" placeholder="请输入4位验证码" />
+						<x-button class="set_code_btn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
+					</div>
 				</div>
 			</div>
-			<div class="agreement_tip" v-if="isReg == 0 || posReg">点击按钮表示同意 <i @click="$router.push({path:'/member/setting/agreement'})">《CGC平台注册协议》</i></div>
+			<!-- 升级登录注册end -->
+
+			<div v-if="!usepass">
+				<div class="input_box fadeInDown animated sss" v-if="isReg == 0 || posReg">
+					<div class="label">验证码</div>
+					<div class="input">
+						<input type="tel" maxlength="4" ref="code" v-model="code" @input="codeChange" placeholder="请输入4位验证码" />
+						<x-button class="set_code_btn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
+					</div>
+				</div>
+			</div>
+
+			<div class="agreement_tip" v-if="isReg == 0">点击按钮表示同意
+				<i @click="$router.push({path:'/member/setting/agreement'})">《CGC平台注册协议》</i>
+			</div>
 			<div class="submit_btn" @click="submit" v-if="isReg == 1">{{isCp?'立即登录':'登录 / 注册'}}</div>
 			<div class="submit_btn" @click="reg" v-if="isReg == 0">立即注册</div>
-			<div class="submit_btn" @click="toPosReg" v-if="posReg">立即激活</div>
+			<div class="submit_btn" @click="login" v-if="posReg">立即登录</div>
+			<!-- <div class="submit_btn" @click="toPosReg" v-if="posReg">立即激活</div> -->
 
-			<div class="login-re" v-if="isReg == 1 && !posReg">
-				<router-link to="/user/changeLoginPassword"><span class="left">忘记密码？</span></router-link>
-				<!--<router-link to=""><span>短信验证登录</span></router-link>-->
+			<div class="login-re" v-if="(isReg == 1 || isReg==3) && isCp">
+				<span class="left" @click="forget()">忘记密码？</span>
+				<span v-show="!ispass" @click="useYzmLogin">短信验证码登录</span>
+				<span v-show="ispass" @click="userPassLogin">密码登录</span>
 			</div>
-			<div class="login-re" v-else>
-				<span @click="backLogin" class="left">返回登录</span>
-			</div>
+			<!-- <div class="login-re" v-else>
+               <span @click="backLogin" class="left">返回登录</span>
+           </div> -->
 		</div>
 	</div>
 </template>
 <script>
-	import { XButton } from 'vux'
 	import settingHeader from '@/components/setting_header'
 	import agreement from '@/views/member/setting/agreement'
 	import { base64_encode, base64_decode } from '../../global/course.js'
@@ -61,64 +82,112 @@
 				showLoading: false,
 				token: '',
 				isAgree: true,
-				parentId: '',
+				parentId: null,
 				frompath: '',
 				isCp: false,
 				pid: '',
-				posReg: false
+				posReg: null,
+				oReg: null,
+				allianceId: '',
+				eid: '',
+				ispass: true, //判断使用验证码或密码登录 btnn
+				usepass: false,
+				articleId: '', //文章id
+				equipNumber: '', //设备编号
 			}
 		},
 		created() {
-			
-			if(this.mainApp.getCs('parentId')){
-				this.parentId = this.mainApp.getCs('parentId')
-			}else{
-				this.parentId = sessionStorage['parentUserId']
+			//alert(sessionStorage['parentUserId'])
+			var _this = this;
+			if(_this.mainApp.getCs('parentId')) {
+				_this.parentId = _this.mainApp.getCs('parentId')
+			} else {
+				_this.parentId = sessionStorage['parentUserId']
 			}
 
-			
-			
-			if(this.$route.query.mobile) {
-				this.mobile = this.$route.query.mobile
+			// console.log(_this.parentId)
+
+			if(_this.$route.query.mobile) {
+				_this.mobile = _this.$route.query.mobile
 			}
+			_this.$store.state.page.isLogin = 'false'
+
 		},
 		beforeRouteEnter(to, from, next) {
 			next(vm => {
 				vm.frompath = from.path
+				//console.log(from)
+				if(from.path == "/member/article/detail") {
+					this.articleId = from.query.id
+				} else if(from.path == "/share/instrumentCode") {
+					this.equipNumber = from.query.n
+				}
+				//用户设置完登录密码或支付密码后，重新登录
+				if(from.path == "/user/changeLoginPassword2") {
+					vm.usepass = true
+					vm.ispass = false
+					vm.nameChange()
+				}
+
 			})
 		},
+		beforeRouteLeave(to, from, next) {
+			if((to.path == "/multi_user_mall/confirm_order" 
+				|| to.path == "/share/comfirmOrder") 
+				&& this.$store.state.page.isLogin == 'true') {
+				// this.$router.go(-1)
+				next({
+					path: localStorage['_buyCommodityFullPath_'],
+					replace: true
+				})
+			} else if(this.$store.state.page.isLogin != 'true' && !to.meta.isNoLogin){
+				this.$router.go(-1)
+			}else{
+				next()
+			}
+		},
 		methods: {
+			forget(){
+				this.$router.push({
+					path:'/user/changeLoginPassword',
+					query:{
+						'mobile':this.mobile
+					}
+				})
+			},
+			userPassLogin() {
+				var _this = this;
+				_this.usepass = true
+				_this.ispass = false
+			},
+			useYzmLogin() {
+				var _this = this;
+				_this.ispass = true
+				_this.usepass = false
+			},
 			submit() {
 				var _this = this
-
+				// alert(1)
 				if(_this.mobile.length != 11) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '手机号码长度不符合要求'
-					})
+					_this.mainApp.showMessage('手机号码长度不符合要求')
 					return false
 				}
 
 				if(!_this.mainApp.isphone(_this.mobile)) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '手机号码格式不符合要求'
-					})
+					_this.mainApp.showMessage('手机号码格式不符合要求')
 					return false
 				}
-
-				if(_this.password.length < 6 || _this.password.length > 25) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '密码长度不符合要求'
-					})
-					return false
+				if(_this.usepass == true) {
+					if(_this.password.length < 6 || _this.password.length > 25) {
+						_this.mainApp.showMessage('密码长度不符合要求')
+						return false
+					}
+				}
+				if(!_this.usepass) {
+					if(_this.code == "") {
+						_this.mainApp.showMessage('验证码不能为空')
+						return false
+					}
 				}
 
 				_this.showLoading = true
@@ -126,75 +195,257 @@
 				_this.showLoading = false
 			}, //注册
 			reg() {
-				var _this = this
+				var _this = this,
+					// eid = localStorage['_eid_'],
+					chainsid = localStorage['_chainsid_'],
+					allianceid = localStorage['_allianceid_'];
 
 				if(_this.mobile.length != 11) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '手机号码长度不符合要求'
-					})
+					_this.mainApp.showMessage('手机号码长度不符合要求')
 					return false
 				}
 
 				if(!_this.mainApp.isphone(_this.mobile)) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '手机号码格式不符合要求'
-					})
+					_this.mainApp.showMessage('手机号码格式不符合要求')
 					return false
 				}
 
-				if(_this.password.length < 6 || _this.password.length > 25) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '密码长度不符合要求'
-					})
-					return false
+				if(!_this.usepass) {
+					if(_this.code == "") {
+						_this.mainApp.showMessage('验证码不能为空')
+						return false
+					}
 				}
 
-				if(_this.code.length != 4) {
-					_this.$vux.toast.show({
-						width: '60%',
-						type: 'text',
-						position: 'top',
-						text: '验证码长度不符合要求'
-					})
-					return false
-				}
+				_this.parentId = _this.parentId == "null" ? null : _this.parentId
 
-				_this.$http.post(this.url.user.userRegister, {
+				var params = {
 					mobile: _this.mobile,
-					password: _this.MD5(_this.password),
+					// password: _this.MD5(_this.password),
 					smsVerificationCode: _this.code,
 					platformId: _this.url.platformId,
 					parentUserId: _this.parentId,
-					unionid: sessionStorage['_openid_'],
-				}).then(function(res) {
+					unionid: localStorage['_openid_'],
+					terminal: _this.url.client
+				};
+				if(allianceid) {
+					params.allianceId = allianceid
+				}
+				if(chainsid) {
+					params.chainsId = chainsid
+				}
+
+				if(/MicroMessenger/.test(window.navigator.userAgent) ||
+					/AlipayClient/.test(window.navigator.userAgent)) {
+					if(!localStorage['_openid_']) {
+						//微信或支付宝浏览器中，未获取到唯一标识码，则直接跳转重新授权
+						//获取不同环境的授权地址
+						let wbekitUrl = _this.mainApp.getOrizaUrl();
+						//存入用户注册信息，调用再次授权成功后，则自动帮用户请求注册接口，无需用户输入两次
+						// _this.mainApp.saveRegInfo(params);
+						window.location.href = wbekitUrl;
+						return false;
+					}
+				}
+
+				_this.userRegister(params)
+				/*if(eid){
+					params = _this.getRegAllianceId(eid,params);
+				}*/
+
+				/*if(eid) {
+						_this.getRegAllianceId(eid,params);
+				} else {
+				    _this.userRegister(params)
+				}*/
+			},
+			userRegister(params) {
+				var _this = this;
+				// alert(params.allianceId)
+				_this.$http.post(_this.url.user.userRegister, params).then(function(res) {
 					if(res.data.status == "00000000") {
 						//sessionStorage.setItem('regFirst',true)
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '注册成功'
-						})
+						_this.mainApp.showMessage('注册成功','middle')
+
+						let hash = base64_encode(res.data.data)
+
+						_this.$store.state.user.userId = res.data.data.userId //保存userId
+
+						localStorage.setItem('_HASH_', hash)
+
+						localStorage.setItem('isLogin', true)
+
+						_this.getUserInfo()
+
+					}
+				})
+			},
+			//登录
+			login() {
+				let _this = this,
+					pid = localStorage['_openid_'],
+					accessCode = localStorage['_accessCode_'],
+					allianceid = localStorage['_allianceid_'],
+					chainsid = localStorage['_chainsid_'];
+
+				_this.parentId = _this.parentId == "null" ? null : _this.parentId
+				// alert(_this.ispass)
+				// alert(_this.usepass)  //true
+				if(!_this.ispass) {
+					// alert(2)
+					if(_this.password.length < 6 || _this.password.length > 25) {
+						_this.mainApp.showMessage('密码长度不符合要求')
+						return false
+					}
+				}
+
+				/*if(/MicroMessenger/.test(window.navigator.userAgent) 
+				  || /AlipayClient/.test(window.navigator.userAgent)){
+				    if(!localStorage['_openid_']){
+				      //微信或支付宝浏览器中，未获取到唯一标识码，则直接跳转重新授权
+				      //获取不同环境的授权地址
+				      let wbekitUrl = _this.mainApp.getOrizaUrl();
+				      window.location.href = wbekitUrl;
+				      return false;
+				    }
+				 }*/
+
+				// return;
+				let params = {
+					audience: 'user',
+					platformId: _this.url.platformId,
+					mobile: _this.mobile,
+					// password: _this.MD5(_this.password),
+					smsVerificationCode: _this.code,
+					terminal: _this.url.client,
+					parentUserId: _this.parentId
+				}
+				if(pid) {
+					params.type = 1
+					params.unionid = pid
+					params.accessCode = accessCode
+				}
+				if(allianceid) {
+					params.allianceId = allianceid
+				}
+				if(chainsid) {
+					params.chainsId = chainsid
+				}
+
+				if(_this.password && !_this.ispass) {
+					let pass = _this.MD5(_this.password)
+					params.password = pass
+				}
+				_this.userLogin(params)
+
+				/*if(eid){
+						_this.getLogAllianceId(eid,params);
+				}else{
+					_this.userLogin(params)
+				}*/
+			},
+			userLogin(params) {
+				var _this = this,
+					requrl = '';
+
+				if(params.password) {
+					requrl = _this.url.user.loginPAS
+				} else {
+					requrl = _this.url.user.userLogin
+				}
+
+				_this.$http.post(requrl, params).then(function(res) {
+					if(res.data.status == "00000000") {
+
+						let hash = base64_encode(res.data.data)
+
+						_this.$store.state.user.userId = res.data.data.userId //保存userId
+						_this.$store.state.user.token = res.data.data.token //保存token
+
+						localStorage.setItem('_HASH_', hash)
+
+						localStorage.setItem('isLogin', true)
+
+						//判断是否要设置登录密码
+
+						_this.mainApp.showMessage('登录成功','middle')
+
+						_this.getUserInfo();
+
+					}
+				})
+			},
+			//注册登录成功后，获取用户信息，跳转
+			getUserInfo() {
+				var _this = this;
+				//获取用户信息
+				_this.$http.get(_this.url.user.getBasicInfo, {
+					params: {
+						// userId: res.data.data.userId
+						userId: _this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+
+						localStorage.setItem('userInfo', JSON.stringify(res.data.data))
+						_this.$store.state.page.isLogin = 'true'
 
 						setTimeout(function() {
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '正在登录...',
-								onHide() {
-									_this.login()
+							/*_this.$router.replace({
+                             path: '/index'
+                         })*/
+							if(window.sessionStorage.length > 2) {
+								if(_this.frompath) {
+									//alert(_this.frompath)
+									if(_this.frompath != '/user/changeLoginPassword2' && _this.frompath != '/member/oriza') {
+										if(_this.articleId) {
+											_this.$router.replace({
+												path: _this.frompath,
+												query: {
+													id: _this.articleId
+												}
+											})
+											_this.$router.go(-1)
+										} else if(_this.equipNumber) {
+											_this.$router.replace({
+												path: _this.frompath,
+												query: {
+													n: _this.equipNumber
+												}
+											})
+											_this.$router.go(-1)
+										} else {
+											// alert(0)
+											/*_this.$router.replace({
+											    path: _this.frompath
+											  })*/
+											if(_this.frompath == '/user/changeLoginPassword2') {
+												_this.$router.replace({
+													path: '/index'
+												})
+											} else {
+												_this.$router.replace({
+													path: _this.frompath
+												})
+											}
+
+										}
+
+									} else {
+										_this.$router.replace({
+											path: '/index'
+										})
+									}
+								} else {
+									_this.$router.replace({
+										path: '/index'
+									})
 								}
-							})
+							} else {
+								_this.$router.replace({
+									path: '/index'
+								})
+							}
 						}, 500)
 					}
 				})
@@ -211,12 +462,8 @@
 								_this.isReg = 0
 								_this.isCp = false
 								_this.posReg = false
-								_this.$vux.toast.show({
-									width: '60%',
-									type: 'text',
-									position: 'top',
-									text: '该账户未注册,请先完成注册'
-								})
+
+							_this.mainApp.showMessage('该账户未注册,请先完成注册')
 
 							} else if(res.data.data == '1') {
 								//已注册
@@ -227,6 +474,7 @@
 							} else if(res.data.data == '2') {
 								//pos用户
 								_this.isReg = 3
+								_this.isCp = true
 								_this.posReg = true
 							}
 						}
@@ -250,82 +498,7 @@
 					}
 				})
 			},
-			//登录
-			login() {
-				var _this = this
 
-				let pid = sessionStorage['_openid_']
-				let accessCode = sessionStorage['_accessCode_']
-
-				let params = {
-					audience: 'user',
-					platformId: _this.url.platformId,
-					mobile: _this.mobile,
-					password: _this.MD5(_this.password),
-					terminal: _this.url.client
-				}
-				if(pid) {
-					params.type = 1
-					params.unionid = pid
-					params.accessCode = accessCode
-				}
-
-				_this.$http.post(this.url.user.userLogin, params).then(function(res) {
-					if(res.data.status == "00000000") {
-
-						let hash = base64_encode(res.data.data)
-
-						_this.$store.state.user.userId = res.data.data.id
-
-						localStorage.setItem('_HASH_', hash)
-
-						localStorage.setItem('isLogin', true)
-
-						_this.$vux.toast.show({
-							width: '50%',
-							type: 'text',
-							position: 'middle',
-							text: '登录成功'
-						})
-
-						//获取用户信息
-						_this.$http.get(_this.url.user.getBasicInfo, {
-							params: {
-								userId: res.data.data.id
-							}
-						}).then((res) => {
-							if(res.data.status == "00000000") {
-								localStorage.setItem('userInfo', JSON.stringify(res.data.data))
-							}
-						})
-
-						setTimeout(function() {
-							if(window.sessionStorage.length > 2) {
-								if(_this.frompath) {
-									if(_this.frompath != '/user/changeLoginPassword2') {
-										//_this.$router.replace({
-										//  path: _this.frompath
-										//})
-										_this.$router.go(-1)
-									} else {
-										_this.$router.replace({
-											path: '/index'
-										})
-									}
-								} else {
-									_this.$router.replace({
-										path: '/index'
-									})
-								}
-							} else {
-								_this.$router.replace({
-									path: '/index'
-								})
-							}
-						}, 500)
-					}
-				})
-			},
 			//验证码输入改变时
 			codeChange(val) {
 				if(val.length == 4) {
@@ -350,22 +523,12 @@
 					//_this.$refs.password.focus()
 
 					if(_this.mobile.length != 11) {
-						_this.$vux.toast.show({
-							width: '60%',
-							type: 'text',
-							position: 'top',
-							text: '手机号码长度不符合要求'
-						})
+						_this.mainApp.showMessage('手机号码长度不符合要求')
 						return false
 					}
 
 					if(!_this.mainApp.isphone(_this.mobile)) {
-						_this.$vux.toast.show({
-							width: '60%',
-							type: 'text',
-							position: 'top',
-							text: '手机号码格式不符合要求'
-						})
+						_this.mainApp.showMessage('手机号码格式不符合要求')
 						return false
 					}
 
@@ -378,22 +541,49 @@
 									_this.isReg = 0
 									_this.isCp = true
 									_this.posReg = false
-									_this.$vux.toast.show({
-										width: '60%',
-										type: 'text',
-										position: 'top',
-										text: '该账户未注册,请先完成注册'
-									})
+									_this.oReg = false
+									_this.mainApp.showMessage('该账户未注册,请先完成注册')
+									// 使用验证码
+									_this.ispass = true
+									_this.usepass = false
+									// 使用验证码end
 								} else if(res.data.data == '1') {
 									//已注册
 									_this.isReg = 1
 									_this.posReg = false
+
+									_this.oReg = true
 									_this.isCp = true
+
+									_this.userPassLogin()
 								} else if(res.data.data == '2') {
 									//pos用户
 									_this.isReg = 3
+
 									_this.posReg = true
-									console.log(_this.posReg)
+									_this.isCp = true
+									_this.oReg = true
+
+									_this.$dialog.show({
+										type: 'warning',
+										// headMessage:"是否开启设备？",
+										message: '您的账户暂未设置登录密码，是否设置？',
+										buttons: ['确定', '取消'],
+										canel() {
+											// console.log('你点击了取消')
+										},
+										confirm() {
+											_this.$router.push({
+												path: '/user/changeLoginPassword',
+												query: {
+													'mobile': _this.mobile
+												}
+											})
+
+										},
+									});
+
+									// console.log(_this.posReg)
 								}
 							}
 						})
@@ -404,30 +594,21 @@
 			sendCode() {
 				var _this = this
 				_this.code = ''
+				// alert(_this.oReg)
+				// return;
 				if(_this.mainApp.isphone(_this.mobile)) {
 					_this.$refs.code.focus()
 					_this.$http.post(this.url.user.getVerificationCode, {
 						mobile: _this.mobile,
-						type: _this.posReg ? 2 : 1
+						type: _this.oReg ? 4 : 1 //4登录  1注册
 					}).then(function(res) {
 						if(res.data.status == "00000000") {
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'top',
-								text: '验证码发送成功'
-							})
-
+							_this.mainApp.showMessage('验证码发送成功')
 							_this.reduce()
 						}
 					})
 				} else {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'top',
-						text: '手机号码格式不正确'
-					})
+					_this.mainApp.showMessage('手机号码格式不正确')
 					_this.$refs.phone.focus()
 				}
 			},
@@ -449,15 +630,52 @@
 					_this.reduce()
 				}, 1000)
 			},
-			backLogin() {
-				this.isCp = false
-				this.isReg = 1
-				this.posReg = false
+			//注册时获取到allianceId
+			getRegAllianceId(eid, params) {
+				var _this = this
+
+				_this.$http.get(_this.url.qy.getBasicInfo, {
+					params: {
+						enterpriseId: eid
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.allianceId) {
+							_this.allianceId = res.data.data.allianceId
+							params.allianceId = _this.allianceId
+							// alert(params.allianceId+'   000111')
+						}
+						// _this.userRegister(params)
+					}
+				})
+			},
+			//登录时获取到allianceId
+			getLogAllianceId(eid, params) {
+				var _this = this
+
+				_this.$http.get(_this.url.qy.getBasicInfo, {
+					params: {
+						enterpriseId: eid
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						if(res.data.data.allianceId) {
+							_this.allianceId = res.data.data.allianceId
+							params.allianceId = _this.allianceId
+							// alert(params.allianceId+'   000111')
+						}
+						_this.userLogin(params)
+					}
+				})
 			}
+			/*backLogin() {
+			    this.isCp = false
+			    this.isReg = 1
+			    this.posReg = false
+			}*/
 		},
 		components: {
 			settingHeader,
-			XButton,
 		}
 	}
 </script>

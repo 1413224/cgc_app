@@ -66,7 +66,6 @@
 
 <script>
 	import BScroll from 'better-scroll'
-	import { Popup } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -139,8 +138,7 @@
 			}
 		},
 		components: {
-			settingHeader,
-			Popup
+			settingHeader
 		}
 	}
 </script>

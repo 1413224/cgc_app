@@ -13,10 +13,11 @@
 		</div>
 		<div class="content bounceInRight animated" v-if="isRemember == 0">
 			<group gutter="0" class="input-div">
-				<x-input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" type="tel" disabled :max="11" @on-change="phoneChange"></x-input>
-				<x-input class="input-item" type="tel" ref="code" v-model="code" :max="4" placeholder="验证码" @on-change="codeChange">
-					<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
-				</x-input>
+				<input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" type="tel" disabled maxlength="11" @on-change="phoneChange" />
+				<div class="pr">
+					<input class="input-item" type="tel" ref="code" v-model="code" maxlength="4" placeholder="验证码" @on-change="codeChange" />
+					<button class="codeBtn" @click="sendCode" :disabled="sendFlag">{{codeText}}</button>
+				</div>
 			</group>
 			<div class="tip">
 				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading">下一步</x-button>
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-	import { XInput, Group, XButton, Cell, AlertModule } from 'vux'
+	// import { AlertModule } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -245,16 +246,44 @@
 		},
 		components: {
 			settingHeader,
-			XInput,
-			Group,
-			XButton,
-			Cell
 		}
 	}
 </script>
 
 <style lang="less" scoped>
 	.zf-box1 {
+		.input-div {
+			.pr {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				button {
+					position: absolute;
+					right: 0%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+					background-color: white;
+					color: #256fff;
+					border: none;
+					    font-size: 0.28rem;
+				}
+			}
+			.pr:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #E1E1E1;
+				color: #E1E1E1;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 15px;
+			}
+		}
 		.tips {
 			height: 2.22rem;
 			display: flex;
@@ -300,12 +329,11 @@
 			}
 		}
 		.input-item {
+			width: 100%;padding: 10px 15px;
 			height: 1.02rem;
 			font-family: PingFangSC-Regular;
 			font-size: 0.28rem;
 			letter-spacing: 0;
-			padding-top: 0;
-			padding-bottom: 0;
 			box-sizing: border-box;
 			color: #1A2642;
 			.codeBtn {
@@ -316,9 +344,6 @@
 			.codeBtn:active {
 				color: #256FFF;
 				background-color: transparent!important;
-			}
-			.weui-btn:after {
-				border: 1px solid transparent!important;
 			}
 		}
 		.tip {

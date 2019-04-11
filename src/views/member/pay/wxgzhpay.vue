@@ -26,9 +26,9 @@
 			wxPay() {
 				var _this = this;
 				// console.log(window.location.href.split('#')[0])
-				var oid = sessionStorage['_openid_']
+				var oid = localStorage['_openid_']
 
-				let openid = sessionStorage['_openid_']
+				let openid = localStorage['_openid_']
 
 				this.$http.post('/pay/body/v1/wechat/pay', {
 					id: '200001',

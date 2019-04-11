@@ -1,5 +1,5 @@
-import card from '@/views/lock/card'
-import list from '@/views/lock/list'
+/*import card from '@/views/lock/card'
+import list from '@/views/lock/list'*/
 
 const lock = [{
 	path: '/lock/card',

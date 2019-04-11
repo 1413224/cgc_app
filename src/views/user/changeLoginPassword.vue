@@ -3,10 +3,11 @@
 		<settingHeader :title="title"></settingHeader>
 		<div class="content">
 			<group gutter="0" class="input-div">
-				<x-input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" :disabled="$route.query.isLogin" type="tel" :max="11" @on-change="phoneChange"></x-input>
-				<x-input class="input-item" type="tel" ref="code" v-model="code" placeholder="验证码" @on-change="codeChange">
-					<x-button class="codeBtn" slot="right" type="primary" mini @click.native="sendCode" :disabled="sendFlag">{{codeText}}</x-button>
-				</x-input>
+				<input class="input-item" ref="phone" v-model="phone" placeholder="输入手机号码" :disabled="$route.query.isLogin" type="tel" maxlength="11" @on-change="phoneChange" />
+				<div class="pr">
+					<input class="input-item" type="tel" ref="code" maxlength="4" v-model="code" placeholder="验证码" @on-change="codeChange" />
+					<button class="codeBtn" @click="sendCode" :disabled="sendFlag">{{codeText}}</button>
+				</div>
 			</group>
 			<div class="tip">
 				<x-button class="add-btn" @click.native="submit" :show-loading="showLoading">下一步</x-button>
@@ -16,7 +17,6 @@
 </template>
 
 <script>
-	import { XInput, Group, XButton, Cell, AlertModule } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {
@@ -34,6 +34,9 @@
 		created() {
 			if(this.$route.query.isLogin) {
 				this.getUserInfo()
+			}
+			if(this.$route.query.mobile){
+				this.phone = this.$route.query.mobile
 			}
 		},
 		methods: {
@@ -68,22 +71,12 @@
 									}
 								})
 							} else {
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '验证码不正确'
-								})
+								_this.mainApp.showMessage('验证码不正确','middle')
 							}
 						}
 					})
 				} else {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '手机号码或验证码不正确'
-					})
+					_this.mainApp.showMessage('手机号码或验证码不正确','middle')
 				}
 			},
 			codeChange(val) {
@@ -107,23 +100,12 @@
 						type: 2
 					}).then(function(res) {
 						if(res.data.status == "00000000") {
-							_this.$vux.toast.show({
-								width: '50%',
-								type: 'text',
-								position: 'middle',
-								text: '验证码发送成功'
-							})
-
+							_this.mainApp.showMessage('验证码发送成功','middle')
 							_this.reduce()
 						}
 					})
 				} else {
-					_this.$vux.toast.show({
-						width: '50%',
-						type: 'text',
-						position: 'middle',
-						text: '手机号码格式不正确'
-					})
+					_this.mainApp.showMessage('手机号码格式不正确','middle')
 					_this.$refs.phone.focus()
 				}
 			},
@@ -147,39 +129,59 @@
 			}
 		},
 		components: {
-			settingHeader,
-			XInput,
-			Group,
-			XButton,
-			Cell
+			settingHeader
 		}
 	}
 </script>
 
 <style lang="less">
 	.loginps-box {
+		.input-div {
+			.pr {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				button {
+					position: absolute;
+					right: 0%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+					background-color: white;
+					color: #256fff;
+					border: none;
+					    font-size: 0.28rem;
+				}
+			}
+			.pr:after {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 1px solid #E1E1E1;
+				color: #E1E1E1;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(0.5);
+				transform: scaleY(0.5);
+				left: 15px;
+			}
+		}
 		.input-item {
 			height: 1.02rem;
 			font-family: PingFangSC-Regular;
 			font-size: 0.28rem;
 			letter-spacing: 0;
-			padding-top: 0;
-			padding-bottom: 0;
 			box-sizing: border-box;
-			.weui-input {
-				color: #1A2642!important;
-			}
+			width: 100%;
+			padding: 10px 15px;
 			.codeBtn {
-				background-color: white;
-				color: #256fff;
 				padding-right: 0;
 			}
 			.codeBtn:active {
 				color: #256FFF;
 				background-color: transparent!important;
-			}
-			.weui-btn:after {
-				border: 1px solid transparent!important;
 			}
 		}
 		.tip {

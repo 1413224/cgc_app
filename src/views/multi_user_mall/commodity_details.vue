@@ -1,7 +1,22 @@
 <template>
 	<section class="commodity-details-box">
 		<settingHeader :title="title"></settingHeader>
-		<div class="goods-banner-box">
+		<sticky>
+			<div class="tab-box" v-if="aLength > 0">
+				<tab v-model="tabIndex" lineWidth="2" active-color="#E4472C" custom-bar-width="1.1rem">
+					<tab-item selected @on-item-click="onItemClick">商品</tab-item>
+					<tab-item @on-item-click="onItemClick">参数</tab-item>
+					<tab-item @on-item-click="onItemClick">详情</tab-item>
+				</tab>
+			</div>
+			<div class="tab-box" v-else>
+				<tab v-model="tabIndex" lineWidth="2" active-color="#E4472C" custom-bar-width="1.1rem">
+					<tab-item selected @on-item-click="onItemClick">商品</tab-item>
+					<tab-item @on-item-click="onItemClick">详情</tab-item>
+				</tab>
+			</div>
+		</sticky>
+		<div class="goods-banner-box" ref="one">
 			<div class="swiper-inner">
 				<swiper :options="swiperOption">
 					<swiper-slide v-for="(item, index) in goodsTcList" :key="index">
@@ -12,12 +27,53 @@
 			</div>
 		</div>
 		<div class="goods-tip-box">
-			<div class="top">
-				<p class="price">¥{{goodsDetails.minPrice}} <span v-if="Number(goodsDetails.minOriginPrice) > Number(goodsDetails.minPrice)">¥{{goodsDetails.minOriginPrice}}</span></p>
-				<div @click="changeGoodsConcern">
+			<div class="top" v-if="goodsDetails.type==3">
+				<div class="dikouwrap">
+					<!-- <p class="yuanjia fl" v-if="goodsDetails.goodsName != '【活鲜】鲜活俄罗斯帝王蟹 3000g 海鲜水产'">
+						<span>￥ {{chooseSkuInfo.originPrice}}</span>
+					</p> -->
+				</div>
+				<p class="price fl">
+					¥{{chooseSkuInfo.price}}
+				</p>
+				<div @click="changeGoodsConcern" class="fr">
 					<img :src="goodsDetails.hasConcern == 1?'./static/images/aixin.png':'./static/shop/collection.png'" />
 					<p>{{goodsDetails.hasConcern == 1 ?'已关注':'关注'}}</p>
 				</div>
+			</div>
+			<div class="top" v-else>
+				<!-- <p class="price" v-if="goodsDetails.minPrice == goodsDetails.maxPrice">
+					¥{{goodsDetails.minPrice}}
+				</p>
+				<p class="price" v-else>¥{{goodsDetails.minPrice}}~{{goodsDetails.maxPrice}}
+					<span v-if="Number(goodsDetails.minOriginPrice) > Number(goodsDetails.minPrice)">¥{{goodsDetails.minOriginPrice}}</span>
+				</p> -->
+				<div class="dikouwrap">
+					<p class="yuanjia fl" v-if="goodsDetails.maxOriginPrice == goodsDetails.minOriginPrice">
+						<span v-if="goodsDetails.maxOriginPrice != goodsDetails.maxPrice">￥ {{goodsDetails.maxOriginPrice}}</span>
+					</p>
+					<p class="yuanjia fl" v-else>
+						<span>￥ {{goodsDetails.minOriginPrice}}~{{goodsDetails.maxOriginPrice}}</span>
+					</p>
+				</div>
+				<p class="price fl" v-if="goodsDetails.maxPrice == goodsDetails.minPrice">
+					¥{{goodsDetails.maxPrice}}
+				</p>
+				<p class="price fl" v-else>
+					¥{{goodsDetails.minPrice}}~{{goodsDetails.maxPrice}}
+				</p>
+				<div @click="changeGoodsConcern" class="fr">
+					<img :src="goodsDetails.hasConcern == 1?'./static/images/aixin.png':'./static/shop/collection.png'" />
+					<p>{{goodsDetails.hasConcern == 1 ?'已关注':'关注'}}</p>
+				</div>
+			</div>
+
+			<div class="dikouwrap">
+				<p class="dikou" v-if="goodsDetails.type==3">￥{{chooseSkuInfo.payPrice == 0 ? '' : chooseSkuInfo.payPrice}} 
+				<span v-if="chooseSkuInfo.payPrice!=0">+</span> 
+				{{chooseSkuInfo.points}}信用积分
+					<span><img src="../../assets/images/shop/tip1.png" alt=""></span>
+				</p>
 			</div>
 			<div class="title">
 				{{goodsDetails.goodsName}}
@@ -27,6 +83,12 @@
 				<p>销量：{{goodsDetails.salesNum}}</p>
 			</div>
 		</div>
+
+		<div class="banner" v-if="goodsDetails.type == 3">
+			<img v-if="$store.state.page.isLogin == 'true'" src="../../assets/images/shop/jfbanner2.png" alt="">
+			<img @click="$router.push({path:'/user/login'})" v-else src="../../assets/images/shop/jfbanner.png" alt="">
+		</div>
+
 		<div class="goods-spec" @click="showGoodsSpec = true">
 			<div>
 				<span>规格</span>
@@ -34,11 +96,24 @@
 			</div>
 			<img :src="'./static/images/b-right.png'" />
 		</div>
-		<div class="goods-store" @click="toStoreDetails(goodsDetails.enterpriseId)">
+		<div class="goods-store" @click="toStore()" v-if="goodsDetails.type == 3">
+			<div class="left">
+				<img :src="'./static/shop/scLogo.png'" />
+				<div>
+					<p class="name">供应链云商城</p>
+					<p class="gz">全球供应链 国际品牌 正品保障</p>
+				</div>
+			</div>
+			<div class="right">
+				<p>进入商城</p>
+				<img :src="'./static/images/b-right.png'" />
+			</div>
+		</div>
+		<div class="goods-store" @click="toStoreDetails(goodsDetails.enterpriseId)" v-if="goodsDetails.type == 2">
 			<div class="left">
 				<img v-if="goodsDetails.enterpriseLogo" :src="goodsDetails.enterpriseLogo.original?goodsDetails.enterpriseLogo.original:'./static/shop/storeLogo.png'" />
 				<div>
-					<p class="name">{{goodsDetails.enterpriseName}}</p>
+					<p class="name">{{ goodsDetails.enterpriseName }}</p>
 					<p class="gz">{{goodsDetails.enterpriseConcern}}人关注</p>
 				</div>
 			</div>
@@ -47,12 +122,20 @@
 				<img :src="'./static/images/b-right.png'" />
 			</div>
 		</div>
-		<div class="goods-information" ref="goodsDetails">
+		<div class="goods-information">
 			<div class="title">商品详情</div>
-			<div v-html="goodsDetails.detail" class="detail">{{goodsDetails.detail}}</div>
+			<ul class="attribute-box" ref="two" v-if="aLength > 0">
+				<li>参数</li>
+				<li v-for="(item,index) in goodsDetails.attribute">
+					<div class="name">{{item.attributeName}}</div>
+					<div class="value">{{item.attributeValue}}</div>
+				</li>
+			</ul>
+			<div v-html="goodsDetails.detail" class="detail" ref="goodsDetails">{{goodsDetails.detail}}</div>
 		</div>
+
 		<div class="btn-box">
-			<div class="left">
+			<div class="left" v-if="goodsDetails.type != 3">
 				<div class="service">
 					<img src="../../assets/images/shop/customer.png">
 					<p>客服</p>
@@ -62,17 +145,24 @@
 					<p>店铺</p>
 				</div>
 			</div>
-			<div class="pay-btn" @click="submit">立即购买</div>
+			<div class="pay-btn" :class="{'w100':goodsDetails.type == 3}" @click="submit">立即购买</div>
 		</div>
 		<div v-transfer-dom>
 			<popup class="goods-popup" v-model="showGoodsSpec" position="bottom">
 				<div class="content">
 					<div class="goods pr">
 						<img v-if="goodsDetails.logo" :src="goodsDetails.logo.original?goodsDetails.logo.original:'./static/images/pr.png'" />
-						<div>
-							<p class="price">¥{{specItem.price?specItem.price:goodsDetails.minPrice}}</p>
+						<div v-if="goodsDetails.type==3">
+							<p class="price">¥{{chooseSkuInfo.price}}</p>
+							<p class="price2">¥{{chooseSkuInfo.payPrice}}+{{chooseSkuInfo.points}}信用积分</p>
 							<p class="stock">库存{{specItem.stock?specItem.stock:goodsDetails.total}}件</p>
 							<p class="spec" v-if="specItem.skuName">已选“{{specItem.skuName}}”</p>
+						</div>
+						<div v-else>
+							<p class="price" v-if="goodsDetails.maxPrice==goodsDetails.minPrice">¥{{goodsDetails.maxPrice}}
+							</p>
+							<p class="price" v-else>¥{{goodsDetails.minPrice}}~{{goodsDetails.maxPrice}}
+							</p>
 						</div>
 					</div>
 					<div class="ov">
@@ -103,7 +193,7 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Popup, Group, Cell, XNumber } from 'vux'
+	import { Popup, Group, Cell, XNumber, Sticky } from 'vux'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	export default {
 		components: {
@@ -113,7 +203,8 @@
 			Popup,
 			Group,
 			Cell,
-			XNumber
+			XNumber,
+			Sticky
 		},
 		data() {
 			return {
@@ -142,18 +233,71 @@
 				sizeList: ['1', '2', '3', '4', '5556'],
 				specItem: {},
 				num: 1,
-				skuId: ''
+				skuId: '',
+				tabIndex: 0,
+				aLength: 0,
+				chooseSkuInfo: ''
 			}
 		},
 		created() {
-			this.goodsId = this.$route.query.goodsId
+			// this.goodsId = this.$route.query.goodsId
+			this.goodsId = this.mainApp.getCs('goodsId')
+			// this.skuId = this.$route.query.skuId
+			this.skuId = this.mainApp.getCs('skuId')
 			this.getGoodsInfo()
 		},
 		mounted() {
-
+			window.addEventListener('scroll', this.handleScroll)
 		},
 		computed: {},
+		beforeRouteLeave(to, from, next){
+			if(to.path == "/multi_user_mall/confirm_order" 
+					&& this.$store.state.page.isLogin != 'true') {
+					localStorage.setItem('_buyCommodityFullPath_', to.fullPath)
+				}
+			next()
+		},
 		methods: {
+			onItemClick(index) {
+				var _this = this
+				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+				if(index == 0) {
+					_this.$refs.one.scrollIntoView()
+				} else if(index == 1) {
+					if(_this.goodsDetails.attribute.length > 0) {
+						_this.$refs.two.scrollIntoView()
+					} else {
+						_this.$refs.goodsDetails.scrollIntoView()
+					}
+				} else if(index == 2) {
+					_this.$refs.goodsDetails.scrollIntoView()
+				}
+				document.documentElement.scrollTop = document.documentElement.scrollTop - 44
+				document.body.scrollTop = document.body.scrollTop - 44
+			},
+			handleScroll() {
+				var _this = this
+				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+				var oneOffsetTop = _this.$refs.one.offsetTop
+				var threeOffsetTop = _this.$refs.goodsDetails.offsetTop
+
+				if(this.aLength > 0) {
+					var twoOffsetTop = _this.$refs.two.offsetTop
+					if(scrollTop >= oneOffsetTop - 44 && scrollTop < twoOffsetTop - 44) {
+						_this.tabIndex = 0
+					} else if(scrollTop >= twoOffsetTop - 44 && scrollTop < threeOffsetTop - 44) {
+						_this.tabIndex = 1
+					} else if(scrollTop > threeOffsetTop - 44) {
+						_this.tabIndex = 2
+					}
+				} else {
+					if(scrollTop >= oneOffsetTop - 44 && scrollTop < threeOffsetTop - 44) {
+						_this.tabIndex = 0
+					} else if(scrollTop > threeOffsetTop - 44) {
+						_this.tabIndex = 1
+					}
+				}
+			},
 			changeGoodsConcern() {
 				var _this = this
 				if(_this.goodsDetails.hasConcern == 1) {
@@ -189,15 +333,11 @@
 					return false;
 				}
 
+				//保存商品信息
+
 				this.$router.push({
 					path: '/multi_user_mall/confirm_order',
 					query: {
-						'enterpriseName': this.goodsDetails.enterpriseName,
-						'goodsLogo': this.goodsDetails.logo.original,
-						'goodsName': this.goodsDetails.goodsName,
-						'skuName': this.specItem.skuName,
-						'minPrice': this.goodsDetails.minPrice,
-						'minOriginPrice': this.goodsDetails.minOriginPrice,
 						'goodsNum': this.num,
 						'skuId': this.skuId
 					}
@@ -218,12 +358,6 @@
 				this.$router.push({
 					path: '/multi_user_mall/confirm_order',
 					query: {
-						'enterpriseName': this.goodsDetails.enterpriseName,
-						'goodsLogo': this.goodsDetails.logo.original,
-						'goodsName': this.goodsDetails.goodsName,
-						'skuName': this.specItem.skuName,
-						'minPrice': this.goodsDetails.minPrice,
-						'minOriginPrice': this.goodsDetails.minOriginPrice,
 						'goodsNum': this.num,
 						'skuId': this.skuId
 					}
@@ -235,11 +369,18 @@
 				_this.$http.get(_this.url.goods.getGoodsInfo, {
 					params: {
 						userId: _this.$store.state.user.userId,
-						goodsId: _this.goodsId
+						goodsId: _this.goodsId,
+						skuId: _this.skuId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.goodsDetails = res.data.data
+
+						_this.chooseSkuInfo = _this.goodsDetails.chooseSkuInfo
+
+						_this.goodsId = _this.goodsDetails.goodsId
+
+						// _this.aLength = _this.goodsDetails.attribute.length
 
 						_this.goodsTcList = []
 
@@ -249,7 +390,7 @@
 							value.isChoose = false
 						})
 						//只有一个规格时直接赋值
-						if(res.data.data.skuId) {
+						if(res.data.data.skuList.length == 1) {
 							_this.chooseSpec(0, res.data.data.skuList[0], 'color')
 
 						}
@@ -278,14 +419,51 @@
 				this.$router.push({
 					path: '/multi_user_mall',
 					query: {
-						id: id
+						eid: id
 					}
 				})
 			},
+			toStore(){
+				this.$router.push({
+					path:'/member/supply/productList'
+				})
+			}
 		}
 	}
 </script>
 <style lang="less">
+	.tab-box {
+		z-index: 1115;
+	}
+	
+	.attribute-box {
+		border-top: 1px solid #dadada;
+		border-bottom: 1px solid #dadada;
+		color: #999999;
+		font-size: 0.2rem;
+		border-radius: 2px;
+		li {
+			height: 35px;
+			line-height: 35px;
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+			padding-left: 0.30rem;
+			.name {
+				width: 30%;
+				border-right: 1px solid #dadada;
+			}
+			.value {
+				flex: 1;
+				padding-left: 0.30rem;
+				box-sizing: border-box;
+			}
+		}
+		li:not(:last-child) {
+			border-bottom: 1px solid #dadada;
+		}
+	}
+	
 	.number-box .weui-cell:before {
 		border-top: none;
 	}
@@ -375,7 +553,13 @@
 				.price {
 					font-size: 0.32rem;
 					font-family: PingFangSC-Medium;
+					/*color: rgba(242, 48, 48, 1);*/
+				}
+				.price2 {
+					font-size: 0.32rem;
+					font-family: PingFangSC-Medium;
 					color: rgba(242, 48, 48, 1);
+					/*text-decoration: line-through;*/
 				}
 				.stock {
 					font-size: 0.28rem;
@@ -408,7 +592,8 @@
 					align-items: center;
 					justify-content: center;
 					padding: 0 0.20rem;
-					height: 0.57rem;
+					/*height: 0.57rem;*/
+					padding: 0.1rem;
 					background: rgba(245, 246, 250, 1);
 					border-radius: 2px;
 					font-size: 0.28rem;
@@ -488,6 +673,17 @@
 				}
 			}
 		}
+		.banner {
+			width: 95%;
+			height: 1rem;
+			border-radius: .2rem;
+			margin: .1rem .16rem;
+			/*border: 1px solid #333;*/
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
 		.goods-tip-box {
 			display: flex;
 			flex-direction: column;
@@ -497,13 +693,14 @@
 			background-color: white;
 			position: relative;
 			.top {
-				display: flex;
+				/* display: flex;
 				align-items: center;
-				justify-content: space-between;
+				justify-content: space-between; */
 				.price {
-					font-size: 0.48rem;
+					font-size: 0.4rem;
 					font-family: PingFangSC-Medium;
-					color: rgba(242, 48, 48, 1);
+					/*color: rgba(242, 48, 48, 1);*/
+					color: #353535;
 					span {
 						margin-left: 0.15rem;
 						font-size: 0.24rem;
@@ -522,6 +719,30 @@
 						font-size: 0.20rem;
 						font-family: PingFangSC-Regular;
 						color: rgba(102, 102, 102, 1);
+					}
+				}
+			}
+			.dikouwrap {
+				.dikou {
+					color: #F23030;
+					font-size: .32rem;
+					img {
+						width: 1rem;
+						position: relative;
+						top: 0.06rem;
+						left: .1rem;
+						/*height: .24rem;*/
+					}
+				}
+				.yuanjia {
+					color: #A0A0A0;
+					/*font-size: .25rem;*/
+					font-size: .4rem;
+					margin-right: .3rem;
+					margin-right: .1rem;
+					/*margin-top: .1rem;*/
+					span {
+						text-decoration: line-through;
 					}
 				}
 			}
@@ -662,10 +883,10 @@
 			height: 1rem;
 			position: fixed;
 			bottom: 0;
-			left: 0;
 			width: 100%;
 			background-color: white;
 			display: flex;
+			max-width: 640px;
 			.left {
 				flex: 1;
 				display: flex;
@@ -711,6 +932,9 @@
 				font-family: PingFangSC-Regular;
 				color: rgba(255, 255, 255, 1);
 				background: rgba(51, 111, 255, 1);
+			}
+			.w100 {
+				width: 100%!important;
 			}
 		}
 	}

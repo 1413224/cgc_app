@@ -1,6 +1,7 @@
 <template>
 	<section class="prc-box">
 		<settingHeader title="中国地区馆"></settingHeader>
+		<div class="wap" @click="zanwei()"></div>
 		<div class="search-box">
 			<img :src="'./static/images/ss.png'" />
 			<input type="text" readonly="readonly" placeholder="搜索" />
@@ -48,15 +49,12 @@
 <script>
 	import settingHeader from '@/components/setting_header'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
-	import { Tab, TabItem } from 'vux'
 	import list from '@/views/prc/list'
 	export default {
 		components: {
 			settingHeader,
 			swiper,
 			swiperSlide,
-			Tab,
-			TabItem
 		},
 		data() {
 			return {
@@ -83,6 +81,14 @@
 		methods: {
 			onItemClick(index) {
 				this.tabIndex = index
+			},
+			zanwei(){
+				this.$vux.toast.show({
+					width: '50%',
+					type: 'text',
+					position: 'top',
+					text: '建设中，敬请期待'
+				});
 			}
 		}
 	}
@@ -102,6 +108,15 @@
 	}
 </style>
 <style lang="less" scoped>
+.wap{
+		width: 100%;
+		height: 100%;
+		background:#fff;
+		opacity: 0;
+		position: fixed;
+		top: 50px;
+		z-index: 999;
+	}
 	.prc-box {
 		background-color: #F5F6FA;
 		padding-bottom: 0.20rem;

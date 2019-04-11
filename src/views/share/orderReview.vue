@@ -49,7 +49,6 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Rater, XTextarea, Previewer } from 'vux'
 
 	export default {
 		data() {
@@ -66,10 +65,7 @@
 
 		},
 		components: {
-			settingHeader,
-			Rater,
-			XTextarea,
-			Previewer
+			settingHeader
 		},
 		created() {
 

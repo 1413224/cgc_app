@@ -27,7 +27,6 @@
 <!--$dialog  //type: failure/success/warning  //buttons: 确定、取消、我知道了-->
 
 <script>
-	import { XSwitch, Group, Cell } from 'vux'
 	import payMode from '@/components/payMode'
 	import scroll from '@/components/wrapper'
 	export default {
@@ -64,9 +63,6 @@
 			}
 		},
 		components: {
-			XSwitch,
-			Group,
-			Cell,
 			payMode,
 			scroll
 		},

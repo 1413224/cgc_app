@@ -64,7 +64,6 @@
 <script>
 	import settingHeader from '@/components/setting_header'
 	import BScroll from 'better-scroll'
-	import { Popup } from 'vux'
 	import Loading from '@/components/loading'
 	import Nomore from '@/components/noMore'
 	import noData from '@/components/noData'
@@ -89,7 +88,6 @@
 		},
 		components: {
 			settingHeader,
-			Popup,
 			Loading,
 			Nomore,
 			noData
@@ -188,7 +186,7 @@
 				this.$router.push({
 					path:'/multi_user_mall',
 					query:{
-						id:id,
+						eid:id,
 						// oIndex:3
 					}
 				})
@@ -268,6 +266,7 @@
 	
 	.cardDetail_box {
 		.top {
+			max-width: 640px;
 			height: 3.70rem;
 			padding: 0.25rem 0.25rem 0rem;
 			box-sizing: border-box;
@@ -496,6 +495,7 @@
 	}
 	.wrapper{
 		width: 100%;
+		max-width: 640px;
 		position: absolute;
 		top: 0;
 		bottom: 0;

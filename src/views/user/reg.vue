@@ -47,7 +47,7 @@
 </template>
 
 <script>
-	import { XInput, Group, XButton, Cell, Loading, AlertModule, Confirm, CheckIcon } from 'vux'
+	import { Loading } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	import agreement from '@/views/member/setting/agreement'
 	import { base64_encode, base64_decode } from '../../global/course.js'
@@ -175,7 +175,7 @@
 					smsVerificationCode: _this.code,
 					platformId: _this.url.platformId,
 					parentUserId: _this.parentId,
-					unionid: sessionStorage['_openid_']
+					unionid: localStorage['_openid_']
 				}).then(function(res) {
 					if(res.data.status == "00000000") {
 						//sessionStorage.setItem('regFirst',true)
@@ -255,7 +255,7 @@
 			login() {
 				var _this = this
 
-				let pid = sessionStorage['_openid_']
+				let pid = localStorage['_openid_']
 
 				let params = {
 					audience: 'user',
@@ -456,13 +456,7 @@
 		},
 		components: {
 			settingHeader,
-			XInput,
-			Group,
-			XButton,
-			Cell,
-			Loading,
-			Confirm,
-			CheckIcon
+			Loading
 		}
 	}
 </script>

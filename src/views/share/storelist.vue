@@ -5,7 +5,7 @@
 			<div class="top">
 				<div class="item" :class="{'blue':tabIndex == index}" v-for="(item,index) in tabList" :key="index" @click="tabClick(index)">
 					<span>{{item.type}}</span>
-					<i v-if="index < 2" :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-shixinjiantou-copy"></i>
+					<i v-if="index < 2" :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-triangledownfill"></i>
 					<img v-else src="../../assets/images/shop/screen.png" alt="">
 				</div>
 			</div>
@@ -82,7 +82,7 @@
 				<!-- <h2>附近商家 <span class="fr">更多<i class="iconfont icon-arrow-right"></i></span></h2> -->
 				<div v-if="showList" class="pd_box">
 					<!-- list.length > 0 -->
-					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId)">
+					<div class="list" v-for="(item,index) in list" @click="toDetail(item.enterpriseId,item)">
 						<div class="item">
 							<div class="logo">
 								<img v-if="item.logo" :src="item.logo.original" alt="" />
@@ -92,7 +92,7 @@
 								<p class="type" v-if="item.domainCate1Name">{{item.domainCate1Name}} l {{item.domainCate2Name}}</p>
 								<p class="address">
 									<span>{{item.area.country}}{{item.area.province}}{{item.area.city}}{{item.area.area}}{{item.area.town}}</span>
-									<span>{{item.distance}}km</span>
+									<!-- <span>{{item.distance}}km</span> -->
 								</p>
 								<p class="sf">
 									<span class="lm" v-if="item.isAlliance == 1">联盟企业</span>
@@ -121,8 +121,6 @@
 	import noMore from '@/components/noMore'
 	import Null from '@/components/null'
 	import { swiper, swiperSlide } from 'vue-awesome-swiper'
-
-	import { Group, XInput } from 'vux'
 	export default {
 		name: 'storelist',
 		data() {
@@ -133,10 +131,12 @@
 				}, {
 					type: '类型',
 					show: false
-				}, {
+				}, 
+				/*{
 					type: '筛选',
 					show: false
-				}],
+				}*/
+				],
 				tabIndex: 0,
 				regionShow: false, //区域显示
 				screenShow: false, //筛选显示
@@ -173,7 +173,7 @@
 				//筛选入参
 				lat: '',
 				lng: '',
-				distance: 100,
+				distance: 10000,
 				curPage: 1,
 				pageSize: 20,
 				listType: 1,
@@ -195,8 +195,6 @@
 			Loading,
 			noMore,
 			Null,
-			Group,
-			XInput,
 			swiper,
 			swiperSlide
 		},
@@ -245,7 +243,7 @@
 				this.typeIndex = 0
 				this.cityId = ''
 				this.areaId = ''
-				this.distance = 100
+				this.distance = 10000
 				this.distanceIndex = 4
 				this.lat = ''
 				this.lng = ''
@@ -263,6 +261,8 @@
 			// 完成
 			complete() {
 				var _this = this
+				
+				this.curPage = 1
 
 				//重置加载中
 				_this.showList = false
@@ -293,14 +293,14 @@
 					}
 				}
 			},
-			toDetail(id) {
+			toDetail(id,item) {
 				this.$router.push({
-					path: '/multi_user_mall',
-					query: {
-						id: id,
-						oIndex: 3
+					path:'/multi_user_mall',
+					query:{
+						eid:id,
+						// allianceId:item.allianceId
 					}
-				})
+				})	
 			},
 			//地址三级联动
 			itemsInit(id, type) {
@@ -364,7 +364,8 @@
 
 					this.addressName = this.provinceName + this.cityName + this.areaName
 				}
-
+				
+				this.curPage = 1
 				this.itemsInit(item.areaId, type)
 
 				this.getEnterpriseListInfo()
@@ -373,6 +374,7 @@
 			activeType(index, item) {
 				this.typeIndex = index
 				this.listType = item.value
+				this.curPage = 1
 
 				this.maskerShow = false
 				this.$forceUpdate()
@@ -403,15 +405,28 @@
 			},
 			//微信定位
 			getLocation() {
-				var _this = this
-				var uri = window.location.href.split('#')[0] //截取#前面的路径
-				_this.$http.post(_this.url.zf.wxScan, {
-					mchId: '1388332102',
+				var _this = this,
+				appId='',
+				uri = window.location.href.split('#')[0], //截取#前面的路径
+				params={
 					url: uri
-				}).then((res) => {
+				};
+
+				if(location.host == _this.url.health) {
+					params.mchId = _this.url.mchIdHealth
+					appId = _this.url.appIdHealth
+				} else if(location.host == _this.url.cgc) {
+					params.mchId =_this.url.mchIdCgc
+					appId = _this.url.appIdCgc
+				} else if(location.host == _this.url.test) {
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}
+
+				_this.$http.post(_this.url.zf.wxScan,params).then((res) => {
 					wx.config({
 						debug: false,
-						appId: 'wx7a4933a7a3c33ec8',
+						appId: appId,
 						timestamp: res.data.data.timestamp,
 						nonceStr: res.data.data.nonceStr,
 						signature: res.data.data.signature,
@@ -420,6 +435,7 @@
 
 					wx.ready(function() {
 						wx.getLocation({
+							type:'gcj02',
 							success: function(res) {
 								console.log(res)
 								_this.lat = res.latitude
@@ -588,6 +604,7 @@
 	}
 </script>
 <style lang="less" scoped>
+	@import '//at.alicdn.com/t/font_912483_lcojf3qe8m.css';
 	.store_list_box {
 		background-color: white;
 		.masker {
@@ -695,6 +712,7 @@
 			background-color: white;
 			z-index: 15;
 			top: 0.87rem;
+			max-width: 640px;
 		}
 		.screen_box {
 			position: absolute;
@@ -825,12 +843,14 @@
 			bottom: 1rem;
 			overflow: hidden;
 			width: 100%;
+			max-width: 640px;
 			background-color: white;
 			.pr_box {
 				position: relative;
 				height: 100%;
 				z-index: 11;
 				background-color: white;
+				max-width: 640px;
 				.null_box {
 					position: absolute;
 					top: 50%;

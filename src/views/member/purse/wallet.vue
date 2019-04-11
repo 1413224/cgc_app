@@ -13,7 +13,7 @@
 							<!--<i class="icon iconfont icon-arrow-right "></i>-->
 						</div>
 					</div>
-					<div class="use" @click="$router.push({path:'/shop'})">
+					<div class="use" @click="$router.push({path:'/member/supply/productList'})">
 						<div class="use_btn">使用积分
 							<i class="icon iconfont icon-arrow-right"></i>
 						</div>
@@ -135,11 +135,6 @@
 </template>
 
 <script>
-	import {
-		Card,
-		Cell,
-		Group,
-	} from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -211,7 +206,6 @@
 		created() {},
 		components: {
 			settingHeader,
-			Card
 		}
 	}
 </script>

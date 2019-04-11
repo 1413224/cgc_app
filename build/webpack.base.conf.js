@@ -29,7 +29,11 @@ const webpackConfig = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-    }
+    },
+    modules:[
+      resolve('src'),
+      resolve('node_modules')
+    ]
   },
   module: {
     rules: [

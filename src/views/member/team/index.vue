@@ -5,7 +5,7 @@
 			<div class="top">
 				<div class="middle">
 					<p>{{totalNums}}</p>
-					<p>合伙人</p>
+					<p>粉丝数</p>
 				</div>
 				<div class="right" @click="toQrcode" v-if="list.length > 0">
 					<img src="../../../assets/images/member/yq@2x.png" />
@@ -21,7 +21,7 @@
 								<div class="list" v-for="(item,index) in list" :key="index">
 									<div class="he">
 										<div class="user-img">
-											<img v-if="item.avatar" :src="item.avatar.original" />
+											<img v-if="item.avatar && item.avatar.original != ''" :src="item.avatar.original" />
 											<img v-else :src="'./static/images/mrtx.png'" />
 										</div>
 										<div class="user-text">
@@ -68,7 +68,7 @@
 	export default {
 		data() {
 			return {
-				title: '我的团队',
+				title: '我的粉丝',
 				show: false, //是否显示loading
 				showNo: false, //是否显示没有更多
 				isload: false, //是否上拉加载

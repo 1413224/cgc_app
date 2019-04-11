@@ -62,7 +62,6 @@
 	import Nomore from '@/components/noMore'
 	import Null from '@/components/null'
 	import mainApp from '@/global/global'
-	import { Masker } from 'vux'
 	export default {
 		data() {
 			return {
@@ -260,7 +259,6 @@
 			Loading,
 			Nomore,
 			Null,
-			Masker
 		}
 	}
 </script>

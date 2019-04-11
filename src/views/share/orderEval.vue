@@ -57,14 +57,9 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { CheckIcon, Rater, XTextarea, Previewer } from 'vux'
 	export default {
 		components: {
-			settingHeader,
-			CheckIcon,
-			Rater,
-			XTextarea,
-			Previewer
+			settingHeader
 		},
 		data() {
 			return {

@@ -27,12 +27,9 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { CheckIcon, Rater } from 'vux'
 	export default {
 		components: {
-			settingHeader,
-			CheckIcon,
-			Rater,
+			settingHeader
 		},
 		data() {
 			return {

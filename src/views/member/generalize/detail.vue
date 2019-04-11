@@ -4,7 +4,7 @@
 		<div class="content">
 			<div class="tit">{{data.title}}</div>
 			<p class="author">{{data.author}} <span>{{data.createTime | getDate}}</span></p>
-			<div class="card" v-if="data.userId && (data.userId != $store.state.user.userId)">
+			<div class="card" v-if="$store.state.user.userId != pId && pId != 'null'">
 				<img v-if="data.avatar" :src="data.avatar.original" />
 				<img v-else :src="'./static/images/wz_tx.png'" />
 				<div class="tip_box">
@@ -27,7 +27,8 @@
 		data() {
 			return {
 				title: '文章详情',
-				data: ''
+				data: '',
+				pId:''
 			}
 		},
 		components: {
@@ -36,9 +37,9 @@
 		},
 		created() {
 			var _this = this
-		},
-		mounted() {
+			this.pId = sessionStorage['parentUserId']
 			this.onLoadData()
+			// this.fx()
 		},
 		methods: {
 			onLoadData() {
@@ -47,30 +48,88 @@
 					params: {
 						type: 2,
 						articleId: _this.$route.query.id,
-						userId: this.mainApp.getCs('userId')
+						userId: this.pId
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.data = res.data.data
-
-						_this.$router.replace({
-							query: _this.merge(_this.$route.query, {
-								'userId': _this.$store.state.user.userId
-							})
-						})
-
-						if(res.data.data.userId) {
-							sessionStorage.setItem('parentUserId', res.data.data.userId)
-						}
+						console.log(res.data.data)
+						_this.fx()
 					}
 				})
-			}
+			},
+			fx() {
+				var _this = this,
+					appId = '',
+					uri = window.location.href.split('#')[0], //截取#前面的路径
+					params = {
+						url: uri
+					};
+				if(location.host == _this.url.health) {
+					params.mchId = _this.url.mchIdHealth
+					appId = _this.url.appIdHealth
+				} else if(location.host == _this.url.cgc) {
+					params.mchId =_this.url.mchIdCgc
+					appId = _this.url.appIdCgc
+				} else if(location.host == _this.url.test) {
+					params.mchId = _this.url.mchIdTest
+					appId = _this.url.appIdTest
+				}
+				_this.$http.post(_this.url.zf.wxScan, params).then((res) => {
+
+					wx.config({
+						debug: false,
+						appId: appId,
+						timestamp: res.data.data.timestamp,
+						nonceStr: res.data.data.nonceStr,
+						signature: res.data.data.signature,
+						jsApiList: ['checkJsApi', 'scanQRCode', 'onMenuShareTimeline', 'onMenuShareAppMessage']
+					})
+
+					wx.ready(function() {
+						//分享给好友
+						wx.onMenuShareAppMessage({
+							title: _this.data.title, // 分享标题
+							desc: _this.data.digest, // 分享描述
+							link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: _this.data.thumb && _this.data.thumb[0] && _this.data.thumb[0].original ? _this.data.thumb[0].original : 'http://domain.cgc999.com:8080/group1/M00/00/6D/rBL0CVv7wamAIl75AAAsglR_VP0222.png', // 自定义图标
+							type: 'link', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function() {
+								// 用户确认分享后执行的回调函数
+								//alert('分享给朋友成功')
+							},
+							cancel: function() {
+								// 用户取消分享后执行的回调函数
+								//alert('取消分享')
+							}
+						});
+						//分享给朋友圈
+						wx.onMenuShareTimeline({
+							title: _this.data.title, // 分享标题
+							desc: _this.data.digest, // 分享描述
+							link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: _this.data.thumb && _this.data.thumb[0] && _this.data.thumb[0].original ? _this.data.thumb[0].original : 'http://domain.cgc999.com:8080/group1/M00/00/6D/rBL0CVv7wamAIl75AAAsglR_VP0222.png', // 自定义图标
+							type: 'link', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function() {
+								// 用户确认分享后执行的回调函数
+								//alert('分享给朋友成功')
+							},
+							cancel: function() {
+								// 用户取消分享后执行的回调函数
+								//alert('取消分享')
+							}
+						});
+					})
+				})
+			},
 		}
 	}
 </script>
 
 <style lang='less' scoped>
-	iframe{
+	.cont /deep/ iframe {
 		width: 100% !important;
 	}
 	

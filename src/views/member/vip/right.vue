@@ -87,7 +87,6 @@
 
 <script>
 	import settingHeader from '../../../components/setting_header'
-	import { Tab, TabItem } from 'vux'
 	export default {
 		data() {
 			return {
@@ -181,8 +180,6 @@
 		},
 		components: {
 			settingHeader,
-			Tab,
-			TabItem
 		},
 		methods: {
 			huoEnter() {

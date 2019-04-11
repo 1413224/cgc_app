@@ -18,4 +18,5 @@ export default new Router({
 	routes: all,
 	// mode:'history',
 	/* fallback:true*/
+	// scrollBehavior(){}
 })

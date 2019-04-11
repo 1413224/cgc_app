@@ -52,7 +52,6 @@
 </template>
 
 <script>
-	import { ButtonTab, ButtonTabItem } from 'vux'
 	import BScroll from 'better-scroll'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
@@ -82,8 +81,6 @@
 			}
 		},
 		components: {
-			ButtonTab,
-			ButtonTabItem,
 			Loading,
 			noMore,
 			settingHeader,
@@ -124,7 +121,7 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.numberList = res.data.data.rankList
-						_this.userRank = res.data.data.userRank
+						_this.userRank = res.data.data.userRank || {}
 
 						_this.showList = res.data.data.rankList.length > 0 ? true : false
 						_this.inloading = false
@@ -141,7 +138,7 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						_this.numberList = res.data.data.rankList
-						_this.userRank = res.data.data.userRank
+						_this.userRank = res.data.data.userRank || {}
 
 						_this.showList = res.data.data.rankList.length > 0 ? true : false
 						_this.inloading = false

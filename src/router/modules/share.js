@@ -7,7 +7,8 @@ const share =[
 		meta: {
 			navShow: true,
 			navIndex:1,
-			title: '共享设备'
+			title: '共享设备',
+			isNoLogin:true
 		}
 	},
 	{
@@ -15,7 +16,8 @@ const share =[
 		name:'sdetail',
 		component:resolve => require(['@/views/share/sdetail'], resolve),
 		meta: {
-			title:'门店详情'
+			title:'门店详情',
+			isNoLogin:true
 		}
 	},
 	{
@@ -27,7 +29,8 @@ const share =[
 			navShow: true,
 			navIndex:3,
 			title:'门店列表',
-			keepAlive:true
+			keepAlive:true,
+			isNoLogin:true
 		}
 	},
 	{
@@ -35,7 +38,8 @@ const share =[
 		name:'meaidetail',
 		component:resolve => require(['@/views/share/meaidetail'], resolve),
 		meta: {
-			title:'套餐详情'
+			title:'套餐详情',
+			isNoLogin:true
 		}
 	},
 	{
@@ -43,7 +47,8 @@ const share =[
 		name:'pintroduce',
 		component:resolve => require(['@/views/share/pintroduce'], resolve),
 		meta: {
-			title:'威健康介绍'
+			title:'威健康介绍',
+			isNoLogin:true
 		}
 	},
 	{
@@ -51,7 +56,8 @@ const share =[
 		name:'join',
 		component:resolve => require(['@/views/share/join'], resolve),
 		meta: {
-			title:'招商加盟'
+			title:'招商加盟',
+			isNoLogin:true
 		}
 	},
 	{
@@ -59,7 +65,8 @@ const share =[
 		name:'treatment',
 		component:resolve => require(['@/views/share/treatment'], resolve),
 		meta: {
-			title:'治疗指导'
+			title:'治疗指导',
+			isNoLogin:true
 		}
 	},
 	{
@@ -155,7 +162,8 @@ const share =[
 		name: 'service',
 		component:resolve => require(['@/views/share/service'], resolve),
 		meta: {
-			title: '店铺服务'
+			title: '店铺服务',
+			isNoLogin:true
 		}
 	},
 	{
@@ -163,7 +171,8 @@ const share =[
 		name: 'guidance',
 		component:resolve => require(['@/views/share/guidance'], resolve),
 		meta: {
-			title: '治疗指导'
+			title: '治疗指导',
+			isNoLogin:true
 		}
 	},
 	{

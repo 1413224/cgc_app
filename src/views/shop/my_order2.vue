@@ -75,46 +75,118 @@
 							<span class="yf" v-if="item.freight">(含运费{{item.freight}}) </span>
 							<span v-if="item.points > 0"> + <i>{{item.points}}</i>信用积分</span>
 						</div>
-						<div class="order_bth_box">
+						<div class="order_bth_box" ref="btnBox">
 							<!--线下门店-->
-							<div v-if="item.type == 1">
+							<div ref="btnBoxItem" v-if="item.type == 1 || item.type == 12 || item.type == 13">
 								<div class="btn" v-if="item.status == 70">
 									<div @click="deleteOrder(item.orderSn)">删除订单</div>
 									<!--<div>评价订单</div>-->
 								</div>
 							</div>
-							<!--共享服务-->
-							<div v-if="item.type == 3">
+							<!-- 即时下单消费 -->
+							<div ref="btnBoxItem" v-if="item.type == 14">
 								<!--待付款-->
 								<div class="btn" v-if="item.status == 0">
 									<div @click="cancelOrder(item.orderSn)">取消订单</div>
-									<div>立即付款</div>
+									<!--<div>立即付款</div>-->
+								</div>
+								<!--待发货-->
+								<div class="btn" v-if="item.status == 10">
+									<div @click="cancelOrder(item.orderSn)">取消订单</div>
+									<!--<div>我要催单</div>-->
+									<div @click="toLogistics(item.orderSn)">查看物流</div>
+								</div>
+								<!--待收货-->
+								<div class="btn" v-if="item.status == 20">
+									<div @click="finishOrder(item.orderSn)">确认收货</div>
+									<!--<div>我要催单</div>-->
+									<div @click="toLogistics(item.orderSn)">查看物流</div>
+									<!--<div>申请售后</div>-->
+								</div>
+								<!--待取货-->
+								<div class="btn" v-if="item.status == 30">
+									<!--<div>确认取货</div>-->
+								</div>
+								<!--已完成-->
+								<div class="btn" v-if="item.status == 70">
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
+									<!--<div>评价晒单</div>-->
+									<!--<div>查看发票</div>-->
+								</div>
+								<!--待使用-->
+								<div class="btn" v-if="item.status == 80 ||item.status == 90 ||item.status == 110 ||item.status == 120 ||item.status == 130 ||item.status == 140 ||item.status == 150 ">
+									<div @click="toShopDetail(item.enterpriseId)">联系商家</div>
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
+								</div>
+							</div>
+							<!--企业云商城-->
+							<div ref="btnBoxItem" v-if="item.type == 2">
+								<!--待付款-->
+								<div class="btn" v-if="item.status == 0">
+									<div @click="cancelOrder(item.orderSn)">取消订单</div>
+									<!--<div>立即付款</div>-->
+								</div>
+								<!--待发货-->
+								<div class="btn" v-if="item.status == 10">
+									<div @click="cancelOrder(item.orderSn)">取消订单</div>
+									<!--<div>我要催单</div>-->
+									<div @click="toLogistics(item.orderSn)">查看物流</div>
+								</div>
+								<!--待收货-->
+								<div class="btn" v-if="item.status == 20">
+									<div @click="finishOrder(item.orderSn)">确认收货</div>
+									<!--<div>我要催单</div>-->
+									<div @click="toLogistics(item.orderSn)">查看物流</div>
+									<!--<div>申请售后</div>-->
+								</div>
+								<!--待取货-->
+								<div class="btn" v-if="item.status == 30">
+									<!--<div>确认取货</div>-->
+								</div>
+								<!--已完成-->
+								<div class="btn" v-if="item.status == 70">
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
+									<!--<div>评价晒单</div>-->
+									<!--<div>查看发票</div>-->
+								</div>
+								<!--待使用-->
+								<div class="btn" v-if="item.status == 80 ||item.status == 90 ||item.status == 110 ||item.status == 120 ||item.status == 130 ||item.status == 140 ||item.status == 150 ">
+									<div @click="toShopDetail(item.enterpriseId)">联系商家</div>
+									<div @click="deleteOrder(item.orderSn)">删除订单</div>
+								</div>
+							</div>
+							<!--共享服务-->
+							<div ref="btnBoxItem" v-if="item.type == 3">
+								<!--待付款-->
+								<div class="btn" v-if="item.status == 0">
+									<div @click="cancelOrder(item.orderSn)">取消订单</div>
+									<!--<div>立即付款</div>-->
 								</div>
 								<!--待使用-->
 								<div class="btn" v-if="item.status == 40">
-									<div>联系商家</div>
-									<div @click=gousetime()>立即使用</div>
+									<div @click="toShopDetail(item.enterpriseId)">联系商家</div>
+									<div @click="$router.push({path: '/share/usetime'})">立即使用</div>
 								</div>
 								<!--设备挂单-->
 								<div class="btn" v-if="item.status == 50">
-									<div>联系商家</div>
-									<div>继续使用</div>
+									<div @click="toShopDetail(item.enterpriseId)">联系商家</div>
+									<div @click="$router.push({path: '/share/usetime'})">继续使用</div>
 								</div>
 								<!--使用中-->
 								<div class="btn" v-if="item.status == 60">
-									<div>设备管理</div>
+									<div @click="$router.push({path: '/share/usetime'})">设备管理</div>
 								</div>
 								<!--已完成-->
 								<div class="btn" v-if="item.status == 70">
 									<div @click="deleteOrder(item.orderSn)">删除订单</div>
 
-									<div>查看发票</div>
+									<!--<div>查看发票</div>-->
 									<!--<div>评价晒单</div>-->
 								</div>
 								<!--使用失败-->
-								<div class="btn" v-if="item.status == 100 || item.status == 102">
-									<div>联系商家</div>
-									<div>继续使用</div>
+								<div class="btn" v-if="item.status == 100 || item.status == 101 || item.status == 102">
+									<div @click="toShopDetail(item.enterpriseId)">联系商家</div>
+									<div @click="$router.push({path: '/share/usetime'})">继续使用</div>
 								</div>
 								<!--订单超时-->
 								<div class="btn" v-if="item.status == 130">
@@ -154,6 +226,10 @@
 				</div>
 			</popup>
 		</div>
+
+		<actionsheet v-model="isCancelOrder" :menus="cancelReason" @on-click-menu="cancelReasonClick">
+			<p slot="header">请选择取消原因</p>
+		</actionsheet>
 	</div>
 </template>
 
@@ -163,6 +239,7 @@
 	import Loading from '@/components/loading'
 	import noMore from '@/components/noMore'
 	import Null from '@/components/null'
+	import { Actionsheet } from 'vux'
 	export default {
 		data() {
 			return {
@@ -211,7 +288,42 @@
 				huan: false,
 				showList: false,
 				inloading: true,
-				tipText: '暂无订单'
+				tipText: '暂无订单',
+				isCancelOrder: false,
+				cancelReason: [{
+						label: '正常',
+						value: 0
+					},
+					{
+						label: '订单不能按预计时间送达',
+						value: 1
+					}, {
+						label: '操作有误（商品、地址等选错）',
+						value: 2
+					},
+					{
+						label: '重复下单/误下单',
+						value: 3
+					}, {
+						label: '其他渠道价格更低',
+						value: 4
+					}, {
+						label: '该商品降价了',
+						value: 5
+					},
+					{
+						label: '不想买了',
+						value: 6
+					}, {
+						label: '商品无货',
+						value: 7
+					},
+					{
+						label: '其他',
+						value: 8
+					},
+				],
+				orderSn: ''
 			}
 		},
 		components: {
@@ -219,7 +331,8 @@
 			Loading,
 			noMore,
 			BScroll,
-			Null
+			Null,
+			Actionsheet
 		},
 		created() {
 
@@ -240,11 +353,22 @@
 			this.timeType = this.$route.query.timeType ? this.$route.query.timeType : 0 //订单时间
 
 			this.keyword = this.$route.query.keyword ? this.$route.query.keyword : '' //keyword
-		},
-		mounted() {
+
 			this.getOrderList()
 		},
+		mounted() {
+
+		},
 		methods: {
+			//查看物流
+			toLogistics(orderSn) {
+				this.$router.push({
+					path: '/shop/logistics_detail',
+					query: {
+						'orderSn': orderSn
+					}
+				})
+			},
 			getOrderList(time, isLess) {
 				var _this = this
 
@@ -306,6 +430,16 @@
 							}, 800)
 
 						}
+
+						console.log(_this.$refs.btnBoxItem)
+
+						//						_this.$nextTick(function() {
+						//							_this.$refs.btnBoxItem.forEach((value, index) => {
+						//								if(value.children.length == 0) {
+						//									_this.$refs.btnBox[index].style.display = 'none'
+						//								}
+						//							})
+						//						})
 					} else {
 						if(time) {
 							_this.changeTip = '刷新失败'
@@ -326,7 +460,7 @@
 					_this.$router.push({
 						path: '/multi_user_mall',
 						query: {
-							id: shopId
+							eid: shopId
 						}
 					})
 				}
@@ -419,27 +553,40 @@
 					path: '/shop/confirm'
 				})
 			},
-			//取消订单
-			cancellationOrder() {
-				var _this = this
+			//确认收货
+			finishOrder(orderId) {
+				var _this = this;
 				_this.$dialog.show({
 					type: 'warning',
-					headMessage: '提示',
-					message: '亲,您确定要取消订单？',
+					headMessage: "是否确认收货？",
+					// message: '是否开启设备？',
 					buttons: ['确定', '取消'],
 					canel() {
-
+						// console.log('你点击了取消')
 					},
 					confirm() {
+						_this.sureFinishOrder(orderId)
+					}
+				});
+			},
+			sureFinishOrder(orderId) {
+				var _this = this;
+				_this.$http.post(_this.url.order.confirmReceipt, {
+					orderSn: orderId,
+					userId: _this.$store.state.user.userId
+				}).then((res) => {
+					if(res.data.status == "00000000") {
 						_this.$vux.toast.show({
 							width: '50%',
 							type: 'text',
 							position: 'middle',
-							text: '取消成功'
+							text: '完成订单成功'
 						})
+						_this.getOrderList()
 					}
 				})
 			},
+
 			//删除订单
 			deleteOrder(orderSn) {
 				var _this = this
@@ -470,36 +617,29 @@
 					}
 				})
 			},
+			cancelReasonClick(val) {
+				var _this = this
+				_this.$http.post(_this.url.order.cancelOrderByOrderSn, {
+					userId: _this.$store.state.user.userId,
+					orderSn: _this.orderSn,
+					cancelReason: val
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.$vux.toast.show({
+							width: '50%',
+							type: 'text',
+							position: 'middle',
+							text: '取消成功'
+						})
+						_this.getOrderList()
+					}
+				})
+			},
 			//取消订单
 			cancelOrder(orderSn) {
 				var _this = this
-				_this.$dialog.show({
-					type: 'warning',
-					headMessage: '提示',
-					message: '亲,您确定要取消该订单？',
-					buttons: ['确定', '取消'],
-					canel() {
-
-					},
-					confirm() {
-						_this.$http.post(_this.url.order.cancelOrderByOrderSn, {
-							userId: _this.$store.state.user.userId,
-							//							userId: 'userDev01',
-							orderSn: orderSn,
-						}).then((res) => {
-							if(res.data.status == "00000000") {
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '取消成功'
-								})
-								_this.getOrderList()
-							}
-						})
-
-					}
-				})
+				this.orderSn = orderSn
+				this.isCancelOrder = true
 			},
 			//评价
 			toEvaluate() {
@@ -728,6 +868,7 @@
 			top: 2.8rem;
 			bottom: 0;
 			width: 100%;
+			max-width: 640px;
 			background: #f5f6fa;
 			z-index: 11;
 		}
@@ -747,6 +888,7 @@
 			position: fixed;
 			top: 0;
 			width: 100%;
+			max-width: 640px;
 			z-index: 15;
 		}
 		.search {
@@ -851,6 +993,7 @@
 				top: 2.02rem;
 				bottom: 0;
 				width: 100%;
+				max-width: 640px;
 				background: rgba(245, 246, 250, 1);
 				z-index: 11;
 				.content {
@@ -945,6 +1088,7 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
+						overflow: hidden;
 						img {
 							width: 80%;
 							height: auto;

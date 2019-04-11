@@ -1,18 +1,31 @@
 import {base64_encode,base64_decode} from '../../global/course.js'
 let info=base64_decode(localStorage['_HASH_'])
+// console.log(info)
+var userid
+var token
 if(info){
-  var userid = info.id
+  userid = info.userId
+  token = info.token
+  // console.log(userid)
 }else{
-  var userid = " "
+  userid = " "
 }
 const user = {
     state: {
         username: null,
         userstate: false,
+        // userId:userid,
+        // userId:1,
+        id:userid,
         userId:userid,
         openid:"",
-        token:"",
-        accessCode:""
+        token:token,
+        accessCode:"",
+        showDefaultNav:true,
+        menuId:"001",  //自定义菜单id
+        shopMenuId:"002",  //自定义店铺菜单
+        platformMenuId:"001",//行业平台菜单id
+        shoePlatformMenu:false
     },
   
     mutations: {
@@ -34,6 +47,19 @@ const user = {
         },
         setUid:(state,param) => {
           state.userId = param
+        },
+        changeMenuId:(state,id) => {
+          state.menuId = id
+        },
+        changeShopMenuId:(state,id) => {
+          state.shopMenuId = id
+        },
+        changeShowDefaultNav:(state,bool)=>{
+          state.showDefaultNav = bool
+        },
+        changePlatformId:(state,id) => {
+          state.platformMenuId = id
+          state.shoePlatformMenu = true
         }
       },
       //Action 通过 store.dispatch 方法触发

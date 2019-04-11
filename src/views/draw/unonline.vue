@@ -41,7 +41,7 @@
 				<span>领奖时间</span>
 			</div>
 			<div class="text">
-				{{info.getAwardDeadline}}
+				{{info.getAwardDeadline | getDate}}
 			</div>
 			<div class="title">
 				<span></span>
@@ -55,7 +55,7 @@
 				<span>领奖事项</span>
 			</div>
 			<div class="text">
-				1.请在规定时间内到指定地点领取。<br /> 2.请带好相关证件前去领取，如当事人无法到场，代 领人员需提供身份证明及与当事人身份关系相关证明 方可发放。<br /> 3.商品不可兑现不可改换。
+				1.请在规定时间内到指定地点领取。<br /> 2.请带好相关证件前去领取，如当事人无法到场，代领人员需提供身份证明及与当事人身份关系相关证明 方可发放。<br /> 3.商品不可兑现不可改换。
 			</div>
 		</div>
 	</div>
@@ -63,11 +63,9 @@
 
 <script>
 	import settingHeader from '@/components/setting_header'
-	import { Qrcode } from 'vux'
 	export default {
 		components: {
-			settingHeader,
-			Qrcode
+			settingHeader
 		},
 		data() {
 			return {

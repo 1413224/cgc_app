@@ -1,11 +1,12 @@
 <template>
 	<section class="coupon_index_box">
 		<settingHeader title="我的优惠券"></settingHeader>
-		<div class="tab_box">
+		<div class="tab_box couponwap">
 			<div class="top">
 				<div class="item" :class="{'blue':tabIndex == index}" v-for="(item,index) in tabList" :key="index" @click="tabClick(index)">
 					<span>{{item.type}}</span>
-					<i :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-shixinjiantou-copy"></i>
+					<!-- icon-shixinjiantou-copy -->
+					<i :class="{'r180':item.show && tabIndex == index}" class="iconfont icon-triangledownfill"></i>
 				</div>
 			</div>
 			<!--类型-->
@@ -39,7 +40,7 @@
 			<div class="masker" v-if="maskerShow" @click="maskerShow = false"></div>
 		</div>
 
-		<div class="wrapper" :class="[{'top46':!$store.state.page.isWx}]" ref="wrapper">
+		<div class="wrapper" ref="wrapper">
 			<div class="content" :class="{'pr_box':!showCoupon}">
 				<div class="list_box" v-if="showCoupon">
 					<div class="mb20" v-for="(item,index) in couponList" :key="index">
@@ -75,7 +76,7 @@
 				</div>
 				<Loading v-if="show"></Loading>
 				<Nomore v-if="showNo"></Nomore>
-				<Null status="404" text="暂无优惠券" v-if="!showCoupon && !inloading"></Null>
+				<Null status="zwyhq" text="暂无优惠券" v-if="!showCoupon && !inloading"></Null>
 				<Null status="loading" text="加载中" v-if="!showCoupon && inloading"></Null>
 			</div>
 		</div>
@@ -349,8 +350,14 @@
 		}
 	}
 </script>
+<style>
+	.settingHeader+.couponwap+.wrapper {
+		top: 1.9rem !important;
+	}
+</style>
 
 <style lang="less" scoped>
+	@import '//at.alicdn.com/t/font_912483_lcojf3qe8m.css';
 	.h100 {
 		height: 100%!important;
 		overflow: hidden;
@@ -479,14 +486,26 @@
 				.red_bg {
 					background: url(../../../../static/member/coupon_bg.png) no-repeat;
 					background-size: cover;
+					.type,
+					.mk {
+						color: #ff5365;
+					}
 				}
 				.blue_bg {
 					background: url(../../../../static/member/blue_bg.png) no-repeat;
 					background-size: cover;
+					.type,
+					.mk {
+						color: #667BDC;
+					}
 				}
 				.yellow_bg {
 					background: url(../../../../static/member/yellow_bg.png) no-repeat;
 					background-size: cover;
+					.type,
+					.mk {
+						color: #FF9600;
+					}
 				}
 				.gray_bg {
 					background: url(../../../../static/member/gray_bg.png) no-repeat;
@@ -540,16 +559,13 @@
 							.type {
 								font-size: 0.30rem;
 								font-family: PingFang-SC-Medium;
-								color: rgba(255, 83, 101, 1);
 							}
 							.mk {
 								font-size: 0.24rem;
 								font-family: PingFang-SC-Medium;
-								color: rgba(255, 83, 101, 1);
 								i {
 									font-size: 0.28rem;
 									font-family: PingFang SC;
-									color: #FF5365;
 								}
 							}
 						}

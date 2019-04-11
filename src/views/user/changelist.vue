@@ -11,7 +11,6 @@
 </template>
 
 <script>
-	import { Cell, Group } from 'vux'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		data() {

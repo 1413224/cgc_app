@@ -113,19 +113,15 @@
 </template>
 
 <script>
-	import { ButtonTab, ButtonTabItem, XDialog } from 'vux'
 	import BScroll from 'better-scroll'
 	import Loading from '../../components/loading'
 	import noMore from '../../components/noMore'
 	import settingHeader from '../../components/setting_header'
 	export default {
 		components: {
-			ButtonTab,
-			ButtonTabItem,
 			Loading,
 			noMore,
 			settingHeader,
-			XDialog
 		},
 		data() {
 			return {

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-	import { Group, CellBox, XButton, PopupHeader, Radio, Checklist } from 'vux'
+	import { PopupHeader, Checklist } from 'vux'
 	import settingHeader from '@/components/setting_header'
 	import payMode from '@/components/payMode'
 	export default {
@@ -97,38 +97,25 @@
 
 				},
 				toPay(type) {
-					// alert("发送"+_this.parentOrderSn)
-					if(location.host == "health.cgc999.com"){
-						// axios.defaults.baseURL = '//health.cgc999.com/apigw' // 请求默认地址,演示版
-						var params = {
-							userId: _this.$store.state.user.userId,
-							platformId: _this.url.platformId,
-							payConfigId:200002,
-							rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
-							payType: type,
-							openId: sessionStorage['_openid_'],
-							//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
-							parentOrderSn: _this.parentOrderSn
-						}
-					}else{
-						// axios.defaults.baseURL = '//domain.cgc999.com/apigw' // 请求默认地址
-						var params = {
-							userId: _this.$store.state.user.userId,
-							platformId: _this.url.platformId,
-							payConfigId:200000,
-							rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
-							payType: type,
-							openId: sessionStorage['_openid_'],
-							//openId: 'oWt0-v-MvBHHcMo68ic0d-atjQ04',
-							parentOrderSn: _this.parentOrderSn
-						}
+					var params = {
+						userId: _this.$store.state.user.userId,
+						platformId: _this.url.platformId,
+						rechargeId: _this.moneyList[_this.moneyIndex].rechargeId,
+						payType: type,
+						openId: localStorage['_openid_'],
+						parentOrderSn: _this.parentOrderSn
+					}
+					if(location.host == _this.url.health) {
+						params.payConfigId = _this.url.IdHealth
+					} else if(location.host == _this.url.cgc) {
+						params.payConfigId = _this.url.IdCgc
+					} else if(location.host == _this.url.test) {
+						params.payConfigId = _this.url.IdTest
 					}
 
-		
-					_this.$http.post(_this.url.user.rechargeBalance,params).then((res) => {
+					_this.$http.post(_this.url.user.rechargeBalance, params).then((res) => {
 						if(res.data.status == "00000000") {
 							_this.parentOrderSn = res.data.data.parentOrderSn
-							// alert("订单编号"+_this.parentOrderSn)
 							if(type == 1) {
 								wx.config({
 									debug: false,
@@ -163,6 +150,7 @@
 											width: '50%'
 										})
 										_this.parentOrderSn = ""
+										_this.getRechargeList()
 									},
 									error: function() {
 										_this.$vux.toast.show({
@@ -277,11 +265,7 @@
 		},
 		components: {
 			settingHeader,
-			Group,
-			CellBox,
-			XButton,
 			PopupHeader,
-			Radio,
 			Checklist,
 			payMode
 		}

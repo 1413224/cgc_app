@@ -6,7 +6,8 @@ const business =[
 		name:'management',
 		component:resolve => require(['@/views/business'],resolve),
 		meta:{
-			title:'选择身份'
+			title:'选择身份',
+			isNoLogin:true
 		}
 	},
 	{

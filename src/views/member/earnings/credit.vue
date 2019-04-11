@@ -18,7 +18,7 @@
 		<div class="bottom">
 			<div class="title">
 				<div>积分来源</div>
-				<div @click="$router.push({path:'/member/benefits/index'})">积分攻略<img :src="thao" alt="" /></div>
+				<!-- <div @click="$router.push({path:'/member/benefits/index'})">积分攻略<img :src="thao" alt="" /></div> -->
 			</div>
 			<!--<div class="b-list">
 				<group :gutter='0'>
@@ -126,7 +126,6 @@
 </template>
 
 <script>
-	import { Cell, Group } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	export default {
 		data() {
@@ -166,8 +165,6 @@
 		},
 		components: {
 			settingHeader,
-			Cell,
-			Group,
 		}
 	}
 </script>

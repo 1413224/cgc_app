@@ -43,7 +43,6 @@
 </template>
 
 <script>
-	import { Scroller, CheckIcon, XButton } from 'vux'
 	import settingHeader from '../../../components/setting_header'
 	import Null from '@/components/null'
 	export default {
@@ -137,9 +136,6 @@
 		},
 		components: {
 			settingHeader,
-			CheckIcon,
-			XButton,
-			Scroller,
 			Null
 		}
 	}
@@ -175,10 +171,11 @@
 		}
 		.add-btn-box {
 			width: 100%;
+			max-width: 640px;
 			background-color: white;
 			position: fixed;
 			bottom: 0;
-			left: 0;
+			/*left: 0;*/
 			height: 0.88rem;
 			.add-btn {
 				height: 0.88rem;

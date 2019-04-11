@@ -175,6 +175,7 @@
 			top: 37.5px;
 			bottom: 0;
 			width: 100%;
+			max-width: 640px;
 			z-index: 11;
 			background-color: white;
 		}
