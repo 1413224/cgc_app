@@ -1,6 +1,6 @@
 import Vue from 'vue'
-// console.log(Vue)
-
+import axios from '../config/axios_config.js'
+import url from '../config/url.js'
 var mainApp = {
 	frDateTimehp: {
 
@@ -304,6 +304,25 @@ var mainApp = {
 			text: text
 		})
 	},
+	returnAlliance(eid){
+
+		return new Promise(function(resolve, reject){
+			axios.get(url.qy.getBasicInfo,{
+				params:{
+					enterpriseId: eid
+				}
+			}).then((res)=>{
+				if(res.data.status == "00000000"){
+					let allianceId = res.data.data.allianceId
+					if(allianceId){
+						resolve(allianceId)
+					}
+				}else{
+					reject(error)
+				}
+			})
+		})
+	},
 	ischeckTax(number) {
 		var reg = /^[A-Z0-9]{15}$|^[A-Z0-9]{17}$|^[A-Z0-9]{18}$|^[A-Z0-9]{20}$/
 		if(!reg.test(number)) {
@@ -357,6 +376,9 @@ var mainApp = {
 	},
 	getCs(name) {
 		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
+	},
+	getStringCs(str,name){
+		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(str) || [, ""])[1].replace(/\+/g, '%20')) || null;
 	},
 	xss: {
 		//html节点内容,html属性

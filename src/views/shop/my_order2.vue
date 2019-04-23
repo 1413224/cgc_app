@@ -30,7 +30,7 @@
 
 					<div class="order_item" v-for="(item,index) in orderList" :key="index" v-if="showList">
 						<div class="order_top">
-							<div class="left" @click="toShopDetail(item.enterpriseId)">
+							<div class="left" @click="toShopDetail(item.enterpriseId,item)">
 								<img :src="'./static/images/shopLogo.png'" alt="" />
 								<p>{{item.shopName}}</p>
 								<i class="icon iconfont icon-arrow-right"></i>
@@ -94,7 +94,7 @@
 								<div class="btn" v-if="item.status == 10">
 									<div @click="cancelOrder(item.orderSn)">取消订单</div>
 									<!--<div>我要催单</div>-->
-									<div @click="toLogistics(item.orderSn)">查看物流</div>
+									<!-- <div @click="toLogistics(item.orderSn)">查看物流</div> -->
 								</div>
 								<!--待收货-->
 								<div class="btn" v-if="item.status == 20">
@@ -130,7 +130,7 @@
 								<div class="btn" v-if="item.status == 10">
 									<div @click="cancelOrder(item.orderSn)">取消订单</div>
 									<!--<div>我要催单</div>-->
-									<div @click="toLogistics(item.orderSn)">查看物流</div>
+									<!-- <div @click="toLogistics(item.orderSn)">查看物流</div> -->
 								</div>
 								<!--待收货-->
 								<div class="btn" v-if="item.status == 20">
@@ -453,7 +453,7 @@
 					}
 				})
 			},
-			toShopDetail(shopId) {
+			toShopDetail(shopId,item) {
 				var _this = this
 
 				if(shopId) {
@@ -464,6 +464,7 @@
 						}
 					})
 				}
+				// if(item.)
 			},
 			onItemClick(index) {
 				var _this = this
@@ -791,12 +792,12 @@
 
 								_this.showLoading = false
 								_this.showNo = true
-								_this.$vux.toast.show({
-									width: '50%',
-									type: 'text',
-									position: 'middle',
-									text: '已经到底了'
-								})
+								// _this.$vux.toast.show({
+								// 	width: '50%',
+								// 	type: 'text',
+								// 	position: 'middle',
+								// 	text: '已经到底了'
+								// })
 
 							}
 						}

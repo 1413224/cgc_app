@@ -14,7 +14,9 @@
 					<input v-if="isC" class="upinput" id="upinput" type="file" @change="up2" accept="image/*" ref="input" />
 				</div>
 
-				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" is-link link="/member/setting/nickname"></cell>
+				<cell class="list-item" title="用户昵称" :value="userInfo.nickname?userInfo.nickname:'未设置'" 
+				is-link 
+				link="/member/setting/nickname"></cell>
 			</group>
 			<group>
 				<cell class="list-item" title="我的二维码" is-link @click.native="goCode"><img class="code" src="../../../assets/images/member/code@2x.png" /></cell>
@@ -145,7 +147,8 @@
 
 				_this.$http.get(_this.url.ocr.getOCR,{
 					params:{
-						userId:_this.$store.state.user.userId
+						userId:_this.$store.state.user.userId,
+						type:1
 					}
 				}).then((res) => {
 					if(res.data.status == "00000000"){
@@ -176,7 +179,7 @@
 								text: '超过当日认证次数上限'
 							})
 						}else{
-							alert("sha")
+							// alert("sha")
 						}
 						
 					}

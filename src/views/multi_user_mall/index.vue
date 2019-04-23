@@ -131,18 +131,22 @@
 		created() {
 			var _this = this
 			// _this.$store.commit('changeShopMenuId',"")
-			/*if(_this.$route.path == "/multi_user_mall/components/goods"){
+			if(_this.$route.path == "/multi_user_mall/components/goods"){
+				_this.getInfo()
 				_this.goGoods()
 			}else if(_this.$route.path == "/multi_user_mall/components/fuwu"){
+				_this.getInfo()
 				_this.goFuwu()
 			}else if(_this.$route.path == "/multi_user_mall/components/productList"){
+				_this.getInfo()
 				_this.goProductList()
 			}else if(_this.$route.path == "/multi_user_mall/components/introduce"){
+				_this.getInfo()
 				_this.goIntroduce()
 			}else{
 				_this.getBasicInfo()//获取企业详情信息
-			}*/
-			_this.getBasicInfo()
+			}
+			// _this.getBasicInfo()
 			// console.log(_this.$route.path)
 		},
 		mounted() {},
@@ -185,6 +189,20 @@
 				// console.log(cont)
 				this.menuDefault = ""
 				this.tabType = 2
+			},
+			getInfo(){
+				//获取企业详情，解决直接进入子页面
+				//底部导航不存在问题
+				var _this = this
+				_this.$http.get(_this.url.qy.getBasicInfo, {
+					params: {
+						enterpriseId: _this.$route.query.eid
+					}
+				}).then((res)=>{
+					if(res.data.status=="00000000"){
+						_this.showdefaultMenu(res.data.data,'isGetInfo')
+					}
+				})
 			},
 			// 获取企业详情
 			getBasicInfo() {
@@ -292,11 +310,13 @@
 					// _this.publicAlliance(detail)  
 				})
 			},
-			showdefaultMenu(data){
-				console.log(data)
+			showdefaultMenu(data,str){
+				// console.log(data)
 				var _this = this
 				_this.navList[3].show = true
-				_this.navList[0].show = true
+				if(!str){
+					_this.navList[0].show = true
+				}
 
 				if(data.isAlliance==1){
 					if(data.isChains==1){

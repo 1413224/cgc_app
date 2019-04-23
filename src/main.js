@@ -160,18 +160,9 @@ else{
 
 router.beforeEach(function(to, from, next) {
 		// store.commit('setToPath',to)
-		if(to.query.offLine) {
-				if(to.query.eid) {
-						localStorage.setItem('_enterpriseId_', to.query.eid)
-				}
-				if(to.query.n) {
-						localStorage.setItem('_code_', to.query.n)
-				}
-		}
 		if(to.query.parentId) {
-				localStorage.setItem('_parentid_', to.query.parentId) //用于绑定会员
+			localStorage.setItem('_parentid_', to.query.parentId) //用于绑定会员
 		}
-		
 
 		var jumpUrl = '';//
 		var wechatUrl= '';//当前项目的url
@@ -201,38 +192,65 @@ router.beforeEach(function(to, from, next) {
 		}
 
 
+
 		if(/MicroMessenger/.test(window.navigator.userAgent)){
 
-			let openid = localStorage['_openid_']
-			
-			// alert('openid'+ openid)
-			// alert('openid2'+ localStorage['_openid_'])
-
-			if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
-				// alert('进入授权')
-					localStorage.setItem('beforeLoginUrl', wechatUrl + to.fullPath)
-					window.location.href = jumpUrl + '/member/oriza'
-					return false
-
-			}else if(openid && (!store.state.user.userId || !store.state.user.token)){
-				/*alert('userId'+store.state.user.userId)
-				alert('token'+store.state.user.token)
-				alert(to.meta.isNoLogin)*/
-				if (to.meta.isNoLogin) {
-					//判断路由白名单
-					//alert('白名单')
-					next()
-				}else{
-					if(to.path=='/user/login'){
-						next()
-					}else{
-						next({
-							path: '/user/login'
+			if(to.query.offLine) {
+				if(to.query.eid) {
+					// localStorage.setItem('_enterpriseId_', to.query.eid)
+					getAllianceId()	
+					
+					function getAllianceId(){
+						mainApp.returnAlliance(to.query.eid).then(function(value){
+							oriza(value)
+						},function(err){
+							console.log(err)
 						})
 					}
 				}
-				
+				if(to.query.n) {
+					localStorage.setItem('_code_', to.query.n)
+				}
+			}else{
+				oriza()
 			}
+
+			function oriza(aid){
+
+				let openid = localStorage['_openid_']
+				if(!openid && (to.path != '/member/oriza') && (to.path != '/user/reg')) {
+					// alert('进入授权')	
+						if(aid){
+							// alert(aid)
+							localStorage.setItem('beforeLoginUrl', wechatUrl + to.fullPath + '&aid=' + aid)
+						}else{
+							localStorage.setItem('beforeLoginUrl', wechatUrl + to.fullPath)
+						}
+						window.location.href = jumpUrl + '/member/oriza'
+						return false
+				}else if(openid && (!store.state.user.userId || !store.state.user.token)){
+					/*alert('userId'+store.state.user.userId)
+					alert('token'+store.state.user.token)
+					alert(to.meta.isNoLogin)*/
+					if (to.meta.isNoLogin) {
+						//判断路由白名单
+						next()
+					}else{
+						if(to.path=='/user/login'){
+							next()
+						}else{
+							next({
+								path: '/user/login'
+							})
+						}
+					}
+				}
+
+			}
+
+			
+
+
 		}
 
 		//缓存路由页面 注册协议

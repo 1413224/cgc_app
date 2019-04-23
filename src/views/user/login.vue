@@ -1,6 +1,6 @@
 <template>
 	<div class="login_box">
-		<settingHeader title="大健康产业联盟"></settingHeader>
+		<settingHeader title="CGC联盟"></settingHeader>
 		<div class="bg_white">
 			<div class="title" v-if="isReg == 1 || isReg == 3">{{isCp?'登录':'登录 / 注册'}}</div>
 			<div class="title" v-if="isReg == 0">注册</div>
@@ -110,7 +110,8 @@
 			if(_this.$route.query.mobile) {
 				_this.mobile = _this.$route.query.mobile
 			}
-			_this.$store.state.page.isLogin = 'false'
+			localStorage.setItem('isLogin', false)
+			_this.$store.state.page.isLogin = false
 
 		},
 		beforeRouteEnter(to, from, next) {
@@ -133,13 +134,18 @@
 		},
 		beforeRouteLeave(to, from, next) {
 			if((to.path == "/multi_user_mall/confirm_order" 
-				|| to.path == "/share/comfirmOrder") 
+				||to.path == "/multi_user_mall/commodity_details"
+				|| to.path == "/share/comfirmOrder"
+				||to.path == "/multi_user_mall/components/fuwu") 
 				&& this.$store.state.page.isLogin == 'true') {
-				// this.$router.go(-1)
-				next({
-					path: localStorage['_buyCommodityFullPath_'],
-					replace: true
-				})
+				if(to.fullPath==localStorage['_buyCommodityFullPath_']){
+					next()
+				}else{
+					next({
+						path: localStorage['_buyCommodityFullPath_'],
+						replace: true
+					})
+				}
 			} else if(this.$store.state.page.isLogin != 'true' && !to.meta.isNoLogin){
 				this.$router.go(-1)
 			}else{
@@ -200,6 +206,9 @@
 					chainsid = localStorage['_chainsid_'],
 					allianceid = localStorage['_allianceid_'];
 
+				//处理微信端allianceid
+        var wxAllianceid = _this.mainApp.getStringCs(localStorage['beforeLoginUrl'],'aid');
+
 				if(_this.mobile.length != 11) {
 					_this.mainApp.showMessage('手机号码长度不符合要求')
 					return false
@@ -217,7 +226,7 @@
 					}
 				}
 
-				_this.parentId = _this.parentId == "null" ? null : _this.parentId
+					_this.parentId = _this.parentId == "null" ? null : _this.parentId
 
 				var params = {
 					mobile: _this.mobile,
@@ -230,9 +239,15 @@
 				};
 				if(allianceid) {
 					params.allianceId = allianceid
+					params.parentId = ''
 				}
+				if(wxAllianceid){
+	        params.allianceId = wxAllianceid
+	        params.parentId = ''
+	       }
 				if(chainsid) {
 					params.chainsId = chainsid
+					params.parentId = ''
 				}
 
 				if(/MicroMessenger/.test(window.navigator.userAgent) ||
@@ -299,18 +314,7 @@
 					}
 				}
 
-				/*if(/MicroMessenger/.test(window.navigator.userAgent) 
-				  || /AlipayClient/.test(window.navigator.userAgent)){
-				    if(!localStorage['_openid_']){
-				      //微信或支付宝浏览器中，未获取到唯一标识码，则直接跳转重新授权
-				      //获取不同环境的授权地址
-				      let wbekitUrl = _this.mainApp.getOrizaUrl();
-				      window.location.href = wbekitUrl;
-				      return false;
-				    }
-				 }*/
 
-				// return;
 				let params = {
 					audience: 'user',
 					platformId: _this.url.platformId,

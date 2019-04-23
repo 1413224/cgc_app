@@ -16,14 +16,34 @@
 		data() {
 			return {
 				title: '修改用户昵称',
-				name: ''
+				name: '',
+				userInfo:''
 			}
 		},
-		created() {},
+		created() {
+			this.getUserInfo()
+		},
 		mounted() {
 
 		},
 		methods: {
+			//获取用户信息
+			getUserInfo() {
+				var _this = this
+				_this.$http.get(_this.url.user.getBasicInfo, {
+					params: {
+						userId: _this.$store.state.user.userId
+					}
+				}).then((res) => {
+					if(res.data.status == "00000000") {
+						_this.userInfo = res.data.data
+						// console.log(_this.userInfo)
+						if(_this.userInfo.nickname){
+							_this.name = _this.userInfo.nickname
+						}
+					}
+				})
+			},
 			submit() {
 				let _this = this
 				if(_this.name.length > 0 && _this.name.trim() != "") {

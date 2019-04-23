@@ -487,7 +487,7 @@
 					this.$router.push({
 						name: 'multi_user_mall',
 						query: {
-							id: id
+							eid: id
 						}
 					})
 				}

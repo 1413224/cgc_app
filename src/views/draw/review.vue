@@ -13,7 +13,7 @@
 				<img class="banner-img" :src="'./static/draw/banner5.png'" />
 
 				<div class="drawList">
-					<p class="wonderful">往期回顾</p>
+					<p class="wonderful">精彩回顾</p>
 					<ul class="commodity2" v-if="showList">
 						<group v-for="(item,index) in historyLottery" :key="index">
 							<cell>

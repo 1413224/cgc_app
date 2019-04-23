@@ -33,11 +33,8 @@
 				}).then((res) => {
 					if(res.data.status == "00000000") {
 						if(res.data.message == 'success') {
-							_this.$router.push({
-								path: '/authCode',
-								query: {
-									'userId': _this.$store.state.user.userId
-								}
+							_this.$router.replace({
+								path: '/member/purse/qrcode'
 							})
 						}
 					}

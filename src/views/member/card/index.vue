@@ -4,12 +4,9 @@
 		<div class="wrapper" :class="[{'top46':!$store.state.page.isWx},{'b_white':cardList.length == 0}]" ref="wrapper">
 			<div class="content">
 				<ul class="card_list" v-if="cardList.length > 0">
-				<!-- 'url('+item.logo+')' -->  
-				<!-- :style="{backgroundImage:styleObject}" -->
-				<!-- :style="{ 'background-image': 'url(' + item.logo.middle + ')','background-repeat':'no-repeat','background-size':'cover' }"  -->
 					<li class="item" 
 						:class="item.bj"
-						:style="{ 'background-image': 'url(' + item.logo.original + ')','background-repeat':'no-repeat','background-size':'cover' }"
+						:style="{ 'background':item.logo ? `url(${item.logo.original})` : `rgba(0,0,0,.5)`}"
 					    v-for="(item,index) in cardList" 
 					    :key="index" 
 					    @click="toDetail(item.userCardId,item.cardId)">
@@ -193,6 +190,10 @@
 			flex-direction: column;
 			justify-content: space-between;
 			margin-bottom: 0.20rem;
+			/*background: url(../../../../static/member/bsjz.png)!important;*/
+			border-radius: 4px;
+			background-repeat:no-repeat;
+			background-size:cover !important;
 			.store {
 				width: 5.5rem;
 				font-size: 0.38rem;

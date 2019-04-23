@@ -134,7 +134,7 @@
 								goodsId: obj.goodsId,
 								goodsOriginalPrice: obj.originPrice,
 								goodsPrice: obj.price,
-								goodsTitle: obj.goodName,
+								goodsTitle: obj.goodsName,
 								imgUrl: obj.img.original,
 								integral: obj.points,
 								salesNum: obj.salesNum
@@ -166,7 +166,7 @@
 								goodsId: obj.goodsId,
 								goodsOriginalPrice: obj.originPrice,
 								goodsPrice: obj.price,
-								goodsTitle: obj.goodName,
+								goodsTitle: obj.goodsName,
 								imgUrl: obj.img.original,
 								integral: obj.points,
 								salesNum: obj.salesNum

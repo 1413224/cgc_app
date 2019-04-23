@@ -301,13 +301,6 @@
 				}
 			}
 		},
-		beforeRouteEnter(to,from,next){
-			next(vm =>{
-				if(from.path=="/share/instrumentCode" && vm.$store.state.page.isLogin != 'true'){
-					localStorage.setItem('_fullPath_',from.fullPath)
-				}
-			})
-		},
 		mounted() {
 
 		},

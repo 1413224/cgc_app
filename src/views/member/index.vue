@@ -194,11 +194,11 @@
 						url: '/draw',
 						//tip: '您有一条中奖消息'
 					},
-					{
-						img: './static/member/member_5.png',
-						text: '授权管理',
-						url: '/authList'
-					}
+					//{
+						//img: './static/member/member_5.png',
+						//text: '授权管理',
+						//url: '/authList'
+					//}
 				],
 				infoList2: [{
 						img: './static/member/m-index6.png',
@@ -283,6 +283,9 @@
 
 			this.getUserInfo()
 			this.getCardStat()
+		},
+		mounted(){
+			// alert(9)
 		},
 		methods: {
 			toLogin() {

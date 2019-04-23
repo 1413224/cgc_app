@@ -100,6 +100,13 @@
 			this.getBasicInfo()
 			// this.getEquipmentInfo()
 		},
+		beforeRouteLeave(to,from,next){
+			if(to.path == "/share/comfirmOrder" 
+					&& this.$store.state.page.isLogin != 'true') {
+					localStorage.setItem('_buyCommodityFullPath_', from.fullPath)
+				}
+			next()
+		},
 		methods: {
 			// 获取企业详情
 			getBasicInfo() {
