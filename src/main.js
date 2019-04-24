@@ -214,7 +214,6 @@ router.beforeEach(function(to, from, next) {
 			}else{
 				oriza()
 			}
-
 			function oriza(aid){
 
 				let openid = localStorage['_openid_']
